@@ -67,15 +67,13 @@ targets:
         CFBundleName: $(PRODUCT_NAME)
         CFBundlePackageType: $(PRODUCT_BUNDLE_PACKAGE_TYPE)
         CFBundleShortVersionString: "1.0"
-        CFBundleVersion: "1"
+        CFBundleVersion: "$(CURRENT_PROJECT_VERSION)"
 
   Server:
     type: framework
     platform: macOS
     sources: 
       - path: Sources/Server
-        excludes:
-          - Resources/KappOneBundle
     dependencies:
       - package: Vapor
     scheme:
@@ -96,7 +94,6 @@ targets:
         CFBundlePackageType: $(PRODUCT_BUNDLE_PACKAGE_TYPE)
         CFBundleShortVersionString: "1.0"
         CFBundleVersion: "1"
-        LSMinimumSystemVersion: "$(MACOSX_DEPLOYMENT_TARGET)"
   
   ServerUnitTests:
     type: bundle.unit-test
@@ -116,4 +113,4 @@ targets:
         CFBundleName: $(PRODUCT_NAME)
         CFBundlePackageType: $(PRODUCT_BUNDLE_PACKAGE_TYPE)
         CFBundleShortVersionString: "1.0"
-        CFBundleVersion: "1"
+        CFBundleVersion: "$(CURRENT_PROJECT_VERSION)"
