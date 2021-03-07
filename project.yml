@@ -32,7 +32,7 @@ targets:
       - target: Server
     scheme:
       testTargets:
-        - MockaUnitTests
+        - MockaTests
       gatherCoverageData: true
       randomExecutionOrder: true
       customArchiveName: Mocka
@@ -50,11 +50,11 @@ targets:
         CFBundleVersion: "1"
         LSMinimumSystemVersion: "$(MACOSX_DEPLOYMENT_TARGET)"
 
-  MockaUnitTests:
+  MockaTests:
     type: bundle.unit-test
     platform: macOS
     sources:
-      - path: Tests/AppUnitTests
+      - path: Tests/AppTests
     dependencies:
       - target: Mocka
     info:
@@ -72,13 +72,13 @@ targets:
   Server:
     type: framework
     platform: macOS
-    sources: 
+    sources:
       - path: Sources/Server
     dependencies:
       - package: Vapor
     scheme:
       testTargets:
-        - ServerUnitTests
+        - ServerTests
       gatherCoverageData: true
       randomExecutionOrder: true
       customArchiveName: Server
@@ -94,17 +94,17 @@ targets:
         CFBundlePackageType: $(PRODUCT_BUNDLE_PACKAGE_TYPE)
         CFBundleShortVersionString: "1.0"
         CFBundleVersion: "1"
-  
-  ServerUnitTests:
+
+  ServerTests:
     type: bundle.unit-test
     platform: macOS
     sources:
-      - path: Tests/ServerUnitTests
+      - path: Tests/ServerTests
     dependencies:
       - package: Vapor
       - target: Server
     info:
-      path: Tests/ServerUnitTests/Resources/ServerTestsInfo.plist
+      path: Tests/ServerTests/Resources/ServerTestsInfo.plist
       properties:
         CFBundleDevelopmentRegion: "$(DEVELOPMENT_LANGUAGE)"
         CFBundleExecutable: $(EXECUTABLE_NAME)
