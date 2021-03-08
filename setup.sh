@@ -26,7 +26,7 @@ if ! [[ -x "$(command -v swiftlint)" ]]; then
   curl -L $SWIFTLINT_PKG_URL --output $SWIFTLINT_PKG_PATH
 
   if [ -f $SWIFTLINT_PKG_PATH ]; then
-    echo "SwiftLint package exists! Installing it..."
+    echo "SwiftLint package downloaded! Installing it..."
     sudo installer -pkg $SWIFTLINT_PKG_PATH -target /
   else
     echo "SwiftLint package doesn't exist. Compiling from source..." &&
