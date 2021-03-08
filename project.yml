@@ -105,7 +105,6 @@ targets:
     sources:
       - path: Tests/ServerTests
     dependencies:
-      - package: Vapor
       - target: Server
     info:
       path: Tests/ServerTests/Resources/Info.plist
