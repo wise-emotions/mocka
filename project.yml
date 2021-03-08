@@ -38,7 +38,7 @@ targets:
       customArchiveName: Mocka
       revealArchiveInOrganizer: false
     info:
-      path: Sources/App/Resources/MockaInfo.plist
+      path: Sources/App/Resources/Info.plist
       properties:
         CFBundleDevelopmentRegion: "$(DEVELOPMENT_LANGUAGE)"
         CFBundleExecutable: $(EXECUTABLE_NAME)
@@ -62,7 +62,7 @@ targets:
     dependencies:
       - target: Mocka
     info:
-      path: Tests/AppUnitTests/Resources/MockaTestsInfo.plist
+      path: Tests/AppUnitTests/Resources/Info.plist
       properties:
         CFBundleDevelopmentRegion: "$(DEVELOPMENT_LANGUAGE)"
         CFBundleExecutable: $(EXECUTABLE_NAME)
@@ -88,7 +88,7 @@ targets:
       customArchiveName: Server
       revealArchiveInOrganizer: false
     info:
-      path: Sources/Server/Resources/ServerInfo.plist
+      path: Sources/Server/Resources/Info.plist
       properties:
         CFBundleDevelopmentRegion: "$(DEVELOPMENT_LANGUAGE)"
         CFBundleExecutable: $(EXECUTABLE_NAME)
@@ -105,10 +105,9 @@ targets:
     sources:
       - path: Tests/ServerTests
     dependencies:
-      - package: Vapor
       - target: Server
     info:
-      path: Tests/ServerTests/Resources/ServerTestsInfo.plist
+      path: Tests/ServerTests/Resources/Info.plist
       properties:
         CFBundleDevelopmentRegion: "$(DEVELOPMENT_LANGUAGE)"
         CFBundleExecutable: $(EXECUTABLE_NAME)
