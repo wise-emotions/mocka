@@ -62,7 +62,7 @@ targets:
     dependencies:
       - target: Mocka
     info:
-      path: Tests/AppUnitTests/Resources/Info.plist
+      path: Tests/AppTests/Resources/Info.plist
       properties:
         CFBundleDevelopmentRegion: "$(DEVELOPMENT_LANGUAGE)"
         CFBundleExecutable: $(EXECUTABLE_NAME)

@@ -45,7 +45,8 @@ public class Server {
     application = nil
   }
 
-  /// Shuts down the currently running instance of `Application`, if any, then starts  a new `Application` instance using the passed configuration.
+  /// Shuts down the currently running instance of `Application` if any,
+  /// then starts  a new `Application` instance using the passed configuration.
   /// - Parameter configuration: An object conforming to `ServerConfigurationProvider`.
   /// - Throws: `ServerError.instanceAlreadyRunning` or a wrapped `Vapor` error.
   public func restart(with configuration: ServerConfigurationProvider = DefaultServerConfiguration()) throws {

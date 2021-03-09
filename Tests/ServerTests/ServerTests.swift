@@ -57,7 +57,7 @@ class ServerTests: XCTestCase {
       try server.start()
     } catch {
       guard case .instanceAlreadyRunning = error as? ServerError else {
-        XCTFail()
+        XCTFail("Was expecting a ServerError.instanceAlreadyRunning")
         return
       }
 
