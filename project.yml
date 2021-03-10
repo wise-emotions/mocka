@@ -48,10 +48,6 @@ targets:
         CFBundleShortVersionString: "1.0"
         CFBundleVersion: "1"
         LSMinimumSystemVersion: "$(MACOSX_DEPLOYMENT_TARGET)"
-    preBuildScripts:
-      - script: |
-          swiftlint
-        name: SwiftLint
 
   MockaTests:
     type: bundle.unit-test

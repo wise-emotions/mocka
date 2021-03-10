@@ -15,30 +15,6 @@ if ! [[ -x "$(command -v xcodegen)" ]]; then
   brew install xcodegen
 fi
 
-# Install SwiftLint to lint all the code.
-if ! [[ -x "$(command -v swiftlint)" ]]; then
-  SWIFTLINT_PKG_PATH="./.temp/SwiftLint.pkg"
-  SWIFTLINT_PKG_URL="https://github.com/realm/SwiftLint/releases/download/0.43.0/SwiftLint.pkg"
-
-  rm -rf .temp
-  mkdir .temp
-
-  curl -L $SWIFTLINT_PKG_URL --output $SWIFTLINT_PKG_PATH
-
-  if [ -f $SWIFTLINT_PKG_PATH ]; then
-    echo "SwiftLint package downloaded! Installing it..."
-    sudo installer -pkg $SWIFTLINT_PKG_PATH -target /
-  else
-    echo "SwiftLint package doesn't exist. Compiling from source..." &&
-    git clone https://github.com/realm/SwiftLint.git /tmp/SwiftLint &&
-    cd /tmp/SwiftLint &&
-    git submodule update --init --recursive &&
-    sudo make install
-  fi
-
-  rm -rf .temp
-fi
-
 # If argument "close" is passed, close the project.
 for var in $@
 do
