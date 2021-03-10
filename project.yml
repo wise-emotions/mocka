@@ -1,0 +1,118 @@
+name: Mocka
+
+settings:
+  DEBUG_INFORMATION_FORMAT: dwarf-with-dsym
+  TARGETED_DEVICE_FAMILY: 3
+
+options:
+  minimumXcodeGenVersion: "2.11.0"
+  bundleIdPrefix: com.wisemotions
+  developmentLanguage: en
+  indentWidth: 2
+  xcodeVersion: 12.4
+  deploymentTarget:
+    macOS: "11.0"
+  generateEmptyDirectories: true
+
+packages:
+  Vapor:
+    url: https://github.com/vapor/vapor
+    from: 4.0.0
+
+targets:
+  Mocka:
+    type: application
+    platform: macOS
+    attributes:
+      ProvisioningStyle: Automatic
+    sources:
+      - path: Sources/App
+    dependencies:
+      - target: Server
+    scheme:
+      testTargets:
+        - MockaTests
+      gatherCoverageData: true
+      randomExecutionOrder: true
+      customArchiveName: Mocka
+      revealArchiveInOrganizer: false
+    info:
+      path: Sources/App/Resources/Info.plist
+      properties:
+        CFBundleDevelopmentRegion: "$(DEVELOPMENT_LANGUAGE)"
+        CFBundleExecutable: $(EXECUTABLE_NAME)
+        CFBundleIdentifier: $(PRODUCT_BUNDLE_IDENTIFIER)
+        CFBundleInfoDictionaryVersion: "6.0"
+        CFBundleName: $(PRODUCT_NAME)
+        CFBundlePackageType: $(PRODUCT_BUNDLE_PACKAGE_TYPE)
+        CFBundleShortVersionString: "1.0"
+        CFBundleVersion: "1"
+        LSMinimumSystemVersion: "$(MACOSX_DEPLOYMENT_TARGET)"
+    preBuildScripts:
+      - script: |
+          swiftlint
+        name: SwiftLint
+
+  MockaTests:
+    type: bundle.unit-test
+    platform: macOS
+    sources:
+      - path: Tests/AppTests
+    dependencies:
+      - target: Mocka
+    info:
+      path: Tests/AppUnitTests/Resources/Info.plist
+      properties:
+        CFBundleDevelopmentRegion: "$(DEVELOPMENT_LANGUAGE)"
+        CFBundleExecutable: $(EXECUTABLE_NAME)
+        CFBundleIdentifier: $(PRODUCT_BUNDLE_IDENTIFIER)
+        CFBundleInfoDictionaryVersion: "6.0"
+        CFBundleName: $(PRODUCT_NAME)
+        CFBundlePackageType: $(PRODUCT_BUNDLE_PACKAGE_TYPE)
+        CFBundleShortVersionString: "1.0"
+        CFBundleVersion: "$(CURRENT_PROJECT_VERSION)"
+
+  Server:
+    type: framework
+    platform: macOS
+    sources:
+      - path: Sources/Server
+    dependencies:
+      - package: Vapor
+    scheme:
+      testTargets:
+        - ServerTests
+      gatherCoverageData: true
+      randomExecutionOrder: true
+      customArchiveName: Server
+      revealArchiveInOrganizer: false
+    info:
+      path: Sources/Server/Resources/Info.plist
+      properties:
+        CFBundleDevelopmentRegion: "$(DEVELOPMENT_LANGUAGE)"
+        CFBundleExecutable: $(EXECUTABLE_NAME)
+        CFBundleIdentifier: $(PRODUCT_BUNDLE_IDENTIFIER)
+        CFBundleInfoDictionaryVersion: "6.0"
+        CFBundleName: $(PRODUCT_NAME)
+        CFBundlePackageType: $(PRODUCT_BUNDLE_PACKAGE_TYPE)
+        CFBundleShortVersionString: "1.0"
+        CFBundleVersion: "1"
+
+  ServerTests:
+    type: bundle.unit-test
+    platform: macOS
+    sources:
+      - path: Tests/ServerTests
+    dependencies:
+      - target: Server
+    info:
+      path: Tests/ServerTests/Resources/Info.plist
+      properties:
+        CFBundleDevelopmentRegion: "$(DEVELOPMENT_LANGUAGE)"
+        CFBundleExecutable: $(EXECUTABLE_NAME)
+        CFBundleIdentifier: $(PRODUCT_BUNDLE_IDENTIFIER)
+        CFBundleInfoDictionaryVersion: "6.0"
+        CFBundleName: $(PRODUCT_NAME)
+        CFBundlePackageType: $(PRODUCT_BUNDLE_PACKAGE_TYPE)
+        CFBundleShortVersionString: "1.0"
+        CFBundleVersion: "$(CURRENT_PROJECT_VERSION)"
