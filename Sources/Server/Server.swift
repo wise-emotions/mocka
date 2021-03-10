@@ -33,13 +33,15 @@ public class Server {
     } catch {
       throw ServerError.vapor(error: error)
     }
+
     application?.http.server.configuration.port = configuration.port
     application?.http.server.configuration.hostname = configuration.hostname
+
     do {
       registerRoutes(for: configuration.requests)
       try application?.start()
     } catch {
-      // The most common error would be when we try to run the server on a PORT that is already occupied.
+      // The most common error would be when we try to run the server on a PORT that is already used.
       throw ServerError.vapor(error: error)
     }
   }
@@ -51,7 +53,7 @@ public class Server {
   }
 
   /// Shuts down the currently running instance of `Application` if any,
-  /// then starts  a new `Application` instance using the passed configuration.
+  /// then starts a new `Application` instance using the passed configuration.
   /// - Parameter configuration: An object conforming to `ServerConfigurationProvider`.
   /// - Throws: `ServerError.instanceAlreadyRunning` or a wrapped `Vapor` error.
   public func restart(with configuration: ServerConfigurationProvider) throws {
