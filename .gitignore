@@ -104,4 +104,3 @@ fastlane/FastlaneRunner
 *.plist
 projxcuserdata
 workspacexcuserdata
-Localization.swift

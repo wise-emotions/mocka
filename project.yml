@@ -1,7 +1,6 @@
 name: Mocka
 
 settings:
-  DEVELOPMENT_TEAM: XKET3Q5DFE
   DEBUG_INFORMATION_FORMAT: dwarf-with-dsym
   TARGETED_DEVICE_FAMILY: 3
 
