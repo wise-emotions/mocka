@@ -1,7 +1,6 @@
 import Foundation
 
 /// An object containing the required configuration to run the server.
-/// For most cases, the provided `DefaultServerConfiguration` with the default values is enough.
 public protocol ServerConfigurationProvider {
   /// The host part of the `URL`.
   /// Defaults to `127.0.0.1`
@@ -10,14 +9,12 @@ public protocol ServerConfigurationProvider {
   /// The port listening to incoming requests.
   /// Defaults to 8080
   var port: Int { get }
+
+  /// The list of `Request` that vapor should be able to manage.
+  var requests: [Request] { get }
 }
 
 // MARK: - Defaults
-
-/// A default implementation of `ServerConfigurationProvider`.
-public struct DefaultServerConfiguration: ServerConfigurationProvider {
-  public init() {}
-}
 
 public extension ServerConfigurationProvider {
   var hostname: String {

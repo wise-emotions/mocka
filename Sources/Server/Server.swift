@@ -9,6 +9,9 @@ public class Server {
   /// The `Vapor` `Application` instance.
   internal private(set) var application: Application?
 
+  /// The `Request`s created by the user.
+  internal var requests: [Request] = []
+
   // MARK: - Init
 
   /// Returns a new instance of `Server`.
@@ -19,7 +22,7 @@ public class Server {
   /// Starts  a new `Application` instance using the passed configuration.
   /// - Parameter configuration: An object conforming to `ServerConfigurationProvider`.
   /// - Throws: `ServerError.instanceAlreadyRunning` or a wrapped `Vapor` error.
-  public func start(with configuration: ServerConfigurationProvider = DefaultServerConfiguration()) throws {
+  public func start(with configuration: ServerConfigurationProvider) throws {
     guard application == nil else {
       throw ServerError.instanceAlreadyRunning
     }
@@ -33,8 +36,10 @@ public class Server {
     application?.http.server.configuration.port = configuration.port
     application?.http.server.configuration.hostname = configuration.hostname
     do {
+      registerRoutes(for: configuration.requests)
       try application?.start()
     } catch {
+      // The most common error would be when we try to run the server on a PORT that is already occupied.
       throw ServerError.vapor(error: error)
     }
   }
@@ -49,8 +54,21 @@ public class Server {
   /// then starts  a new `Application` instance using the passed configuration.
   /// - Parameter configuration: An object conforming to `ServerConfigurationProvider`.
   /// - Throws: `ServerError.instanceAlreadyRunning` or a wrapped `Vapor` error.
-  public func restart(with configuration: ServerConfigurationProvider = DefaultServerConfiguration()) throws {
+  public func restart(with configuration: ServerConfigurationProvider) throws {
     stop()
     try start(with: configuration)
+  }
+
+  /// Registers a route for every request.
+  /// - Parameter requests: The list of requests to manage.
+  private func registerRoutes(for requests: [Request]) {
+    self.requests = requests
+
+    requests.forEach {
+      application?.on($0.method.vaporMethod, $0.vaporParameter) { req -> String in
+        #warning("Return a response based on the content of the file associated with the request.")
+        return ""
+      }
+    }
   }
 }
