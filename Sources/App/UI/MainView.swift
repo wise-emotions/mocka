@@ -24,7 +24,7 @@ struct MainView_Previews: PreviewProvider {
 
 extension MainView {
   var requests: [Request] {
-    [Request(method: .get, path: "api/test", responseLocation: nil)]
+    [Request(method: .get, path: ["api", "test"], responseLocation: nil)]
   }
 }
 

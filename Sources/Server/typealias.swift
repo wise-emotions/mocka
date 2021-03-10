@@ -1,2 +1,2 @@
-/// A `URL` path.
-public typealias Path = String
+/// An array of string that forms a path.
+public typealias Path = [String]

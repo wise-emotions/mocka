@@ -19,7 +19,7 @@ public class Server {
 
   // MARK: - Methods
 
-  /// Starts  a new `Application` instance using the passed configuration.
+  /// Starts a new `Application` instance using the passed configuration.
   /// - Parameter configuration: An object conforming to `ServerConfigurationProvider`.
   /// - Throws: `ServerError.instanceAlreadyRunning` or a wrapped `Vapor` error.
   public func start(with configuration: ServerConfigurationProvider) throws {

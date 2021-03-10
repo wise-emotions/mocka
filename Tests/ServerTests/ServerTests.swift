@@ -1,15 +1,18 @@
-import Vapor
 import XCTest
 
 @testable import Server
 
 class ServerTests: XCTestCase {
+  struct ServerConfiguration: ServerConfigurationProvider {
+    let requests: [Request] = [Request(method: .get, path: ["api", "test"], responseLocation: nil)]
+  }
+
   func testServerStartSuccessful() {
     let server = Server()
 
     XCTAssertNil(server.application)
 
-    try? server.start()
+    try? server.start(with: ServerConfiguration())
 
     XCTAssertNotNil(server.application)
     XCTAssertEqual(server.application?.http.server.configuration.port, 8080)
@@ -20,6 +23,7 @@ class ServerTests: XCTestCase {
     struct CustomConfiguration: ServerConfigurationProvider {
       let hostname: String = "localhost"
       let port: Int = 3000
+      let requests: [Request] = [Request(method: .get, path: ["api", "test"], responseLocation: nil)]
     }
 
     let server = Server()
@@ -38,7 +42,7 @@ class ServerTests: XCTestCase {
 
     XCTAssertNil(server.application)
 
-    try? server.start()
+    try? server.start(with: ServerConfiguration())
 
     XCTAssertNotNil(server.application)
 
@@ -49,12 +53,12 @@ class ServerTests: XCTestCase {
 
   func testStartingServerTwiceOnSamePortThrows() {
     let server = Server()
-    try? server.start()
+    try? server.start(with: ServerConfiguration())
 
-    XCTAssertThrowsError(try server.start())
+    XCTAssertThrowsError(try server.start(with: ServerConfiguration()))
 
     do {
-      try server.start()
+      try server.start(with: ServerConfiguration())
     } catch {
       guard case .instanceAlreadyRunning = error as? ServerError else {
         XCTFail("Was expecting a ServerError.instanceAlreadyRunning")
@@ -63,5 +67,15 @@ class ServerTests: XCTestCase {
 
       XCTAssertTrue(true)
     }
+  }
+
+  func testRoutesCorrectlyRegistered() {
+    let server = Server()
+    try? server.start(with: ServerConfiguration())
+
+    XCTAssertEqual(server.application?.routes.all.count, 1)
+    XCTAssertEqual(server.application?.routes.all[0].method, .GET)
+    XCTAssertEqual(server.application?.routes.all[0].path[0].description, "api")
+    XCTAssertEqual(server.application?.routes.all[0].path[1].description, "test")
   }
 }
