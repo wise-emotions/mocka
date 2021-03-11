@@ -48,10 +48,6 @@ targets:
         CFBundleShortVersionString: "1.0"
         CFBundleVersion: "1"
         LSMinimumSystemVersion: "$(MACOSX_DEPLOYMENT_TARGET)"
-    preBuildScripts:
-      - script: |
-          swiftlint
-        name: SwiftLint
 
   MockaTests:
     type: bundle.unit-test
@@ -61,7 +57,7 @@ targets:
     dependencies:
       - target: Mocka
     info:
-      path: Tests/AppUnitTests/Resources/Info.plist
+      path: Tests/AppTests/Resources/Info.plist
       properties:
         CFBundleDevelopmentRegion: "$(DEVELOPMENT_LANGUAGE)"
         CFBundleExecutable: $(EXECUTABLE_NAME)
