@@ -39,7 +39,7 @@ public class Server {
 
     do {
       registerRoutes(for: configuration.requests)
-      try application?.start()
+      try application?.server.start()
     } catch {
       // The most common error would be when we try to run the server on a PORT that is already used.
       throw ServerError.vapor(error: error)
@@ -47,8 +47,9 @@ public class Server {
   }
 
   /// Shuts down the currently running instance of `Application`, if any.
-  public func stop() {
-    application?.shutdown()
+  public func stop() throws {
+    application?.server.shutdown()
+    try application?.server.onShutdown.wait()
     application = nil
   }
 

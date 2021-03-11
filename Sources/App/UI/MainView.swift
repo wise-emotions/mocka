@@ -10,7 +10,7 @@ struct MainView: View {
         try? server.start(with: ServerConfiguration(requests: requests))
       })
       Button("Stop", action: {
-        server.stop()
+        try? server.stop()
       })
     })
   }
