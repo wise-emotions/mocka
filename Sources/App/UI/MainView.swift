@@ -23,15 +23,34 @@ struct MainView_Previews: PreviewProvider {
 }
 
 extension MainView {
-  var requests: [Request] {
-    [Request(method: .get, path: ["api", "test"], responseLocation: nil)]
+  var requests: Set<Request> {
+    [
+      Request(
+        method: .get,
+        path: ["api", "204"],
+        requestedResponse: RequestedResponse(
+            status: .noContent,
+            headers: [:],
+            content: nil
+          )
+      ),
+      Request(
+        method: .post,
+        path: ["api", "200"],
+        requestedResponse: RequestedResponse(
+          status: .ok,
+          headers: [:],
+          content: .applicationJSON(url: URL(string: "/Users/TheInkedEngineer/Code/Wise/mocka/Tests/ServerTests/Resources/DummyJSON.json")!)
+        )
+      )
+    ]
   }
 }
 
 struct ServerConfiguration: ServerConfigurationProvider {
-  var requests: [Request]
+  var requests: Set<Request>
 
-  init(requests: [Request]) {
+  init(requests: Set<Request>) {
     self.requests = requests
   }
 }
