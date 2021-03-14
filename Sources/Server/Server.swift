@@ -1,3 +1,4 @@
+import Combine
 import Vapor
 
 /// The `Server` is the brains of `Mocka`.
@@ -5,17 +6,34 @@ import Vapor
 public class Server {
 
   // MARK: - Properties
+  
+  /// The `Publisher` of `LogEvent`s.
+  public var loggerPublisher: AnyPublisher<LogEvent, Never> {
+    loggerSubject.eraseToAnyPublisher()
+  }
+  
+  /// The `PassthroughSubject` of `LogEvent`s.
+  /// This subject is used to send and subscribe to `LogEvent`s.
+  /// - Note: This property is marked `internal` to allow only the `Server` to send events.
+  internal let loggerSubject = PassthroughSubject<LogEvent, Never>()
 
   /// The `Vapor` `Application` instance.
   internal private(set) var application: Application?
 
   /// The `Request`s created by the user.
   internal var requests: [Request] = []
-
+  
+  /// The `Set` containing the list of subscriptions.
+  private var subscriptions = Set<AnyCancellable>()
+  
   // MARK: - Init
 
   /// Returns a new instance of `Server`.
-  public init() {}
+  public init() {
+    loggerSubject
+      .sink { print($0.message) }
+      .store(in: &subscriptions)
+  }
 
   // MARK: - Methods
 
@@ -34,6 +52,8 @@ public class Server {
       throw ServerError.vapor(error: error)
     }
 
+    // Logger must be set at the beginning or it will result in missing the server start event.
+    application?.logger = Logger(label: "Server Logger", factory: { _ in ServerLogHander(subject: loggerSubject) })
     application?.http.server.configuration.port = configuration.port
     application?.http.server.configuration.hostname = configuration.hostname
 
@@ -58,7 +78,7 @@ public class Server {
   /// - Parameter configuration: An object conforming to `ServerConfigurationProvider`.
   /// - Throws: `ServerError.instanceAlreadyRunning` or a wrapped `Vapor` error.
   public func restart(with configuration: ServerConfigurationProvider) throws {
-    stop()
+    try stop()
     try start(with: configuration)
   }
 
