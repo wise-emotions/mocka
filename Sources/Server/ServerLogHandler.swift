@@ -2,7 +2,7 @@ import Combine
 import Foundation
 import Vapor
 
-/// It is an implementation of `LogHandler` for directing `Logger` output to a `PassthroughSubject` of `LogEvent`.
+/// A concrete implementation of `LogHandler` to direct the `Logger` output to a `PassthroughSubject` of `LogEvent`.
 internal struct ServerLogHander: LogHandler {
 
   // MARK: - Properties
