@@ -79,7 +79,7 @@ public class Server {
 
           guard content.isValidFileFormat() else {
             return req.eventLoop
-              .makeSucceededFuture(ClientResponse(status: .badRequest, headers: [:], body: nil))
+              .makeFailedFuture(Abort(.badRequest, reason: "Invalid file format. Was expecting a .\(content.expectedFileExtension) file."))
           }
 
           return req.fileio
