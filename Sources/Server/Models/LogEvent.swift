@@ -3,8 +3,16 @@ import Vapor
 
 /// An object that represents a log event.
 public struct LogEvent {
+  /// The level of the log event.
+  public let level: Level
+  
+  /// The message describing the log event.
+  public let message: String
+}
+
+public extension LogEvent {
   /// The log level.
-  public enum Level {
+  enum Level {
     /// Appropriate for messages that contain information normally of use only when tracing the execution of a program.
     case trace
     
@@ -53,10 +61,4 @@ public struct LogEvent {
       }
     }
   }
-  
-  /// The level of the log event.
-  public let level: Level
-  
-  /// The message describing the log event.
-  public let message: String
 }

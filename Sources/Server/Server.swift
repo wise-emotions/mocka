@@ -8,14 +8,14 @@ public class Server {
   // MARK: - Properties
   
   /// The `Publisher` of `LogEvent`s.
-  public var loggerPublisher: AnyPublisher<LogEvent, Never> {
-    loggerSubject.eraseToAnyPublisher()
+  public var logsPublisher: AnyPublisher<LogEvent, Never> {
+    logsSubject.eraseToAnyPublisher()
   }
   
   /// The `PassthroughSubject` of `LogEvent`s.
   /// This subject is used to send and subscribe to `LogEvent`s.
   /// - Note: This property is marked `internal` to allow only the `Server` to send events.
-  internal let loggerSubject = PassthroughSubject<LogEvent, Never>()
+  internal let logsSubject = PassthroughSubject<LogEvent, Never>()
 
   /// The `Vapor` `Application` instance.
   internal private(set) var application: Application?
@@ -30,7 +30,7 @@ public class Server {
 
   /// Returns a new instance of `Server`.
   public init() {
-    loggerSubject
+    logsSubject
       .sink { print($0.message) }
       .store(in: &subscriptions)
   }
@@ -53,7 +53,7 @@ public class Server {
     }
 
     // Logger must be set at the beginning or it will result in missing the server start event.
-    application?.logger = Logger(label: "Server Logger", factory: { _ in ServerLogHander(subject: loggerSubject) })
+    application?.logger = Logger(label: "Server Logger", factory: { _ in ServerLogHander(subject: logsSubject) })
     application?.http.server.configuration.port = configuration.port
     application?.http.server.configuration.hostname = configuration.hostname
 
