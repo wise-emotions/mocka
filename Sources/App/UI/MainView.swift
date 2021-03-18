@@ -5,14 +5,17 @@ struct MainView: View {
   let server = Server()
 
   var body: some View {
-    HStack(content: {
-      Button("Start", action: {
-        try? server.start(with: ServerConfiguration(requests: requests))
+    VStack {
+      HStack(content: {
+        Button("Start", action: {
+          try? server.start(with: ServerConfiguration(requests: requests))
+        })
+        Button("Stop", action: {
+          try? server.stop()
+        })
       })
-      Button("Stop", action: {
-        try? server.stop()
-      })
-    })
+    }
+    LogListView(viewModel: LogListViewModel(consoleLogsPublisher: server.consoleLogsPublisher))
   }
 }
 

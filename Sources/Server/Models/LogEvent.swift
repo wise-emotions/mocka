@@ -10,7 +10,13 @@ public struct LogEvent {
   public let message: String
   
   /// The date when the event occurred.
-  public let date = Date()
+  public let date: Date
+  
+  public init(level: LogEvent.Level, message: String) {
+    self.level = level
+    self.message = message
+    self.date = Date()
+  }
 }
 
 public extension LogEvent {
@@ -38,7 +44,7 @@ public extension LogEvent {
     case critical
     
     /// The name of the level.
-    var name: String {
+    public var name: String {
       switch self {
       case .trace:
         return "TRACE"
