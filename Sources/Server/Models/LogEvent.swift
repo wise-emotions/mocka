@@ -8,6 +8,9 @@ public struct LogEvent {
   
   /// The message describing the log event.
   public let message: String
+  
+  /// The date when the event occurred.
+  public let date = Date()
 }
 
 public extension LogEvent {
@@ -34,10 +37,36 @@ public extension LogEvent {
     /// Appropriate for critical error conditions that usually require immediate attention.
     case critical
     
+    /// The name of the level.
+    var name: String {
+      switch self {
+      case .trace:
+        return "TRACE"
+        
+      case .debug:
+        return "DEBUG"
+        
+      case .info:
+        return "INFO"
+        
+      case .notice:
+        return "NOTICE"
+        
+      case .warning:
+        return "WARNING"
+        
+      case .error:
+        return "ERROR"
+        
+      case .critical:
+        return "CRITICAL"
+      }
+    }
+    
     /// Initializes the level using the Vapor's `Logger.Level`.
-    /// - Parameter vaporLoggerLevel: The logger level returned by Vapor.
-    init(vaporLoggerLevel: Logger.Level) {
-      switch vaporLoggerLevel {
+    /// - Parameter loggerLevel: The logger level returned by Vapor.
+    init(loggerLevel: Logger.Level) {
+      switch loggerLevel {
       case .trace:
         self = .trace
         

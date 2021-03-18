@@ -3,7 +3,7 @@ import Foundation
 import Vapor
 
 /// A concrete implementation of `LogHandler` to direct the `Logger` output to a `PassthroughSubject` of `LogEvent`.
-internal struct ServerLogHander: LogHandler {
+internal struct ConsoleLogHander: LogHandler {
 
   // MARK: - Properties
   
@@ -39,11 +39,11 @@ internal struct ServerLogHander: LogHandler {
     function: String,
     line: UInt
   ) {
-    subject.send(LogEvent(level: LogEvent.Level(vaporLoggerLevel: level), message: message.description))
+    subject.send(LogEvent(level: LogEvent.Level(loggerLevel: level), message: message.description))
   }
 }
 
-extension ServerLogHander {
+extension ConsoleLogHander {
   /// Accesses the `metadata` dictionary using a key.
   /// This subscript is required to conform to `LogHandler` protocol.
   internal subscript(metadataKey key: String) -> Logger.Metadata.Value? {
