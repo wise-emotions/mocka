@@ -31,7 +31,7 @@ struct LogListView: View {
     List {
       ForEach(Array(viewModel.logEvents.enumerated()), id: \.offset) { index, event in
         LogEventCell(viewModel: LogEventCellModel(logEvent: event))
-          .background(index.isMultiple(of: 2) ? Color.clear : Color(NSColor.windowBackgroundColor))
+          .background(index.isMultiple(of: 2) ? Color(NSColor.alternatingContentBackgroundColors[0]) : Color(NSColor.alternatingContentBackgroundColors[1]))
           .cornerRadius(4)
       }
       .listRowInsets(EdgeInsets())
