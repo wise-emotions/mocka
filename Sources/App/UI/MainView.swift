@@ -33,15 +33,6 @@ extension MainView {
             headers: [:],
             content: nil
           )
-      ),
-      Request(
-        method: .post,
-        path: ["api", "200"],
-        requestedResponse: RequestedResponse(
-          status: .ok,
-          headers: [:],
-          content: .applicationJSON(url: URL(string: "/Users/TheInkedEngineer/Code/Wise/mocka/Tests/ServerTests/Resources/DummyJSON.json")!)
-        )
       )
     ]
   }

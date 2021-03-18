@@ -1,7 +1,7 @@
 import Foundation
 
 /// A custom file extension that allows bypassing validation.
-fileprivate let passpartout = "*"
+fileprivate let wildcard = "*"
 
 /// The list of supported content type inside the response body.
 public enum ResponseContent {
@@ -57,39 +57,27 @@ internal extension ResponseContent {
       return "xml"
 
     case .custom:
-      return passpartout
+      return wildcard
     }
   }
 
   /// The `URL` of where the file associated with the response is located.
   var fileLocation: URL {
     switch self {
-    case .applicationJSON(let url):
-      return url
-
-    case .custom(let url):
-      return url
-
-    case .textCSS(let url):
-      return url
-
-    case .textCSV(let url):
-      return url
-
-    case .textHTML(let url):
-      return url
-
-    case .textPlain(let url):
-      return url
-
-    case .textXML(let url):
+    case .applicationJSON(let url),
+         .textCSS(let url),
+         .textCSV(let url),
+         .textHTML(let url),
+         .textPlain(let url),
+         .textXML(let url),
+         .custom(let url):
       return url
     }
   }
 
   /// Checks if the actual file extension in the `URL` matches the expected one for the content type.
   func isValidFileFormat() -> Bool {
-    if expectedFileExtension == passpartout {
+    if expectedFileExtension == wildcard {
       return true
     }
 
