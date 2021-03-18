@@ -6,12 +6,12 @@ fileprivate let passpartout = "*"
 /// The list of supported content type inside the response body.
 public enum ResponseContent {
 
-  // MARK: APPLICATION
+  // MARK: Application
 
   /// `content-type: application/json`.
   case applicationJSON(url: URL)
 
-  // MARK: TEXT
+  // MARK: Text
 
   /// `content-type: text/csv`.
   case textCSS(url: URL)
@@ -28,7 +28,7 @@ public enum ResponseContent {
   /// `content-type: text/xml`.
   case textXML(url: URL)
 
-  // MARK: GENERIC
+  // MARK: Custom
 
   /// No preset configuration.
   case custom(url: URL)
