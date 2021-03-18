@@ -10,7 +10,17 @@ public struct LogEvent {
   public let message: String
   
   /// The date when the event occurred.
-  public let date = Date()
+  public let date: Date
+  
+  /// Creates an instance of `LogEvent`.
+  /// - Parameters:
+  ///   - level: The level of the log.
+  ///   - message: The message of the log.
+  public init(level: LogEvent.Level, message: String) {
+    self.level = level
+    self.message = message
+    self.date = Date()
+  }
 }
 
 public extension LogEvent {
