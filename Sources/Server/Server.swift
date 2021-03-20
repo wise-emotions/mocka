@@ -5,13 +5,11 @@ import Vapor
 /// It starts, stops and restarts `Vapor`.
 public class Server {
 
-  // MARK: - Properties
-  
-  /// The `Publisher` of `LogEvent`s.
-  public var consoleLogsPublisher: AnyPublisher<LogEvent, Never> {
-    consoleLogsSubject.eraseToAnyPublisher()
-  }
-  
+  // MARK: - Stored Properties
+
+  /// The `Request`s created by the user.
+  internal var requests: Set<Request> = []
+    
   /// The `PassthroughSubject` of `LogEvent`s.
   /// This subject is used to send and subscribe to `LogEvent`s.
   /// - Note: This property is marked `internal` to allow only the `Server` to send events.
@@ -20,11 +18,15 @@ public class Server {
   /// The `Vapor` `Application` instance.
   internal private(set) var application: Application?
 
-  /// The `Request`s created by the user.
-  internal var requests: Set<Request> = []
-
-    /// The `Set` containing the list of subscriptions.
+  /// The `Set` containing the list of subscriptions.
   private var subscriptions = Set<AnyCancellable>()
+  
+  // MARK: - Computed Properties
+    
+  /// The `Publisher` of `LogEvent`s.
+  public var consoleLogsPublisher: AnyPublisher<LogEvent, Never> {
+    consoleLogsSubject.eraseToAnyPublisher()
+  }
   
   // MARK: - Init
 
