@@ -5,13 +5,11 @@ import Vapor
 /// It starts, stops and restarts `Vapor`.
 public class Server {
 
-  // MARK: - Properties
-  
-  /// The `Publisher` of `LogEvent`s.
-  public var consoleLogsPublisher: AnyPublisher<LogEvent, Never> {
-    consoleLogsSubject.eraseToAnyPublisher()
-  }
-  
+  // MARK: - Stored Properties
+
+  /// The `Request`s created by the user.
+  internal var requests: Set<Request> = []
+    
   /// The `PassthroughSubject` of `LogEvent`s.
   /// This subject is used to send and subscribe to `LogEvent`s.
   /// - Note: This property is marked `internal` to allow only the `Server` to send events.
@@ -20,11 +18,15 @@ public class Server {
   /// The `Vapor` `Application` instance.
   internal private(set) var application: Application?
 
-  /// The `Request`s created by the user.
-  internal var requests: [Request] = []
-  
   /// The `Set` containing the list of subscriptions.
   private var subscriptions = Set<AnyCancellable>()
+  
+  // MARK: - Computed Properties
+    
+  /// The `Publisher` of `LogEvent`s.
+  public var consoleLogsPublisher: AnyPublisher<LogEvent, Never> {
+    consoleLogsSubject.eraseToAnyPublisher()
+  }
   
   // MARK: - Init
 
@@ -84,14 +86,36 @@ public class Server {
 
   /// Registers a route for every request.
   /// - Parameter requests: The list of requests to manage.
-  private func registerRoutes(for requests: [Request]) {
+  private func registerRoutes(for requests: Set<Request>) {
     self.requests = requests
 
     requests.forEach {
-      application?.on($0.method.vaporMethod, $0.vaporParameter) { req -> String in
-        #warning("Return a response based on the content of the file associated with the request.")
-        return ""
-      }
+      let requestedResponse = $0.requestedResponse
+
+      application?
+        .on($0.method.vaporMethod, $0.vaporParameter) { req -> EventLoopFuture<ClientResponse> in
+          guard let content = requestedResponse.content else  {
+            return req.eventLoop
+              .makeSucceededFuture(ClientResponse(status: requestedResponse.status, headers: requestedResponse.headers, body: nil))
+          }
+
+          guard content.isValidFileFormat() else {
+            return req.eventLoop
+              .makeFailedFuture(Abort(.badRequest, reason: "Invalid file format. Was expecting a .\(content.expectedFileExtension) file."))
+          }
+
+          return req.fileio
+            .collectFile(at: content.fileLocation.absoluteString)
+            .flatMap { buffer -> EventLoopFuture<ClientResponse> in
+              return req.eventLoop
+                .makeSucceededFuture(ClientResponse(status: requestedResponse.status, headers: requestedResponse.headers, body: buffer))
+            }
+            .flatMapError { error in
+              // So far, only logical error is the file not being found.
+              return req.eventLoop
+                .makeFailedFuture(Abort(.badRequest, reason: "File not found at \(content.fileLocation.absoluteString)"))
+            }
+        }
     }
   }
 }
