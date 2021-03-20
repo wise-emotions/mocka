@@ -22,7 +22,7 @@ struct ServerRequestDetailHeaderView: View {
   /// The path of the request.
   let path: String
 
-  // MARK: - Computer Properties
+  // MARK: - Computed Properties
 
   /// The color of the circle, based on the HTTPStatus.
   var httpStatusColor: Color {
