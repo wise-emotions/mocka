@@ -75,7 +75,7 @@ public extension LogEvent {
     
     /// Initializes the level using the Vapor's `Logger.Level`.
     /// - Parameter loggerLevel: The logger level returned by Vapor.
-    init(loggerLevel: Logger.Level) {
+    internal init(loggerLevel: Logger.Level) {
       switch loggerLevel {
       case .trace:
         self = .trace
