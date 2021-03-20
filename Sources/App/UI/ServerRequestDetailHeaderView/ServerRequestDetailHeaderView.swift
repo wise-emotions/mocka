@@ -1,30 +1,65 @@
+import Server
 import SwiftUI
 
+
+/// The header of the `ServerRequestDetailView`.
 struct ServerRequestDetailHeaderView: View {
 
-  let requestTypeText: String
-  let requestURLText: String
-  let circleColor: Color
-  let statusText: String
-  let timeStampText: String
+  // MARK: - Stored Properties
+
+  /// The `HTTPMethod` of the request.
+  let httpMethod: HTTPMethod
+
+  /// The `HTTPStatus` of the response`
+  let httpStatus: Int
+
+  /// The meaning of the respective status code.
+  let httpStatusMeaning: String
+
+  /// The timestamp of the response.
+  let timestamp: String
+
+  /// The path of the request.
+  let path: String
+
+  // MARK: - Computer Properties
+
+  /// The color of the circle, based on the HTTPStatus.
+  var httpStatusColor: Color {
+    switch httpStatus {
+    case 200...299:
+      return .green
+
+    case 300...399:
+      return .yellow
+
+    case 400...599:
+      return .red
+
+    default:
+      return .clear
+    }
+  }
+
+  // MARK: - Body
 
   var body: some View {
     VStack(alignment: .leading, spacing: 16){
       HStack(alignment: .top, spacing: 8) {
-        TextPillView(text: requestTypeText)
-        Text(requestURLText)
+        TextPillView(text: httpMethod.rawValue)
+        Text(path)
           .font(.system(size: 13))
           .fixedSize(horizontal: false, vertical: true)
       }
       HStack {
         Circle()
           .frame(width: 10, height: 10)
-          .foregroundColor(circleColor)
-        Text(statusText)
+          .foregroundColor(httpStatusColor)
+        Text("\(httpStatus) \(httpStatusMeaning)")
           .font(.system(size: 13))
           .foregroundColor(.secondary)
         Spacer()
-        Text(timeStampText)
+        Text(timestamp)
           .font(.system(size: 13))
           .foregroundColor(.secondary)
       }
@@ -36,12 +71,11 @@ struct ServerRequestDetailHeaderView: View {
 struct ServerRequestDetailHeaderView_Previews: PreviewProvider {
   static var previews: some View {
     ServerRequestDetailHeaderView(
-      requestTypeText: "DELETE",
-      requestURLText: "/api/v1/transactions?id=1243&user=wiseman128134752387423848923489238942384189234891234891348912343242345",
-      circleColor: .red,
-      statusText: "431 Request headers too large",
-      timeStampText: "13:04:32:999"
-    )
+      httpMethod: .delete,
+      httpStatus: 431,
+      httpStatusMeaning: "Request headers too large",
+      timestamp: "13:04:32:999",
+      path: "/api/v1/transactions?id=1243&user=wiseman128134752387423848923489238942384189234891234891348912343242345"    )
     .frame(minWidth: 0, idealWidth: 100, maxWidth: .infinity, minHeight: 0, idealHeight: 100, maxHeight: .infinity)
   }
 }
