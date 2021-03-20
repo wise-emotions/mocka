@@ -75,7 +75,8 @@ struct ServerRequestDetailHeaderView_Previews: PreviewProvider {
       httpStatus: 431,
       httpStatusMeaning: "Request headers too large",
       timestamp: "13:04:32:999",
-      path: "/api/v1/transactions?id=1243&user=wiseman128134752387423848923489238942384189234891234891348912343242345"    )
+      path: "/api/v1/transactions?id=1243&user=wiseman128134752387423848923489238942384189234891234891348912343242345"
+    )
     .frame(minWidth: 0, idealWidth: 100, maxWidth: .infinity, minHeight: 0, idealHeight: 100, maxHeight: .infinity)
   }
 }
