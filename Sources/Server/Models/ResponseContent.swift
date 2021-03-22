@@ -8,35 +8,36 @@ public enum ResponseContent {
 
   // MARK: Application
 
-  /// `content-type: application/json`.
+  /// `Content-Type: application/json`.
   case applicationJSON(url: URL)
 
   // MARK: Text
 
-  /// `content-type: text/csv`.
+  /// `Content-Type: text/csv`.
   case textCSS(url: URL)
 
-  /// `content-type: text/css`.
+  /// `Content-Type: text/css`.
   case textCSV(url: URL)
 
-  /// `content-type: text/html`.
+  /// `Content-Type: text/html`.
   case textHTML(url: URL)
 
-  /// `content-type: text/plain`.
+  /// `Content-Type: text/plain`.
   case textPlain(url: URL)
 
-  /// `content-type: text/xml`.
+  /// `Content-Type: text/xml`.
   case textXML(url: URL)
 
   // MARK: Custom
 
   /// No preset configuration.
+  /// This preset does not provide any validation.
   case custom(url: URL)
 }
 
 internal extension ResponseContent {
   /// The file extension associated with each type.
-  var expectedFileExtension: String {
+  var expectedFileExtension: String? {
     switch self {
     case .applicationJSON:
       return "json"
@@ -57,7 +58,7 @@ internal extension ResponseContent {
       return "xml"
 
     case .custom:
-      return wildcard
+      return nil
     }
   }
 
@@ -75,9 +76,36 @@ internal extension ResponseContent {
     }
   }
 
+  /// The value to associated to `Content-Type` in the response header.
+  var contentTypeHeader: String? {
+    switch self {
+    case .applicationJSON:
+      return "application/json"
+
+    case .textCSS:
+      return "text/css"
+
+    case .textCSV:
+      return "text/csv"
+
+    case .textHTML:
+      return "text/html"
+
+    case .textPlain:
+      return "text/txt"
+
+    case .textXML:
+      return "text/xml"
+
+    case .custom:
+      return nil
+    }
+  }
+
   /// Checks if the actual file extension in the `URL` matches the expected one for the content type.
   func isValidFileFormat() -> Bool {
-    if expectedFileExtension == wildcard {
+    // This is nil only for wildcard, in which case we do not check the validity of the format, and return true.
+    guard let expectedFileExtension = self.expectedFileExtension else {
       return true
     }
 
