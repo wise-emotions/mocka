@@ -24,12 +24,11 @@ do
   fi
 done
 
-# Removes the temporary folders if they are alrady present.
-rm -rf projxcuserdata
-
+# Create a temporary folder.
+mkdir -p .temp
 # Move the project userdata folder to a temporary folder.
 if ls *.xcodeproj/xcuserdata 1> /dev/null 2>&1; then
-  mv *.xcodeproj/xcuserdata projxcuserdata
+  mv *.xcodeproj/xcuserdata .temp/projxcuserdata
 fi
 # Remove present .xcodeproj.
 rm -rf *.xcodeproj
@@ -39,9 +38,14 @@ xcodegen
 
 # Move back the project userdata folder to the correct folder.
 if ls projxcuserdata 1> /dev/null 2>&1; then
-  mv projxcuserdata *.xcodeproj/
+  mv .temp/projxcuserdata *.xcodeproj/
   mv *.xcodeproj/projxcuserdata $PROJECT_NAME.xcodeproj/xcuserdata
 fi
+# Remove the temporary folder.
+rm -rf .temp
+
+# Move config files to right place.
+cp IDETemplateMacros.plist $PROJECT_NAME.xcodeproj/xcshareddata/IDETemplateMacros.plist
 
 for var in $@
 do
