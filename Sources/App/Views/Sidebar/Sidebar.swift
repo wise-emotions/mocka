@@ -11,12 +11,30 @@ struct Sidebar: View {
   var body: some View {
     VStack {
       ForEach(SidebarSection.allCases, id: \.rawValue) { section in
-        Item(section: section, selectedSection: $selectedSection)
+        Item(selectedSection: $selectedSection, section: section)
       }
       Spacer()
     }
     .padding(.top, windowManager.titleBarHeight(to: .add))
     .background(Color("TertiaryColor"))
     .frame(minWidth: Constants.sidebarWidth, maxWidth: Constants.sidebarWidth)
+  }
+}
+
+struct SidebarPreviews: PreviewProvider {
+  static var previews: some View {
+    Group {
+      Sidebar(selectedSection: .constant(.server))
+        .previewDisplayName("Server")
+        .environmentObject(WindowManager.shared)
+
+      Sidebar(selectedSection: .constant(.editor))
+        .previewDisplayName("Editor")
+        .environmentObject(WindowManager.shared)
+      
+      Sidebar(selectedSection: .constant(.console))
+        .previewDisplayName("Console")
+        .environmentObject(WindowManager.shared)
+    }
   }
 }
