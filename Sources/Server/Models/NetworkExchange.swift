@@ -13,55 +13,42 @@ public struct NetworkExchange {
 /// An object containing the details about the received request.
 public struct DetailedRequest {
   /// The `HTTP` method associated with the request.
-  let httpMethod: HTTPMethod
+  public let httpMethod: HTTPMethod
 
   /// The `URI` that invoked the start of the exchange.
-  let uri: URI
+  public let uri: URI
 
   /// The headers associated with the request.
-  let headers: HTTPHeaders
+  public let headers: HTTPHeaders
 
   /// The timestamp of when the request was invoked.
-  let timestamp: TimeInterval
+  public let timestamp: TimeInterval
 
   /// The list of query items associated with the request.
-  var queryItems: [URLQueryItem] {
-    uri.query?
-      .split(separator: "&")
-      .compactMap {
-        let keyValue = $0.split(separator: "=")
-          .map {
-            String($0)
-          }
-
-        guard keyValue.count == 2 else {
-          return nil
-        }
-
-        return URLQueryItem(name: keyValue[0], value: keyValue[1])
-      } ?? []
+  public var queryItems: [URLQueryItem] {
+    URLComponents(string: uri.string)?.queryItems ?? []
   }
 }
 
 /// An object containing the details about the sent response.
 public struct DetailedResponse {
   /// The `HTTP` method that prompted the response.
-  let httpMethod: HTTPMethod
+  public let httpMethod: HTTPMethod
 
   /// The `URI` considered when answering to the started exchange.
   ///
   /// This is intended to give the user a realistic idea of what the server did and did not consider when answering the exchange.
-  let uri: URI
+  public let uri: URI
 
   /// The headers associated with the response.
-  let headers: HTTPHeaders
+  public let headers: HTTPHeaders
 
   /// The `HTTP` response status code.
   ///
   /// - Access `.code` for the numerical output.
   /// - Access `.reasonPhrase` for the phrasal output.
-  let responseStatus: HTTPResponseStatus
+  public let responseStatus: HTTPResponseStatus
 
   /// The timestamp of when the response was ready.
-  let timestamp: TimeInterval
+  public let timestamp: TimeInterval
 }

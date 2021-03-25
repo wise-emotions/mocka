@@ -111,12 +111,14 @@ public class Server {
     self.requests = requests
 
     requests.forEach {
-      let request = $0
-      let requestedResponse = request.requestedResponse
+      let requestedPath = $0.path.joined(separator: "/")
+      let requestedResponse = $0.requestedResponse
 
       application?
-        .on($0.method.vaporMethod, $0.vaporParameter) { [unowned self] req -> EventLoopFuture<ClientResponse> in
-          let httpMethod = HTTPMethod(rawValue: req.method.rawValue)!
+        .on($0.method.vaporMethod, $0.vaporParameter) { [unowned self] request -> EventLoopFuture<ClientResponse> in
+          // This property is force-unwrapped because it can never fail,
+          // since the raw value passed is an identical copy of SWIFTNIO's `HTTPMethod`.
+          let httpMethod = HTTPMethod(rawValue: request.method.rawValue)!
           let receivedRequestTimeStamp = Date().timeIntervalSince1970
 
           var clientResponse: ClientResponse!
@@ -124,16 +126,16 @@ public class Server {
             NetworkExchange(
               request: DetailedRequest(
                 httpMethod: httpMethod,
-                uri: URI(scheme: URI.Scheme.http, host: host, port: port, path: req.url.path, query: req.url.query),
-                headers: req.headers,
-                timeStamp: receivedRequestTimeStamp
+                uri: URI(scheme: URI.Scheme.http, host: host, port: port, path: request.url.path, query: request.url.query),
+                headers: request.headers,
+                timestamp: receivedRequestTimeStamp
               ),
               response: DetailedResponse(
                 httpMethod: httpMethod,
-                uri: URI(scheme: URI.Scheme.http, host: host, port: port, path: request.path.joined(separator: "/")),
+                uri: URI(scheme: URI.Scheme.http, host: host, port: port, path: requestedPath),
                 headers: clientResponse.headers,
                 responseStatus: clientResponse.status,
-                timeStamp: Date().timeIntervalSince1970
+                timestamp: Date().timeIntervalSince1970
               )
             )
           }
@@ -141,29 +143,29 @@ public class Server {
           guard let content = requestedResponse.content else  {
             clientResponse = ClientResponse(status: requestedResponse.status, headers: requestedResponse.headers, body: nil)
             networkExchangesSubject.send(networkExchange)
-            return req.eventLoop.makeSucceededFuture(clientResponse)
+            return request.eventLoop.makeSucceededFuture(clientResponse)
           }
 
           guard content.isValidFileFormat() else {
             let failReason = "Invalid file format. Was expecting a .\(content.expectedFileExtension!) file"
             clientResponse = ClientResponse(status: .badRequest, headers: [:], body: ByteBuffer(string: failReason))
             networkExchangesSubject.send(networkExchange)
-            return req.eventLoop.makeFailedFuture(Abort(.badRequest, reason: failReason))
+            return request.eventLoop.makeFailedFuture(Abort(.badRequest, reason: failReason))
           }
 
-          return req.fileio
+          return request.fileio
             .collectFile(at: content.fileLocation.absoluteString)
             .flatMap { buffer -> EventLoopFuture<ClientResponse> in
               clientResponse = ClientResponse(status: requestedResponse.status, headers: requestedResponse.headers, body: buffer)
               networkExchangesSubject.send(networkExchange)
-              return req.eventLoop.makeSucceededFuture(clientResponse)
+              return request.eventLoop.makeSucceededFuture(clientResponse)
             }
             .flatMapError { error in
               // So far, only logical error is the file not being found.
               let failReason = "File not found at \(content.fileLocation.absoluteString)"
               clientResponse = ClientResponse(status: .badRequest, headers: [:], body: ByteBuffer(string: failReason))
               networkExchangesSubject.send(networkExchange)
-              return req.eventLoop.makeFailedFuture(Abort(.badRequest, reason: failReason))
+              return request.eventLoop.makeFailedFuture(Abort(.badRequest, reason: failReason))
             }
         }
     }

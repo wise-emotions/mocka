@@ -1,8 +1,5 @@
 import Foundation
 
-/// A custom file extension that allows bypassing validation.
-fileprivate let wildcard = "*"
-
 /// The list of supported content type inside the response body.
 public enum ResponseContent {
 
@@ -104,7 +101,7 @@ internal extension ResponseContent {
 
   /// Checks if the actual file extension in the `URL` matches the expected one for the content type.
   func isValidFileFormat() -> Bool {
-    // This is nil only for wildcard, in which case we do not check the validity of the format, and return true.
+    // This is nil only for `ResponseContent.custom`, in which case we do not check the validity of the format, and return true.
     guard let expectedFileExtension = self.expectedFileExtension else {
       return true
     }
