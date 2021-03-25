@@ -15,7 +15,7 @@ struct MainView: View {
         })
       })
     }
-    LogListView(viewModel: LogListViewModel(consoleLogsPublisher: server.consoleLogsPublisher))
+    LogEventListView(viewModel: LogEventListViewModel(consoleLogsPublisher: server.consoleLogsPublisher))
   }
 }
 
