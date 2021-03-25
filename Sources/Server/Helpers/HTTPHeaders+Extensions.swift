@@ -1,7 +1,7 @@
 import Foundation
 
 internal extension HTTPHeaders {
-  /// Adds a value to the `HTTPHeaders`.
+  /// Adds or replaces a value to the `HTTPHeaders`.
   /// - Parameters:
   ///   - name: The header field name.
   ///   - value: The header field value to add for the given name.

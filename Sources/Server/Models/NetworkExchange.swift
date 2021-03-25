@@ -21,8 +21,8 @@ public struct DetailedRequest {
   /// The headers associated with the request.
   let headers: HTTPHeaders
 
-  /// The time stamp of when the request was invoked.
-  let timeStamp: TimeInterval
+  /// The timestamp of when the request was invoked.
+  let timestamp: TimeInterval
 
   /// The list of query items associated with the request.
   var queryItems: [URLQueryItem] {
@@ -62,6 +62,6 @@ public struct DetailedResponse {
   /// - Access `.reasonPhrase` for the phrasal output.
   let responseStatus: HTTPResponseStatus
 
-  /// The time stamp of when the response was ready.
-  let timeStamp: TimeInterval
+  /// The timestamp of when the response was ready.
+  let timestamp: TimeInterval
 }
