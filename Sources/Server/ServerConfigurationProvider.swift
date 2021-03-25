@@ -11,7 +11,7 @@ public protocol ServerConfigurationProvider {
   var port: Int { get }
 
   /// The list of `Request` that vapor should be able to manage.
-  var requests: [Request] { get }
+  var requests: Set<Request> { get }
 }
 
 // MARK: - Defaults

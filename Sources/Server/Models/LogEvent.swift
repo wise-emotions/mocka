@@ -12,6 +12,10 @@ public struct LogEvent {
   /// The date when the event occurred.
   public let date: Date
   
+  /// Creates an instance of `LogEvent`.
+  /// - Parameters:
+  ///   - level: The level of the log.
+  ///   - message: The message of the log.
   public init(level: LogEvent.Level, message: String) {
     self.level = level
     self.message = message
@@ -71,7 +75,7 @@ public extension LogEvent {
     
     /// Initializes the level using the Vapor's `Logger.Level`.
     /// - Parameter loggerLevel: The logger level returned by Vapor.
-    init(loggerLevel: Logger.Level) {
+    internal init(loggerLevel: Logger.Level) {
       switch loggerLevel {
       case .trace:
         self = .trace

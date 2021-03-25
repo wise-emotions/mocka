@@ -26,15 +26,25 @@ struct MainView_Previews: PreviewProvider {
 }
 
 extension MainView {
-  var requests: [Request] {
-    [Request(method: .get, path: ["api", "test"], responseLocation: nil)]
+  var requests: Set<Request> {
+    [
+      Request(
+        method: .get,
+        path: ["api", "204"],
+        requestedResponse: RequestedResponse(
+            status: .noContent,
+            headers: [:],
+            content: nil
+          )
+      )
+    ]
   }
 }
 
 struct ServerConfiguration: ServerConfigurationProvider {
-  var requests: [Request]
+  var requests: Set<Request>
 
-  init(requests: [Request]) {
+  init(requests: Set<Request>) {
     self.requests = requests
   }
 }
