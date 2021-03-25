@@ -30,3 +30,12 @@ struct KeyValueTablePreviews: PreviewProvider {
     ])
   }
 }
+
+struct KeyValueTableLibraryContent: LibraryContentProvider {
+  let keyValueItems: [KeyValueItem] = []
+
+  @LibraryContentBuilder
+  var views: [LibraryItem] {
+    LibraryItem(KeyValueTable(keyValueItems: keyValueItems))
+  }
+}
