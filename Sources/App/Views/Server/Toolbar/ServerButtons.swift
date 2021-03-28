@@ -3,12 +3,16 @@ import SwiftUI
 
 /// A stack of buttons to execute commands on the server.
 struct ServerButtons: View {
+  /// Whether the server is currently running.
   let isServerRunning: Bool
 
+  /// The start and stop server action.
   let startAndStopAction: () -> Void
 
+  /// The restart server action.
   let restartAction: () -> Void
 
+  /// The delete API call list action.
   let deleteAction: () -> Void
 
   var body: some View {

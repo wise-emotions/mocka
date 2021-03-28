@@ -2,8 +2,10 @@ import SwiftUI
 
 /// A toolbar view for the server.
 struct ServerToolbar: View {
+  /// The associated view model.
   @StateObject var viewModel = ServerToolbarViewModel()
 
+  /// Whether the server is currently running.
   @Binding var isServerRunning: Bool
 
   var body: some View {
