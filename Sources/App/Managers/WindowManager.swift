@@ -25,10 +25,10 @@ class WindowManager: ObservableObject {
     let titleBarHeight: CGFloat = 28
 
     switch titleBarHeightMode {
-      case .add:
-        return self.isFullScreen ? 0 : titleBarHeight
-      case .remove:
-        return self.isFullScreen ? 0 : -titleBarHeight
+    case .add:
+      return self.isFullScreen ? 0 : titleBarHeight
+    case .remove:
+      return self.isFullScreen ? 0 : -titleBarHeight
     }
   }
 }

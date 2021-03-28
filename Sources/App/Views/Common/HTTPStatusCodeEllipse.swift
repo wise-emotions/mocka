@@ -7,17 +7,17 @@ struct HTTPStatusCodeEllipse: View {
   /// The color of the ellipse, based on the HTTPStatus.
   var httpStatusColor: Color {
     switch httpStatus {
-      case 200...299:
-        return .green
+    case 200...299:
+      return .green
 
-      case 300...399:
-        return .yellow
+    case 300...399:
+      return .yellow
 
-      case 400...599:
-        return .red
+    case 400...599:
+      return .red
 
-      default:
-        return .clear
+    default:
+      return .clear
     }
   }
 
