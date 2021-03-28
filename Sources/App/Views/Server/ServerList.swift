@@ -23,7 +23,7 @@ struct ServerList: View {
     }
     .background(Color("PrimaryColor"))
     .padding(.top, windowManager.titleBarHeight(to: .remove))
-    .frame(minWidth: Constants.listWidth)
+    .frame(minWidth: Constants.minimumListWidth)
   }
 }
 
