@@ -11,7 +11,28 @@ struct SourcesTreeView: View {
 
   var body: some View {
     List(viewModel.directoryContent, children: \.children) { node in
-      Text(node.name)
+      Node(name: node.name, isFolder: node.isFolder)
+    }
+  }
+}
+
+extension SourcesTreeView {
+  /// A view that displays a node into a tree.
+  struct Node: View {
+    /// The name of the file or folder.
+    let name: String
+
+    /// Whether the node represents a folder or not.
+    let isFolder: Bool
+
+    var body: some View {
+      HStack {
+        Image(systemName: isFolder ? "folder.fill" : "doc.text.fill")
+          .foregroundColor(isFolder ? .yellow : .white)
+          .frame(width: 24)
+
+        Text(name)
+      }
     }
   }
 }

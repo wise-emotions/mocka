@@ -21,7 +21,7 @@ struct FileSystemNode: Identifiable, Hashable {
   // MARK: - Computed Properties
 
   /// Whether the node represents a directory in the filesystem.
-  var isDirectory: Bool {
+  var isFolder: Bool {
     !isFile
   }
 
