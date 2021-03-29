@@ -3,6 +3,7 @@
 //
 
 import Foundation
+import UniformTypeIdentifiers
 
 /// The view model of the `SourcesTreeView`.
 final class SourcesTreeViewModel: ObservableObject {
@@ -10,7 +11,10 @@ final class SourcesTreeViewModel: ObservableObject {
   // MARK: - Constants
 
   /// The resource keys for the infos to extract from a `URL`.
-  static let resourceKeys: Set<URLResourceKey> = [.nameKey, .isDirectoryKey]
+  static let resourceKeys: Set<URLResourceKey> = [.nameKey, .contentTypeKey]
+
+  /// The list of types allowed in the tree.
+  static let allowedTypes: Set<UTType?> = [UTType(kUTTypeJSON as String)]
 
   // MARK: - Stored Properties
 
@@ -57,25 +61,32 @@ final class SourcesTreeViewModel: ObservableObject {
   /// - Parameter url: The `URL` of the node to retrieve.
   /// - Returns: A `FileSystemNode` representing the node at the specified `URL`.
   private func node(at url: URL) -> FileSystemNode? {
-    guard let (name, isDirectory) = resourceValues(for: url) else {
+    guard let (name, contentType) = resourceValues(for: url) else {
       return nil
     }
 
-    return FileSystemNode(name: name, children: isDirectory ? enumerateDirectory(at: url) : nil)
+    if SourcesTreeViewModel.allowedTypes.contains(contentType) {
+      return FileSystemNode(name: name)
+    } else if contentType == UTType(kUTTypeFolder as String) {
+      // Filter by contentType to make sure the directory is a folder, since files like Playgrounds are seen as directories.
+      return FileSystemNode(name: name, children: enumerateDirectory(at: url))
+    }
+
+    return nil
   }
 
   /// Returns informations about the specified `URL`.
   /// - Parameter url: The `URL` to retrieve information from.
-  /// - Returns: A tuple containing the name of the directory or file and a `Bool` indicating whether the `URL` represents a directory.
-  private func resourceValues(for url: URL) -> (name: String, isDirectory: Bool)? {
+  /// - Returns: A tuple containing the name of the directory or file and the `UTType` of the file or folder.
+  private func resourceValues(for url: URL) -> (name: String, contentType: UTType)? {
     guard
       let resourceValues = try? url.resourceValues(forKeys: SourcesTreeViewModel.resourceKeys),
-      let isDirectory = resourceValues.isDirectory,
-      let name = resourceValues.name
+      let name = resourceValues.name,
+      let contentType = resourceValues.contentType
     else {
       return nil
     }
 
-    return (name: name, isDirectory: isDirectory)
+    return (name, contentType)
   }
 }
