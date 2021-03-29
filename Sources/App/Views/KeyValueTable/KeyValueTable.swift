@@ -10,7 +10,7 @@ struct KeyValueTable: View {
       Header()
 
       ScrollView {
-        LazyVStack {
+        LazyVStack(spacing: 0) {
           ForEach(Array(keyValueItems.enumerated()), id: \.offset) { index, item in
             Row(item: item, index: index)
           }
