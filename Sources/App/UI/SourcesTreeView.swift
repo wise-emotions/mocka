@@ -6,14 +6,12 @@ import SwiftUI
 
 /// A view that displays the content of a directory in the form of a tree.
 struct SourcesTreeView: View {
-  /// The parent node of the tree.
-  let parentNode: FileSystemNode
+  /// The view model of the directory tree.
+  @StateObject var viewModel: SourcesTreeViewModel
 
   var body: some View {
-    if let nodes = parentNode.children {
-      List(nodes, children: \.children) { node in
-        Text(node.name)
-      }
+    List(viewModel.directoryContent, children: \.children) { node in
+      Text(node.name)
     }
   }
 }
@@ -31,6 +29,6 @@ struct SourcesTreeView_Previews: PreviewProvider {
   )
 
   static var previews: some View {
-    SourcesTreeView(parentNode: exampleDirectoryContent)
+    SourcesTreeView(viewModel: SourcesTreeViewModel())
   }
 }
