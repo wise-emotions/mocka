@@ -15,12 +15,21 @@ if ! [[ -x "$(command -v xcodegen)" ]]; then
   brew install xcodegen
 fi
 
-# If argument "close" is passed, close the project.
 for var in $@
 do
+  # If argument "close" is passed, close the project.
   if [[ "$var" == "close" ]]; then
     echo -e "Killing Xcode."
     osascript -e 'tell app "Xcode" to quit'
+  fi
+
+  # If argument "format" is passed, format all the code by using swift-format.
+  if [[ "$var" == "format" ]]; then
+    echo -e "Formatting code..."
+
+    if [[ -x "$(command -v swift-format)" ]]; then
+      swift-format --configuration swiftformat.json -m format -r -i ./
+    fi
   fi
 done
 
