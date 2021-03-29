@@ -2,7 +2,7 @@ import Foundation
 import Vapor
 
 /// The list of supported `HTTP` methods.
-/// 
+///
 /// A custom list exist instead of using `Vapor`'s own list because the latter has several methods that are not needed.
 public enum HTTPMethod: String {
   /// `CONNECT` method.

@@ -9,7 +9,7 @@ public class Server: ObservableObject {
 
   /// The `Request`s created by the user.
   internal var requests: Set<Request> = []
-    
+
   /// The `PassthroughSubject` of `LogEvent`s.
   /// This subject is used to send and subscribe to `LogEvent`s.
   /// - Note: This property is marked `internal` to allow only the `Server` to send events.
@@ -20,14 +20,14 @@ public class Server: ObservableObject {
 
   /// The `Set` containing the list of subscriptions.
   private var subscriptions = Set<AnyCancellable>()
-  
+
   // MARK: - Computed Properties
-    
+
   /// The `Publisher` of `LogEvent`s.
   public var consoleLogsPublisher: AnyPublisher<LogEvent, Never> {
     consoleLogsSubject.eraseToAnyPublisher()
   }
-  
+
   // MARK: - Init
 
   /// Returns a new instance of `Server`.
@@ -94,7 +94,7 @@ public class Server: ObservableObject {
 
       application?
         .on($0.method.vaporMethod, $0.vaporParameter) { req -> EventLoopFuture<ClientResponse> in
-          guard let content = requestedResponse.content else  {
+          guard let content = requestedResponse.content else {
             return req.eventLoop
               .makeSucceededFuture(ClientResponse(status: requestedResponse.status, headers: requestedResponse.headers, body: nil))
           }

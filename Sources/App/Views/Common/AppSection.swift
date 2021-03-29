@@ -27,4 +27,3 @@ struct AppSectionPreview: PreviewProvider {
       .environmentObject(WindowManager.shared)
   }
 }
-

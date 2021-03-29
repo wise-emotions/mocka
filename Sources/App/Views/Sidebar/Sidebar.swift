@@ -31,7 +31,7 @@ struct SidebarPreviews: PreviewProvider {
       Sidebar(selectedSection: .constant(.editor))
         .previewDisplayName("Editor")
         .environmentObject(WindowManager.shared)
-      
+
       Sidebar(selectedSection: .constant(.console))
         .previewDisplayName("Console")
         .environmentObject(WindowManager.shared)

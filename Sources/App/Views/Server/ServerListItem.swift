@@ -1,5 +1,5 @@
-import Server
 import Foundation
+import Server
 import SwiftUI
 
 extension ServerList {
@@ -23,7 +23,7 @@ extension ServerList {
       HStack {
         HTTPStatusCodeEllipse(httpStatus: httpStatus)
           .padding(.leading, 8)
-        
+
         VStack(alignment: .leading, spacing: 10) {
           HStack {
             Text(httpMethod.rawValue)

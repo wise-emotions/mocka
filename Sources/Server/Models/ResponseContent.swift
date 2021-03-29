@@ -65,12 +65,12 @@ internal extension ResponseContent {
   var fileLocation: URL {
     switch self {
     case .applicationJSON(let url),
-         .textCSS(let url),
-         .textCSV(let url),
-         .textHTML(let url),
-         .textPlain(let url),
-         .textXML(let url),
-         .custom(let url):
+      .textCSS(let url),
+      .textCSV(let url),
+      .textHTML(let url),
+      .textPlain(let url),
+      .textXML(let url),
+      .custom(let url):
       return url
     }
   }
