@@ -66,10 +66,10 @@ final class SourcesTreeViewModel: ObservableObject {
     }
 
     if SourcesTreeViewModel.allowedTypes.contains(contentType) {
-      return FileSystemNode(name: name)
+      return FileSystemNode(name: name, fileURL: url)
     } else if contentType == UTType(kUTTypeFolder as String) {
       // Filter by contentType to make sure the directory is a folder, since files like Playgrounds are seen as directories.
-      return FileSystemNode(name: name, children: enumerateDirectory(at: url))
+      return FileSystemNode(name: name, fileURL: url, children: enumerateDirectory(at: url))
     }
 
     return nil

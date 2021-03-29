@@ -18,6 +18,9 @@ struct FileSystemNode: Identifiable, Hashable {
   /// The children nodes of the directory. `nil` if the node represents a file.
   let children: [FileSystemNode]?
 
+  /// The `URL` to the file.
+  let fileURL: URL
+
   // MARK: - Computed Properties
 
   /// Whether the node represents a directory in the filesystem.
@@ -32,8 +35,9 @@ struct FileSystemNode: Identifiable, Hashable {
 
   // MARK: - Init
 
-  init(name: String, children: [FileSystemNode]? = nil) {
+  init(name: String, fileURL: URL, children: [FileSystemNode]? = nil) {
     self.name = name
     self.children = children
+    self.fileURL = fileURL
   }
 }
