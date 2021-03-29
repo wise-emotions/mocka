@@ -12,7 +12,11 @@ public struct RequestedResponse {
 
   /// The expected response content.
   /// Whenever the status code does not support a body, like `HTTPResponseStatus.noContent`, content will automatically be set ti `nil`.
+  /// The response content will automatically set the value for `Content-Type` in the headers, and will override any passed value.
   public let content: ResponseContent?
+
+  /// The key defining the content type in the `HTTP` response header.
+  private let contentTypeHTTPHeaderKey = "Content-Type"
 
   /// Returns an instance of `RequestedResponse`
   /// - Parameters:
@@ -21,13 +25,18 @@ public struct RequestedResponse {
   ///   The `"Content-Length"` and `"Transfer-Encoding"` headers will be set automatically when the `body` property is mutated.
   ///   - content: The expected response content.
   ///   Whenever the status code does not support a body, like `HTTPResponseStatus.noContent`, content will automatically be set ti `nil`.
+  ///   The response content will automatically set the value for `Content-Type` in the headers, and will override any passed value.
   public init(
     status: HTTPResponseStatus,
     headers: HTTPHeaders,
     content: ResponseContent?
   ) {
     self.status = status
-    self.headers = headers
     self.content = status.mayHaveResponseBody ? content : nil
+    if let content = self.content, let contentTypeHeader = content.contentTypeHeader {
+      self.headers = headers.replacingOrAdding(name: contentTypeHTTPHeaderKey, value: contentTypeHeader)
+    } else {
+      self.headers = headers.removing(name: contentTypeHTTPHeaderKey)
+    }
   }
 }
