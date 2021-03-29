@@ -48,7 +48,7 @@ public class Server: ObservableObject {
   private var port: Int? {
     application?.http.server.configuration.port
   }
-  
+
   // MARK: - Init
 
   /// Returns a new instance of `Server`.
@@ -140,7 +140,7 @@ public class Server: ObservableObject {
             )
           }
 
-          guard let content = requestedResponse.content else  {
+          guard let content = requestedResponse.content else {
             clientResponse = ClientResponse(status: requestedResponse.status, headers: requestedResponse.headers, body: nil)
             networkExchangesSubject.send(networkExchange)
             return request.eventLoop.makeSucceededFuture(clientResponse)
