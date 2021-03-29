@@ -1,4 +1,5 @@
 import NIOHTTP1
+import Vapor
 
 /// An array of string that forms a path.
 public typealias Path = [String]
@@ -19,3 +20,6 @@ public typealias HTTPResponseStatus = NIOHTTP1.HTTPResponseStatus
 /// or split representation, such that header fields that are able to be repeated
 /// can be represented appropriately.
 public typealias HTTPHeaders = NIOHTTP1.HTTPHeaders
+
+/// A Uniform Resource Identifier.
+public typealias URI = Vapor.URI
