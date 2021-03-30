@@ -17,7 +17,7 @@ struct HTTPStatusCodeEllipse: View {
         return Color.redEye
 
       default:
-        return .clear
+        return Color.ristretto
     }
   }
 
