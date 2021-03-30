@@ -1,11 +1,12 @@
 import Foundation
 import SwiftUI
+import Server
 
 struct ServerList: View {
   /// The list of all the server calls.
   @Binding var serverCalls: [ServerCall]
 
-  /// The window manager environment object.
+  /// The `WindowManager` environment object.
   @EnvironmentObject var windowManager: WindowManager
 
   var body: some View {
@@ -44,5 +45,6 @@ struct ServerListPreviews: PreviewProvider {
   static var previews: some View {
     ServerList(serverCalls: .constant(serverCalls))
       .environmentObject(WindowManager.shared)
+      .environmentObject(Server())
   }
 }

@@ -1,9 +1,13 @@
 import SwiftUI
+import Server
 
 /// A toolbar view for the server.
 struct ServerToolbar: View {
   /// The associated view model.
   @StateObject var viewModel = ServerToolbarViewModel()
+
+  /// The `Server` environment object.
+  @EnvironmentObject var server: Server
 
   /// Whether the server is currently running.
   @Binding var isServerRunning: Bool
@@ -26,11 +30,20 @@ struct ServerToolbar: View {
 
   /// Starts or stops the server depending on whether it is running or not.
   private func startAndStopServer() {
+    switch isServerRunning {
+    case true:
+      try? server.stop()
+    case false:
+      try? server.start(with: ServerConfiguration(requests: []))
+    }
+
     isServerRunning.toggle()
   }
 
   /// Restarts the server.
-  private func restartServer() {}
+  private func restartServer() {
+    try? server.restart(with: ServerConfiguration(requests: []))
+  }
 
   /// Empties the list of requests.
   private func emptyList() {}

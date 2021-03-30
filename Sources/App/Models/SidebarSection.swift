@@ -19,14 +19,14 @@ enum SidebarSection: String, CaseIterable {
   /// The SF Symbol representing the section.
   var symbolName: String {
     switch self {
-      case .server:
-        return "server.rack"
+    case .server:
+      return "server.rack"
 
-      case .editor:
-        return "pencil.circle"
+    case .editor:
+      return "pencil.circle"
 
-      case .console:
-        return "chevron.left.slash.chevron.right"
+    case .console:
+      return "chevron.left.slash.chevron.right"
     }
   }
 }
