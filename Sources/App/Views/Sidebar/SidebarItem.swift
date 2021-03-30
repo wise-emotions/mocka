@@ -23,7 +23,7 @@ extension Sidebar {
           Text(section.title)
             .font(.system(size: 12))
         }
-        .foregroundColor(isSelected ? Color.white : Color(.secondaryLabelColor))
+        .foregroundColor(isSelected ? Color.latte : Color.macchiato)
         .frame(width: 88, height: 88, alignment: .center)
         .background(isSelected ? Color(.controlAccentColor) : Color.clear)
         .contentShape(Rectangle())
