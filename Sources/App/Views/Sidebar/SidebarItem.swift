@@ -24,7 +24,7 @@ extension Sidebar {
             .font(.system(size: 12))
         }
         .foregroundColor(isSelected ? Color.latte : Color.macchiato)
-        .frame(width: 88, height: 88, alignment: .center)
+        .frame(width: Constants.fixedSidebarWidth, height: Constants.fixedSidebarWidth, alignment: .center)
         .background(isSelected ? Color(.controlAccentColor) : Color.clear)
         .contentShape(Rectangle())
       })
