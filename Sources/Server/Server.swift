@@ -9,14 +9,20 @@ public class Server: ObservableObject {
 
   /// The `Request`s created by the user.
   internal var requests: Set<Request> = []
-    
-  /// The `PassthroughSubject` of `LogEvent`s.
-  /// This subject is used to send and subscribe to `LogEvent`s.
-  /// - Note: This property is marked `internal` to allow only the `Server` to send events.
-  internal let consoleLogsSubject = PassthroughSubject<LogEvent, Never>()
 
   /// The `Vapor` `Application` instance.
   internal private(set) var application: Application?
+
+  /// The `PassthroughSubject` of `LogEvent`s.
+  /// This subject is used to send and subscribe to `LogEvent`s.
+  /// - Note: This property is marked `internal` to allow only the `Server` to send events.
+  private let consoleLogsSubject = PassthroughSubject<LogEvent, Never>()
+
+  /// The `PassthroughSubject` of `NetworkExchange`s.
+  /// This subject is used to send and subscribe to `NetworkExchange`s.
+  /// Anytime a request/response exchange happens, a detailed version of the actors is generated and injected in this object.
+  /// - Note: This property is marked `internal` to allow only the `Server` to send events.
+  private let networkExchangesSubject = PassthroughSubject<NetworkExchange, Never>()
 
   /// The `Set` containing the list of subscriptions.
   private var subscriptions = Set<AnyCancellable>()
@@ -26,6 +32,21 @@ public class Server: ObservableObject {
   /// The `Publisher` of `LogEvent`s.
   public var consoleLogsPublisher: AnyPublisher<LogEvent, Never> {
     consoleLogsSubject.eraseToAnyPublisher()
+  }
+
+  /// The `Publisher` of `NetworkExchange`s.
+  public var networkExchangesPublisher: AnyPublisher<NetworkExchange, Never> {
+    networkExchangesSubject.eraseToAnyPublisher()
+  }
+
+  /// The host associated with the running instance's configuration.
+  private var host: String? {
+    application?.http.server.configuration.hostname
+  }
+
+  /// The port associated with the running instance's configuration.
+  private var port: Int? {
+    application?.http.server.configuration.port
   }
   
   // MARK: - Init
@@ -90,30 +111,61 @@ public class Server: ObservableObject {
     self.requests = requests
 
     requests.forEach {
+      let requestedPath = $0.path.joined(separator: "/")
       let requestedResponse = $0.requestedResponse
 
       application?
-        .on($0.method.vaporMethod, $0.vaporParameter) { req -> EventLoopFuture<ClientResponse> in
+        .on($0.method.vaporMethod, $0.vaporParameter) { [unowned self] request -> EventLoopFuture<ClientResponse> in
+          // This property is force-unwrapped because it can never fail,
+          // since the raw value passed is an identical copy of SWIFTNIO's `HTTPMethod`.
+          let httpMethod = HTTPMethod(rawValue: request.method.rawValue)!
+          let receivedRequestTimeStamp = Date().timeIntervalSince1970
+
+          var clientResponse: ClientResponse!
+          var networkExchange: NetworkExchange {
+            NetworkExchange(
+              request: DetailedRequest(
+                httpMethod: httpMethod,
+                uri: URI(scheme: URI.Scheme.http, host: host, port: port, path: request.url.path, query: request.url.query),
+                headers: request.headers,
+                timestamp: receivedRequestTimeStamp
+              ),
+              response: DetailedResponse(
+                httpMethod: httpMethod,
+                uri: URI(scheme: URI.Scheme.http, host: host, port: port, path: requestedPath),
+                headers: clientResponse.headers,
+                responseStatus: clientResponse.status,
+                timestamp: Date().timeIntervalSince1970
+              )
+            )
+          }
+
           guard let content = requestedResponse.content else  {
-            return req.eventLoop
-              .makeSucceededFuture(ClientResponse(status: requestedResponse.status, headers: requestedResponse.headers, body: nil))
+            clientResponse = ClientResponse(status: requestedResponse.status, headers: requestedResponse.headers, body: nil)
+            networkExchangesSubject.send(networkExchange)
+            return request.eventLoop.makeSucceededFuture(clientResponse)
           }
 
           guard content.isValidFileFormat() else {
-            return req.eventLoop
-              .makeFailedFuture(Abort(.badRequest, reason: "Invalid file format. Was expecting a .\(content.expectedFileExtension) file."))
+            let failReason = "Invalid file format. Was expecting a .\(content.expectedFileExtension!) file"
+            clientResponse = ClientResponse(status: .badRequest, headers: [:], body: ByteBuffer(string: failReason))
+            networkExchangesSubject.send(networkExchange)
+            return request.eventLoop.makeFailedFuture(Abort(.badRequest, reason: failReason))
           }
 
-          return req.fileio
+          return request.fileio
             .collectFile(at: content.fileLocation.absoluteString)
             .flatMap { buffer -> EventLoopFuture<ClientResponse> in
-              return req.eventLoop
-                .makeSucceededFuture(ClientResponse(status: requestedResponse.status, headers: requestedResponse.headers, body: buffer))
+              clientResponse = ClientResponse(status: requestedResponse.status, headers: requestedResponse.headers, body: buffer)
+              networkExchangesSubject.send(networkExchange)
+              return request.eventLoop.makeSucceededFuture(clientResponse)
             }
             .flatMapError { error in
               // So far, only logical error is the file not being found.
-              return req.eventLoop
-                .makeFailedFuture(Abort(.badRequest, reason: "File not found at \(content.fileLocation.absoluteString)"))
+              let failReason = "File not found at \(content.fileLocation.absoluteString)"
+              clientResponse = ClientResponse(status: .badRequest, headers: [:], body: ByteBuffer(string: failReason))
+              networkExchangesSubject.send(networkExchange)
+              return request.eventLoop.makeFailedFuture(Abort(.badRequest, reason: failReason))
             }
         }
     }
