@@ -10,7 +10,7 @@ extension Sidebar {
     let section: SidebarSection
 
     /// Whether the button should be displayed as selected.
-    var isSelected: Bool { selectedSection == section }
+    private var isSelected: Bool { selectedSection == section }
 
     var body: some View {
       Button(
@@ -21,12 +21,11 @@ extension Sidebar {
           VStack(alignment: .center, spacing: 8) {
             Image(systemName: section.symbolName)
               .font(.system(size: 21))
-
             Text(section.title)
               .font(.system(size: 12))
           }
-          .foregroundColor(isSelected ? Color.white : Color(.secondaryLabelColor))
-          .frame(width: 88, height: 88, alignment: .center)
+          .foregroundColor(isSelected ? Color.latte : Color.macchiato)
+          .frame(width: Constants.fixedSidebarWidth, height: Constants.fixedSidebarWidth, alignment: .center)
           .background(isSelected ? Color(.controlAccentColor) : Color.clear)
           .contentShape(Rectangle())
         }
