@@ -30,32 +30,32 @@ extension ServerList {
               .font(.system(size: 12, weight: .bold))
               .padding(8)
               .frame(height: 20)
-              .background(Color.gray)
+              .background(Color.ristretto)
               .cornerRadius(100)
-              .foregroundColor(Color.white)
+              .foregroundColor(Color.latte)
               .frame(width: 63, alignment: .leading)
             Text(path)
               .font(.system(size: 12))
-              .foregroundColor(Color.white)
+              .foregroundColor(Color.latte)
               .padding(.trailing, 8)
           }
           HStack(spacing: 4) {
             Text(String(httpStatus))
               .font(.system(size: 11, weight: .bold))
-              .foregroundColor(Color.gray)
+              .foregroundColor(Color.macchiato)
             Text(httpStatusMeaning)
               .font(.system(size: 11))
-              .foregroundColor(Color.gray)
+              .foregroundColor(Color.macchiato)
             Spacer()
             Text(timestamp)
               .font(.system(size: 11))
-              .foregroundColor(Color.gray)
+              .foregroundColor(Color.macchiato)
               .padding(.trailing, 4)
           }
         }
         .padding(EdgeInsets(top: 20, leading: 0, bottom: 8, trailing: 8))
       }
-      .background(Color("SecondaryColor"))
+      .background(Color.lungo)
       .clipShape(RoundedRectangle(cornerRadius: 5))
     }
   }

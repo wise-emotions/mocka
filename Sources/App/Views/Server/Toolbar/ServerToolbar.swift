@@ -25,7 +25,7 @@ struct ServerToolbar: View {
       )
     }
     .padding(EdgeInsets(top: 15, leading: 0, bottom: 15, trailing: 0))
-    .background(Color("PrimaryColor"))
+    .background(Color.doppio)
   }
 
   /// Starts or stops the server depending on whether it is running or not.

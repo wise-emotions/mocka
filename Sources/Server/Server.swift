@@ -26,9 +26,9 @@ public class Server: ObservableObject {
 
   /// The `Set` containing the list of subscriptions.
   private var subscriptions = Set<AnyCancellable>()
-
+  
   // MARK: - Computed Properties
-
+    
   /// The `Publisher` of `LogEvent`s.
   public var consoleLogsPublisher: AnyPublisher<LogEvent, Never> {
     consoleLogsSubject.eraseToAnyPublisher()

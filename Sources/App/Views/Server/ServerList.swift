@@ -26,9 +26,9 @@ struct ServerList: View {
           )
         }
       }
-      .background(Color("PrimaryColor"))
+      .background(Color.doppio)
     }
-    .background(Color("PrimaryColor"))
+    .background(Color.doppio)
     .padding(.top, windowManager.titleBarHeight(to: .remove))
     .frame(minWidth: Constants.minimumListWidth)
   }
