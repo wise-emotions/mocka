@@ -16,12 +16,18 @@ struct ServerList: View {
 
       List(serverCalls) { item in
         NavigationLink(destination: Text(item.path)) {
-          Item(httpMethod: item.httpMethod, httpStatus: item.httpStatus, httpStatusMeaning: item.httpStatusMeaning, timestamp: item.timestamp, path: item.path)
+          Item(
+            httpMethod: item.httpMethod,
+            httpStatus: item.httpStatus,
+            httpStatusMeaning: item.httpStatusMeaning,
+            timestamp: item.timestamp,
+            path: item.path
+          )
         }
       }
-      .background(Color("PrimaryColor"))
+      .background(Color.doppio)
     }
-    .background(Color("PrimaryColor"))
+    .background(Color.doppio)
     .padding(.top, windowManager.titleBarHeight(to: .remove))
     .frame(minWidth: Constants.minimumListWidth)
   }

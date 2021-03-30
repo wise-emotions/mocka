@@ -5,7 +5,7 @@ import Vapor
 /// The request is composed of:
 /// - an `HTTPMethod`
 /// - a path that the request responds to
-/// - a response location that points to where the `JSON` file associated with the request is present, if any.
+/// - a `RequestedResponse`.
 public struct Request {
   /// The `HTTPMethod` of the request.
   public let method: HTTPMethod
@@ -31,6 +31,7 @@ public struct Request {
       PathComponent(stringLiteral: String($0))
     }
   }
+  
   /// Returns a `Request` object.
   /// - Parameters:
   ///   - method: The `HTTPMethod` of the request.
@@ -47,6 +48,7 @@ public struct Request {
   }
 }
 
+// Hashable conformance to create sets.
 extension Request: Hashable {
   public static func == (lhs: Request, rhs: Request) -> Bool {
     lhs.method == rhs.method && lhs.path == rhs.path
