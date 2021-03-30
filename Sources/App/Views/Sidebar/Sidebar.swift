@@ -16,8 +16,8 @@ struct Sidebar: View {
       Spacer()
     }
     .padding(.top, windowManager.titleBarHeight(to: .add))
-    .background(Color("TertiaryColor"))
-    .frame(minWidth: Constants.sidebarWidth, maxWidth: Constants.sidebarWidth)
+    .background(Color.lungo)
+    .frame(minWidth: Constants.fixedSidebarWidth, maxWidth: Constants.fixedSidebarWidth)
   }
 }
 

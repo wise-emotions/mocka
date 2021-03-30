@@ -16,7 +16,7 @@ struct RoundedTextField: View {
     .font(.system(size: 12))
     .padding(.leading, 6)
     .frame(height: 28)
-    .background(Color(.unemphasizedSelectedContentBackgroundColor))
+    .background(Color.espresso)
     .cornerRadius(6)
   }
 }

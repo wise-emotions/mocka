@@ -8,16 +8,16 @@ struct HTTPStatusCodeEllipse: View {
   var httpStatusColor: Color {
     switch httpStatus {
       case 200...299:
-        return .green
+        return Color.irish
 
       case 300...399:
-        return .yellow
+        return Color.cappuccino
 
       case 400...599:
-        return .red
+        return Color.redEye
 
       default:
-        return .clear
+        return Color.ristretto
     }
   }
 
