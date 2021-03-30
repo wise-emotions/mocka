@@ -19,11 +19,11 @@ struct ServerList: View {
           Item(httpMethod: item.httpMethod, httpStatus: item.httpStatus, httpStatusMeaning: item.httpStatusMeaning, timestamp: item.timestamp, path: item.path)
         }
       }
-      .background(Color("PrimaryColor"))
+      .background(Color.doppio)
     }
-    .background(Color("PrimaryColor"))
+    .background(Color.doppio)
     .padding(.top, windowManager.titleBarHeight(to: .remove))
-    .frame(minWidth: Constants.listWidth)
+    .frame(minWidth: Constants.minimumListWidth)
   }
 }
 
