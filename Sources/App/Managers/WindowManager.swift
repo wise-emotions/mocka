@@ -7,6 +7,7 @@ class WindowManager: ObservableObject {
   enum TitleBarHeightMode {
     /// Add case.
     case add
+    
     /// Remove case.
     case remove
   }
@@ -27,6 +28,7 @@ class WindowManager: ObservableObject {
     switch titleBarHeightMode {
       case .add:
         return self.isFullScreen ? 0 : titleBarHeight
+        
       case .remove:
         return self.isFullScreen ? 0 : -titleBarHeight
     }
