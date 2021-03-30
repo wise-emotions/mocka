@@ -35,10 +35,12 @@ done
 
 # Create a temporary folder.
 mkdir -p .temp
+
 # Move the project userdata folder to a temporary folder.
 if ls *.xcodeproj/xcuserdata 1> /dev/null 2>&1; then
   mv *.xcodeproj/xcuserdata .temp/projxcuserdata
 fi
+
 # Remove present .xcodeproj.
 rm -rf *.xcodeproj
 
@@ -50,6 +52,7 @@ if ls projxcuserdata 1> /dev/null 2>&1; then
   mv .temp/projxcuserdata *.xcodeproj/
   mv *.xcodeproj/projxcuserdata $PROJECT_NAME.xcodeproj/xcuserdata
 fi
+
 # Remove the temporary folder.
 rm -rf .temp
 

@@ -3,6 +3,8 @@
 <plist version="1.0">
 <dict>
   <key>FILEHEADER</key>
-  <string>REMOVE ME</string>
+  <string>
+//  Mocka
+//</string>
 </dict>
 </plist>
