@@ -10,7 +10,7 @@ extension Sidebar {
     let section: SidebarSection
 
     /// Whether the button should be displayed as selected.
-    var isSelected: Bool { selectedSection == section }
+    private var isSelected: Bool { selectedSection == section }
 
     var body: some View {
       Button(action: {
