@@ -1,5 +1,5 @@
-import SwiftUI
 import Server
+import SwiftUI
 
 @main
 struct Mocka: App {
@@ -21,7 +21,7 @@ struct Mocka: App {
         Sidebar(selectedSection: $viewModel.selectedSection)
           .padding(.top, windowManager.titleBarHeight(to: .remove))
           .environmentObject(windowManager)
-        
+
         AppSection(selectedSection: $viewModel.selectedSection)
           .environmentObject(windowManager)
           .environmentObject(server)

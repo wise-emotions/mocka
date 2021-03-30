@@ -37,12 +37,12 @@ struct ServerButtons: View {
 
 struct ServerButtonsPreview: PreviewProvider {
   static var previews: some View {
-      ServerButtons(
-        isServerRunning: false,
-        startAndStopAction: {},
-        restartAction: {},
-        deleteAction: {}
-      )
+    ServerButtons(
+      isServerRunning: false,
+      startAndStopAction: {},
+      restartAction: {},
+      deleteAction: {}
+    )
   }
 }
 

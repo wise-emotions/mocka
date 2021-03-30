@@ -10,7 +10,7 @@ extension KeyValueTable {
     var index: Int
 
     var body: some View {
-      HStack() {
+      HStack {
         Group {
           TextField(item.key, text: .constant(item.key))
             .foregroundColor(Color.latte)

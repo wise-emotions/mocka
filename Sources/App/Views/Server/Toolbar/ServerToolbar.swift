@@ -1,5 +1,5 @@
-import SwiftUI
 import Server
+import SwiftUI
 
 /// A toolbar view for the server.
 struct ServerToolbar: View {
@@ -56,7 +56,7 @@ struct ServerToolbarPreview: PreviewProvider {
         .previewDisplayName("ServerToolbar with server not running")
 
       ServerToolbar(isServerRunning: .constant(true))
-      .previewDisplayName("ServerToolbar with server running")
+        .previewDisplayName("ServerToolbar with server running")
     }
     .previewLayout(.fixed(width: 370, height: 48))
   }

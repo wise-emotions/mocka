@@ -1,5 +1,5 @@
-import Server
 import Foundation
+import Server
 import SwiftUI
 
 extension ServerList {

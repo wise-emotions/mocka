@@ -8,7 +8,7 @@ extension View {
   /// - Returns: Returns `self`, to be used inside any `View`.
   func debugPrint(_ value: Any) -> some View {
     #if DEBUG
-    print(value)
+      print(value)
     #endif
     return self
   }

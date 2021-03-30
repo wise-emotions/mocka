@@ -9,10 +9,13 @@ struct SymbolButton: View {
   var action: () -> Void
 
   var body: some View {
-    Button(action: action, label: {
-      Image(systemName: symbolName)
-        .font(.system(size: 16, weight: .regular, design: .default))
-    })
+    Button(
+      action: action,
+      label: {
+        Image(systemName: symbolName)
+          .font(.system(size: 16, weight: .regular, design: .default))
+      }
+    )
     .buttonStyle(PlainButtonStyle())
   }
 }

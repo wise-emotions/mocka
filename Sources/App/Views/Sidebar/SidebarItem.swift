@@ -13,21 +13,24 @@ extension Sidebar {
     private var isSelected: Bool { selectedSection == section }
 
     var body: some View {
-      Button(action: {
-        selectedSection = section
-      }, label: {
-        VStack(alignment: .center, spacing: 8) {
-          Image(systemName: section.symbolName)
-            .font(.system(size: 21))
+      Button(
+        action: {
+          selectedSection = section
+        },
+        label: {
+          VStack(alignment: .center, spacing: 8) {
+            Image(systemName: section.symbolName)
+              .font(.system(size: 21))
 
-          Text(section.title)
-            .font(.system(size: 12))
+            Text(section.title)
+              .font(.system(size: 12))
+          }
+          .foregroundColor(isSelected ? Color.latte : Color.macchiato)
+          .frame(width: Constants.fixedSidebarWidth, height: Constants.fixedSidebarWidth, alignment: .center)
+          .background(isSelected ? Color(.controlAccentColor) : Color.clear)
+          .contentShape(Rectangle())
         }
-        .foregroundColor(isSelected ? Color.latte : Color.macchiato)
-        .frame(width: Constants.fixedSidebarWidth, height: Constants.fixedSidebarWidth, alignment: .center)
-        .background(isSelected ? Color(.controlAccentColor) : Color.clear)
-        .contentShape(Rectangle())
-      })
+      )
       .buttonStyle(PlainButtonStyle())
     }
   }
