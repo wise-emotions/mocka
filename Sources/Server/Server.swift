@@ -3,7 +3,7 @@ import Vapor
 
 /// The `Server` is the brains of `Mocka`.
 /// It starts, stops and restarts `Vapor`.
-public class Server: ObservableObject {
+public class Server {
 
   // MARK: - Stored Properties
 
