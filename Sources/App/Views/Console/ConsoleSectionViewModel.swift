@@ -3,7 +3,7 @@ import Foundation
 import Server
 import SwiftUI
 
-/// The `ViewModel` of the `LogListView`.
+/// The `ViewModel` of the `ConsoleSection`.
 final class ConsoleSectionViewModel: ObservableObject {
   
   // MARK: - Properties

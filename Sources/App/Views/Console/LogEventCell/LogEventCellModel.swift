@@ -3,7 +3,7 @@ import Server
 import SwiftUI
 
 /// The `ViewModel` of the `LogEventCell`.
-struct LogEventCellModel: ViewModel {
+struct LogEventCellModel {
 
   // MARK: - Constants
   

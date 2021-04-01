@@ -5,37 +5,35 @@ import SwiftUI
 
 /// The view that displays a list of `LogEvent`s.
 struct LogEventListView: View {
-  /// The `ViewModel` of the view.
-  @ObservedObject var viewModel: LogEventListViewModel
-
+  /// The list of log events to show.
+  @Binding var logEvents: [LogEvent]
+  
   var body: some View {
-    VStack {
-      TextField("Filter", text: $viewModel.filterText)
-      ScrollView {
-        ScrollViewReader { scrollView in
-          LazyVStack {
-            ForEach(Array(viewModel.filteredLogEvents.enumerated()), id: \.offset) { index, event in
-              LogEventCell(
-                viewModel: LogEventCellModel(
-                  logEvent: event,
-                  isOddCell: !index.isMultiple(of: 2)
-                )
+    ScrollView {
+      ScrollViewReader { scrollView in
+        LazyVStack {
+          ForEach(Array(logEvents.enumerated()), id: \.offset) { index, event in
+            LogEventCell(
+              viewModel: LogEventCellModel(
+                logEvent: event,
+                isOddCell: !index.isMultiple(of: 2)
               )
-            }
-            .listRowInsets(EdgeInsets())
+            )
           }
-          .onChange(of: viewModel.filteredLogEvents.count) { _ in
-            withAnimation {
-              scrollView.scrollTo(viewModel.filteredLogEvents.count - 1)
-            }
+          .listRowInsets(EdgeInsets())
+        }
+        .onChange(of: logEvents.count) { _ in
+          withAnimation {
+            scrollView.scrollTo(logEvents.count - 1)
           }
         }
       }
     }
+    .background(Color.doppio)
   }
 }
 
-struct ConsoleView_Previews: PreviewProvider {
+struct LogEventListView_Previews: PreviewProvider {
   static let subject = PassthroughSubject<LogEvent, Never>()
   
   static let events = [LogEvent](
@@ -46,9 +44,6 @@ struct ConsoleView_Previews: PreviewProvider {
   )
 
   static var previews: some View {
-    let viewModel = LogEventListViewModel(
-      consoleLogsPublisher: events.publisher.eraseToAnyPublisher()
-    )
-    return LogEventListView(viewModel: viewModel)
+    LogEventListView(logEvents: .constant(events))
   }
 }
