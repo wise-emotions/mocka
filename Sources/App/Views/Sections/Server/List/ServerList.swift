@@ -52,10 +52,10 @@ struct ServerList: View {
           symbolName: appEnvironment.isServerRunning ? "stop.circle" : "play.circle",
           action: {
             switch appEnvironment.isServerRunning {
-              case true:
-                try? appEnvironment.server.stop()
-              case false:
-                try? appEnvironment.server.start(with: ServerConfiguration(requests: []))
+            case true:
+              try? appEnvironment.server.stop()
+            case false:
+              try? appEnvironment.server.start(with: ServerConfiguration(requests: []))
             }
 
             appEnvironment.isServerRunning.toggle()

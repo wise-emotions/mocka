@@ -3,8 +3,8 @@
 //
 
 import Foundation
-import SwiftUI
 import Server
+import SwiftUI
 
 struct ServerSection: View {
   /// The app environment object.
