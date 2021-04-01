@@ -26,9 +26,9 @@ public class Server {
 
   /// The `Set` containing the list of subscriptions.
   private var subscriptions = Set<AnyCancellable>()
-  
+
   // MARK: - Computed Properties
-    
+
   /// The `Publisher` of `LogEvent`s.
   public var consoleLogsPublisher: AnyPublisher<LogEvent, Never> {
     consoleLogsSubject.eraseToAnyPublisher()
@@ -134,7 +134,7 @@ public class Server {
                 httpMethod: httpMethod,
                 uri: URI(scheme: URI.Scheme.http, host: host, port: port, path: requestedPath),
                 headers: clientResponse.headers,
-                responseStatus: clientResponse.status,
+                status: clientResponse.status,
                 timestamp: Date().timeIntervalSince1970
               )
             )
