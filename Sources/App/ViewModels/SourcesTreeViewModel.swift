@@ -26,13 +26,16 @@ final class SourcesTreeViewModel: ObservableObject {
     .xml
   ]
 
-  /// The list of allowed file names.
+  /// The allowed name for a file containing a request.
+  private static let allowedRequestFileName = "request.json"
+
+  /// The list of allowed file names for a response.
   /// This list is used to filter out what files will be displayed in the sources tree.
-  private static let allowedFileNames: Set<String> = ResponseBody.ContentType.allCases.reduce(into: Set<String>()) {
+  private static let allowedResponseFileNames: Set<String> = ResponseBody.ContentType.allCases.reduce(into: Set<String>()) {
     guard let fileExtension = $1.expectedFileExtension else {
       return
     }
-    $0.insert("request.\(fileExtension)")
+
     $0.insert("response.\(fileExtension)")
   }
 
@@ -112,8 +115,13 @@ final class SourcesTreeViewModel: ObservableObject {
     if children.contains(where: { $0.isFolder }) {
       return FileSystemNode(name: name, url: url, kind: .folder, children: children)
     } else {
-      // Checks if the folder name is sound. If not, return nil.
-      guard name.matchesRegex(SourcesTreeViewModel.folderNameRegex) else {
+      // Check if the folder name is sound. If not, return nil.
+      // Check if the folder contains at least a request. If not, return nil.
+      // Some folders can contain no response.
+      guard
+        name.matchesRegex(SourcesTreeViewModel.folderNameRegex) &&
+          children.contains(where: { $0.name == SourcesTreeViewModel.allowedRequestFileName })
+      else {
         return nil
       }
 
@@ -142,6 +150,10 @@ final class SourcesTreeViewModel: ObservableObject {
   ///   - contentType: The type of the file to check.
   /// - Returns: A `Bool` indicating whether the file is valid and should be allowed in the tree.
   private func isValidFile(name: String, contentType: UTType) -> Bool {
-    SourcesTreeViewModel.allowedTypes.contains(contentType) && SourcesTreeViewModel.allowedFileNames.contains(name)
+    if name == SourcesTreeViewModel.allowedRequestFileName {
+      return true
+    }
+
+    return SourcesTreeViewModel.allowedTypes.contains(contentType) && SourcesTreeViewModel.allowedResponseFileNames.contains(name)
   }
 }
