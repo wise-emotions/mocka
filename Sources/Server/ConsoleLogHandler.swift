@@ -6,19 +6,19 @@ import Vapor
 internal struct ConsoleLogHander: LogHandler {
 
   // MARK: - Properties
-  
+
   /// The `Subject` to which `LogEvent`s are sent.
   internal let subject: PassthroughSubject<LogEvent, Never>
 
   /// The `logLevel` is set to `.trace` to track all events.
   internal var logLevel: Logger.Level = .trace
-  
+
   /// The dictionary of metadata that are relevant to all logs.
   /// - Note: These metadata should be merged to the ones related to the single log.
   internal var metadata: Logger.Metadata = [:]
 
   // MARK: - Functions
-  
+
   /// This method is called when a `LogHandler` must emit a log message. There is no need for the `LogHandler` to
   /// check if the `level` is above or below the configured `logLevel` as `Logger` already performed this check and
   /// determined that a message should be logged.
