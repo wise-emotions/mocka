@@ -55,7 +55,7 @@ final class SourcesTreeViewModel: ObservableObject {
 
   /// Enumerates the contents of a directory.
   /// - Parameter url: The `URL` of the directory to scan.
-  /// - Returns: An array of `FileSystemNode` containing all subnodes of the directory.
+  /// - Returns: An array of `FileSystemNode` containing all sub-nodes of the directory.
   private func enumerateDirectory(at url: URL) -> [FileSystemNode] {
     guard
       let directoryEnumerator = FileManager.default.enumerator(
@@ -87,10 +87,10 @@ final class SourcesTreeViewModel: ObservableObject {
     }
 
     if SourcesTreeViewModel.allowedTypes.contains(contentType), SourcesTreeViewModel.allowedFileNames.contains(name) {
-      return FileSystemNode(name: name, fileURL: url)
+      return FileSystemNode(name: name, url: url, kind: .file)
     } else if contentType == UTType(kUTTypeFolder as String) {
       // Filter by contentType to make sure the directory is a folder, since files like Playgrounds are seen as directories.
-      return FileSystemNode(name: name, fileURL: url, children: enumerateDirectory(at: url))
+      return FileSystemNode(name: name, url: url, kind: .folder, children: enumerateDirectory(at: url))
     }
 
     return nil

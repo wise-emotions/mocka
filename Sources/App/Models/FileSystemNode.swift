@@ -15,29 +15,52 @@ struct FileSystemNode: Identifiable, Hashable {
   /// The name of the file or folder.
   let name: String
 
+  /// The kind of the node. Folder or `file`.
+  let kind: Kind
+
+  /// The `URL` to the node.
+  let url: URL
+
   /// The children nodes of the directory. `nil` if the node represents a file.
   let children: [FileSystemNode]?
-
-  /// The `URL` to the file.
-  let fileURL: URL
 
   // MARK: - Computed Properties
 
   /// Whether the node represents a directory in the filesystem.
   var isFolder: Bool {
-    !isFile
+    kind == .folder
   }
 
   /// Whether the node represents a file in the filesystem.
   var isFile: Bool {
-    children == nil
+    kind == .file
   }
 
   // MARK: - Init
 
-  init(name: String, fileURL: URL, children: [FileSystemNode]? = nil) {
+  /// Returns a `FileSystemNode`. An automatic `UUID` will be generated for each created node.
+  /// - Parameters:
+  ///   - name: The name of the file or folder.
+  ///   - url: The kind of the node. Folder or `file`.
+  ///   - kind: The `URL` to the node.
+  ///   - children: The children nodes of the directory. `nil` if the node represents a file.
+  init(name: String, url: URL, kind: FileSystemNode.Kind, children: [FileSystemNode]? = nil) {
     self.name = name
+    self.url = url
+    self.kind = kind
     self.children = children
-    self.fileURL = fileURL
+  }
+}
+
+// MARK: - Data Structure
+
+extension FileSystemNode {
+  /// The possibile kinds of `FileSystemNode`.
+  enum Kind {
+    /// The node is a folder.
+    case folder
+
+    /// The node is a file.
+    case file
   }
 }
