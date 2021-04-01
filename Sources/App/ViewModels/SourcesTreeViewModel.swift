@@ -14,10 +14,10 @@ final class SourcesTreeViewModel: ObservableObject {
   /// The resource keys for the infos to extract from a `URL`.
   /// `.nameKey` returns the name of the file.
   /// `.contentTypeKey` returns the type of the file. Example "public.json".
-  static let resourceKeys: Set<URLResourceKey> = [.nameKey, .contentTypeKey]
+  private static let resourceKeys: Set<URLResourceKey> = [.nameKey, .contentTypeKey]
 
   /// The list of types allowed in the tree.
-  static let allowedTypes: Set<UTType?> = [
+  private static let allowedTypes: Set<UTType?> = [
     .commaSeparatedValues,
     .css,
     .html,
@@ -28,7 +28,7 @@ final class SourcesTreeViewModel: ObservableObject {
 
   /// The list of allowed file names.
   /// This list is used to filter out what files will be displayed in the sources tree.
-  static let allowedFileNames: Set<String> = ResponseBody.ContentType.allCases.reduce(into: Set<String>()) {
+  private static let allowedFileNames: Set<String> = ResponseBody.ContentType.allCases.reduce(into: Set<String>()) {
     guard let fileExtension = $1.expectedFileExtension else {
       return
     }
@@ -37,7 +37,7 @@ final class SourcesTreeViewModel: ObservableObject {
   }
 
   /// The regex the name of the folder should match to be allowed in the tree.
-  static let folderNameRegex: String = "(CONNECT|DELETE|GET|HEAD|OPTIONS|PATCH|POST|PUT|TRACE)-[A-Za-z0-9-]*"
+  private static let folderNameRegex: String = "(CONNECT|DELETE|GET|HEAD|OPTIONS|PATCH|POST|PUT|TRACE)-[A-Za-z0-9-]*"
 
   // MARK: - Stored Properties
 
@@ -46,19 +46,23 @@ final class SourcesTreeViewModel: ObservableObject {
 
   // MARK: - Init
 
-  init() {
+  /// Returns an instance of `SourcesTreeViewModel`.
+  ///
+  /// This instantiation will fail if the root path value has not been set yet.
+  init() throws {
     guard let rootDirectory = Logic.RootPath.value else {
-      directoryContent = []
-      return
+      throw MockaError.missingRootPathValue
     }
 
-    directoryContent = enumerateDirectory(at: rootDirectory)
+    directoryContent = contents(of: rootDirectory)
   }
+
+  // MARK: - Functions
 
   /// Enumerates the contents of a directory.
   /// - Parameter url: The `URL` of the directory to scan.
   /// - Returns: An array of `FileSystemNode` containing all sub-nodes of the directory.
-  private func enumerateDirectory(at url: URL) -> [FileSystemNode] {
+  private func contents(of url: URL) -> [FileSystemNode] {
     guard
       let directoryEnumerator = FileManager.default.enumerator(
         at: url,
@@ -69,15 +73,13 @@ final class SourcesTreeViewModel: ObservableObject {
       return []
     }
 
-    var nodes: [FileSystemNode] = []
-
-    for case let fileURL as URL in directoryEnumerator {
-      if let node = node(at: fileURL) {
-        nodes.append(node)
+    return directoryEnumerator.reduce(into: [FileSystemNode]()) {
+      guard let url = $1 as? URL, let node = node(at: url) else {
+        return
       }
-    }
 
-    return nodes
+      $0.append(node)
+    }
   }
 
   /// Gets the filesystem node at the specified `URL`.
@@ -88,10 +90,11 @@ final class SourcesTreeViewModel: ObservableObject {
       return nil
     }
 
-    if isValidFile(name: name, contentType: contentType) {
-      return FileSystemNode(name: name, url: url, kind: .file)
-    } else {
+    if contentType == .folder {
       return folderNode(at: url)
+    } else {
+      return isValidFile(name: name, contentType: contentType) ?
+        FileSystemNode(name: name, url: url, kind: .file) : nil
     }
   }
 
@@ -99,19 +102,22 @@ final class SourcesTreeViewModel: ObservableObject {
   /// - Parameter url: The `URL` of the folder node to retrieve.
   /// - Returns: A `FileSystemNode` representing the node at the specified `URL`. `nil` if the `URL` doesn't point to a folder or the folder is not valid.
   private func folderNode(at url: URL) -> FileSystemNode? {
-    guard
-      let (name, contentType) = resourceValues(for: url),
-      contentType == .folder
-    else {
+    guard let (name, contentType) = resourceValues(for: url), contentType == .folder else {
       return nil
     }
 
-    let children = enumerateDirectory(at: url)
+    let children = contents(of: url)
 
+    // If the folder contains other folder, return the node.
     if children.contains(where: { $0.isFolder }) {
       return FileSystemNode(name: name, url: url, kind: .folder, children: children)
     } else {
-      return name.matchesRegex(SourcesTreeViewModel.folderNameRegex) ? FileSystemNode(name: name, url: url, kind: .folder, children: children) : nil
+      // Checks if the folder name is sound. If not, return nil.
+      guard name.matchesRegex(SourcesTreeViewModel.folderNameRegex) else {
+        return nil
+      }
+
+      return FileSystemNode(name: name, url: url, kind: .folder, children: children)
     }
   }
 
@@ -126,7 +132,7 @@ final class SourcesTreeViewModel: ObservableObject {
     else {
       return nil
     }
-
+    
     return (name, contentType)
   }
 
