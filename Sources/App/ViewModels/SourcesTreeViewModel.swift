@@ -31,7 +31,7 @@ final class SourcesTreeViewModel: ObservableObject {
 
   /// The list of allowed file names for a response.
   /// This list is used to filter out what files will be displayed in the sources tree.
-  private static let allowedResponseFileNames: Set<String> = ResponseBody.ContentType.allCases.reduce(into: Set<String>()) {
+  private static let allowedResponseFileNames = ResponseBody.ContentType.allCases.reduce(into: Set<String>()) {
     guard let fileExtension = $1.expectedFileExtension else {
       return
     }
@@ -40,7 +40,7 @@ final class SourcesTreeViewModel: ObservableObject {
   }
 
   /// The regex the name of the folder should match to be allowed in the tree.
-  private static let folderNameRegex: String = "(CONNECT|DELETE|GET|HEAD|OPTIONS|PATCH|POST|PUT|TRACE)-[A-Za-z0-9-]*"
+  private static let folderNameRegex = "(CONNECT|DELETE|GET|HEAD|OPTIONS|PATCH|POST|PUT|TRACE)-[A-Za-z0-9-]*"
 
   // MARK: - Stored Properties
 
