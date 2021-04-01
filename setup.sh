@@ -15,21 +15,32 @@ if ! [[ -x "$(command -v xcodegen)" ]]; then
   brew install xcodegen
 fi
 
-# If argument "close" is passed, close the project.
 for var in $@
 do
+  # If argument "close" is passed, close the project.
   if [[ "$var" == "close" ]]; then
     echo -e "Killing Xcode."
     osascript -e 'tell app "Xcode" to quit'
+  fi
+
+  # If argument "format" is passed, format all the code by using swift-format.
+  if [[ "$var" == "format" ]]; then
+    echo -e "Formatting code..."
+
+    if [[ -x "$(command -v swift-format)" ]]; then
+      swift-format --configuration swiftformat.json -m format -r -i ./
+    fi
   fi
 done
 
 # Create a temporary folder.
 mkdir -p .temp
+
 # Move the project userdata folder to a temporary folder.
 if ls *.xcodeproj/xcuserdata 1> /dev/null 2>&1; then
   mv *.xcodeproj/xcuserdata .temp/projxcuserdata
 fi
+
 # Remove present .xcodeproj.
 rm -rf *.xcodeproj
 
@@ -41,6 +52,7 @@ if ls projxcuserdata 1> /dev/null 2>&1; then
   mv .temp/projxcuserdata *.xcodeproj/
   mv *.xcodeproj/projxcuserdata $PROJECT_NAME.xcodeproj/xcuserdata
 fi
+
 # Remove the temporary folder.
 rm -rf .temp
 

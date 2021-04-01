@@ -10,7 +10,7 @@ struct KeyValueTable: View {
       Header()
 
       ScrollView {
-        LazyVStack {
+        LazyVStack(spacing: 0) {
           ForEach(Array(keyValueItems.enumerated()), id: \.offset) { index, item in
             Row(item: item, index: index)
           }
@@ -26,7 +26,16 @@ struct KeyValueTablePreviews: PreviewProvider {
     KeyValueTable(keyValueItems: [
       KeyValueItem(key: "Test", value: "Test"),
       KeyValueItem(key: "Test2", value: "Test2"),
-      KeyValueItem(key: "Test3", value: "Test3")
+      KeyValueItem(key: "Test3", value: "Test3"),
     ])
+  }
+}
+
+struct KeyValueTableLibraryContent: LibraryContentProvider {
+  let keyValueItems: [KeyValueItem] = []
+
+  @LibraryContentBuilder
+  var views: [LibraryItem] {
+    LibraryItem(KeyValueTable(keyValueItems: keyValueItems))
   }
 }
