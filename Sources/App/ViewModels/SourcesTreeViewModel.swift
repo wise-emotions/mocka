@@ -11,10 +11,31 @@ final class SourcesTreeViewModel: ObservableObject {
   // MARK: - Constants
 
   /// The resource keys for the infos to extract from a `URL`.
+  /// `.nameKey` returns the name of the file.
+  /// `.contentTypeKey` returns the type of the file. Example "public.json".
   static let resourceKeys: Set<URLResourceKey> = [.nameKey, .contentTypeKey]
 
   /// The list of types allowed in the tree.
-  static let allowedTypes: Set<UTType?> = [UTType(kUTTypeJSON as String)]
+  static let allowedTypes: Set<UTType?> = [
+    UTType("public.json"),
+    UTType("public.comma-separated-values-text"),
+    UTType("public.plain-text"),
+    UTType("public.html"),
+    UTType("public.xml"),
+    UTType("public.css")
+  ]
+
+  /// The list of allowed file names.
+  /// This list is used to filter out what files will be displayed in the sources tree.
+  static let allowedFileNames: Set<String> = [
+    "request.json",
+    "response.json",
+    "response.csv",
+    "response.css",
+    "response.html",
+    "response.plain",
+    "response.xml"
+  ]
 
   // MARK: - Stored Properties
 
@@ -24,12 +45,12 @@ final class SourcesTreeViewModel: ObservableObject {
   // MARK: - Init
 
   init() {
-    guard let directoryURL = FileManager.default.urls(for: .developerDirectory, in: .userDomainMask).first else {
+    guard let rootDirectory = Logic.RootPath.value else {
       directoryContent = []
       return
     }
 
-    directoryContent = enumerateDirectory(at: directoryURL)
+    directoryContent = enumerateDirectory(at: rootDirectory)
   }
 
   /// Enumerates the contents of a directory.
@@ -65,7 +86,7 @@ final class SourcesTreeViewModel: ObservableObject {
       return nil
     }
 
-    if SourcesTreeViewModel.allowedTypes.contains(contentType) {
+    if SourcesTreeViewModel.allowedTypes.contains(contentType), SourcesTreeViewModel.allowedFileNames.contains(name) {
       return FileSystemNode(name: name, fileURL: url)
     } else if contentType == UTType(kUTTypeFolder as String) {
       // Filter by contentType to make sure the directory is a folder, since files like Playgrounds are seen as directories.
