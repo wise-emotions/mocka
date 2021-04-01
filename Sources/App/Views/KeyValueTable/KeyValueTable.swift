@@ -8,12 +8,9 @@ struct KeyValueTable: View {
   var body: some View {
     VStack {
       Header()
-
-      ScrollView {
-        LazyVStack(spacing: 0) {
-          ForEach(Array(keyValueItems.enumerated()), id: \.offset) { index, item in
-            Row(item: item, index: index)
-          }
+      LazyVStack(spacing: 0) {
+        ForEach(Array(keyValueItems.enumerated()), id: \.offset) { index, item in
+          Row(item: item, index: index)
         }
       }
     }
