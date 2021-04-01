@@ -4,13 +4,12 @@
 
 import SwiftUI
 
-/// A view that displays the content of a directory in the form of a tree.
+/// A view that displays the content of directories containing a request/response? pair in the form of a tree.
 struct SourcesTreeView: View {
   /// The view model of the directory tree.
   @StateObject var viewModel: SourcesTreeViewModel
 
   var body: some View {
-    NavigationView {
       List(viewModel.directoryContent, children: \.children) { node in
         NavigationLink(destination: Text(node.url.path)) {
           Node(name: node.name, isFolder: node.isFolder)
@@ -25,7 +24,6 @@ struct SourcesTreeView: View {
         )
       }
       .listStyle(SidebarListStyle())
-    }
   }
 }
 
@@ -52,6 +50,6 @@ extension SourcesTreeView {
 
 struct SourcesTreeView_Previews: PreviewProvider {
   static var previews: some View {
-    SourcesTreeView(viewModel: SourcesTreeViewModel())
+    SourcesTreeView(viewModel: try! SourcesTreeViewModel())
   }
 }
