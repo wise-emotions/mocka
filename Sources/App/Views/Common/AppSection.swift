@@ -1,7 +1,10 @@
-import Foundation
+import Server
 import SwiftUI
 
 struct AppSection: View {
+  /// The server instance of the app.
+  @EnvironmentObject var server: Server
+
   /// The selected section.
   @Binding var selectedSection: SidebarSection
 
@@ -13,7 +16,12 @@ struct AppSection: View {
       case .editor:
         ServerSection()
       case .console:
-        ServerSection()
+        ConsoleSection(
+          viewModel:
+            ConsoleSectionViewModel(
+              consoleLogsPublisher: server.consoleLogsPublisher
+            )
+        )
       }
     }
     .frame(minWidth: Constants.minimumAppSectionWidth, alignment: .leading)
