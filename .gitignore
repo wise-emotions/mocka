@@ -101,6 +101,6 @@ fastlane/FastlaneRunner
 
 # End of https://www.gitignore.io/api/xcode,macos,swiftpm,cocoapods,swiftpackagemanager,fastlane
 
-*.plist
+Info.plist
 projxcuserdata
 workspacexcuserdata
