@@ -1,3 +1,7 @@
+//
+//  Mocka
+//
+
 import Foundation
 import SwiftUI
 
@@ -6,6 +10,6 @@ struct ServerDetail: View {
     VStack {
       Text("Detail")
     }
-    .frame(minWidth: Constants.minimumDetailWidth)
+    .frame(minWidth: .minimumDetailWidth)
   }
 }

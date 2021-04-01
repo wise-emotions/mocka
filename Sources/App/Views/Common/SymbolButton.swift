@@ -1,3 +1,7 @@
+//
+//  Mocka
+//
+
 import SwiftUI
 
 /// A `Button` with plain style and SF Symbol as image.
@@ -17,6 +21,7 @@ struct SymbolButton: View {
       }
     )
     .buttonStyle(PlainButtonStyle())
+    .frame(width: 20, height: 20, alignment: .center)
   }
 }
 

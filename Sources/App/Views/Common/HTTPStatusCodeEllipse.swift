@@ -1,8 +1,12 @@
+//
+//  Mocka
+//
+
 import SwiftUI
 
 struct HTTPStatusCodeEllipse: View {
   /// The `HTTPStatus` of the response`
-  let httpStatus: Int
+  let httpStatus: UInt
 
   /// The color of the ellipse, based on the HTTPStatus.
   var httpStatusColor: Color {
@@ -35,7 +39,7 @@ struct HTTPStatusCodeEllipsePreviews: PreviewProvider {
 }
 
 struct HTTPStatusCodeEllipseLibraryContent: LibraryContentProvider {
-  let statusCode: Int = 200
+  let statusCode: UInt = 200
 
   @LibraryContentBuilder
   var views: [LibraryItem] {
