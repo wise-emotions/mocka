@@ -3,14 +3,8 @@ import Foundation
 import Server
 import SwiftUI
 
-/// A protocol representing a view model.
-protocol ViewModel {}
-
-/// A protocol representing an observable view model.
-protocol ObservableViewModel: ViewModel, ObservableObject {}
-
 /// The `ViewModel` of the `LogListView`.
-final class LogEventListViewModel: ObservableViewModel {
+final class ConsoleSectionViewModel: ObservableObject {
   
   // MARK: - Properties
   
