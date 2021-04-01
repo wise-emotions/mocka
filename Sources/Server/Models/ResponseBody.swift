@@ -9,7 +9,7 @@ public struct ResponseBody {
   public let fileLocation: URL
 }
 
-// MARK: - Public `ResponseContent` extension
+// MARK: - Public `ResponseContent` Extension
 
 public extension ResponseBody {
   /// The `Content-Type` of the response body.
@@ -45,7 +45,7 @@ public extension ResponseBody {
   }
 }
 
-// MARK: - Internal `ResponseContent` extension
+// MARK: - Internal `ResponseBody` Extension
 
 internal extension ResponseBody {
   /// Checks if the actual file extension in the `URL` matches the expected one for the body type.
@@ -64,7 +64,7 @@ internal extension ResponseBody {
   }
 }
 
-// MARK: - Public `ResponseContent.ContentType` extension
+// MARK: - Public `ResponseBody.ContentType` Extension
 
 public extension ResponseBody.ContentType {
   /// The file extension associated with each `Content-Type`.
@@ -94,7 +94,7 @@ public extension ResponseBody.ContentType {
   }
 }
 
-// MARK: - Internal `ResponseContent.ContentType` extension
+// MARK: - Internal `ResponseBody.ContentType` Extension
 
 internal extension ResponseBody.ContentType {
   /// The value to associated to `Content-Type` in the response header.
