@@ -1,3 +1,7 @@
+//
+//  Mocka
+//
+
 import SwiftUI
 
 /// The key-value table structure.
@@ -7,17 +11,18 @@ struct KeyValueTable: View {
 
   var body: some View {
     VStack {
-      Header()
+      KeyValueTableHeader()
 
       ScrollView {
         LazyVStack(spacing: 0) {
           ForEach(Array(keyValueItems.enumerated()), id: \.offset) { index, item in
-            Row(item: item, index: index)
+            KeyValueTableRow(item: item, index: index)
           }
         }
       }
     }
     .padding()
+    .background(Color.doppio)
   }
 }
 
@@ -26,7 +31,7 @@ struct KeyValueTablePreviews: PreviewProvider {
     KeyValueTable(keyValueItems: [
       KeyValueItem(key: "Test", value: "Test"),
       KeyValueItem(key: "Test2", value: "Test2"),
-      KeyValueItem(key: "Test3", value: "Test3"),
+      KeyValueItem(key: "Test3", value: "Test3\nasd\nasaTest"),
     ])
   }
 }
