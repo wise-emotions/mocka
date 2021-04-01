@@ -4,6 +4,7 @@
 
 import Foundation
 import UniformTypeIdentifiers
+import Server
 
 /// The view model of the `SourcesTreeView`.
 final class SourcesTreeViewModel: ObservableObject {
@@ -17,25 +18,23 @@ final class SourcesTreeViewModel: ObservableObject {
 
   /// The list of types allowed in the tree.
   static let allowedTypes: Set<UTType?> = [
-    UTType("public.json"),
-    UTType("public.comma-separated-values-text"),
-    UTType("public.plain-text"),
-    UTType("public.html"),
-    UTType("public.xml"),
-    UTType("public.css")
+    .commaSeparatedValues,
+    .css,
+    .html,
+    .json,
+    .plainText,
+    .xml
   ]
 
   /// The list of allowed file names.
   /// This list is used to filter out what files will be displayed in the sources tree.
-  static let allowedFileNames: Set<String> = [
-    "request.json",
-    "response.json",
-    "response.csv",
-    "response.css",
-    "response.html",
-    "response.txt",
-    "response.xml"
-  ]
+  static let allowedFileNames: Set<String> = ResponseBody.ContentType.allCases.reduce(into: Set<String>()) {
+    guard let fileExtension = $1.expectedFileExtension else {
+      return
+    }
+    $0.insert("request.\(fileExtension)")
+    $0.insert("response.\(fileExtension)")
+  }
 
   /// The regex the name of the folder should match to be allowed in the tree.
   static let folderNameRegex: String = "(CONNECT|DELETE|GET|HEAD|OPTIONS|PATCH|POST|PUT|TRACE)-[A-Za-z0-9-]*"
@@ -102,7 +101,7 @@ final class SourcesTreeViewModel: ObservableObject {
   private func folderNode(at url: URL) -> FileSystemNode? {
     guard
       let (name, contentType) = resourceValues(for: url),
-      contentType == UTType("public.folder")
+      contentType == .folder
     else {
       return nil
     }
