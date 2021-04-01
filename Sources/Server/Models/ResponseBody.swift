@@ -9,7 +9,7 @@ public struct ResponseBody {
   public let fileLocation: URL
 }
 
-// MARK: - Public `ResponseContent` Extension
+// MARK: - Public `ResponseBody` Extension
 
 public extension ResponseBody {
   /// The `Content-Type` of the response body.

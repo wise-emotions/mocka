@@ -41,8 +41,8 @@ struct FileSystemNode: Identifiable, Hashable {
   /// Returns a `FileSystemNode`. An automatic `UUID` will be generated for each created node.
   /// - Parameters:
   ///   - name: The name of the file or folder.
-  ///   - url: The kind of the node. Folder or `file`.
-  ///   - kind: The `URL` to the node.
+  ///   - url: The `URL` to the node.
+  ///   - kind: The kind of the node. Folder or `file`.
   ///   - children: The children nodes of the directory. `nil` if the node represents a file.
   init(name: String, url: URL, kind: FileSystemNode.Kind, children: [FileSystemNode]? = nil) {
     self.name = name
