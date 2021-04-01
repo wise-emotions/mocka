@@ -33,9 +33,12 @@ final class SourcesTreeViewModel: ObservableObject {
     "response.csv",
     "response.css",
     "response.html",
-    "response.plain",
+    "response.txt",
     "response.xml"
   ]
+
+  /// The regex the name of the folder should match to be allowed in the tree.
+  static let folderNameRegex: String = "(CONNECT|DELETE|GET|HEAD|OPTIONS|PATCH|POST|PUT|TRACE)-[A-Za-z0-9-]*"
 
   // MARK: - Stored Properties
 
@@ -86,14 +89,31 @@ final class SourcesTreeViewModel: ObservableObject {
       return nil
     }
 
-    if SourcesTreeViewModel.allowedTypes.contains(contentType), SourcesTreeViewModel.allowedFileNames.contains(name) {
+    if isValidFile(name: name, contentType: contentType) {
       return FileSystemNode(name: name, url: url, kind: .file)
-    } else if contentType == UTType(kUTTypeFolder as String) {
-      // Filter by contentType to make sure the directory is a folder, since files like Playgrounds are seen as directories.
-      return FileSystemNode(name: name, url: url, kind: .folder, children: enumerateDirectory(at: url))
+    } else {
+      return folderNode(at: url)
+    }
+  }
+
+  /// Creates the node for a folder, provided that the `URL` points to a valid folder.
+  /// - Parameter url: The `URL` of the folder node to retrieve.
+  /// - Returns: A `FileSystemNode` representing the node at the specified `URL`. `nil` if the `URL` doesn't point to a folder or the folder is not valid.
+  private func folderNode(at url: URL) -> FileSystemNode? {
+    guard
+      let (name, contentType) = resourceValues(for: url),
+      contentType == UTType("public.folder")
+    else {
+      return nil
     }
 
-    return nil
+    let children = enumerateDirectory(at: url)
+
+    if children.contains(where: { $0.isFolder }) {
+      return FileSystemNode(name: name, url: url, kind: .folder, children: children)
+    } else {
+      return name.matchesRegex(SourcesTreeViewModel.folderNameRegex) ? FileSystemNode(name: name, url: url, kind: .folder, children: children) : nil
+    }
   }
 
   /// Returns informations about the specified `URL`.
@@ -109,5 +129,14 @@ final class SourcesTreeViewModel: ObservableObject {
     }
 
     return (name, contentType)
+  }
+
+  /// Checks if the specified file name and content type are allowed in the tree.
+  /// - Parameters:
+  ///   - name: The name of the file to check.
+  ///   - contentType: The type of the file to check.
+  /// - Returns: A `Bool` indicating whether the file is valid and should be allowed in the tree.
+  private func isValidFile(name: String, contentType: UTType) -> Bool {
+    SourcesTreeViewModel.allowedTypes.contains(contentType) && SourcesTreeViewModel.allowedFileNames.contains(name)
   }
 }

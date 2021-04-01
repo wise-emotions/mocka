@@ -12,7 +12,7 @@ struct SourcesTreeView: View {
   var body: some View {
     NavigationView {
       List(viewModel.directoryContent, children: \.children) { node in
-        NavigationLink(destination: Text(node.fileURL.path)) {
+        NavigationLink(destination: Text(node.url.path)) {
           Node(name: node.name, isFolder: node.isFolder)
         }
         .contextMenu(
