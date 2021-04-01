@@ -2,9 +2,19 @@ import Foundation
 
 /// An object containing the `Content-Type` and the file path for the body of the response.
 public struct ResponseBody {
+  /// The kind of the content of the response.
+  public let contentType: ContentType
+  
+  /// The url of the file holding the content.
+  public let fileLocation: URL
+}
+
+// MARK: - Public `ResponseContent` extension
+
+public extension ResponseBody {
   /// The `Content-Type` of the response body.
-  public enum ContentType: CaseIterable {
-    
+  enum ContentType: CaseIterable {
+
     // MARK: Application
 
     /// `Content-Type: application/json`.
@@ -33,12 +43,6 @@ public struct ResponseBody {
     /// This preset does not provide any validation.
     case custom
   }
-
-  /// The kind of the content of the response.
-  public let contentType: ContentType
-
-  /// The url of the file holding the content.
-  public let fileLocation: URL
 }
 
 // MARK: - Internal `ResponseContent` extension
