@@ -14,11 +14,26 @@ final class LogEventListViewModel: ObservableViewModel {
   
   // MARK: - Properties
   
+  /// The text used to filter out the `LogEvent`s.
+  @Published var filterText: String = ""
+  
   /// The `Set` containing the list of subscriptions.
   var subscriptions = Set<AnyCancellable>()
   
   /// The array of `LogEvent`s.
-  @Published var logEvents: [LogEvent] = []
+  @Published private var logEvents: [LogEvent] = []
+  
+  /// The array of `LogEvent`s filtered by the `filterText`.
+  var filteredLogEvents: [LogEvent] {
+    if filterText.isEmpty {
+      return logEvents
+    } else {
+      return logEvents.filter {
+        $0.level.name.lowercased().contains(filterText.lowercased()) ||
+          $0.message.lowercased().contains(filterText.lowercased())
+      }
+    }
+  }
   
   // MARK: - Init
   

@@ -9,16 +9,28 @@ struct LogEventListView: View {
   @ObservedObject var viewModel: LogEventListViewModel
 
   var body: some View {
-    List {
-      ForEach(Array(viewModel.logEvents.enumerated()), id: \.offset) { index, event in
-        LogEventCell(
-          viewModel: LogEventCellModel(
-            logEvent: event,
-            isOddCell: !index.isMultiple(of: 2)
-          )
-        )
+    VStack {
+      TextField("Filter", text: $viewModel.filterText)
+      ScrollView {
+        ScrollViewReader { scrollView in
+          LazyVStack {
+            ForEach(Array(viewModel.filteredLogEvents.enumerated()), id: \.offset) { index, event in
+              LogEventCell(
+                viewModel: LogEventCellModel(
+                  logEvent: event,
+                  isOddCell: !index.isMultiple(of: 2)
+                )
+              )
+            }
+            .listRowInsets(EdgeInsets())
+          }
+          .onChange(of: viewModel.filteredLogEvents.count) { _ in
+            withAnimation {
+              scrollView.scrollTo(viewModel.filteredLogEvents.count - 1)
+            }
+          }
+        }
       }
-      .listRowInsets(EdgeInsets())
     }
   }
 }
