@@ -10,6 +10,6 @@ struct ServerDetail: View {
     VStack {
       Text("Detail")
     }
-    .frame(minWidth: .minimumDetailWidth)
+    .frame(minWidth: Size.minimumDetailWidth)
   }
 }

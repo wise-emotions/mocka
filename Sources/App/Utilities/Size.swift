@@ -5,7 +5,7 @@
 import Foundation
 
 /// App constants enum.
-extension CGFloat {
+enum Size {
   /// Minimum Sidebar width.
   static let minimumSidebarWidth: CGFloat = 140
 

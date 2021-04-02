@@ -34,8 +34,8 @@ struct SidebarItem: View {
         .frame(
           minWidth: 0,
           maxWidth: .infinity,
-          minHeight: .fixedSidebarHeight,
-          maxHeight: .fixedSidebarHeight,
+          minHeight: Size.fixedSidebarHeight,
+          maxHeight: Size.fixedSidebarHeight,
           alignment: .center
         )
         .background(isSelected ? Color(.controlAccentColor) : Color.clear)

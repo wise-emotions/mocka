@@ -30,7 +30,7 @@ struct ServerList: View {
       }
       .background(Color.doppio)
     }
-    .frame(minWidth: .minimumListWidth)
+    .frame(minWidth: Size.minimumListWidth)
     .background(Color.doppio)
     .toolbar {
       ToolbarItem {
@@ -44,7 +44,7 @@ struct ServerList: View {
 
       ToolbarItem {
         RoundedTextField(text: $viewModel.filterText)
-          .frame(minWidth: .minimumFilterTextFieldWidth, maxWidth: .infinity)
+          .frame(minWidth: Size.minimumFilterTextFieldWidth, maxWidth: .infinity)
       }
 
       ToolbarItemGroup {
