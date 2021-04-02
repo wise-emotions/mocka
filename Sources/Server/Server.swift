@@ -8,7 +8,7 @@ public class Server {
   // MARK: - Stored Properties
 
   /// The `Request`s created by the user.
-  internal var requests: Set<Request> = []
+  internal var requests: Set<Models.Request> = []
 
   /// The `Vapor` `Application` instance.
   internal private(set) var application: Application?
@@ -22,7 +22,7 @@ public class Server {
   /// This subject is used to send and subscribe to `NetworkExchange`s.
   /// Anytime a request/response exchange happens, a detailed version of the actors is generated and injected in this object.
   /// - Note: This property is marked `internal` to allow only the `Server` to send events.
-  private let networkExchangesSubject = PassthroughSubject<NetworkExchange, Never>()
+  private let networkExchangesSubject = PassthroughSubject<Models.NetworkExchange, Never>()
 
   /// The `Set` containing the list of subscriptions.
   private var subscriptions = Set<AnyCancellable>()
@@ -35,17 +35,17 @@ public class Server {
   }
 
   /// The `Publisher` of `NetworkExchange`s.
-  public var networkExchangesPublisher: AnyPublisher<NetworkExchange, Never> {
+  public var networkExchangesPublisher: AnyPublisher<Models.NetworkExchange, Never> {
     networkExchangesSubject.eraseToAnyPublisher()
   }
 
   /// The host associated with the running instance's configuration.
-  private var host: String? {
+  internal var host: String? {
     application?.http.server.configuration.hostname
   }
 
   /// The port associated with the running instance's configuration.
-  private var port: Int? {
+  internal var port: Int? {
     application?.http.server.configuration.port
   }
   
@@ -107,7 +107,7 @@ public class Server {
 
   /// Registers a route for every request.
   /// - Parameter requests: The list of requests to manage.
-  private func registerRoutes(for requests: Set<Request>) {
+  private func registerRoutes(for requests: Set<Models.Request>) {
     self.requests = requests
 
     requests.forEach {
@@ -122,15 +122,15 @@ public class Server {
           let receivedRequestTimeStamp = Date().timeIntervalSince1970
 
           var clientResponse: ClientResponse!
-          var networkExchange: NetworkExchange {
-            NetworkExchange(
-              request: DetailedRequest(
+          var networkExchange: Models.NetworkExchange {
+            Models.NetworkExchange(
+              request: Models.DetailedRequest(
                 httpMethod: httpMethod,
                 uri: URI(scheme: URI.Scheme.http, host: host, port: port, path: request.url.path, query: request.url.query),
                 headers: request.headers,
                 timestamp: receivedRequestTimeStamp
               ),
-              response: DetailedResponse(
+              response: Models.DetailedResponse(
                 httpMethod: httpMethod,
                 uri: URI(scheme: URI.Scheme.http, host: host, port: port, path: requestedPath),
                 headers: clientResponse.headers,
