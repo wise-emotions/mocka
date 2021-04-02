@@ -6,6 +6,7 @@ import Foundation
 import Server
 import SwiftUI
 
+/// The server list item. To be used inside a `ServerList` element.
 struct ServerListItem: View {
   /// The `HTTPMethod` of the request.
   let httpMethod: HTTPMethod
