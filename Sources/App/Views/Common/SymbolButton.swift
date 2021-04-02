@@ -7,7 +7,7 @@ import SwiftUI
 /// A `Button` with plain style and SF Symbol as image.
 struct SymbolButton: View {
   /// The name of the SF Symbol.
-  var symbolName: String
+  var symbolName: SFSymbol
 
   /// The action to execute when the button is tapped.
   var action: () -> Void
@@ -16,7 +16,7 @@ struct SymbolButton: View {
     Button(
       action: action,
       label: {
-        Image(systemName: symbolName)
+        Image(systemName: symbolName.rawValue)
           .font(.system(size: 16, weight: .regular, design: .default))
       }
     )
@@ -27,12 +27,12 @@ struct SymbolButton: View {
 
 struct SymbolButtonPreviews: PreviewProvider {
   static var previews: some View {
-    SymbolButton(symbolName: "play.circle", action: {})
+    SymbolButton(symbolName: .playCircle, action: {})
   }
 }
 
 struct SymbolButtonLibraryContent: LibraryContentProvider {
-  let symbolName = "play.circle"
+  let symbolName: SFSymbol = .playCircle
   let action = {}
 
   @LibraryContentBuilder

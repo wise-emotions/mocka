@@ -35,7 +35,7 @@ struct ServerList: View {
     .toolbar {
       ToolbarItem {
         SymbolButton(
-          symbolName: "sidebar.squares.left",
+          symbolName: .sidebarSquaresLeft,
           action: {
             NSApp.keyWindow?.firstResponder?.tryToPerform(#selector(NSSplitViewController.toggleSidebar(_:)), with: nil)
           }
@@ -49,7 +49,7 @@ struct ServerList: View {
 
       ToolbarItemGroup {
         SymbolButton(
-          symbolName: appEnvironment.isServerRunning ? "stop.circle" : "play.circle",
+          symbolName: appEnvironment.isServerRunning ? .stopCircle : .playCircle,
           action: {
             switch appEnvironment.isServerRunning {
             case true:
@@ -64,7 +64,7 @@ struct ServerList: View {
         )
 
         SymbolButton(
-          symbolName: "memories",
+          symbolName: .memories,
           action: {
             try? appEnvironment.server.restart(with: ServerConfiguration(requests: []))
           }
@@ -72,7 +72,7 @@ struct ServerList: View {
         .disabled(!appEnvironment.isServerRunning)
 
         SymbolButton(
-          symbolName: "trash",
+          symbolName: .trash,
           action: {}
         )
       }
