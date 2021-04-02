@@ -23,7 +23,7 @@ struct ServerList: View {
             httpMethod: networkExchange.response.httpMethod,
             httpStatus: networkExchange.response.status.code,
             httpStatusMeaning: networkExchange.response.status.reasonPhrase,
-            timestamp: DateFormatter.timestampFormat(networkExchange.response.timestamp),
+            timestamp: networkExchange.response.timestamp.timestampPrint,
             path: networkExchange.response.uri.path
           )
         }
