@@ -54,6 +54,7 @@ struct ServerList: View {
             switch appEnvironment.isServerRunning {
             case true:
               try? appEnvironment.server.stop()
+              
             case false:
               try? appEnvironment.server.start(with: ServerConfiguration(requests: []))
             }
