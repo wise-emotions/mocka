@@ -9,14 +9,22 @@ public struct NetworkExchange {
   /// The object containing the details about the sent response.
   public let response: DetailedResponse
 
-  /// Creates a `NetworkExchange` object.
-  /// - Parameters:
-  ///   - request: The object containing the details about the received request.
-  ///   - response: The object containing the details about the sent response.
-  public init(request: DetailedRequest, response: DetailedResponse) {
-    self.request = request
-    self.response = response
-  }
+  /// The static mock property. To be used only for mock purposes.
+  public static let mock = NetworkExchange(
+    request: DetailedRequest(
+      httpMethod: .get,
+      uri: URI(path: "api/v1/users"),
+      headers: [:],
+      timestamp: Date().timeIntervalSince1970
+    ),
+    response: DetailedResponse(
+      httpMethod: .get,
+      uri: URI(path: "api/v1/users"),
+      headers: [:],
+      status: HTTPResponseStatus(statusCode: 200),
+      timestamp: Date().timeIntervalSince1970
+    )
+  )
 }
 
 /// An object containing the details about the received request.
@@ -36,19 +44,6 @@ public struct DetailedRequest {
   /// The list of query items associated with the request.
   public var queryItems: [URLQueryItem] {
     URLComponents(string: uri.string)?.queryItems ?? []
-  }
-
-  /// Creates a `DetailedRequest` object.
-  /// - Parameters:
-  ///   - httpMethod: The `HTTP` method associated with the request.
-  ///   - uri: The `URI` that invoked the start of the exchange.
-  ///   - headers: The headers associated with the request.
-  ///   - timestamp: The timestamp of when the request was invoked.
-  public init(httpMethod: HTTPMethod, uri: URI, headers: HTTPHeaders, timestamp: TimeInterval) {
-    self.httpMethod = httpMethod
-    self.uri = uri
-    self.headers = headers
-    self.timestamp = timestamp
   }
 }
 
@@ -73,19 +68,4 @@ public struct DetailedResponse {
 
   /// The timestamp of when the response was ready.
   public let timestamp: TimeInterval
-
-  /// Creates a `DetailedResponse` object.
-  /// - Parameters:
-  ///   - httpMethod: The `HTTP` method that prompted the response.
-  ///   - uri: The `URI` considered when answering to the started exchange.
-  ///   - headers: The headers associated with the response.
-  ///   - status: The `HTTP` response status code.
-  ///   - timestamp: The timestamp of when the response was ready.
-  public init(httpMethod: HTTPMethod, uri: URI, headers: HTTPHeaders, status: HTTPResponseStatus, timestamp: TimeInterval) {
-    self.httpMethod = httpMethod
-    self.uri = uri
-    self.headers = headers
-    self.status = status
-    self.timestamp = timestamp
-  }
 }
