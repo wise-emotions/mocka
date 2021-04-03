@@ -1,10 +1,13 @@
 import Foundation
-import SwiftUI
+import Server
+import SwiftUI 
 
 struct ServerDetail: View {
   var body: some View {
     VStack {
-      Text("Detail")
+      Text("Header")
+      
+      RequestInfoView(viewModel: RequestInfoViewModel(networkExchange: NetworkExchange.mock, kind: .request))
     }
     .frame(minWidth: Constants.minimumDetailWidth)
   }

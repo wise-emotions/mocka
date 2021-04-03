@@ -1,14 +1,19 @@
+//
+//  Mocka
+//
+
 import Server
 import SwiftUI
 
-struct RequestInfoContainerView: View {
-
-  @StateObject var viewModel: RequestInfoContainerViewModel
-
-  var body: some View {
-    ZStack(alignment: .top) {
+extension RequestInfoView {
+  /// The scrollable section containing the information about the request/response pair.
+  struct ContainerSectionView: View {
+    
+    @ObservedObject var viewModel: RequestInfoViewModel
+    
+    var body: some View {
       ScrollView {
-        VStack(alignment: .leading) {
+        LazyVStack(alignment: .leading, spacing: 24) {
           SectionView(title: "URL") {
             TextField(viewModel.path, text: .constant(viewModel.path))
               .padding()
@@ -17,13 +22,16 @@ struct RequestInfoContainerView: View {
               .foregroundColor(Color.latte)
           }
 
-          SectionView(title: "Query") {
-            KeyValueTable(keyValueItems: viewModel.queryParameters)
+          if viewModel.isQuerySectionVisible {
+            SectionView(title: "Query") {
+              KeyValueTable(keyValueItems: viewModel.queryParameters)
+            }
           }
-          .isHidden(viewModel.kind.isResponse, remove: true)
 
-          SectionView(title: "Headers") {
-            KeyValueTable(keyValueItems: viewModel.headers)
+          if viewModel.isHeadersSectionVisible {
+            SectionView(title: "Headers") {
+              KeyValueTable(keyValueItems: viewModel.headers)
+            }
           }
 
           SectionView(title: "Body") {
@@ -35,22 +43,17 @@ struct RequestInfoContainerView: View {
         }
         .padding()
       }
-      .padding(.top, 50)
-
-      WiseSegmentedControl(
-        selection: $viewModel.kind,
-        items: RequestInfoContainerViewModel.Kind.allCases,
-        itemTitles: RequestInfoContainerViewModel.Kind.allCases.map(\.rawValue))
+      .padding(.top, 20)
     }
   }
 }
 
 // MARK: - Preview
 
-struct RequestInfoContainerView_Previews: PreviewProvider {
+struct ScrollableSection_Previews: PreviewProvider {
   static var previews: some View {
-    RequestInfoContainerView(
-      viewModel: RequestInfoContainerViewModel(
+    RequestInfoView.ContainerSectionView(
+      viewModel: RequestInfoViewModel(
         networkExchange: NetworkExchange.mock,
         kind: .request
       )
