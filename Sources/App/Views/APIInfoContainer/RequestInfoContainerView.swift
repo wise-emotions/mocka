@@ -37,15 +37,10 @@ struct RequestInfoContainerView: View {
       }
       .padding(.top, 50)
 
-      Picker(selection: $viewModel.kind, label: Text("")) {
-        ForEach(RequestInfoContainerViewModel.Kind.allCases, id: \.self) { kind in
-          Text(kind.rawValue).tag(kind)
-            .font(.system(size: 13, weight: .regular, design: .default))
-            .foregroundColor(Color.latte)
-        }
-      }
-      .pickerStyle(SegmentedPickerStyle())
-      .frame(width: 160)
+      WiseSegmentedControl(
+        selection: $viewModel.kind,
+        items: RequestInfoContainerViewModel.Kind.allCases,
+        itemTitles: RequestInfoContainerViewModel.Kind.allCases.map(\.rawValue))
     }
   }
 }
