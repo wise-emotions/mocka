@@ -1,9 +1,9 @@
 import Combine
 import Vapor
 
-/// The `Server` is the brains of `Mocka`.
+/// The `AppServer` is the brains of `Mocka`.
 /// It starts, stops and restarts `Vapor`.
-public class Server: ObservableObject {
+public class AppServer: ObservableObject {
 
   // MARK: - Stored Properties
 
@@ -51,7 +51,7 @@ public class Server: ObservableObject {
   
   // MARK: - Init
 
-  /// Returns a new instance of `Server`.
+  /// Returns a new instance of `AppServer`.
   public init() {
     consoleLogsSubject
       .sink { print($0.message) }

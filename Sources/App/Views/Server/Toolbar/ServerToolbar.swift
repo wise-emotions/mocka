@@ -7,7 +7,7 @@ struct ServerToolbar: View {
   @StateObject var viewModel = ServerToolbarViewModel()
 
   /// The `Server` environment object.
-  @EnvironmentObject var server: Server
+  @EnvironmentObject var server: AppServer
 
   /// Whether the server is currently running.
   @Binding var isServerRunning: Bool

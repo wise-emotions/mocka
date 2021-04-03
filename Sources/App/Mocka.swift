@@ -10,7 +10,7 @@ struct Mocka: App {
   @StateObject var windowManager = WindowManager.shared
 
   /// The `Server` environment object.
-  @StateObject var server = Server()
+  @StateObject var server = AppServer()
 
   /// The associated view model.
   @StateObject var viewModel = MockaViewModel()

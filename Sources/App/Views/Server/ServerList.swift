@@ -45,6 +45,6 @@ struct ServerListPreviews: PreviewProvider {
   static var previews: some View {
     ServerList(serverCalls: .constant(serverCalls))
       .environmentObject(WindowManager.shared)
-      .environmentObject(Server())
+      .environmentObject(AppServer())
   }
 }
