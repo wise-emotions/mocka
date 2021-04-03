@@ -6,6 +6,12 @@ import Foundation
 
 /// The San Francisco Symbol enum.
 enum SFSymbol: String {
+  /// Document icon.
+  case document = "doc.fill"
+
+  /// Folder icon.
+  case folder
+
   /// Memories icon.
   case memories
 

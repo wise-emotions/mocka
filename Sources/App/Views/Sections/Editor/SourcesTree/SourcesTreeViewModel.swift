@@ -6,7 +6,7 @@ import Foundation
 import UniformTypeIdentifiers
 import Server
 
-/// The view model of the `SourcesTreeView`.
+/// The view model of the `SourcesTree`.
 final class SourcesTreeViewModel: ObservableObject {
 
   // MARK: - Constants
