@@ -1,6 +1,6 @@
 import XCTest
 
-@testable import Server
+@testable import MockaServer
 
 class BufferedSubjectTests: XCTestCase {
   /// Tests the right fetch of values from a `BufferedSubject`.
