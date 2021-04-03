@@ -3,7 +3,7 @@ import Vapor
 
 /// The `Server` is the brains of `Mocka`.
 /// It starts, stops and restarts `Vapor`.
-public class Server {
+public class Server: ObservableObject {
 
   // MARK: - Stored Properties
 
@@ -140,21 +140,21 @@ public class Server {
             )
           }
 
-          guard let content = requestedResponse.content else  {
+          guard let responseBody = requestedResponse.body else  {
             clientResponse = ClientResponse(status: requestedResponse.status, headers: requestedResponse.headers, body: nil)
             networkExchangesSubject.send(networkExchange)
             return request.eventLoop.makeSucceededFuture(clientResponse)
           }
 
-          guard content.isValidFileFormat() else {
-            let failReason = "Invalid file format. Was expecting a .\(content.expectedFileExtension!) file"
+          guard responseBody.isValidFileFormat() else {
+            let failReason = "Invalid file format. Was expecting a .\(responseBody.contentType.expectedFileExtension!) file"
             clientResponse = ClientResponse(status: .badRequest, headers: [:], body: ByteBuffer(string: failReason))
             networkExchangesSubject.send(networkExchange)
             return request.eventLoop.makeFailedFuture(Abort(.badRequest, reason: failReason))
           }
 
           return request.fileio
-            .collectFile(at: content.fileLocation.absoluteString)
+            .collectFile(at: responseBody.fileLocation.absoluteString)
             .flatMap { buffer -> EventLoopFuture<ClientResponse> in
               clientResponse = ClientResponse(status: requestedResponse.status, headers: requestedResponse.headers, body: buffer)
               networkExchangesSubject.send(networkExchange)
@@ -162,7 +162,7 @@ public class Server {
             }
             .flatMapError { error in
               // So far, only logical error is the file not being found.
-              let failReason = "File not found at \(content.fileLocation.absoluteString)"
+              let failReason = "File not found at \(responseBody.fileLocation.absoluteString)"
               clientResponse = ClientResponse(status: .badRequest, headers: [:], body: ByteBuffer(string: failReason))
               networkExchangesSubject.send(networkExchange)
               return request.eventLoop.makeFailedFuture(Abort(.badRequest, reason: failReason))
