@@ -3,34 +3,34 @@
 //
 
 import SwiftUI
+import UniformTypeIdentifiers
 
 struct AddAPIView: View {
   @ObservedObject var viewModel = AddAPIViewModel()
-  @State private var dragOver = false
   
   var body: some View {
-    VStack {
-      HStack {
-        Spacer()
-        Button("Importa") {
-          let panel = NSOpenPanel()
-          panel.allowsMultipleSelection = false
-          panel.canChooseDirectories = false
-          panel.allowedFileTypes = ["json"]
-          if panel.runModal() == .OK {
-            viewModel.importJSON(from: panel.url)
+    ZStack() {
+      VStack {
+        HStack {
+          Spacer()
+          Button("Importa"){
+            viewModel.isPresented = true
           }
+          .fileImporter(isPresented: $viewModel.isPresented, allowedContentTypes: [UTType.json], allowsMultipleSelection: false, onCompletion: { result in
+            viewModel.importJSON(from: result)
+          })
         }
+        
+        TextEditor(text: $viewModel.textInput)
+          .font(.body)
+          .border(viewModel.borderColor)
+          .onChange(of: viewModel.textInput, perform: { value in
+            viewModel.processJSON()
+          })
+          .padding()
       }
-      
-      TextEditor(text: $viewModel.textInput)
-        .font(.title3)
-        .border(viewModel.borderColor)
-        .onChange(of: viewModel.textInput, perform: { value in
-          viewModel.processJSON()
-        })
-        .padding()
     }
+    .onDrop(of: ["public.file-url"], isTargeted: $viewModel.isDraggingOver, perform: viewModel.handleOnDrop(providers:))
   }
   
   struct ContentView_Previews: PreviewProvider {
@@ -39,3 +39,4 @@ struct AddAPIView: View {
     }
   }
 }
+
