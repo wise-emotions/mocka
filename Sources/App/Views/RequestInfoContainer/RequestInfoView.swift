@@ -11,11 +11,15 @@ struct RequestInfoView: View {
       
       ContainerSectionView(viewModel: viewModel)
 
-      WiseSegmentedControl(
-        selection: $viewModel.kind,
-        items: RequestInfoViewModel.Kind.allCases,
-        itemTitles: RequestInfoViewModel.Kind.allCases.map(\.rawValue)
-      )
+      Picker(selection: $viewModel.kind, label: EmptyView()) {
+        ForEach(RequestInfoViewModel.Kind.allCases, id: \.self) { kind in
+          Text(kind.rawValue).tag(kind)
+            .font(.system(size: 13, weight: .regular, design: .default))
+            .foregroundColor(Color.latte)
+        }
+      }
+      .pickerStyle(SegmentedPickerStyle())
+      .frame(width: 160, height: 24)
       .offset(y: -12)
     }
     .background(Color.lungo.cornerRadius(5))
