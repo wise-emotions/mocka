@@ -26,9 +26,9 @@ public class AppServer: ObservableObject {
 
   /// The `Set` containing the list of subscriptions.
   private var subscriptions = Set<AnyCancellable>()
-  
+
   // MARK: - Computed Properties
-    
+
   /// The `Publisher` of `LogEvent`s.
   public var consoleLogsPublisher: AnyPublisher<LogEvent, Never> {
     consoleLogsSubject.eraseToAnyPublisher()
@@ -48,7 +48,7 @@ public class AppServer: ObservableObject {
   private var port: Int? {
     application?.http.server.configuration.port
   }
-  
+
   // MARK: - Init
 
   /// Returns a new instance of `AppServer`.
@@ -134,13 +134,13 @@ public class AppServer: ObservableObject {
                 httpMethod: httpMethod,
                 uri: URI(scheme: URI.Scheme.http, host: host, port: port, path: requestedPath),
                 headers: clientResponse.headers,
-                responseStatus: clientResponse.status,
+                status: clientResponse.status,
                 timestamp: Date().timeIntervalSince1970
               )
             )
           }
 
-          guard let responseBody = requestedResponse.body else  {
+          guard let responseBody = requestedResponse.body else {
             clientResponse = ClientResponse(status: requestedResponse.status, headers: requestedResponse.headers, body: nil)
             networkExchangesSubject.send(networkExchange)
             return request.eventLoop.makeSucceededFuture(clientResponse)
