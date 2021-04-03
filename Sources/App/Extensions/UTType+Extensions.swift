@@ -5,11 +5,11 @@
 import UniformTypeIdentifiers
 
 extension UTType {
-  /// A `UTType` with identifier `public.comma-separated-values-text`.
-  static var commaSeparatedValues = UTType("public.comma-separated-values-text")
-
   /// A `UTType` with identifier `public.css`.
   static var css = UTType("public.css")
+
+  /// A `UTType` with identifier `public.comma-separated-values-text`.
+  static var csv = UTType("public.comma-separated-values-text")
 
   /// A `UTType` with identifier `public.folder`.
   static var folder = UTType("public.folder")

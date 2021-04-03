@@ -17,14 +17,13 @@ final class SourcesTreeViewModel: ObservableObject {
   private static let resourceKeys: Set<URLResourceKey> = [.nameKey, .contentTypeKey]
 
   /// The list of types allowed in the tree.
-  private static let allowedTypes: Set<UTType?> = [
-    .commaSeparatedValues,
-    .css,
-    .html,
-    .json,
-    .plainText,
-    .xml
-  ]
+  private static let allowedTypes: Set<UTType> = ResponseBody.ContentType.allCases.reduce(into: Set<UTType>()) {
+    guard let uniformTypeIdentifier = $1.uniformTypeIdentifier else {
+      return
+    }
+
+    $0.insert(uniformTypeIdentifier)
+  }
 
   /// The allowed name for a file containing a request.
   private static let allowedRequestFileName = "request.json"
@@ -40,7 +39,14 @@ final class SourcesTreeViewModel: ObservableObject {
   }
 
   /// The regex the name of the folder should match to be allowed in the tree.
-  private static let folderNameRegex = "(CONNECT|DELETE|GET|HEAD|OPTIONS|PATCH|POST|PUT|TRACE)-[A-Za-z0-9-]*"
+  private static var folderNameRegex: String {
+    let allSupportedMethods = HTTPMethod.allCases.map {
+      $0.rawValue
+    }
+    .joined(separator: "|")
+
+    return "(\(allSupportedMethods))-[A-Za-z0-9-]*"
+  }
 
   // MARK: - Stored Properties
 
