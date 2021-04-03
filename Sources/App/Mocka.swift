@@ -1,4 +1,7 @@
-import Server
+//
+//  Mocka
+//
+
 import SwiftUI
 
 @main
@@ -6,36 +9,27 @@ struct Mocka: App {
   /// The `AppDelegate` of the app.
   @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
 
-  /// The `WindowManager` environment object.
-  @StateObject var windowManager = WindowManager.shared
-
-  /// The `Server` environment object.
-  @StateObject var server = Server()
-
-  /// The associated view model.
-  @StateObject var viewModel = MockaViewModel()
+  /// The app environment.
+  @StateObject private var appEnvironment = AppEnvironment()
 
   var body: some Scene {
     WindowGroup {
-      HStack(spacing: 0) {
-        Sidebar(selectedSection: $viewModel.selectedSection)
-          .padding(.top, windowManager.titleBarHeight(to: .remove))
-          .environmentObject(windowManager)
-
-        AppSection(selectedSection: $viewModel.selectedSection)
-          .environmentObject(windowManager)
-          .environmentObject(server)
-      }
-      .frame(
-        minWidth: Constants.fixedSidebarWidth + Constants.minimumListWidth + Constants.minimumDetailWidth + 1,
-        maxWidth: .infinity,
-        minHeight: Constants.minimumAppHeight,
-        maxHeight: .infinity,
-        alignment: .leading
-      )
+      AppSection()
+        .frame(
+          // Due to a bug of the `NavigationView` we cannot use the exactly minimum size.
+          // We add `5` points to be sure to not close the sidebar while resizing the view.
+          minWidth: Size.minimumSidebarWidth + Size.minimumListWidth + Size.minimumDetailWidth + 5,
+          maxWidth: .infinity,
+          minHeight: Size.minimumAppHeight,
+          maxHeight: .infinity,
+          alignment: .leading
+        )
+        .environmentObject(appEnvironment)
     }
     .windowStyle(HiddenTitleBarWindowStyle())
+    .windowToolbarStyle(UnifiedWindowToolbarStyle())
     .commands {
+      SidebarCommands()
       CommandGroup(replacing: .newItem) {}
     }
   }
