@@ -58,6 +58,7 @@ do
 
     # If argument "format" is passed, format all the code by using swift-format.
   if [[ "$var" == "format" ]]; then
+    echo "Formatting code..." >&2
     # Run local swift-format
     ./swift-format/.build/x86_64-apple-macosx/debug/swift-format --configuration swiftformat.json -m format -r -i ./
   fi
