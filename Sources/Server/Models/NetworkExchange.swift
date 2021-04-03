@@ -8,23 +8,32 @@ public struct NetworkExchange {
 
   /// The object containing the details about the sent response.
   public let response: DetailedResponse
+}
 
+#if DEBUG
+extension NetworkExchange {
   public static let mock = NetworkExchange(
     request: DetailedRequest(
       httpMethod: .get,
       uri: URI(string: "https://www.figma.com/file/5tLBOzJ2q07BiF6nrSJx1k/Mocka?node-id=33%3A3"),
-      headers: HTTPHeaders(),
+      headers: HTTPHeaders(
+        [
+          ("Authentication", "Bearer AXBHDLRICDSSRDUDHA324ADA"),
+          ("Accept-Language", "it-IT")
+        ]
+      ),
       timestamp: TimeInterval(10)
     ),
     response: DetailedResponse(
       httpMethod: .get,
       uri: URI(string: "https://www.figma.com/file/5tLBOzJ2q07BiF6nrSJx1k/Mocka?node-id=33%3A3"),
-      headers: HTTPHeaders(),
+      headers: HTTPHeaders([("Server", "Apache")]),
       responseStatus: .accepted,
       timestamp: TimeInterval(10)
     )
   )
 }
+#endif
 
 /// An object containing the details about the received request.
 public struct DetailedRequest {
