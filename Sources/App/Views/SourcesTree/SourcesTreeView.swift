@@ -39,7 +39,7 @@ extension SourcesTreeView {
     var body: some View {
       HStack {
         Image(systemName: isFolder ? "folder" : "doc.fill")
-          .foregroundColor(isFolder ? .blue : .white)
+          .foregroundColor(isFolder ? .accentColor : .latte)
           .frame(width: 24)
 
         Text(name)
