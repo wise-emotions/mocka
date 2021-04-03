@@ -3,6 +3,7 @@ import XCTest
 @testable import Server
 
 class BufferedSubjectTests: XCTestCase {
+  /// Tests the right fetch of values from a `BufferedSubject`.
   func testBufferedSubject() {
     let bufferedSubject = BufferedSubject<Int, Never>()
     
@@ -29,6 +30,7 @@ class BufferedSubjectTests: XCTestCase {
     }
   }
   
+  /// Tests the right fetch of values from a `BufferedSubject` with a buffer size that is less than the sended values.
   func testBufferedSubjectWithBufferSize() {
     let bufferedSubject = BufferedSubject<Int, Never>(bufferSize: 1)
     
@@ -55,6 +57,7 @@ class BufferedSubjectTests: XCTestCase {
     }
   }
   
+  // Tests the empty fetch of values from a `BufferedSubject` by calling the `clearBuffer()` function.
   func testBufferedSubjectWithClearBuffer() {
     let bufferedSubject = BufferedSubject<Int, Never>(bufferSize: 1)
     

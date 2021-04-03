@@ -15,13 +15,13 @@ public class BufferedSubject<Output, Failure: Error> {
   private var buffer: [Output]
   
   /// The max size of the buffer.
+  /// This dictates the maximum number of elements to include in the buffer.
   private let bufferSize: Int
   
   // MARK: - Init
   
   /// Creates an instance of `BufferedSubject`.
-  /// - Parameter bufferSize: The buffer size.
-  ///                         Defaults to `.max`.
+  /// - Parameter bufferSize: The buffer size. Defaults to `.max`.
   /// - Note: A huge buffer size could
   public init(bufferSize: Int = .max) {
     self.bufferSize = bufferSize
@@ -49,9 +49,10 @@ extension BufferedSubject: Subject {
   /// Sends a value to the subscriber.
   /// - Parameter value: The value to send.
   public func send(_ value: Output) {
-    if buffer.count > bufferSize - 1{
+    if buffer.count > bufferSize - 1 {
       buffer.remove(at: 0)
     }
+
     buffer.append(value)
     passthroughSubject.send(value)
   }
