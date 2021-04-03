@@ -5,6 +5,9 @@
 import Foundation
 import SwiftUI
 
+/// This is the common app section used to show all the other sections.
+/// This `View` is responsible for rendering the right section based on the
+/// `appEnvironment.selectedSection` property.
 struct AppSection: View {
   /// The app environment object.
   @EnvironmentObject var appEnvironment: AppEnvironment

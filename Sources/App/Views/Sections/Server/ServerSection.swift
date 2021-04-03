@@ -6,6 +6,8 @@ import Foundation
 import Server
 import SwiftUI
 
+/// This is the server section of the app.
+/// It shows the list of the `NetworkExchange`s and its details.
 struct ServerSection: View {
   /// The app environment object.
   @EnvironmentObject var appEnvironment: AppEnvironment
