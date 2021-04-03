@@ -5,4 +5,4 @@
 import Foundation
 import Server
 
-extension Server: ObservableObject {}
+extension AppServer: ObservableObject {}

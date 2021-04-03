@@ -8,7 +8,7 @@ class ServerTests: XCTestCase {
   }
 
   func testServerStartSuccessful() {
-    let server = Server()
+    let server = AppServer()
 
     XCTAssertNil(server.application)
 
@@ -26,7 +26,7 @@ class ServerTests: XCTestCase {
       let requests: [Request] = [Request(method: .get, path: ["api", "test"], responseLocation: nil)]
     }
 
-    let server = Server()
+    let server = AppServer()
 
     XCTAssertNil(server.application)
 
@@ -38,7 +38,7 @@ class ServerTests: XCTestCase {
   }
 
   func testServerStopSuccessful() {
-    let server = Server()
+    let server = AppServer()
 
     XCTAssertNil(server.application)
 
@@ -52,7 +52,7 @@ class ServerTests: XCTestCase {
   }
 
   func testStartingServerTwiceOnSamePortThrows() {
-    let server = Server()
+    let server = AppServer()
     try? server.start(with: ServerConfiguration())
 
     XCTAssertThrowsError(try server.start(with: ServerConfiguration()))
@@ -70,7 +70,7 @@ class ServerTests: XCTestCase {
   }
 
   func testRoutesCorrectlyRegistered() {
-    let server = Server()
+    let server = AppServer()
     try? server.start(with: ServerConfiguration())
 
     XCTAssertEqual(server.application?.routes.all.count, 1)
