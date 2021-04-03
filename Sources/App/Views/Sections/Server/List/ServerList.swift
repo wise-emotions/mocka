@@ -81,9 +81,7 @@ struct ServerList: View {
 }
 
 struct ServerListPreviews: PreviewProvider {
-  static let networkExchanges = [
-    NetworkExchange.mock
-  ]
+  static let networkExchanges = [NetworkExchange.mock]
 
   static var previews: some View {
     ServerList(networkExchanges: .constant(networkExchanges))
