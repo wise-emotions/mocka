@@ -17,7 +17,7 @@ final class SourcesTreeViewModel: ObservableObject {
   private static let resourceKeys: Set<URLResourceKey> = [.nameKey, .contentTypeKey]
 
   /// The list of types allowed in the tree.
-  private static let allowedTypes: Set<UTType> = ResponseBody.ContentType.allCases.reduce(into: Set<UTType>()) {
+  private static let allowedTypes: Set<UTType> = Models.ResponseBody.ContentType.allCases.reduce(into: Set<UTType>()) {
     guard let uniformTypeIdentifier = $1.uniformTypeIdentifier else {
       return
     }
@@ -30,7 +30,7 @@ final class SourcesTreeViewModel: ObservableObject {
 
   /// The list of allowed file names for a response.
   /// This list is used to filter out what files will be displayed in the sources tree.
-  private static let allowedResponseFileNames = ResponseBody.ContentType.allCases.reduce(into: Set<String>()) {
+  private static let allowedResponseFileNames = Models.ResponseBody.ContentType.allCases.reduce(into: Set<String>()) {
     guard let fileExtension = $1.expectedFileExtension else {
       return
     }

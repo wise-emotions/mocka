@@ -1,17 +1,31 @@
 import Foundation
 
-/// An object containing the `Content-Type` and the file path for the body of the response.
-public struct ResponseBody {
-  /// The kind of the content of the response.
-  public let contentType: ContentType
-  
-  /// The url of the file holding the content.
-  public let fileLocation: URL
+public extension Models {
+  /// An object containing the `Content-Type` and the file path for the body of the response.
+   struct ResponseBody {
+    /// The kind of the content of the response.
+    public let contentType: ContentType
+
+    /// The url of the file holding the content.
+    public let fileLocation: URL
+
+    /// Creates a `Models.ResponseBody` object.
+    /// - Parameters:
+    ///   - contentType: The kind of the content of the response.
+    ///   - fileLocation: The url of the file holding the content.
+    public init(
+      contentType: ContentType,
+      fileLocation: URL
+    ) {
+      self.contentType = contentType
+      self.fileLocation = fileLocation
+    }
+  }
 }
 
-// MARK: - Public `ResponseBody` Extension
+// MARK: - Public `Models.ResponseBody` Extension
 
-public extension ResponseBody {
+public extension Models.ResponseBody {
   /// The `Content-Type` of the response body.
   enum ContentType: CaseIterable {
 
@@ -45,9 +59,9 @@ public extension ResponseBody {
   }
 }
 
-// MARK: - Internal `ResponseBody` Extension
+// MARK: - Internal `Models.ResponseBody` Extension
 
-internal extension ResponseBody {
+internal extension Models.ResponseBody {
   /// Checks if the actual file extension in the `URL` matches the expected one for the body type.
   func isValidFileFormat() -> Bool {
     // When the `ContentType` is `.custom`, we do not check the validity of the format, and return true.
@@ -64,9 +78,9 @@ internal extension ResponseBody {
   }
 }
 
-// MARK: - Public `ResponseBody.ContentType` Extension
+// MARK: - Public `Models.ResponseBody.ContentType` Extension
 
-public extension ResponseBody.ContentType {
+public extension Models.ResponseBody.ContentType {
   /// The file extension associated with each `Content-Type`.
   var expectedFileExtension: String? {
     switch self {
@@ -94,9 +108,9 @@ public extension ResponseBody.ContentType {
   }
 }
 
-// MARK: - Internal `ResponseBody.ContentType` Extension
+// MARK: - Internal `Models.ResponseBody.ContentType` Extension
 
-internal extension ResponseBody.ContentType {
+internal extension Models.ResponseBody.ContentType {
   /// The value to associated to `Content-Type` in the response header.
   var contentTypeHeader: String? {
     switch self {

@@ -6,7 +6,7 @@ import Foundation
 import Server
 import UniformTypeIdentifiers
 
-extension ResponseBody.ContentType {
+extension Models.ResponseBody.ContentType {
   /// The `UTType` of the response file associated with the ResponseBody
   var uniformTypeIdentifier: UTType? {
     switch self {

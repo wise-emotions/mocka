@@ -30,10 +30,10 @@ public extension Models {
     public init(
       status: HTTPResponseStatus,
       headers: HTTPHeaders,
-      content: ResponseBody?
+      body: ResponseBody?
     ) {
       self.status = status
-      self.body = status.mayHaveResponseBody ? content : nil
+      self.body = status.mayHaveResponseBody ? body : nil
       if let body = self.body, let contentTypeHeader = body.contentType.contentTypeHeader {
         self.headers = headers.replacingOrAdding(name: contentTypeHTTPHeaderKey, value: contentTypeHeader)
       } else {
