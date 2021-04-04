@@ -27,12 +27,12 @@ public struct RequestedResponse {
   ///   Whenever the status code does not support a body, like `HTTPResponseStatus.noContent`, body will automatically be set ti `nil`.
   ///   The response content will automatically set the value for `Content-Type` in the headers, and will override any passed value.
   public init(
-    status: HTTPResponseStatus,
-    headers: HTTPHeaders,
-    content: ResponseBody?
+    status: HTTPResponseStatus = .ok,
+    headers: HTTPHeaders = [:],
+    body: ResponseBody? = nil
   ) {
     self.status = status
-    self.body = status.mayHaveResponseBody ? content : nil
+    self.body = status.mayHaveResponseBody ? body : nil
     if let body = self.body, let contentTypeHeader = body.contentType.contentTypeHeader {
       self.headers = headers.replacingOrAdding(name: contentTypeHTTPHeaderKey, value: contentTypeHeader)
     } else {
