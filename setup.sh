@@ -56,7 +56,7 @@ do
 
     echo "Formatting code..." >&2
 
-    # Run local swift-format
+    # Run local swift-format.
     swift run swift-format --configuration ../swiftformat.json -m format -r -i ./../Sources
 
     cd ..
