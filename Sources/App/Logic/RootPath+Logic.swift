@@ -58,6 +58,8 @@ extension Logic.RootPath {
       throw MockaError.rootPathNotFolder
     }
 
+    Self.value = unwrappedURL
+
     guard Self.serverConfigurationFileExists(at: unwrappedURL) else {
       try Self.addDefaultServerConfigurationFile(at: unwrappedURL)
       return
