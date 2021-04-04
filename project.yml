@@ -25,6 +25,8 @@ targets:
     platform: macOS
     attributes:
       ProvisioningStyle: Automatic
+    settings:
+      PRODUCT_NAME: "Mocka"
     sources:
       - path: Sources/App
     dependencies:
