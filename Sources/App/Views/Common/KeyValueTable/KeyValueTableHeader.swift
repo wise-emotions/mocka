@@ -10,7 +10,7 @@ struct KeyValueTableHeader: View {
     HStack {
       Group {
         Text("Key")
-        
+
         Text("Value")
       }
       .frame(maxWidth: .infinity, alignment: .leading)
