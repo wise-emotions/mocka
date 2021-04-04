@@ -2,10 +2,7 @@ import Foundation
 
 /// An object containing information about the request/response pair.
 /// [RFC2616](https://tools.ietf.org/html/rfc2616) refers to this pair as an exchange.
-public struct NetworkExchange: Identifiable {
-  /// The unique ID of the network exchange.
-  public let id = UUID()
-
+public struct NetworkExchange {
   /// The object containing the details about the received request.
   public let request: DetailedRequest
 
