@@ -58,6 +58,7 @@ do
 
     # Run local swift-format.
     swift run swift-format --configuration ../swiftformat.json -m format -r -i ./../Sources
+    swift run swift-format --configuration ../swiftformat.json -m format -r -i ./../Tests
 
     cd ..
   fi
