@@ -16,38 +16,6 @@ if ! [[ -x "$(command -v xcodegen)" ]]; then
   brew install xcodegen
 fi
 
-# Install Swift Format on the current working directory.
-if [[ ! -d "swift-format" ]]; then
-  echo 'swift-format is not installed.' >&2
-
-  CURRENT_WORKING_DIRECTORY=$(pwd)
-
-  git clone -b $SWIFT_FORMAT_VERSION https://github.com/apple/swift-format.git
-  cd swift-format
-  swift build
-
-  cd ..
-else
-  echo "Check if swift-format version is $SWIFT_FORMAT_VERSION." >&2
-
-  cd swift-format
-
-  CURRENT_BRANCH=$(git branch --show-current)
-
-  # If it's already installed, check that it's the right version.
-  if [[ $CURRENT_BRANCH != $SWIFT_FORMAT_VERSION ]]; then
-    echo "Installing swift-format $SWIFT_FORMAT_VERSION version." >&2
-    git fetch --all
-    git checkout --track origin/$SWIFT_FORMAT_VERSION || git checkout $SWIFT_FORMAT_VERSION
-
-    swift build
-  else
-    echo "swift-format $SWIFT_FORMAT_VERSION already installed." >&2
-  fi
-
-  cd ..
-fi
-
 for var in $@
 do
   # If argument "close" is passed, close the project.
@@ -56,11 +24,43 @@ do
     osascript -e 'tell app "Xcode" to quit'
   fi
 
-    # If argument "format" is passed, format all the code by using swift-format.
+  # If argument "format" is passed, format all the code by using swift-format.
   if [[ "$var" == "format" ]]; then
+    # Install Swift Format on the current working directory if needed.
+    if [[ ! -d "swift-format" ]]; then
+      echo 'swift-format is not installed.' >&2
+
+      CURRENT_WORKING_DIRECTORY=$(pwd)
+
+      git clone -b $SWIFT_FORMAT_VERSION https://github.com/apple/swift-format.git
+      cd swift-format
+      swift build
+    else
+      echo "Check if swift-format version is $SWIFT_FORMAT_VERSION." >&2
+
+      cd swift-format
+
+      CURRENT_BRANCH=$(git branch --show-current)
+
+      # If it's already installed, check that it's the right version.
+      if [[ $CURRENT_BRANCH != $SWIFT_FORMAT_VERSION ]]; then
+        echo "Installing swift-format $SWIFT_FORMAT_VERSION version." >&2
+        git fetch --all
+        git checkout --track origin/$SWIFT_FORMAT_VERSION || git checkout $SWIFT_FORMAT_VERSION
+
+        swift build
+      else
+        echo "swift-format $SWIFT_FORMAT_VERSION already installed." >&2
+      fi
+    fi
+
     echo "Formatting code..." >&2
-    # Run local swift-format
-    ./swift-format/.build/x86_64-apple-macosx/debug/swift-format --configuration swiftformat.json -m format -r -i ./
+
+    # Run local swift-format.
+    swift run swift-format --configuration ../swiftformat.json -m format -r -i ./../Sources
+    swift run swift-format --configuration ../swiftformat.json -m format -r -i ./../Tests
+
+    cd ..
   fi
 done
 
