@@ -4,7 +4,7 @@ import Foundation
 public struct ResponseBody {
   /// The kind of the content of the response.
   public let contentType: ContentType
-  
+
   /// The url of the file holding the content.
   public let fileLocation: URL
 }
