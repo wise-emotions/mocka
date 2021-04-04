@@ -19,12 +19,12 @@ extension Logic.RootPath {
   /// The `UTType` of a folder.
   private static let folderUniformTypeIdentifier = UTType("public.folder")
 
-  /// The `UTType` of a `JSON` file.
+  /// The `UTType` of a json file.
   private static let JSONUniformTypeIdentifier = UTType("public.json")
 
   /// The value of the root path.
   /// When this value is updated, the value in the user defaults is updated as well.
-  /// To update this value use `set(_ url)`.
+  /// To update this value use `set(_ url:)`.
   @AppStorage(UserDefaultKey.rootPath) private(set) static var value: URL?
 
   /// Checks if the root path is set in the `UserDefaults`.
@@ -37,12 +37,12 @@ extension Logic.RootPath {
   /// - Throws: `MockaError.rootPathDoesNotExist`,
   ///           `MockaError.rootPathNotFolder`,
   ///           `MockaError.rootPathMissingScheme`,
-  ///           `MockaError.failedToEncode`
+  ///           `MockaError.failedToEncode`.
   ///
   /// The `URL` should contain a scheme. It is recommended to instantiate the `URL` using `URL(fileURLWithPath:)`.
   static func set(_ url: URL?) throws {
     guard let unwrappedURL = url else {
-      Self.value = url
+      Self.value = nil
       return
     }
 
@@ -66,20 +66,23 @@ extension Logic.RootPath {
 }
 
 private extension Logic.RootPath {
-  /// Checks if a resource exists at a given URL's path.
+  /// Checks if a resource exists at a given `URL`'s path.
+  /// - Parameter url: The `URL` of the resource.
+  /// - Returns: Returns `true` if the resource is a folder, otherwise `false`.
   static func resourceExists(at url: URL) -> Bool {
     FileManager.default.fileExists(atPath: url.path)
   }
 
-  /// Checks if the passed URL belongs to a resource of `UTType` `public.folder`
+  /// Checks if the passed `URL` belongs to a resource of `UTType` `public.folder`
   /// - Parameter url: The `URL` of the resource.
-  /// - Returns: True if the resource is a folder. False if the resource is not a folder. Nil if the resource does not exist.
+  /// - Returns: Returns `true` if the resource is a folder, otherwise `false`.
   static func isFolder(at url: URL) -> Bool {
     Self.uniformType(of: url) == Self.folderUniformTypeIdentifier
   }
 
   /// Checks if the passed path includes a server configuration file.
   /// - Parameter path: The `URL` where the configuration file is present.
+  /// - Returns: Returns `true` if the server configuration file exist, otherwise `false`.
   static func serverConfigurationFileExists(at url: URL) -> Bool {
     let fullPath = url.appendingPathComponent(Self.serverConfigurationFileName, isDirectory: false)
     return FileManager.default.fileExists(atPath: fullPath.path) && Self.uniformType(of: fullPath) == Self.JSONUniformTypeIdentifier
@@ -90,6 +93,7 @@ private extension Logic.RootPath {
   /// - Throws: `MockaError.failedToEncode`
   static func addDefaultServerConfigurationFile(at url: URL) throws {
     let configuration = ServerConnectionConfiguration()
+
     do {
       let encoder = JSONEncoder()
       encoder.outputFormatting = .prettyPrinted
@@ -107,6 +111,8 @@ private extension Logic.RootPath {
   }
 
   /// Fetches the `UTType` of the passed `URL`.
+  /// - Parameter path: The `URL` of the resource.
+  /// - Returns: Returns the `UTType` of the given resource if available, otherwise `nil`.
   private static func uniformType(of url: URL) -> UTType? {
     try? url.resourceValues(forKeys: [.contentTypeKey]).contentType
   }

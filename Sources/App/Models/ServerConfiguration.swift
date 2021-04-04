@@ -23,8 +23,8 @@ struct ServerConfiguration: ServerConfigurationProvider {
 
   /// Creates a new `ServerConfiguration` object.
   /// - Parameters:
-  ///   - hostname: The host part of the `URL`.
-  ///   - port: The port listening to incoming requests.
+  ///   - hostname: The host part of the `URL`. Defaults to `127.0.0.1`.
+  ///   - port: The port listening to incoming requests. Defaults to 8080.
   ///   - requests: The requests to allow the server to accept and manage.
   init(
     hostname: String = "127.0.0.1",
