@@ -47,7 +47,7 @@ targets:
         CFBundleInfoDictionaryVersion: "6.0"
         CFBundleName: $(PRODUCT_NAME)
         CFBundlePackageType: $(PRODUCT_BUNDLE_PACKAGE_TYPE)
-        CFBundleShortVersionString: "1.0"
+        CFBundleShortVersionString: "1.0.0"
         CFBundleVersion: "1"
         LSMinimumSystemVersion: "$(MACOSX_DEPLOYMENT_TARGET)"
 
@@ -67,7 +67,7 @@ targets:
         CFBundleInfoDictionaryVersion: "6.0"
         CFBundleName: $(PRODUCT_NAME)
         CFBundlePackageType: $(PRODUCT_BUNDLE_PACKAGE_TYPE)
-        CFBundleShortVersionString: "1.0"
+        CFBundleShortVersionString: "1.0.0"
         CFBundleVersion: "$(CURRENT_PROJECT_VERSION)"
 
   MockaServer:
@@ -93,7 +93,7 @@ targets:
         CFBundleInfoDictionaryVersion: "6.0"
         CFBundleName: $(PRODUCT_NAME)
         CFBundlePackageType: $(PRODUCT_BUNDLE_PACKAGE_TYPE)
-        CFBundleShortVersionString: "1.0"
+        CFBundleShortVersionString: "1.0.0"
         CFBundleVersion: "1"
 
   MockaServerTests:
@@ -112,5 +112,5 @@ targets:
         CFBundleInfoDictionaryVersion: "6.0"
         CFBundleName: $(PRODUCT_NAME)
         CFBundlePackageType: $(PRODUCT_BUNDLE_PACKAGE_TYPE)
-        CFBundleShortVersionString: "1.0"
+        CFBundleShortVersionString: "1.0.0"
         CFBundleVersion: "$(CURRENT_PROJECT_VERSION)"
