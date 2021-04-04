@@ -3,7 +3,7 @@
 //
 
 import Foundation
-import Server
+import MockaServer
 
 /// App environment object shared by all the `View`s of the application.
 final class AppEnvironment: ObservableObject {

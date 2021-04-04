@@ -3,7 +3,7 @@
 //
 
 import Foundation
-import Server
+import MockaServer
 import SwiftUI
 
 /// The server list item. To be used inside a `ServerList` element.

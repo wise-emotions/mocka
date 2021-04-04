@@ -3,7 +3,7 @@
 //
 
 import Foundation
-import Server
+import MockaServer
 import SwiftUI
 
 /// This is the server section of the app.
