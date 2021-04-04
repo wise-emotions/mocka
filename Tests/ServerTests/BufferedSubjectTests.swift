@@ -40,13 +40,11 @@ class BufferedSubjectTests: XCTestCase {
 
     values.forEach(bufferedSubject.send)
 
-    let subscription =
-      bufferedSubject
-      .sink { _ in
-        expectation.fulfill()
-      } receiveValue: {
-        receivedValues.append($0)
-      }
+    let subscription = bufferedSubject.sink { _ in
+      expectation.fulfill()
+    } receiveValue: {
+      receivedValues.append($0)
+    }
 
     bufferedSubject.send(4)
     bufferedSubject.send(completion: .finished)
