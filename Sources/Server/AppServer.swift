@@ -128,13 +128,14 @@ public class AppServer {
                 httpMethod: httpMethod,
                 uri: URI(scheme: URI.Scheme.http, host: host, port: port, path: request.url.path, query: request.url.query),
                 headers: request.headers,
+                body: body(from: request.body.data),
                 timestamp: receivedRequestTimeStamp
               ),
               response: DetailedResponse(
-                httpMethod: httpMethod,
                 uri: URI(scheme: URI.Scheme.http, host: host, port: port, path: requestedPath),
                 headers: clientResponse.headers,
                 status: clientResponse.status,
+                body: body(from: clientResponse.body),
                 timestamp: Date().timeIntervalSince1970
               )
             )
@@ -169,5 +170,14 @@ public class AppServer {
             }
         }
     }
+  }
+
+  /// Transforms readable bytes in the buffer to data.
+  private func body(from buffer: ByteBuffer?) -> Data? {
+    guard var bufferCopy = buffer else {
+      return nil
+    }
+
+    return bufferCopy.readData(length: bufferCopy.readableBytes)
   }
 }

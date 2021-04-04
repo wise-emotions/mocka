@@ -11,6 +11,7 @@ public extension NetworkExchange {
       httpMethod: .get,
       uri: URI(path: "api/v1/users"),
       headers: [:],
+      body: nil,
       timestamp: Date().timeIntervalSince1970
     ),
     response: DetailedResponse(
@@ -18,6 +19,7 @@ public extension NetworkExchange {
       uri: URI(path: "api/v1/users"),
       headers: [:],
       status: HTTPResponseStatus(statusCode: 200),
+      body: "{\"users\": []}".data(using: .utf8),
       timestamp: Date().timeIntervalSince1970
     )
   )

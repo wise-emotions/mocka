@@ -21,6 +21,9 @@ public struct DetailedRequest {
   /// The headers associated with the request.
   public let headers: HTTPHeaders
 
+  /// The body of the request.
+  public let body: Data?
+
   /// The timestamp of when the request was invoked.
   public let timestamp: TimeInterval
 
@@ -32,9 +35,6 @@ public struct DetailedRequest {
 
 /// An object containing the details about the sent response.
 public struct DetailedResponse {
-  /// The `HTTP` method that prompted the response.
-  public let httpMethod: HTTPMethod
-
   /// The `URI` considered when answering to the started exchange.
   ///
   /// This is intended to give the user a realistic idea of what the server did and did not consider when answering the exchange.
@@ -48,6 +48,9 @@ public struct DetailedResponse {
   /// - Access `.code` for the numerical output.
   /// - Access `.reasonPhrase` for the phrasal output.
   public let status: HTTPResponseStatus
+
+  /// The body of the response.
+  public let body: Data?
 
   /// The timestamp of when the response was ready.
   public let timestamp: TimeInterval
