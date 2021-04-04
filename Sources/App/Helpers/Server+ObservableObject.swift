@@ -3,6 +3,6 @@
 //
 
 import Foundation
-import Server
+import MockaServer
 
 extension AppServer: ObservableObject {}

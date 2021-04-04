@@ -4,7 +4,7 @@
 
 import Foundation
 import UniformTypeIdentifiers
-import Server
+import MockaServer
 
 /// The view model of the `SourcesTree`.
 final class SourcesTreeViewModel: ObservableObject {

@@ -3,7 +3,7 @@
 //
 
 import Foundation
-import Server
+import MockaServer
 import UniformTypeIdentifiers
 
 extension ResponseBody.ContentType {

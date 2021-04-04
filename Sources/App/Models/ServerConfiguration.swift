@@ -1,5 +1,5 @@
 import Foundation
-import Server
+import MockaServer
 
 struct ServerConfiguration: ServerConfigurationProvider {
   var requests: Set<Request>
