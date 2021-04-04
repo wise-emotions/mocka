@@ -13,14 +13,26 @@ struct ServerConnectionConfiguration: ServerConnectionConfigurationProvider, Enc
 /// An object containing the full configuration of the server.
 struct ServerConfiguration: ServerConfigurationProvider {
   /// The host part of the `URL`.
-  let hostname = "127.0.0.1"
+  let hostname: String
 
   /// The port listening to incoming requests.
-  let port = 8080
+  let port: Int
 
-  var requests: Set<Request>
+  /// The list of requests to manage by the server.
+  let requests: Set<Request>
 
-  init(requests: Set<Request>) {
+  /// Creates a new `ServerConfiguration` object.
+  /// - Parameters:
+  ///   - hostname: The host part of the `URL`.
+  ///   - port: The port listening to incoming requests.
+  ///   - requests: The requests to allow the server to accept and manage.
+  init(
+    hostname: String = "127.0.0.1",
+    port: Int = 8080,
+    requests: Set<Request>
+  ) {
+    self.hostname = hostname
+    self.port = port
     self.requests = requests
   }
 }
