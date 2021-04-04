@@ -12,10 +12,10 @@ extension ResponseBody.ContentType {
     switch self {
     case .applicationJSON:
       return .json
-      
+
     case .textCSS:
       return .css
-      
+
     case .textCSV:
       return .csv
 

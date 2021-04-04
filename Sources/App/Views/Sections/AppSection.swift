@@ -16,10 +16,10 @@ struct AppSection: View {
     switch appEnvironment.selectedSection {
     case .server:
       ServerSection()
-      
+
     case .editor:
       ServerSection()
-      
+
     case .console:
       ServerSection()
     }

@@ -3,8 +3,8 @@
 //
 
 import Foundation
-import UniformTypeIdentifiers
 import MockaServer
+import UniformTypeIdentifiers
 
 /// The view model of the `SourcesTree`.
 final class SourcesTreeViewModel: ObservableObject {
@@ -102,8 +102,7 @@ final class SourcesTreeViewModel: ObservableObject {
     if contentType == .folder {
       return folderNode(at: url)
     } else {
-      return isValidFile(name: name, contentType: contentType) ?
-        FileSystemNode(name: name, url: url, kind: .file) : nil
+      return isValidFile(name: name, contentType: contentType) ? FileSystemNode(name: name, url: url, kind: .file) : nil
     }
   }
 
@@ -125,8 +124,8 @@ final class SourcesTreeViewModel: ObservableObject {
       // Check if the folder contains at least a request. If not, return nil.
       // Some folders can contain no response.
       guard
-        name.matchesRegex(SourcesTreeViewModel.folderNameRegex) &&
-          children.contains(where: { $0.name == SourcesTreeViewModel.allowedRequestFileName })
+        name.matchesRegex(SourcesTreeViewModel.folderNameRegex)
+          && children.contains(where: { $0.name == SourcesTreeViewModel.allowedRequestFileName })
       else {
         return nil
       }
@@ -146,7 +145,7 @@ final class SourcesTreeViewModel: ObservableObject {
     else {
       return nil
     }
-    
+
     return (name, contentType)
   }
 
