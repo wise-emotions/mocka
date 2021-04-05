@@ -3,6 +3,8 @@ name: Mocka
 settings:
   DEBUG_INFORMATION_FORMAT: dwarf-with-dsym
   TARGETED_DEVICE_FAMILY: 3
+  # https://forums.swift.org/t/swift-packages-in-multiple-targets-results-in-this-will-result-in-duplication-of-library-code-errors/34892/36
+  DISABLE_DIAMOND_PROBLEM_DIAGNOSTIC: true
 
 options:
   minimumXcodeGenVersion: "2.11.0"
@@ -103,6 +105,8 @@ targets:
       - path: Tests/ServerTests
     dependencies:
       - target: MockaServer
+      - package: Vapor
+        product: XCTVapor
     info:
       path: Tests/ServerTests/Resources/Info.plist
       properties:
