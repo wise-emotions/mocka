@@ -8,6 +8,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     registerWindowDelegate()
     // Set the initial value of `isFullScreen` property.
     setIsFullScreen()
+
+    NSApp.appearance = NSAppearance(named: .darkAqua)
   }
 }
 

@@ -8,8 +8,9 @@ import SwiftUI
 extension RequestInfoView {
   /// The scrollable section containing the information about the request/response pair.
   struct ContainerSectionView: View {
-    
-    @ObservedObject var viewModel: RequestInfoViewModel
+
+    /// The view model of this `ContainerSectionView`.
+    let viewModel: RequestInfoViewModel.ContainerSectionViewModel
     
     var body: some View {
       ScrollView {
@@ -43,7 +44,6 @@ extension RequestInfoView {
         }
         .padding()
       }
-      .padding(.top, 20)
     }
   }
 }
@@ -53,7 +53,7 @@ extension RequestInfoView {
 struct ScrollableSection_Previews: PreviewProvider {
   static var previews: some View {
     RequestInfoView.ContainerSectionView(
-      viewModel: RequestInfoViewModel(
+      viewModel: RequestInfoViewModel.ContainerSectionViewModel(
         networkExchange: NetworkExchange.mock,
         kind: .request
       )

@@ -2,27 +2,23 @@ import Server
 import SwiftUI
 import Foundation
 
+/// The View containing the details of the Request and Response pair.
 struct RequestInfoView: View {
 
-  @StateObject var viewModel: RequestInfoViewModel
-    
-  var body: some View {
-    ZStack(alignment: .top) {
-      
-      ContainerSectionView(viewModel: viewModel)
+  /// The  view model of this `RequestInfoView`.
+  let viewModel: RequestInfoViewModel
 
-      Picker(selection: $viewModel.kind, label: EmptyView()) {
-        ForEach(RequestInfoViewModel.Kind.allCases, id: \.self) { kind in
-          Text(kind.rawValue).tag(kind)
-            .font(.system(size: 13, weight: .regular, design: .default))
-            .foregroundColor(Color.latte)
+  var body: some View {
+    TabView {
+      ContainerSectionView(viewModel: viewModel.modelForRequestTab)
+        .tabItem {
+          Text(viewModel.titleForRequestTab)
         }
-      }
-      .pickerStyle(SegmentedPickerStyle())
-      .frame(width: 160, height: 24)
-      .offset(y: -12)
+      ContainerSectionView(viewModel: viewModel.modelForResponseTab)
+        .tabItem {
+          Text(viewModel.titleForResponseTab)
+        }
     }
-    .background(Color.lungo.cornerRadius(5))
     .padding()
     .background(Color.doppio)
   }
@@ -33,10 +29,7 @@ struct RequestInfoView: View {
 struct RequestInfoContainerView_Previews: PreviewProvider {
   static var previews: some View {
     RequestInfoView(
-      viewModel: RequestInfoViewModel(
-        networkExchange: NetworkExchange.mock,
-        kind: .request
-      )
+      viewModel: RequestInfoViewModel(networkExchange: NetworkExchange.mock)
     )
   }
 }

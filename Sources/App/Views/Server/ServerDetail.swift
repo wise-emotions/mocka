@@ -7,7 +7,7 @@ struct ServerDetail: View {
     VStack {
       Text("Header")
       
-      RequestInfoView(viewModel: RequestInfoViewModel(networkExchange: NetworkExchange.mock, kind: .request))
+      RequestInfoView(viewModel: RequestInfoViewModel(networkExchange: NetworkExchange.mock))
     }
     .frame(minWidth: Constants.minimumDetailWidth)
   }
