@@ -12,6 +12,10 @@ class ServerTests {}
 
 extension ServerTests {
   struct ServerConfiguration: ServerConfigurationProvider {
+    var hostname: String = "127.0.0.1"
+
+    var port: Int = 8080
+
     var requests: Set<Request> = [
       Request(
         method: .get,

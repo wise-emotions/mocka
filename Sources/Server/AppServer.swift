@@ -40,13 +40,22 @@ public class AppServer {
   }
 
   /// The host associated with the running instance's configuration.
-  private var host: String? {
+  internal var host: String? {
     application?.http.server.configuration.hostname
   }
 
   /// The port associated with the running instance's configuration.
-  private var port: Int? {
+  internal var port: Int? {
     application?.http.server.configuration.port
+  }
+
+  /// The list of all routes managed by the server.
+  ///
+  /// This is especially because accessing `application?.routes.all` from the tests results in an empty array regardless for what we believe is a bug.
+  /// In Vapor's `Application+Routes`, `self.storage[RoutesKey.self]` is never found even when the routes are actually set, thus instantiating a new `Routes` instance.
+  /// Moreover, accessing `application?.routes.all` from here seems to return the actual routes.
+  internal var routes: [Route] {
+    application?.routes.all ?? []
   }
 
   // MARK: - Init
