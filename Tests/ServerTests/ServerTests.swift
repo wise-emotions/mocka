@@ -33,7 +33,6 @@ extension ServerTests {
   }
 }
 
-
 // MARK: - Helpers
 
 extension Bundle {
