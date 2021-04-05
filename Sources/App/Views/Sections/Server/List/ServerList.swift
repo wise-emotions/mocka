@@ -42,7 +42,7 @@ struct ServerList: View {
       }
 
       ToolbarItem {
-        RoundedTextField(text: $viewModel.filterText)
+        FilterTextField(text: $viewModel.filterText)
           .frame(minWidth: Size.minimumFilterTextFieldWidth, maxWidth: .infinity)
       }
 
@@ -84,5 +84,6 @@ struct ServerListPreviews: PreviewProvider {
 
   static var previews: some View {
     ServerList(networkExchanges: .constant(networkExchanges))
+      .environmentObject(AppEnvironment())
   }
 }
