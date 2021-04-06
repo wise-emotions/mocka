@@ -33,4 +33,4 @@ jobs:
 
       # Build the macOS Mocka app.
       - name: Mocka App Build
-        run: xcodebuild build -scheme MockaApp -destination platform=macOS | xcpretty
+        run: xcodebuild build -scheme MockaApp -destination platform=macOS
