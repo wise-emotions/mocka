@@ -25,7 +25,8 @@ struct Mocka: App {
           alignment: .leading
         )
         .environmentObject(appEnvironment)
-        .sheet(isPresented: .constant(true)) {
+        .sheet(
+          isPresented: $appEnvironment.shouldShowStartupSettings) {
           StartupSettings()
             .environmentObject(appEnvironment)
         }
