@@ -6,11 +6,11 @@ import XCTest
 
 @testable import MockaServer
 
-class ServerTests {}
+class ServerHelpersTests {}
 
 // MARK: - Data Structures
 
-extension ServerTests {
+extension ServerHelpersTests {
   struct ServerConfiguration: ServerConfigurationProvider {
     var hostname: String = "127.0.0.1"
 
@@ -25,7 +25,7 @@ extension ServerTests {
           headers: ["Content-Type": "application/json"],
           body: ResponseBody(
             contentType: .applicationJSON,
-            fileLocation: ServerTests.getFilePath(for: "DummyJSON", extension: "json")
+            fileLocation: ServerHelpersTests.getFilePath(for: "DummyJSON", extension: "json")
           )
         )
       )
@@ -36,13 +36,18 @@ extension ServerTests {
 // MARK: - Helpers
 
 extension Bundle {
+  /// The `Bundle` for the server tests.
   internal static var tests: Bundle {
-    Bundle(for: ServerTests.self)
+    Bundle(for: ServerHelpersTests.self)
   }
 }
 
-extension ServerTests {
+extension ServerHelpersTests {
   /// Returns the `URL` of the passed file in the `Bundle.tests`.
+  /// - Parameters:
+  ///   - name: The name of the file.
+  ///   - extension: The extension of the file.
+  /// - Returns: The path of the file inside the tests bundle.
   static func getFilePath(for name: String, `extension`: String) -> URL {
     URL(string: Bundle.tests.path(forResource: name, ofType: `extension`)!)!
   }

@@ -182,6 +182,8 @@ public class AppServer {
   }
 
   /// Transforms readable bytes in the buffer to data.
+  /// - Parameter buffer: The `ByteBuffer` to read.
+  /// - Returns: Data read from the `ByteBuffer`. `nil` if `ByteBuffer` is `nil`.
   private func body(from buffer: ByteBuffer?) -> Data? {
     guard var bufferCopy = buffer else {
       return nil
