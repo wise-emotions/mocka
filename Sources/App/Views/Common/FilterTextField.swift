@@ -10,9 +10,10 @@ struct FilterTextField: View {
   @Binding var text: String
 
   var body: some View {
-    HStack(alignment: .firstTextBaseline, spacing: 8) {
+    HStack(alignment: .firstTextBaseline, spacing: 4) {
       Image(systemName: SFSymbol.magnifyingGlass.rawValue)
         .foregroundColor(Color(.tertiaryLabelColor))
+        .padding(.leading, 8)
 
       RoundedTextField(title: "Filter", text: $text)
         .textFieldStyle(PlainTextFieldStyle())
