@@ -128,13 +128,14 @@ public class AppServer {
                 httpMethod: httpMethod,
                 uri: URI(scheme: URI.Scheme.http, host: host, port: port, path: request.url.path, query: request.url.query),
                 headers: request.headers,
+                body: body(from: request.body.data),
                 timestamp: receivedRequestTimeStamp
               ),
               response: DetailedResponse(
-                httpMethod: httpMethod,
                 uri: URI(scheme: URI.Scheme.http, host: host, port: port, path: requestedPath),
                 headers: clientResponse.headers,
                 status: clientResponse.status,
+                body: body(from: clientResponse.body),
                 timestamp: Date().timeIntervalSince1970
               )
             )
@@ -154,7 +155,7 @@ public class AppServer {
           }
 
           return request.fileio
-            .collectFile(at: responseBody.fileLocation.absoluteString)
+            .collectFile(at: responseBody.fileLocation.path)
             .flatMap { buffer -> EventLoopFuture<ClientResponse> in
               clientResponse = ClientResponse(status: requestedResponse.status, headers: requestedResponse.headers, body: buffer)
               networkExchangesSubject.send(networkExchange)
@@ -162,12 +163,21 @@ public class AppServer {
             }
             .flatMapError { error in
               // So far, only logical error is the file not being found.
-              let failReason = "File not found at \(responseBody.fileLocation.absoluteString)"
+              let failReason = "File not found at \(responseBody.fileLocation.path)"
               clientResponse = ClientResponse(status: .badRequest, headers: [:], body: ByteBuffer(string: failReason))
               networkExchangesSubject.send(networkExchange)
               return request.eventLoop.makeFailedFuture(Abort(.badRequest, reason: failReason))
             }
         }
     }
+  }
+
+  /// Transforms readable bytes in the buffer to data.
+  private func body(from buffer: ByteBuffer?) -> Data? {
+    guard var bufferCopy = buffer else {
+      return nil
+    }
+
+    return bufferCopy.readData(length: bufferCopy.readableBytes)
   }
 }
