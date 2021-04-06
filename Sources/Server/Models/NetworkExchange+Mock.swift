@@ -12,7 +12,7 @@ public extension NetworkExchange {
       uri: URI(path: "api/v1/user"),
       headers: [
         "token": "ThISisATokEN",
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       ],
       body: "{\"name\": \"john\"}".data(using: .utf8),
       timestamp: Date().timeIntervalSince1970
