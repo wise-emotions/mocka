@@ -20,7 +20,7 @@ class ServerLaunchTests: XCTestCase {
 
     XCTAssertNil(server.application)
 
-    try? server.start(with: ServerHelpersTests.ServerConfiguration())
+    try? server.start(with: ServerTestsHelpers.ServerConfiguration())
 
     XCTAssertNotNil(server.application)
     XCTAssertEqual(server.port, 8080)
@@ -31,11 +31,11 @@ class ServerLaunchTests: XCTestCase {
   func testServerStartWhenInstanceExistsThrowing() {
     XCTAssertNil(server.application)
 
-    try? server.start(with: ServerHelpersTests.ServerConfiguration())
+    try? server.start(with: ServerTestsHelpers.ServerConfiguration())
     XCTAssertNotNil(server.application)
 
     do {
-      try server.start(with: ServerHelpersTests.ServerConfiguration())
+      try server.start(with: ServerTestsHelpers.ServerConfiguration())
     } catch {
       guard case .instanceAlreadyRunning = error as? ServerError else {
         XCTFail("Was expecting `ServerError.instanceAlreadyRunning` but got \(error) instead")
@@ -48,7 +48,7 @@ class ServerLaunchTests: XCTestCase {
   func testServerStopSuccessful() {
     XCTAssertNil(server.application)
 
-    try? server.start(with: ServerHelpersTests.ServerConfiguration())
+    try? server.start(with: ServerTestsHelpers.ServerConfiguration())
     XCTAssertNotNil(server.application)
 
     try? server.stop()
@@ -58,7 +58,7 @@ class ServerLaunchTests: XCTestCase {
   func testRoutesCorrectlyRegistered() {
     XCTAssertEqual(server.routes.count, 0)
 
-    try? server.start(with: ServerHelpersTests.ServerConfiguration())
+    try? server.start(with: ServerTestsHelpers.ServerConfiguration())
     XCTAssertEqual(server.routes.count, 1)
     XCTAssertEqual(server.routes[0].method, .GET)
     XCTAssertEqual(server.routes[0].path[0].description, "api")
