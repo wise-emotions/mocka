@@ -8,16 +8,17 @@ public extension NetworkExchange {
   /// The static mock property. To be used only for mock purposes.
   static let mock = NetworkExchange(
     request: DetailedRequest(
-      httpMethod: .get,
-      uri: URI(path: "api/v1/users"),
-      headers: [:],
+      httpMethod: .post,
+      uri: URI(path: "api/v1/user"),
+      headers: ["token": "ThISisATokEN"],
+      body: "{\"name\": \"john\"}".data(using: .utf8),
       timestamp: Date().timeIntervalSince1970
     ),
     response: DetailedResponse(
-      httpMethod: .get,
-      uri: URI(path: "api/v1/users"),
-      headers: [:],
+      uri: URI(path: "api/*/user"),
+      headers: ["Content-Type": "application/json"],
       status: HTTPResponseStatus(statusCode: 200),
+      body: "{\"name\": \"john\", \"age\": 18}".data(using: .utf8),
       timestamp: Date().timeIntervalSince1970
     )
   )
