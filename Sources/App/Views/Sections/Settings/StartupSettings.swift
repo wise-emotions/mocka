@@ -12,7 +12,7 @@ struct StartupSettings: View {
 
   @State var workspacePath: String = ""
 
-  @State var workspacePathError: MockaError = .missingWorkspacePathValue
+  @State var workspacePathError: MockaError? = nil
 
   var body: some View {
     let workspacePathBinding = Binding {
@@ -21,6 +21,7 @@ struct StartupSettings: View {
       do {
         try Logic.WorkspacePath.check(URL(fileURLWithPath: $0))
         self.workspacePath = $0
+        self.workspacePathError = nil
       } catch {
         self.workspacePath = $0
 
@@ -37,6 +38,7 @@ struct StartupSettings: View {
         .font(.largeTitle)
 
       Text("Before starting you need to select a workspace path.\nYou can also set an optional server's address and port.")
+        .frame(height: 32)
         .font(.body)
         .padding(.vertical)
 
@@ -49,6 +51,10 @@ struct StartupSettings: View {
           VStack {
             RoundedTextField(title: "Workspace folder", text: workspacePathBinding)
               .frame(width: 300)
+              .overlay(
+                RoundedRectangle(cornerRadius: 6)
+                  .stroke(Color.redEye, lineWidth: workspacePathError == nil ? 0 : 1)
+              )
 
             Text("Please note that the selected folder must exist and it will not be automatically created.")
               .font(.subheadline)
@@ -89,18 +95,24 @@ struct StartupSettings: View {
         Button(
           action: {
             let workspaceURL = URL(fileURLWithPath: workspacePath)
+
             do {
+              try Logic.WorkspacePath.check(workspaceURL)
               try Logic.Startup.createConfiguration(for: workspaceURL)
 
               appEnvironment.workspaceURL = workspaceURL
               presentationMode.wrappedValue.dismiss()
             } catch {
-              #warning("Handle error case")
+              guard let workspacePathError = error as? MockaError else {
+                return
+              }
+
+              self.workspacePathError = workspacePathError
             }
           },
           label: {
             Text("OK")
-              .frame(maxWidth: 100, maxHeight: 21)
+              .frame(width: 100, height: 21)
           }
         )
         .buttonStyle(AccentButtonStyle())
