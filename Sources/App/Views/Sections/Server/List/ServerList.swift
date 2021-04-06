@@ -20,7 +20,7 @@ struct ServerList: View {
       List(networkExchanges) { networkExchange in
         NavigationLink(destination: Text(networkExchange.response.uri.path)) {
           ServerListItem(
-            httpMethod: networkExchange.response.httpMethod,
+            httpMethod: networkExchange.request.httpMethod,
             httpStatus: networkExchange.response.status.code,
             httpStatusMeaning: networkExchange.response.status.reasonPhrase,
             timestamp: networkExchange.response.timestamp.timestampPrint,
