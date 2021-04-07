@@ -11,6 +11,10 @@ extension Logic {
 }
 
 extension Logic.Startup {
+  /// Create a server configuration file.
+  /// - Parameter url: The `URL` where the file should be created.
+  /// - Throws: `MockaError.workspacePathDoesNotExist`,
+  ///           `MockaError.failedToEncode`.
   static func createConfiguration(for url: URL?) throws {
     guard let unwrappedURL = url else {
       throw MockaError.workspacePathDoesNotExist
@@ -22,6 +26,9 @@ extension Logic.Startup {
     }
   }
 
+  /// Handle the folder selection by using the `fileImporter`.
+  /// - Parameter result: The `URL` selected by the `fileImporter`.
+  /// - Returns: Returns the selected path as `String`.
   static func selectFolder(from result: Result<[URL], Error>) -> String? {
     guard
       let selectedFolder = try? result.get().first,

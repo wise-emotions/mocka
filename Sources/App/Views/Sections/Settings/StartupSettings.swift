@@ -5,6 +5,8 @@
 import SwiftUI
 import UniformTypeIdentifiers
 
+/// The startup settings view.
+/// This view is shown in case the `workspaceURL` doesn't exist.
 struct StartupSettings: View {
   @Environment(\.presentationMode) var presentationMode
 

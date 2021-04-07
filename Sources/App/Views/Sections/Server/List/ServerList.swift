@@ -5,7 +5,10 @@
 import MockaServer
 import SwiftUI
 
+/// The server list view.
+/// This view handle the list of all the API called to the server.
 struct ServerList: View {
+  /// The app environment object.
   @EnvironmentObject var appEnvironment: AppEnvironment
 
   /// The associated view model.

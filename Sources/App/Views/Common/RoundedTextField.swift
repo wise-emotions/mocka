@@ -6,6 +6,8 @@ import SwiftUI
 
 /// An iOS-style `TextField`.
 struct RoundedTextField: View {
+  /// The rounded text field title, aka placeholder.
+  /// This is named `title` to keep the SwiftUI `TextField` style.
   let title: String
 
   /// The text to display and edit.
