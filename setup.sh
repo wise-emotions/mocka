@@ -69,20 +69,19 @@ done
 mkdir -p .temp
 
 # Move the project userdata folder to a temporary folder.
-if ls $PROJECT_NAME.xcodeproj/xcuserdata 1> /dev/null 2>&1; then
-  mv $PROJECT_NAME.xcodeproj/xcuserdata .temp/projxcuserdata
+if ls $PROJECT_NAME.xcodeproj/project.xcworkspace/xcuserdata 1> /dev/null 2>&1; then
+  mv $PROJECT_NAME.xcodeproj/project.xcworkspace/xcuserdata .temp/xcuserdata
 fi
 
-# Remove present .xcodeproj.
+# Remove the .xcodeproj folder.
 rm -rf $PROJECT_NAME.xcodeproj
 
 # Run xcodegen to generate a new project file.
 xcodegen
 
 # Move back the project userdata folder to the correct folder.
-if ls .temp/projxcuserdata 1> /dev/null 2>&1; then
-  mv .temp/projxcuserdata $PROJECT_NAME.xcodeproj/
-  mv $PROJECT_NAME.xcodeproj/projxcuserdata $PROJECT_NAME.xcodeproj/xcuserdata
+if ls .temp/xcuserdata 1> /dev/null 2>&1; then
+  mv .temp/xcuserdata $PROJECT_NAME.xcodeproj/project.xcworkspace/xcuserdata
 fi
 
 # Remove the temporary folder.
