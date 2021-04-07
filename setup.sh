@@ -2,6 +2,7 @@
 set -e
 
 PROJECT_NAME="Mocka"
+CLEAN_SCHEME="MockaApp"
 SWIFT_FORMAT_VERSION="swift-5.3-branch"
 
 # Install Homebrew dependency manager.
@@ -88,10 +89,25 @@ fi
 rm -rf .temp
 
 # Move config files to right place.
-cp IDETemplateMacros.plist $PROJECT_NAME.xcodeproj/xcshareddata/IDETemplateMacros.plist
+cp Configurations/IDETemplateMacros.plist $PROJECT_NAME.xcodeproj/xcshareddata/IDETemplateMacros.plist
+
+# Move workspace settings to the right place.
+mkdir -p $PROJECT_NAME.xcodeproj/project.xcworkspace/xcuserdata/$USER.xcuserdatad
+cp Configurations/WorkspaceSettings.xcsettings $PROJECT_NAME.xcodeproj/project.xcworkspace/xcuserdata/$USER.xcuserdatad/WorkspaceSettings.xcsettings
+
 
 for var in $@
 do
+  # If "clean" argument is passed, clean up the project and derived data.
+  if [[ "$var" == "clean" ]]; then
+    echo -e "Deleting derived data and running xcodebuild clean."
+    # Clean project and workspace.
+    xcodebuild clean -project $PROJECT_NAME.xcodeproj -scheme "$CLEAN_SCHEME"
+
+    # Remove derived data.
+    rm -rf .build
+  fi
+
   # If "open" argument is passed, open the project.
   if [[ "$var" == "open" ]]; then
     echo -e "Opening project."
