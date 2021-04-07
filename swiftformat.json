@@ -7,7 +7,7 @@
   },
   "indentConditionalCompilationBlocks" : true,
   "indentSwitchCaseLabels" : false,
-  "lineBreakAroundMultilineExpressionChainComponents" : false,
+  "lineBreakAroundMultilineExpressionChainComponents" : true,
   "lineBreakBeforeControlFlowKeywords" : false,
   "lineBreakBeforeEachArgument" : false,
   "lineBreakBeforeEachGenericRequirement" : false,

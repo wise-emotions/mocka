@@ -1,10 +1,38 @@
 import Foundation
-import Server
+import MockaServer
 
+/// An object containing the parameters needed to configure the server's connection.
+struct ServerConnectionConfiguration: ServerConnectionConfigurationProvider, Encodable {
+  /// The host part of the `URL`.
+  let hostname = "127.0.0.1"
+
+  /// The port listening to incoming requests.
+  let port = 8080
+}
+
+/// An object containing the full configuration of the server.
 struct ServerConfiguration: ServerConfigurationProvider {
-  var requests: Set<Request>
+  /// The host part of the `URL`.
+  let hostname: String
 
-  init(requests: Set<Request>) {
+  /// The port listening to incoming requests.
+  let port: Int
+
+  /// The list of requests to manage by the server.
+  let requests: Set<Request>
+
+  /// Creates a new `ServerConfiguration` object.
+  /// - Parameters:
+  ///   - hostname: The host part of the `URL`. Defaults to `127.0.0.1`.
+  ///   - port: The port listening to incoming requests. Defaults to 8080.
+  ///   - requests: The requests to allow the server to accept and manage.
+  init(
+    hostname: String = "127.0.0.1",
+    port: Int = 8080,
+    requests: Set<Request>
+  ) {
+    self.hostname = hostname
+    self.port = port
     self.requests = requests
   }
 }

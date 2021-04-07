@@ -4,12 +4,21 @@ import Foundation
 public struct ResponseBody {
   /// The kind of the content of the response.
   public let contentType: ContentType
-  
+
   /// The url of the file holding the content.
   public let fileLocation: URL
+
+  /// Creates a `ResponseBody` object.
+  /// - Parameters:
+  ///   - contentType: The kind of the content of the response.
+  ///   - fileLocation: The url of the file holding the content.
+  public init(contentType: ResponseBody.ContentType, fileLocation: URL) {
+    self.contentType = contentType
+    self.fileLocation = fileLocation
+  }
 }
 
-// MARK: - Public `ResponseContent` Extension
+// MARK: - Public `ResponseBody` Extension
 
 public extension ResponseBody {
   /// The `Content-Type` of the response body.
