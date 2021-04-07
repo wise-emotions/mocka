@@ -3,6 +3,7 @@
 //
 
 import SwiftUI
+import UniformTypeIdentifiers
 
 struct StartupSettings: View {
   @Environment(\.presentationMode) var presentationMode
@@ -10,26 +11,25 @@ struct StartupSettings: View {
   /// The app environment object.
   @EnvironmentObject var appEnvironment: AppEnvironment
 
-  @State var workspacePath: String = ""
-
-  @State var workspacePathError: MockaError? = nil
+  /// The associated view model.
+  @StateObject var viewModel = StartupSettingsViewModel()
 
   var body: some View {
     let workspacePathBinding = Binding {
-      self.workspacePath
+      viewModel.workspacePath
     } set: {
       do {
         try Logic.WorkspacePath.check(URL(fileURLWithPath: $0))
-        self.workspacePath = $0
-        self.workspacePathError = nil
+        viewModel.workspacePath = $0
+        viewModel.workspacePathError = nil
       } catch {
-        self.workspacePath = $0
+        viewModel.workspacePath = $0
 
         guard let workspacePathError = error as? MockaError else {
           return
         }
 
-        self.workspacePathError = workspacePathError
+        viewModel.workspacePathError = workspacePathError
       }
     }
 
@@ -53,7 +53,7 @@ struct StartupSettings: View {
               .frame(width: 300)
               .overlay(
                 RoundedRectangle(cornerRadius: 6)
-                  .stroke(Color.redEye, lineWidth: workspacePathError == nil ? 0 : 1)
+                  .stroke(Color.redEye, lineWidth: viewModel.workspacePathError == nil ? 0 : 1)
               )
 
             Text("Please note that the selected folder must exist and it will not be automatically created.")
@@ -64,12 +64,28 @@ struct StartupSettings: View {
           }
 
           Button(
-            action: {},
+            action: {
+              viewModel.fileImporterIsPresented.toggle()
+            },
             label: {
               Text("Select folder")
             }
           )
           .frame(height: 30)
+          .fileImporter(
+            isPresented: $viewModel.fileImporterIsPresented,
+            allowedContentTypes: [UTType.folder],
+            allowsMultipleSelection: false,
+            onCompletion: { result in
+              guard let workspacePath = Logic.Startup.selectFolder(from: result) else {
+                viewModel.workspacePathError = .missingWorkspacePathValue
+                return
+              }
+
+              viewModel.workspacePath = workspacePath
+              viewModel.workspacePathError = nil
+            }
+          )
         }
 
         HStack {
@@ -94,7 +110,7 @@ struct StartupSettings: View {
       VStack(alignment: .trailing) {
         Button(
           action: {
-            let workspaceURL = URL(fileURLWithPath: workspacePath)
+            let workspaceURL = URL(fileURLWithPath: viewModel.workspacePath)
 
             do {
               try Logic.WorkspacePath.check(workspaceURL)
@@ -107,7 +123,7 @@ struct StartupSettings: View {
                 return
               }
 
-              self.workspacePathError = workspacePathError
+              viewModel.workspacePathError = workspacePathError
             }
           },
           label: {
