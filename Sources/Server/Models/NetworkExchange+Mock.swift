@@ -10,7 +10,10 @@ public extension NetworkExchange {
     request: DetailedRequest(
       httpMethod: .post,
       uri: URI(path: "api/v1/user"),
-      headers: ["token": "ThISisATokEN"],
+      headers: [
+        "token": "ThISisATokEN",
+        "Content-Type": "application/json",
+      ],
       body: "{\"name\": \"john\"}".data(using: .utf8),
       timestamp: Date().timeIntervalSince1970
     ),

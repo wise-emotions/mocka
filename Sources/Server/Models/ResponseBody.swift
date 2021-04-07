@@ -8,7 +8,7 @@ public struct ResponseBody {
   /// The url of the file holding the content.
   public let fileLocation: URL
 
-  /// Creates and returns a `ResponseBody` object.
+  /// Creates a `ResponseBody` object.
   /// - Parameters:
   ///   - contentType: The kind of the content of the response.
   ///   - fileLocation: The url of the file holding the content.
