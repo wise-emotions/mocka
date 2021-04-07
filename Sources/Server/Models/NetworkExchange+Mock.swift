@@ -21,7 +21,7 @@ public extension NetworkExchange {
       uri: URI(path: "api/*/user"),
       headers: ["Content-Type": "application/json"],
       status: HTTPResponseStatus(statusCode: 200),
-      body: "{\"name\": \"john\", \"age\": 18}".data(using: .utf8),
+      body: "{\"name\": \"john\", \"age\": 18, \"surname\": \"Apple\"}".data(using: .utf8),
       timestamp: Date().timeIntervalSince1970
     )
   )

@@ -60,10 +60,10 @@ extension RequestInfoViewModel {
     var body: String {
       switch kind {
       case .request:
-        return convertDataToBodyString(request.body)
+        return request.body?.asPrettyPrintedJSON ?? ""
         
       case .response:
-        return convertDataToBodyString(response.body)
+        return response.body?.asPrettyPrintedJSON ?? ""
       }
     }
 
@@ -75,17 +75,6 @@ extension RequestInfoViewModel {
     /// Whether the Headers section is visible or not.
     var isHeadersSectionVisible: Bool {
       headers.isEmpty.isFalse
-    }
-    
-    // MARK: - Functions
-    
-    /// Convert the optional `Data` to body `String`.
-    private func convertDataToBodyString(_ data: Data?) -> String {
-      guard let data = data, let body = String(data: data, encoding: .utf8) else {
-        return "Invalid body"
-      }
-      
-      return body
     }
   }
 }
