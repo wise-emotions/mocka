@@ -2,7 +2,7 @@
 //  Mocka
 //
 
-import Server
+import MockaServer
 import SwiftUI
 
 /// The view model of the `RequestInfoContainerView`.

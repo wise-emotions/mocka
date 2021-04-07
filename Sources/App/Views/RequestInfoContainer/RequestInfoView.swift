@@ -1,4 +1,4 @@
-import Server
+import MockaServer
 import SwiftUI
 import Foundation
 

@@ -2,7 +2,8 @@
 //  Mocka
 //
 
-import Server
+import Foundation
+import MockaServer
 
 extension RequestInfoViewModel {
   /// The view model of the `ContainerSectionView`.
@@ -57,7 +58,13 @@ extension RequestInfoViewModel {
 
     /// The body of the request or response.
     var body: String {
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate"
+      switch kind {
+      case .request:
+        return convertDataToBodyString(request.body)
+        
+      case .response:
+        return convertDataToBodyString(response.body)
+      }
     }
 
     /// Whether the Query section is visible or not.
@@ -68,6 +75,17 @@ extension RequestInfoViewModel {
     /// Whether the Headers section is visible or not.
     var isHeadersSectionVisible: Bool {
       headers.isEmpty.isFalse
+    }
+    
+    // MARK: - Functions
+    
+    /// Convert the optional `Data` to body `String`.
+    private func convertDataToBodyString(_ data: Data?) -> String {
+      guard let data = data, let body = String(data: data, encoding: .utf8) else {
+        return "Invalid body"
+      }
+      
+      return body
     }
   }
 }
