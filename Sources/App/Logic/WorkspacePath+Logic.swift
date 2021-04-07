@@ -9,10 +9,10 @@ import UniformTypeIdentifiers
 
 extension Logic {
   /// The logic related to the root path where all the requests and responses live.
-  enum RootPath {}
+  enum WorkspacePath {}
 }
 
-extension Logic.RootPath {
+extension Logic.WorkspacePath {
   /// The name of the file containing the server's configuration.
   private static let serverConfigurationFileName = "serverConfiguration.json"
 
@@ -25,18 +25,18 @@ extension Logic.RootPath {
   /// The value of the root path.
   /// When this value is updated, the value in the user defaults is updated as well.
   /// To update this value use `set(_ url:)`.
-  @AppStorage(UserDefaultKey.rootPath) private(set) static var value: URL?
+  @AppStorage(UserDefaultKey.workspacePath) private(set) static var value: URL?
 
   /// Checks if the root path is set in the `UserDefaults`.
-  static var isRootPathSet: Bool {
+  static var isWorkspacePathSet: Bool {
     value != nil
   }
 
-  /// Sets the `value` for the `RootPath`.
+  /// Sets the `value` for the `WorkspacePath`.
   /// - Parameter url: The new `URL` of the root path.
-  /// - Throws: `MockaError.rootPathDoesNotExist`,
-  ///           `MockaError.rootPathNotFolder`,
-  ///           `MockaError.rootPathMissingScheme`,
+  /// - Throws: `MockaError.workspacePathDoesNotExist`,
+  ///           `MockaError.workspacePathNotFolder`,
+  ///           `MockaError.workspacePathMissingScheme`,
   ///           `MockaError.failedToEncode`.
   ///
   /// The `URL` should contain a scheme. It is recommended to instantiate the `URL` using `URL(fileURLWithPath:)`.
@@ -47,15 +47,15 @@ extension Logic.RootPath {
     }
 
     guard unwrappedURL.scheme != nil else {
-      throw MockaError.rootPathMissingScheme
+      throw MockaError.workspacePathMissingScheme
     }
 
     guard Self.resourceExists(at: unwrappedURL) else {
-      throw MockaError.rootPathDoesNotExist
+      throw MockaError.workspacePathDoesNotExist
     }
 
     guard Self.isFolder(at: unwrappedURL) else {
-      throw MockaError.rootPathNotFolder
+      throw MockaError.workspacePathNotFolder
     }
 
     Self.value = unwrappedURL
@@ -67,7 +67,7 @@ extension Logic.RootPath {
   }
 }
 
-private extension Logic.RootPath {
+private extension Logic.WorkspacePath {
   /// Checks if a resource exists at a given `URL`'s path.
   /// - Parameter url: The `URL` of the resource.
   /// - Returns: Returns `true` if the resource is a folder, otherwise `false`.

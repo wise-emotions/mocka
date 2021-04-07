@@ -60,8 +60,8 @@ final class SourcesTreeViewModel: ObservableObject {
   ///
   /// This instantiation will fail if the root path value has not been set yet.
   init() throws {
-    guard let rootDirectory = Logic.RootPath.value else {
-      throw MockaError.missingRootPathValue
+    guard let rootDirectory = Logic.WorkspacePath.value else {
+      throw MockaError.missingWorkspacePathValue
     }
 
     directoryContent = contents(of: rootDirectory)
