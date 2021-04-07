@@ -11,12 +11,6 @@ extension Logic {
 }
 
 extension Logic.Startup {
-  /// The name of the file containing the server's configuration.
-  private static let serverConfigurationFileName = "serverConfiguration.json"
-
-  /// The `UTType` of a json file.
-  private static let JSONUniformTypeIdentifier = UTType("public.json")
-
   static func createConfiguration(for url: URL?) throws {
     guard let unwrappedURL = url else {
       throw MockaError.workspacePathDoesNotExist
@@ -27,15 +21,31 @@ extension Logic.Startup {
       return
     }
   }
+
+  static func selectFolder(from result: Result<[URL], Error>) -> String? {
+    guard
+      let selectedFolder = try? result.get().first,
+      selectedFolder.startAccessingSecurityScopedResource()
+    else {
+      return nil
+    }
+
+    selectedFolder.stopAccessingSecurityScopedResource()
+
+    return selectedFolder.path
+  }
 }
 
 private extension Logic.Startup {
+  /// The name of the file containing the server's configuration.
+  private static let serverConfigurationFileName = "serverConfiguration.json"
+
   /// Checks if the passed path includes a server configuration file.
   /// - Parameter path: The `URL` where the configuration file is present.
   /// - Returns: Returns `true` if the server configuration file exist, otherwise `false`.
   static func serverConfigurationFileExists(at url: URL) -> Bool {
     let fullPath = url.appendingPathComponent(Self.serverConfigurationFileName, isDirectory: false)
-    return FileManager.default.fileExists(atPath: fullPath.path) && Self.uniformType(of: fullPath) == Self.JSONUniformTypeIdentifier
+    return FileManager.default.fileExists(atPath: fullPath.path) && Self.uniformType(of: fullPath) == UTType.json
   }
 
   /// Adds a `serverConfiguration.json` file to the url passed with the encoded content of `ServerConnectionConfiguration`.
