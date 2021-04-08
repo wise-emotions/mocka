@@ -5,7 +5,7 @@ import Vapor
 /// The request is composed of:
 /// - an `HTTPMethod`
 /// - a path that the request responds to
-/// - a response location that points to where the `JSON` file associated with the request is present, if any.
+/// - a `RequestedResponse`.
 public struct Request {
   /// The `HTTPMethod` of the request.
   public let method: HTTPMethod
@@ -22,9 +22,8 @@ public struct Request {
   /// - `/api/**` will be matched by `/api/v1/users`, `/api/users/notes` and anything that starts with `/api`.
   public let path: Path
 
-  /// The URL location where the response associated with the request is present.
-  /// If a request has no response, this Path **should be** nil.
-  public let responseLocation: URL?
+  /// The requested response when this request is executed.
+  public let requestedResponse: RequestedResponse
 
   /// The `path` transformed in an array of `PathComponent`.
   internal var vaporParameter: [PathComponent] {
@@ -32,18 +31,30 @@ public struct Request {
       PathComponent(stringLiteral: String($0))
     }
   }
+
   /// Returns a `Request` object.
   /// - Parameters:
   ///   - method: The `HTTPMethod` of the request.
   ///   - path: The `Path` associated with `Request`.
-  ///   - responseLocation: The URL location where the response associated with the request is present.
+  ///   - requestedResponse: The desired response when this request is executed.
   public init(
     method: HTTPMethod,
     path: Path,
-    responseLocation: URL?
+    requestedResponse: RequestedResponse
   ) {
     self.method = method
     self.path = path
-    self.responseLocation = responseLocation
+    self.requestedResponse = requestedResponse
+  }
+}
+
+// Hashable conformance to create sets.
+extension Request: Hashable {
+  public static func == (lhs: Request, rhs: Request) -> Bool {
+    lhs.method == rhs.method && lhs.path == rhs.path
+  }
+
+  public func hash(into hasher: inout Hasher) {
+    hasher.combine("\(method) - \(path)")
   }
 }
