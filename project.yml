@@ -3,6 +3,8 @@ name: Mocka
 settings:
   DEBUG_INFORMATION_FORMAT: dwarf-with-dsym
   TARGETED_DEVICE_FAMILY: 3
+  # https://forums.swift.org/t/swift-packages-in-multiple-targets-results-in-this-will-result-in-duplication-of-library-code-errors/34892/36
+  DISABLE_DIAMOND_PROBLEM_DIAGNOSTIC: true
 
 options:
   minimumXcodeGenVersion: "2.11.0"
@@ -20,18 +22,20 @@ packages:
     from: 4.0.0
 
 targets:
-  Mocka:
+  MockaApp:
     type: application
     platform: macOS
     attributes:
       ProvisioningStyle: Automatic
+    settings:
+      PRODUCT_NAME: "Mocka"
     sources:
       - path: Sources/App
     dependencies:
-      - target: Server
+      - target: MockaServer
     scheme:
       testTargets:
-        - MockaTests
+        - MockaAppTests
       gatherCoverageData: true
       randomExecutionOrder: true
       customArchiveName: Mocka
@@ -49,13 +53,13 @@ targets:
         CFBundleVersion: "1"
         LSMinimumSystemVersion: "$(MACOSX_DEPLOYMENT_TARGET)"
 
-  MockaTests:
+  MockaAppTests:
     type: bundle.unit-test
     platform: macOS
     sources:
       - path: Tests/AppTests
     dependencies:
-      - target: Mocka
+      - target: MockaApp
     info:
       path: Tests/AppTests/Resources/Info.plist
       properties:
@@ -68,7 +72,7 @@ targets:
         CFBundleShortVersionString: "1.0"
         CFBundleVersion: "$(CURRENT_PROJECT_VERSION)"
 
-  Server:
+  MockaServer:
     type: framework
     platform: macOS
     sources:
@@ -77,7 +81,7 @@ targets:
       - package: Vapor
     scheme:
       testTargets:
-        - ServerTests
+        - MockaServerTests
       gatherCoverageData: true
       randomExecutionOrder: true
       customArchiveName: Server
@@ -94,13 +98,15 @@ targets:
         CFBundleShortVersionString: "1.0"
         CFBundleVersion: "1"
 
-  ServerTests:
+  MockaServerTests:
     type: bundle.unit-test
     platform: macOS
     sources:
       - path: Tests/ServerTests
     dependencies:
-      - target: Server
+      - target: MockaServer
+      - package: Vapor
+        product: XCTVapor
     info:
       path: Tests/ServerTests/Resources/Info.plist
       properties:

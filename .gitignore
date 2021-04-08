@@ -104,3 +104,6 @@ fastlane/FastlaneRunner
 Info.plist
 projxcuserdata
 workspacexcuserdata
+swift-format
+.build
+.temp
