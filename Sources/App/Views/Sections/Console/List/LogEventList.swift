@@ -14,6 +14,7 @@ struct LogEventList: View {
   var body: some View {
     VStack {
       Divider()
+
       ScrollView {
         ScrollViewReader { scrollView in
           LazyVStack {
@@ -55,6 +56,7 @@ struct LogEventList: View {
           }
         }
       }
+      .padding(.bottom, 10)
       .background(Color.doppio)
     }
   }

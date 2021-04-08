@@ -30,8 +30,8 @@ struct LogEventListItem: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.leading, 32)
     }
-    .padding(.vertical, 12)
-    .frame(minHeight: 44)
+    .padding(.vertical, 4)
+    .frame(minHeight: 26)
     .background(viewModel.backgroundColor)
     .cornerRadius(4)
     .padding(.horizontal, 16)
@@ -43,7 +43,7 @@ struct LogEventListItemPreviews: PreviewProvider {
     Group {
       LogEventListItem(
         viewModel: LogEventListItemViewModel(
-          logEvent: LogEvent(level: .debug, message: "Server started\n"),
+          logEvent: LogEvent(level: .debug, message: "Server started\non 2 lines"),
           isOddCell: false
         )
       )
