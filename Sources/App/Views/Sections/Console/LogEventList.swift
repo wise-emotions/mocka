@@ -7,10 +7,10 @@ import SwiftUI
 struct LogEventList: View {
   /// The app environment object.
   @EnvironmentObject var appEnvironment: AppEnvironment
-  
+
   /// The view model of the console section.
   @StateObject var viewModel: ConsoleSectionViewModel
-  
+
   var body: some View {
     VStack {
       Divider()
@@ -40,22 +40,22 @@ struct LogEventList: View {
           HStack {
             RoundedTextField(title: "Filter", text: $viewModel.filterText)
               .frame(width: Size.minimumFilterTextFieldWidth)
-            
+
             SymbolButton(
               symbolName: appEnvironment.isServerRunning ? .stopCircle : .playCircle,
               action: {
                 switch appEnvironment.isServerRunning {
                 case true:
                   try? appEnvironment.server.stop()
-                  
+
                 case false:
                   try? appEnvironment.server.start(with: ServerConfiguration(requests: []))
                 }
-                
+
                 appEnvironment.isServerRunning.toggle()
               }
             )
-            
+
             SymbolButton(
               symbolName: .memories,
               action: {
@@ -63,7 +63,7 @@ struct LogEventList: View {
               }
             )
             .disabled(!appEnvironment.isServerRunning)
-            
+
             SymbolButton(
               symbolName: .trash,
               action: {
@@ -87,7 +87,7 @@ struct LogEventListView_Previews: PreviewProvider {
     ),
     count: 10
   )
-  
+
   static var previews: some View {
     LogEventList(viewModel: ConsoleSectionViewModel(consoleLogsPublisher: events.publisher.eraseToAnyPublisher()))
       .environmentObject(AppEnvironment())

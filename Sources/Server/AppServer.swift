@@ -113,7 +113,7 @@ public class AppServer {
     try stop()
     try start(with: configuration)
   }
-  
+
   /// Clears the buffered log events from the `consoleLogsSubject`.
   public func clearBufferedConsoleLogEvents() {
     consoleLogsSubject.clearBuffer()

@@ -5,14 +5,14 @@ import SwiftUI
 struct LogEventListItem: View {
   /// The `ViewModel` of the view.
   let viewModel: LogEventCellModel
-  
+
   var body: some View {
     HStack(alignment: .center) {
       Circle()
         .fill(viewModel.circleColor)
         .frame(width: 10, height: 10)
         .padding(.leading, 10)
-      
+
       Text(viewModel.logEvent.level.name)
         .font(.system(size: 12, weight: .bold, design: .default))
         .frame(width: 60, alignment: .leading)
@@ -24,7 +24,7 @@ struct LogEventListItem: View {
         .frame(width: 126)
         .padding(.leading, 40)
         .foregroundColor(Color.macchiato)
-            
+
       Text(viewModel.logEvent.message)
         .font(.system(size: 16, weight: .regular, design: .default))
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -54,7 +54,7 @@ struct LogEventCell_Previews: PreviewProvider {
           isOddCell: true
         )
       )
-      
+
       LogEventListItem(
         viewModel: LogEventCellModel(
           logEvent: LogEvent(level: .error, message: "Server started"),
