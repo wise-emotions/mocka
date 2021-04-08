@@ -28,7 +28,7 @@ extension ResponseBody.ContentType {
     case .textXML:
       return .xml
 
-    case .custom:
+    case .custom, .none:
       return nil
     }
   }
