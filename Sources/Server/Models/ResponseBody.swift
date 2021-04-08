@@ -22,35 +22,38 @@ public struct ResponseBody {
 
 public extension ResponseBody {
   /// The `Content-Type` of the response body.
-  enum ContentType: CaseIterable {
+  enum ContentType: String, CaseIterable {
 
     // MARK: Application
 
     /// `Content-Type: application/json`.
-    case applicationJSON
+    case applicationJSON = "application/json"
 
     // MARK: Text
 
     /// `Content-Type: text/csv`.
-    case textCSS
+    case textCSS = "text/css"
 
     /// `Content-Type: text/css`.
-    case textCSV
+    case textCSV = "text/csv"
 
     /// `Content-Type: text/html`.
-    case textHTML
+    case textHTML = "text/html"
 
     /// `Content-Type: text/plain`.
-    case textPlain
+    case textPlain = "text/txt"
 
     /// `Content-Type: text/xml`.
-    case textXML
+    case textXML = "text/xml"
 
     // MARK: Custom
 
     /// No preset configuration.
     /// This preset does not provide any validation.
-    case custom
+    case custom = "custom"
+
+    /// No content in the body. Example: HTTP Status - 204
+    case none = "none"
   }
 }
 
@@ -59,8 +62,9 @@ public extension ResponseBody {
 internal extension ResponseBody {
   /// Checks if the actual file extension in the `URL` matches the expected one for the body type.
   func isValidFileFormat() -> Bool {
-    // When the `ContentType` is `.custom`, we do not check the validity of the format, and return true.
-    guard contentType != .custom else {
+    // When the `ContentType` is `.custom` or `.none`,
+    // we do not check the validity of the format, and return true.
+    guard contentType.isNone(of: [.custom, .none]) else {
       return true
     }
 
@@ -97,7 +101,7 @@ public extension ResponseBody.ContentType {
     case .textXML:
       return "xml"
 
-    case .custom:
+    case .custom, .none:
       return nil
     }
   }
@@ -108,27 +112,10 @@ public extension ResponseBody.ContentType {
 internal extension ResponseBody.ContentType {
   /// The value to associated to `Content-Type` in the response header.
   var contentTypeHeader: String? {
-    switch self {
-    case .applicationJSON:
-      return "application/json"
-
-    case .textCSS:
-      return "text/css"
-
-    case .textCSV:
-      return "text/csv"
-
-    case .textHTML:
-      return "text/html"
-
-    case .textPlain:
-      return "text/txt"
-
-    case .textXML:
-      return "text/xml"
-
-    case .custom:
+    guard self.isNone(of: [.custom, .none]) else {
       return nil
     }
+
+    return rawValue
   }
 }
