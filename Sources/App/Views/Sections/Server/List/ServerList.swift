@@ -11,7 +11,7 @@ struct ServerList: View {
   /// The app environment object.
   @EnvironmentObject var appEnvironment: AppEnvironment
 
-  /// The associated view model.
+  /// The associated ViewModel.
   @StateObject var viewModel = ServerListViewModel()
 
   /// The list of all the server calls.
@@ -50,28 +50,9 @@ struct ServerList: View {
       }
 
       ToolbarItemGroup {
-        SymbolButton(
-          symbolName: appEnvironment.isServerRunning ? .stopCircle : .playCircle,
-          action: {
-            switch appEnvironment.isServerRunning {
-            case true:
-              try? appEnvironment.server.stop()
+        StartAndStopServerButton()
 
-            case false:
-              try? appEnvironment.server.start(with: ServerConfiguration(requests: []))
-            }
-
-            appEnvironment.isServerRunning.toggle()
-          }
-        )
-
-        SymbolButton(
-          symbolName: .memories,
-          action: {
-            try? appEnvironment.server.restart(with: ServerConfiguration(requests: []))
-          }
-        )
-        .disabled(!appEnvironment.isServerRunning)
+        RestartServerButton()
 
         SymbolButton(
           symbolName: .trash,
