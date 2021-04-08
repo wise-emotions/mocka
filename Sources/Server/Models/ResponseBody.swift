@@ -52,7 +52,9 @@ public extension ResponseBody {
     /// This preset does not provide any validation.
     case custom = "custom"
 
-    /// No content in the body. Example: HTTP Status - 204
+    /// No content in the body.
+    ///
+    /// Example: HTTP Status 204.
     case none = "none"
   }
 }
@@ -63,7 +65,7 @@ internal extension ResponseBody {
   /// Checks if the actual file extension in the `URL` matches the expected one for the body type.
   func isValidFileFormat() -> Bool {
     // When the `ContentType` is `.custom` or `.none`,
-    // we do not check the validity of the format, and return true.
+    // we do not check the validity of the format, and return `true`.
     guard contentType.isNone(of: [.custom, .none]) else {
       return true
     }
@@ -110,7 +112,7 @@ public extension ResponseBody.ContentType {
 // MARK: - Internal `ResponseBody.ContentType` Extension
 
 internal extension ResponseBody.ContentType {
-  /// The value to associated to `Content-Type` in the response header.
+  /// The value associated to `Content-Type` in the response header.
   var contentTypeHeader: String? {
     guard self.isNone(of: [.custom, .none]) else {
       return nil

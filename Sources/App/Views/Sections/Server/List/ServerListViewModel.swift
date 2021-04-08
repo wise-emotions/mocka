@@ -1,3 +1,7 @@
+//
+//  Mocka
+//
+
 import Foundation
 
 /// The view model of the `ServerToolbar`.

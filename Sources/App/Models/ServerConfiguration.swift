@@ -1,4 +1,7 @@
-import Foundation
+//
+//  Mocka
+//
+
 import MockaServer
 
 /// An object containing the parameters needed to configure the server's connection.

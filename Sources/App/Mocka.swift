@@ -25,6 +25,12 @@ struct Mocka: App {
           alignment: .leading
         )
         .environmentObject(appEnvironment)
+        .sheet(
+          isPresented: $appEnvironment.shouldShowStartupSettings
+        ) {
+          StartupSettings()
+            .environmentObject(appEnvironment)
+        }
     }
     .windowStyle(HiddenTitleBarWindowStyle())
     .windowToolbarStyle(UnifiedWindowToolbarStyle())

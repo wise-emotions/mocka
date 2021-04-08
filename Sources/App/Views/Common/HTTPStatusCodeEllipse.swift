@@ -4,6 +4,8 @@
 
 import SwiftUI
 
+/// The HTTP status code ellipse view.
+/// it automatically set the color based on the HTTP status.
 struct HTTPStatusCodeEllipse: View {
   /// The `HTTPStatus` of the response`
   let httpStatus: UInt
