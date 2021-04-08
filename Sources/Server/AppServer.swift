@@ -16,7 +16,7 @@ public class AppServer {
   /// The `PassthroughSubject` of `LogEvent`s.
   /// This subject is used to send and subscribe to `LogEvent`s.
   /// - Note: This property is marked `internal` to allow only the `Server` to send events.
-  private let consoleLogsSubject = PassthroughSubject<LogEvent, Never>()
+  private let consoleLogsSubject = BufferedSubject<LogEvent, Never>()
 
   /// The `PassthroughSubject` of `NetworkExchange`s.
   /// This subject is used to send and subscribe to `NetworkExchange`s.
@@ -112,6 +112,11 @@ public class AppServer {
   public func restart(with configuration: ServerConfigurationProvider) throws {
     try stop()
     try start(with: configuration)
+  }
+
+  /// Clears the buffered log events from the `consoleLogsSubject`.
+  public func clearBufferedConsoleLogEvents() {
+    consoleLogsSubject.clearBuffer()
   }
 
   /// Registers a route for every request.

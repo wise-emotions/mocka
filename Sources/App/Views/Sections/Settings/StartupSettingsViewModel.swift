@@ -5,8 +5,11 @@
 import SwiftUI
 import UniformTypeIdentifiers
 
-/// The view model of the `StartupSettings`.
+/// The ViewModel of the `StartupSettings`.
 final class StartupSettingsViewModel: ObservableObject {
+
+  // MARK: - Stored Properties
+
   /// The workspace path to be set.
   ///
   /// It isn't a nullable property because it's used
@@ -18,6 +21,8 @@ final class StartupSettingsViewModel: ObservableObject {
 
   /// Whether the `fileImporter` is presented.
   @Published var fileImporterIsPresented: Bool = false
+
+  // MARK: - Functions
 
   /// Check the validity of the given path.
   /// - Parameter path: If valid, returns the path.
