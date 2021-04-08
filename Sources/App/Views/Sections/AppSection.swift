@@ -21,7 +21,7 @@ struct AppSection: View {
             KeyValueItem(key: "Test2", value: "Test2"),
             KeyValueItem(key: "Test3", value: "Test3\nasd\nasaTest"),
           ],
-          shouldDisplayEmptyElement: true
+          mode: .write
         )
       )
     

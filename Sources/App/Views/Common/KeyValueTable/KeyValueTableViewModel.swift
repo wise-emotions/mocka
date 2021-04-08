@@ -5,14 +5,19 @@
 import SwiftUI
 
 class KeyValueTableViewModel: ObservableObject {
+  enum Mode {
+    case write
+    case read
+  }
+
   @Published var keyValueItems: [KeyValueItem]
-  @Published var shouldDisplayEmptyElement: Bool
+  @Published var mode: Mode
     
-  init(keyValueItems: [KeyValueItem], shouldDisplayEmptyElement: Bool) {
+  init(keyValueItems: [KeyValueItem], mode: Mode) {
     self.keyValueItems = keyValueItems
-    self.shouldDisplayEmptyElement = shouldDisplayEmptyElement
+    self.mode = mode
     
-    if shouldDisplayEmptyElement {
+    if mode == .write {
       self.keyValueItems.append(KeyValueItem(key: "", value: ""))
     }
   }

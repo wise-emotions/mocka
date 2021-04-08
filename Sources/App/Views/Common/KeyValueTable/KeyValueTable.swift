@@ -14,9 +14,13 @@ struct KeyValueTable: View {
 
       ScrollView {
         LazyVStack(spacing: 0) {
-          ForEach(viewModel.keyValueItems, id: \.self) { item in
-            KeyValueTableRow(items: $viewModel.keyValueItems, index: viewModel.keyValueItems.firstIndex(where: { $0 == item })!
-)
+          ForEach(Array(viewModel.keyValueItems.enumerated()), id: \.offset) { index, item in
+            KeyValueTableRow(
+              items: $viewModel.keyValueItems,
+              kind: viewModel.keyValueItems.count - 1 == index && viewModel.mode == .write ? .add : .textField,
+              mode: viewModel.mode,
+              index: index
+            )
           }
         }
       }
@@ -27,15 +31,19 @@ struct KeyValueTable: View {
 }
 
 struct KeyValueTablePreviews: PreviewProvider {
+  static let rows = [KeyValueItem](
+    repeating: KeyValueItem(
+      key: "Hello",
+      value: "World"
+    ),
+    count: 10
+  )
+
   static var previews: some View {
     KeyValueTable(
       viewModel: KeyValueTableViewModel(
-        keyValueItems: [
-          KeyValueItem(key: "Test", value: "Test"),
-          KeyValueItem(key: "Test2", value: "Test2"),
-          KeyValueItem(key: "Test3", value: "Test3\nasd\nasaTest"),
-        ],
-        shouldDisplayEmptyElement: true
+        keyValueItems: rows,
+        mode: .write
       )
     )
   }
@@ -43,10 +51,10 @@ struct KeyValueTablePreviews: PreviewProvider {
 
 struct KeyValueTableLibraryContent: LibraryContentProvider {
   let keyValueItems: [KeyValueItem] = []
-  let shouldDisplayEmptyElement: Bool = false
+  let mode: KeyValueTableViewModel.Mode = .read
   
   @LibraryContentBuilder
   var views: [LibraryItem] {
-    LibraryItem(KeyValueTable(viewModel: KeyValueTableViewModel(keyValueItems: keyValueItems, shouldDisplayEmptyElement: shouldDisplayEmptyElement)))
+    LibraryItem(KeyValueTable(viewModel: KeyValueTableViewModel(keyValueItems: keyValueItems, mode: mode)))
   }
 }
