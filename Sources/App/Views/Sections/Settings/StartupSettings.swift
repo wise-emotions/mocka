@@ -20,19 +20,7 @@ struct StartupSettings: View {
     let workspacePathBinding = Binding {
       viewModel.workspacePath
     } set: {
-      do {
-        try Logic.WorkspacePath.check(URL(fileURLWithPath: $0))
-        viewModel.workspacePath = $0
-        viewModel.workspacePathError = nil
-      } catch {
-        viewModel.workspacePath = $0
-
-        guard let workspacePathError = error as? MockaError else {
-          return
-        }
-
-        viewModel.workspacePathError = workspacePathError
-      }
+      viewModel.checkURL($0)
     }
 
     VStack {
@@ -79,13 +67,7 @@ struct StartupSettings: View {
             allowedContentTypes: [UTType.folder],
             allowsMultipleSelection: false,
             onCompletion: { result in
-              guard let workspacePath = Logic.Startup.selectFolder(from: result) else {
-                viewModel.workspacePathError = .missingWorkspacePathValue
-                return
-              }
-
-              viewModel.workspacePath = workspacePath
-              viewModel.workspacePathError = nil
+              viewModel.selectFolder(with: result)
             }
           )
         }
@@ -112,21 +94,7 @@ struct StartupSettings: View {
       VStack(alignment: .trailing) {
         Button(
           action: {
-            let workspaceURL = URL(fileURLWithPath: viewModel.workspacePath)
-
-            do {
-              try Logic.WorkspacePath.check(workspaceURL)
-              try Logic.Startup.createConfiguration(for: workspaceURL)
-
-              appEnvironment.workspaceURL = workspaceURL
-              presentationMode.wrappedValue.dismiss()
-            } catch {
-              guard let workspacePathError = error as? MockaError else {
-                return
-              }
-
-              viewModel.workspacePathError = workspacePathError
-            }
+            viewModel.confirmSettings(for: appEnvironment, with: presentationMode)
           },
           label: {
             Text("OK")

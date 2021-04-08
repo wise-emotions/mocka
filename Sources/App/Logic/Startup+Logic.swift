@@ -11,12 +11,11 @@ extension Logic {
 }
 
 extension Logic.Startup {
-  /// Create a server configuration file.
-  /// - Parameter url: The `URL` where the file should be created.
+  /// /// Create a server configuration file, if one does not already exist at the workspace root folder.
   /// - Throws: `MockaError.workspacePathDoesNotExist`,
   ///           `MockaError.failedToEncode`.
-  static func createConfiguration(for url: URL?) throws {
-    guard let unwrappedURL = url else {
+  static func createConfiguration() throws {
+    guard let unwrappedURL = UserDefaults.standard.url(forKey: UserDefaultKey.workspaceURL) else {
       throw MockaError.workspacePathDoesNotExist
     }
 
@@ -38,7 +37,6 @@ extension Logic.Startup {
     }
 
     selectedFolder.stopAccessingSecurityScopedResource()
-
     return selectedFolder.path
   }
 }
