@@ -12,12 +12,10 @@ struct KeyValueTable: View {
   var body: some View {
     VStack {
       KeyValueTableHeader()
-
-      ScrollView {
-        LazyVStack(spacing: 0) {
-          ForEach(Array(keyValueItems.enumerated()), id: \.offset) { index, item in
-            KeyValueTableRow(item: item, index: index)
-          }
+      
+      LazyVStack(spacing: 0) {
+        ForEach(Array(keyValueItems.enumerated()), id: \.offset) { index, item in
+          KeyValueTableRow(item: item, index: index)
         }
       }
     }
