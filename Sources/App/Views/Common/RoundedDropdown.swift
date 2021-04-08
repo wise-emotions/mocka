@@ -29,22 +29,12 @@ struct RoundedDropdown<Item: Hashable>: View {
     } label: {
       Text(selection?[keyPath: itemTitleKeyPath] ?? title)
     }
-    .menuStyle(BorderlessButtonMenuStyle())
-    .font(.system(size: 12))
-    .padding(.horizontal, 14)
-    .padding(.vertical, 10)
-    .overlay(borderOverlay)
+    .menuStyle(RoundedBorderMenuStyle())
   }
 
   /// Handles the selection of an item in the menu and updates the binding.
   private func onSelect(_ item: Item) {
     selection = item
-  }
-
-  /// An overlay that draws a rounded border on the view.
-  private var borderOverlay: some View {
-    RoundedRectangle(cornerRadius: 6, style: .continuous)
-      .stroke(Color.americano, lineWidth: 1)
   }
 }
 
