@@ -7,8 +7,8 @@ internal struct ConsoleLogHander: LogHandler {
 
   // MARK: - Properties
 
-  /// The `Subject` to which `LogEvent`s are sent.
-  internal let subject: PassthroughSubject<LogEvent, Never>
+  /// The `BufferedSubject` to which `LogEvent`s are sent.
+  internal let subject: BufferedSubject<LogEvent, Never>
 
   /// The `logLevel` is set to `.trace` to track all events.
   internal var logLevel: Logger.Level = .trace

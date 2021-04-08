@@ -31,7 +31,7 @@ public struct Request {
       PathComponent(stringLiteral: String($0))
     }
   }
-  
+
   /// Returns a `Request` object.
   /// - Parameters:
   ///   - method: The `HTTPMethod` of the request.
