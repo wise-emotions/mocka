@@ -4,7 +4,7 @@ import SwiftUI
 /// The view that displays a `LogEvent`.
 struct LogEventListItem: View {
   /// The `ViewModel` of the view.
-  let viewModel: LogEventCellModel
+  let viewModel: LogEventListItemViewModel
 
   var body: some View {
     HStack(alignment: .center) {
@@ -38,25 +38,25 @@ struct LogEventListItem: View {
   }
 }
 
-struct LogEventCell_Previews: PreviewProvider {
+struct LogEventListItemPreviews: PreviewProvider {
   static var previews: some View {
     Group {
       LogEventListItem(
-        viewModel: LogEventCellModel(
+        viewModel: LogEventListItemViewModel(
           logEvent: LogEvent(level: .debug, message: "Server started\n"),
           isOddCell: false
         )
       )
 
       LogEventListItem(
-        viewModel: LogEventCellModel(
+        viewModel: LogEventListItemViewModel(
           logEvent: LogEvent(level: .warning, message: "Server started"),
           isOddCell: true
         )
       )
 
       LogEventListItem(
-        viewModel: LogEventCellModel(
+        viewModel: LogEventListItemViewModel(
           logEvent: LogEvent(level: .error, message: "Server started"),
           isOddCell: false
         )

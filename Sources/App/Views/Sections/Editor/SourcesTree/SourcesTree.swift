@@ -6,7 +6,7 @@ import SwiftUI
 
 /// A view that displays the content of directories containing a request/response? pair in the form of a tree.
 struct SourcesTree: View {
-  /// The view model of the directory tree.
+  /// The associated ViewModel.
   @StateObject var viewModel: SourcesTreeViewModel
 
   var body: some View {

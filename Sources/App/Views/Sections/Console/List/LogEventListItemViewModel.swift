@@ -2,8 +2,8 @@ import Foundation
 import MockaServer
 import SwiftUI
 
-/// The `ViewModel` of the `LogEventCell`.
-struct LogEventCellModel {
+/// The ViewModel of the `LogEventListItem`.
+struct LogEventListItemViewModel {
 
   // MARK: - Constants
 
@@ -45,6 +45,6 @@ struct LogEventCellModel {
 
   /// The formatted date of the `LogEvent`.
   var formattedDateText: String {
-    LogEventCellModel.dateFormatter.string(from: logEvent.date)
+    LogEventListItemViewModel.dateFormatter.string(from: logEvent.date)
   }
 }

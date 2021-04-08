@@ -4,18 +4,20 @@ import MockaServer
 import SwiftUI
 
 /// The `ViewModel` of the `ConsoleSection`.
-final class ConsoleSectionViewModel: ObservableObject {
+final class LogEventListViewModel: ObservableObject {
 
-  // MARK: - Properties
+  // MARK: - Stored Properties
 
   /// The text used to filter out the `LogEvent`s.
   @Published var filterText: String = ""
 
+  /// The array of `LogEvent`s.
+  @Published private var logEvents: [LogEvent] = []
+
   /// The `Set` containing the list of subscriptions.
   var subscriptions = Set<AnyCancellable>()
 
-  /// The array of `LogEvent`s.
-  @Published private var logEvents: [LogEvent] = []
+  // MARK: - Computed Properties
 
   /// The array of `LogEvent`s filtered by the `filterText`.
   var filteredLogEvents: [LogEvent] {
