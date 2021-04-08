@@ -14,24 +14,18 @@ struct Request: Codable {
   /// The method associated with the request.
   let method: HTTPMethod
 
-  /// The `HTTP` response status code.
-  let responseCode: Int
-
-  /// The name of the file from which to read the response.
-  /// Version 1.0 supports only one response at a time with the file named `response.json`.
-  /// This value cannot be changed in the initialiser or at any point.
-  let responseFileName: String
+  /// The expected response when this request is invoked.
+  let expectedResponse: Response
 
   /// Creates a `Request` object.
   /// - Parameters:
   ///   - path: The path of the `API`. This should not consider any query parameters.
   ///   - method: The method associated with the request.
-  ///   - responseCode: The `HTTP` response status code.
-  init(path: Path, method: HTTPMethod, responseCode: Int) {
+  ///   - response: The expected response when this request is invoked.
+  init(path: Path, method: HTTPMethod, responseCode: Int, expectedResponse: Response) {
     self.path = path
     self.method = method
-    self.responseCode = responseCode
-    self.responseFileName = "response.json"
+    self.expectedResponse = expectedResponse
   }
 
   /// Converts a `MockaApp.Request` into a `MockaServer.Request`.
@@ -44,7 +38,7 @@ struct Request: Codable {
       method: method,
       path: path,
       requestedResponse: RequestedResponse(
-        status: HTTPResponseStatus(statusCode: responseCode),
+        status: HTTPResponseStatus(statusCode: response.statusCode),
         headers: response.headers,
         body: ResponseBody(contentType: response.contentType, fileLocation: url)
       )
