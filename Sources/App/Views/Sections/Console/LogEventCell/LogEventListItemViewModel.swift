@@ -26,21 +26,20 @@ struct LogEventCellModel {
   
   /// The background color of the cell.
   var backgroundColor: Color {
-    isOddCell ? Color(NSColor.alternatingContentBackgroundColors[1]) :
-      Color.clear
+    isOddCell ? Color.lungo : Color.clear
   }
   
   /// The background color of the circle.
   var circleColor: Color {
     switch logEvent.level {
     case .trace, .debug, .info:
-      return Color.green
+      return Color.irish
       
     case .notice, .warning:
-      return Color.yellow
+      return Color.cappuccino
     
     case .error, .critical:
-      return Color.red
+      return Color.redEye
     }
   }
   

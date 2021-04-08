@@ -113,6 +113,11 @@ public class AppServer {
     try stop()
     try start(with: configuration)
   }
+  
+  /// Clears the buffered log events from the `consoleLogsSubject`.
+  public func clearBufferedConsoleLogEvents() {
+    consoleLogsSubject.clearBuffer()
+  }
 
   /// Registers a route for every request.
   /// - Parameter requests: The list of requests to manage.

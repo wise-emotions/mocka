@@ -18,7 +18,7 @@ struct LogEventList: View {
         ScrollViewReader { scrollView in
           LazyVStack {
             ForEach(Array(viewModel.filteredLogEvents.enumerated()), id: \.offset) { index, event in
-              LogEventCell(
+              LogEventListItem(
                 viewModel: LogEventCellModel(
                   logEvent: event,
                   isOddCell: !index.isMultiple(of: 2)
@@ -38,7 +38,7 @@ struct LogEventList: View {
       .toolbar {
         ToolbarItem(placement: .principal) {
           HStack {
-            RoundedTextField(text: $viewModel.filterText)
+            RoundedTextField(title: "Filter", text: $viewModel.filterText)
               .frame(width: Size.minimumFilterTextFieldWidth)
             
             SymbolButton(
@@ -66,13 +66,15 @@ struct LogEventList: View {
             
             SymbolButton(
               symbolName: .trash,
-              action: {}
+              action: {
+                appEnvironment.server.clearBufferedConsoleLogEvents()
+                viewModel.clearLogEvents()
+              }
             )
           }
         }
       }
       .background(Color.doppio)
-      .padding(.top, 8)
     }
   }
 }

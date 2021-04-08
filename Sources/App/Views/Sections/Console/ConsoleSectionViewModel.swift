@@ -41,5 +41,12 @@ final class ConsoleSectionViewModel: ObservableObject {
       }
       .store(in: &subscriptions)
   }
+  
+  // MARK: - Functions
+  
+  /// Clears the array of log events.
+  func clearLogEvents() {
+    logEvents.removeAll()
+  }
 }
 
