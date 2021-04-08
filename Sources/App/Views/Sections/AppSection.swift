@@ -2,7 +2,6 @@
 //  Mocka
 //
 
-import Foundation
 import SwiftUI
 
 /// This is the common app section used to show all the other sections.

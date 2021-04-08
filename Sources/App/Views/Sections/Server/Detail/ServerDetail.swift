@@ -2,7 +2,6 @@
 //  Mocka
 //
 
-import Foundation
 import SwiftUI
 
 struct ServerDetail: View {

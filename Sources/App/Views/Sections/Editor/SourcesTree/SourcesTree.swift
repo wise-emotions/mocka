@@ -29,6 +29,6 @@ struct SourcesTree: View {
 
 struct SourcesTreePreviews: PreviewProvider {
   static var previews: some View {
-    SourcesTree(viewModel: try! SourcesTreeViewModel())
+    SourcesTree(viewModel: try! SourcesTreeViewModel(workspacePath: nil))
   }
 }

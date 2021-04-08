@@ -2,11 +2,13 @@
 //  Mocka
 //
 
-import Foundation
 import MockaServer
 import SwiftUI
 
+/// The server list view.
+/// This view handle the list of all the API called to the server.
 struct ServerList: View {
+  /// The app environment object.
   @EnvironmentObject var appEnvironment: AppEnvironment
 
   /// The associated view model.
@@ -43,7 +45,7 @@ struct ServerList: View {
       }
 
       ToolbarItem {
-        RoundedTextField(text: $viewModel.filterText)
+        FilterTextField(text: $viewModel.filterText)
           .frame(minWidth: Size.minimumFilterTextFieldWidth, maxWidth: .infinity)
       }
 
@@ -85,5 +87,6 @@ struct ServerListPreviews: PreviewProvider {
 
   static var previews: some View {
     ServerList(networkExchanges: .constant(networkExchanges))
+      .environmentObject(AppEnvironment())
   }
 }

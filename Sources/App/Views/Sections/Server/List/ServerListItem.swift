@@ -2,7 +2,6 @@
 //  Mocka
 //
 
-import Foundation
 import MockaServer
 import SwiftUI
 
@@ -36,24 +35,24 @@ struct ServerListItem: View {
             .frame(height: 20)
             .background(Color.ristretto)
             .cornerRadius(100)
-            .foregroundColor(Color.latte)
+            .foregroundColor(.latte)
             .frame(width: 77, alignment: .leading)
           Text(path)
             .font(.system(size: 12))
-            .foregroundColor(Color.latte)
+            .foregroundColor(.latte)
             .padding(.trailing, 8)
         }
         HStack(spacing: 4) {
           Text(String(httpStatus))
             .font(.system(size: 11, weight: .bold))
-            .foregroundColor(Color.macchiato)
+            .foregroundColor(.macchiato)
           Text(httpStatusMeaning)
             .font(.system(size: 11))
-            .foregroundColor(Color.macchiato)
+            .foregroundColor(.macchiato)
           Spacer()
           Text(timestamp)
             .font(.system(size: 11))
-            .foregroundColor(Color.macchiato)
+            .foregroundColor(.macchiato)
             .padding(.trailing, 4)
         }
       }
