@@ -5,7 +5,7 @@
 import MockaServer
 import UniformTypeIdentifiers
 
-/// The view model of the `SourcesTree`.
+/// The ViewModel of the `SourcesTree`.
 final class SourcesTreeViewModel: ObservableObject {
 
   // MARK: - Constants

@@ -20,7 +20,7 @@ struct AppSection: View {
       ServerSection()
 
     case .console:
-      ServerSection()
+      ConsoleSection()
     }
   }
 }
