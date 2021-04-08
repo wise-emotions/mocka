@@ -1,3 +1,7 @@
+//
+//  Mocka
+//
+
 import Foundation
 
 /// All the app sections to display in a sidebar.

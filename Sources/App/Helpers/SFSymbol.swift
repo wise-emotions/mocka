@@ -12,6 +12,9 @@ enum SFSymbol: String {
   /// Folder icon.
   case folder
 
+  /// The classic search icon.
+  case magnifyingGlass = "magnifyingglass"
+
   /// Memories icon.
   case memories
 
