@@ -6,7 +6,7 @@ import MockaServer
 import SwiftUI
 
 /// A dropdown with rounded border.
-struct RoundedDropdown<Item: Hashable>: View {
+struct RoundedBorderDropdown<Item: Hashable>: View {
   /// The title of the dropdown.
   let title: String
 
@@ -38,9 +38,9 @@ struct RoundedDropdown<Item: Hashable>: View {
   }
 }
 
-struct RoundedDropdown_Preview: PreviewProvider {
+struct RoundedBorderDropdownPreview: PreviewProvider {
   static var previews: some View {
-    RoundedDropdown(
+    RoundedBorderDropdown(
       title: "Method",
       selection: .constant(HTTPMethod.get),
       items: HTTPMethod.allCases,
