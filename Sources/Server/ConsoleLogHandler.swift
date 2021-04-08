@@ -39,7 +39,7 @@ internal struct ConsoleLogHander: LogHandler {
     function: String,
     line: UInt
   ) {
-    subject.send(LogEvent(level: LogEvent.Level(loggerLevel: level), message: message.description))
+    subject.send(LogEvent(level: LogEvent.Level(loggerLevel: level), message: message.description.trimmingCharacters(in: .whitespacesAndNewlines)))
   }
 }
 
