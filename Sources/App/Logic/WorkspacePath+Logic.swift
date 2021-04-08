@@ -11,17 +11,15 @@ extension Logic {
 }
 
 extension Logic.WorkspacePath {
-  /// The `UTType` of a folder.
-  private static let folderUniformTypeIdentifier = UTType("public.folder")
-
-  /// Sets the `value` for the `WorkspacePath`.
+  /// Check if the `url` exists.
   /// - Parameter url: The new `URL` of the workspace path.
-  ///                  The `URL` should contain a scheme. It is recommended to instantiate the `URL` using `URL(fileURLWithPath:)`.
+  ///                  The `URL` should contain a scheme.
+  ///                  It is recommended to instantiate the `URL` using `URL(fileURLWithPath:)`.
   /// - Throws: `MockaError.workspacePathDoesNotExist`,
   ///           `MockaError.workspacePathNotFolder`,
   ///           `MockaError.workspacePathMissingScheme`,
   ///           `MockaError.failedToEncode`.
-  static func check(_ url: URL?) throws {
+  static func isFolder(_ url: URL?) throws {
     guard let unwrappedURL = url else {
       throw MockaError.workspacePathDoesNotExist
     }
@@ -34,7 +32,7 @@ extension Logic.WorkspacePath {
       throw MockaError.workspacePathDoesNotExist
     }
 
-    guard Self.isFolder(at: unwrappedURL) else {
+    guard Self.uniformType(of: unwrappedURL) == UTType.folder else {
       throw MockaError.workspacePathNotFolder
     }
   }
@@ -46,13 +44,6 @@ private extension Logic.WorkspacePath {
   /// - Returns: Returns `true` if the resource is a folder, otherwise `false`.
   static func resourceExists(at url: URL) -> Bool {
     FileManager.default.fileExists(atPath: url.path)
-  }
-
-  /// Checks if the passed `URL` belongs to a resource of `UTType` `public.folder`
-  /// - Parameter url: The `URL` of the resource.
-  /// - Returns: Returns `true` if the resource is a folder, otherwise `false`.
-  static func isFolder(at url: URL) -> Bool {
-    Self.uniformType(of: url) == Self.folderUniformTypeIdentifier
   }
 
   /// Fetches the `UTType` of the passed `URL`.

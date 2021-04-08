@@ -6,11 +6,11 @@ import Foundation
 import UniformTypeIdentifiers
 
 extension Logic {
-  /// The logic related to startup of the app.
-  enum Startup {}
+  /// The logic related to settings of the app.
+  enum Settings {}
 }
 
-extension Logic.Startup {
+extension Logic.Settings {
   /// /// Create a server configuration file, if one does not already exist at the workspace root folder.
   /// - Throws: `MockaError.workspacePathDoesNotExist`,
   ///           `MockaError.failedToEncode`.
@@ -41,7 +41,7 @@ extension Logic.Startup {
   }
 }
 
-private extension Logic.Startup {
+private extension Logic.Settings {
   /// The name of the file containing the server's configuration.
   private static let serverConfigurationFileName = "serverConfiguration.json"
 

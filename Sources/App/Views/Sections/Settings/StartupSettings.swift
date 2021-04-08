@@ -8,6 +8,7 @@ import UniformTypeIdentifiers
 /// The startup settings view.
 /// This view is shown in case the `workspaceURL` doesn't exist.
 struct StartupSettings: View {
+  /// A binding to the current presentation mode of the view associated with this environment.
   @Environment(\.presentationMode) var presentationMode
 
   /// The app environment object.
