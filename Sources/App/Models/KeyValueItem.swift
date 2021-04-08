@@ -6,8 +6,8 @@ struct KeyValueItem: Identifiable, Hashable {
   let id = UUID()
 
   /// The key of the KeyValue parameter.
-  let key: String
+  var key: String
 
   /// The value of the KeyValue parameter.
-  let value: String
+  var value: String
 }

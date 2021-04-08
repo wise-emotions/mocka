@@ -4,35 +4,39 @@
 
 import SwiftUI
 
-class AddAPIViewModel: ObservableObject {
+class APIEditorViewModel: ObservableObject {
   @Published var textInput: String = ""
   @Published var isDraggingOver = false
   @Published var isPresented = false
   
   // MARK: - Computed Properties
   
+  /// Whether or not the input is a valid json.
   var isValidJSON: Bool {
     textInput.asPrettyPrintedJSON != nil
   }
   
+  /// The color of the border of the text editor.
   var borderColor: Color {
     guard !isDraggingOver else {
-      return .green
+      return Color.irish
     }
     
     guard !textInput.isEmpty else {
       return .clear
     }
     
-    return isValidJSON ? .clear : .red
+    return isValidJSON ? .clear : Color.redEye
   }
   
+  /// Whether or not the error label is visible.
   var isErrorLabelVisible: Bool {
     !isValidJSON
   }
   
   // MARK: - Functions
   
+  /// Imports a JSON from the fileImporter.
   func importJSON(from result: Result<[URL], Error>) {
     guard
       let selectedFileURL = try? result.get().first,

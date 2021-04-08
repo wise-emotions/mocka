@@ -5,13 +5,19 @@
 import SwiftUI
 import UniformTypeIdentifiers
 
-struct AddAPIView: View {
-  @ObservedObject var viewModel = AddAPIViewModel()
+struct APIEditorView: View {
+  @ObservedObject var viewModel = APIEditorViewModel()
   
   var body: some View {
     ZStack() {
       VStack {
         HStack {
+          Text("Response Body")
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .font(.system(size: 13, weight: .semibold, design: .default))
+            .foregroundColor(Color.latte)
+            .padding(.leading)
+          
           Spacer()
           Button("Importa"){
             viewModel.isPresented = true
@@ -19,6 +25,7 @@ struct AddAPIView: View {
           .fileImporter(isPresented: $viewModel.isPresented, allowedContentTypes: [UTType.json], allowsMultipleSelection: false, onCompletion: { result in
             viewModel.importJSON(from: result)
           })
+          .padding(.trailing)
         }
         
         TextEditor(text: $viewModel.textInput)
@@ -27,7 +34,7 @@ struct AddAPIView: View {
           .onChange(of: viewModel.textInput, perform: { value in
             viewModel.processJSON()
           })
-          .padding()
+          .padding(.horizontal)
       }
     }
     .onDrop(of: ["public.file-url"], isTargeted: $viewModel.isDraggingOver, perform: viewModel.handleOnDrop(providers:))
@@ -35,7 +42,7 @@ struct AddAPIView: View {
   
   struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-      AddAPIView(viewModel: AddAPIViewModel())
+      APIEditorView(viewModel: APIEditorViewModel())
     }
   }
 }

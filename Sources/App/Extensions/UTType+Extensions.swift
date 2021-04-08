@@ -17,9 +17,6 @@ extension UTType {
   /// A `UTType` with identifier `public.html`.
   static let html = UTType("public.html")
 
-  /// A `UTType` with identifier `public.json`.
-  static let json = UTType("public.json")
-
   /// A `UTType` with identifier `public.plain-text`.
   static let plainText = UTType("public.plain-text")
 
