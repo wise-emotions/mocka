@@ -19,7 +19,7 @@ struct ServerConfiguration: ServerConfigurationProvider {
   let port: Int
 
   /// The list of requests to manage by the server.
-  let requests: Set<Request>
+  let requests: Set<MockaServer.Request>
 
   /// Creates a new `ServerConfiguration` object.
   /// - Parameters:
@@ -29,7 +29,7 @@ struct ServerConfiguration: ServerConfigurationProvider {
   init(
     hostname: String = "127.0.0.1",
     port: Int = 8080,
-    requests: Set<Request>
+    requests: Set<MockaServer.Request>
   ) {
     self.hostname = hostname
     self.port = port
