@@ -1,3 +1,7 @@
+//
+// Mocka
+//
+
 import SwiftUI
 
 /// A pill containing an uppercased text.
@@ -12,10 +16,12 @@ struct TextPillView: View {
   
   var body: some View {
     Text(text.uppercased())
-      .font(.system(size: 13, weight: .bold))
-      .padding(EdgeInsets(top: 3, leading: 8, bottom: 3, trailing: 8))
-      .background(Color.secondary)
-      .cornerRadius(10)
+      .font(.system(size: 12, weight: .bold))
+      .padding(8)
+      .frame(height: 20)
+      .background(Color.ristretto)
+      .cornerRadius(100)
+      .foregroundColor(Color.latte)
   }
 }
 
