@@ -12,10 +12,10 @@ struct KeyValueTableRow: View {
   /// The row mode.
   /// Useful to disable user interaction on `read` mode.
   @State var mode: KeyValueTableViewModel.Mode
-  
+
   /// The index of the item.
   var index: Int
-    
+
   var body: some View {
     HStack {
       Group {

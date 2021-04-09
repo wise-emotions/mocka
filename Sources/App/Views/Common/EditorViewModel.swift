@@ -17,34 +17,34 @@ class EditorViewModel: ObservableObject {
 
   /// Whether the `fileImporter` is presented.
   @Published var fileImporterIsPresented = false
-  
+
   // MARK: - Computed Properties
-  
+
   /// Whether or not the input is a valid json.
   var isValidJSON: Bool {
     text.asPrettyPrintedJSON != nil
   }
-  
+
   /// The color of the border of the text editor.
   var borderColor: Color {
     guard !isDraggingOver else {
       return Color.irish
     }
-    
+
     guard !text.isEmpty else {
       return .clear
     }
-    
+
     return isValidJSON ? .clear : Color.redEye
   }
-  
+
   /// Whether or not the error label is visible.
   var isErrorLabelVisible: Bool {
     !isValidJSON
   }
-  
+
   // MARK: - Functions
-  
+
   /// Imports a file from the `fileImporter`.
   /// - Parameter result: The `URL` selected by the `fileImporter`.
   /// - Returns: Returns the selected path as `String`.
@@ -56,7 +56,7 @@ class EditorViewModel: ObservableObject {
     else {
       return
     }
-    
+
     text = input
     selectedFileURL.stopAccessingSecurityScopedResource()
   }
@@ -66,7 +66,7 @@ class EditorViewModel: ObservableObject {
     guard let prettyPrintedJSON = text.asPrettyPrintedJSON else {
       return
     }
-    
+
     text = prettyPrintedJSON
   }
 
@@ -78,7 +78,7 @@ class EditorViewModel: ObservableObject {
     guard let provider = providers.first else {
       return false
     }
-    
+
     provider.loadDataRepresentation(
       forTypeIdentifier: "public.file-url",
       completionHandler: { urlData, error in
@@ -94,7 +94,7 @@ class EditorViewModel: ObservableObject {
         }
       }
     )
-    
+
     return true
   }
 }

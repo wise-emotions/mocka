@@ -66,7 +66,7 @@ struct KeyValueTablePreviews: PreviewProvider {
 struct KeyValueTableLibraryContent: LibraryContentProvider {
   let keyValueItems: [KeyValueItem] = []
   let mode: KeyValueTableViewModel.Mode = .read
-  
+
   @LibraryContentBuilder
   var views: [LibraryItem] {
     LibraryItem(KeyValueTable(viewModel: KeyValueTableViewModel(keyValueItems: keyValueItems, mode: mode)))

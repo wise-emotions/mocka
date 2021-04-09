@@ -10,9 +10,9 @@ import UniformTypeIdentifiers
 struct Editor: View {
   /// The associated ViewModel.
   @StateObject var viewModel = EditorViewModel()
-  
+
   var body: some View {
-    ZStack() {
+    ZStack {
       VStack {
         HStack {
           Text("Response Body")
@@ -20,7 +20,7 @@ struct Editor: View {
             .font(.headline)
             .foregroundColor(Color.latte)
             .padding(.leading)
-          
+
           Spacer()
 
           Button("Importa") {
@@ -34,12 +34,13 @@ struct Editor: View {
           )
           .padding(.trailing)
         }
-        
+
         TextEditor(text: $viewModel.text)
           .font(.body)
           .border(viewModel.borderColor)
           .onChange(
-            of: viewModel.text, perform: { _ in
+            of: viewModel.text,
+            perform: { _ in
               viewModel.prettyPrintJSON()
             }
           )

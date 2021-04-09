@@ -33,7 +33,7 @@ class KeyValueTableViewModel: ObservableObject {
   init(keyValueItems: [KeyValueItem], mode: Mode) {
     self.keyValueItems = keyValueItems
     self.mode = mode
-    
+
     if mode == .write {
       self.keyValueItems.append(KeyValueItem(key: "", value: ""))
     }

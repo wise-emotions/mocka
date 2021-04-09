@@ -12,9 +12,8 @@ extension String {
     let predicate = NSPredicate(format: "self MATCHES %@", regex)
     return predicate.evaluate(with: self)
   }
-  
+
   var asPrettyPrintedJSON: String? {
     data(using: .utf8)?.asPrettyPrintedJSON
   }
 }
-
