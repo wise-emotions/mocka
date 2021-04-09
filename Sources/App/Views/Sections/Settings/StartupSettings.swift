@@ -14,7 +14,7 @@ struct StartupSettings: View {
   /// The app environment object.
   @EnvironmentObject var appEnvironment: AppEnvironment
 
-  /// The associated view model.
+  /// The associated ViewModel.
   @StateObject var viewModel = StartupSettingsViewModel()
 
   var body: some View {

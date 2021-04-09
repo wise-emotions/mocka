@@ -23,4 +23,7 @@ final class AppEnvironment: ObservableObject {
   /// The value of the workspace path.
   /// When this value is updated, the value in the user defaults is updated as well.
   @AppStorage(UserDefaultKey.workspaceURL) var workspaceURL: URL?
+
+  /// The global server configuration.
+  let serverConfiguration = ServerConfiguration(requests: [])
 }

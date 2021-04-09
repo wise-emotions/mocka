@@ -48,7 +48,7 @@ public extension LogEvent {
     case critical
 
     /// The name of the level.
-    var name: String {
+    public var name: String {
       switch self {
       case .trace:
         return "TRACE"
