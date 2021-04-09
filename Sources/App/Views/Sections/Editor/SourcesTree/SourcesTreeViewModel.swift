@@ -2,7 +2,6 @@
 //  Mocka
 //
 
-import Foundation
 import MockaServer
 import UniformTypeIdentifiers
 
@@ -58,13 +57,15 @@ final class SourcesTreeViewModel: ObservableObject {
 
   /// Returns an instance of `SourcesTreeViewModel`.
   ///
-  /// This instantiation will fail if the root path value has not been set yet.
-  init() throws {
-    guard let rootDirectory = Logic.WorkspacePath.value else {
+  /// This instantiation will fail if the workspace path value has not been set yet.
+  /// - Parameter workspacePath: The user workspace path.
+  /// - Throws: `MockaError.missingWorkspacePathValue` if `path` is `nil`.
+  init(workspacePath: URL?) throws {
+    guard let workspaceDirectory = workspacePath else {
       throw MockaError.missingWorkspacePathValue
     }
 
-    directoryContent = contents(of: rootDirectory)
+    directoryContent = contents(of: workspaceDirectory)
   }
 
   // MARK: - Functions

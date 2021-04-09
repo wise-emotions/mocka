@@ -71,6 +71,8 @@ extension RequestInfoViewModel {
       headers.isEmpty.isFalse
     }
     
+    // MARK: - Functions
+    
     /// The formatted body based on `Content-Type`.
     func formattedBody(for kind: Kind) -> String? {
       switch kind {

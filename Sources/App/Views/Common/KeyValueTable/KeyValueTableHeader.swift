@@ -15,7 +15,7 @@ struct KeyValueTableHeader: View {
       }
       .frame(maxWidth: .infinity, alignment: .leading)
       .font(.system(size: 13, weight: .semibold, design: .default))
-      .foregroundColor(Color.latte)
+      .foregroundColor(.latte)
     }
   }
 }

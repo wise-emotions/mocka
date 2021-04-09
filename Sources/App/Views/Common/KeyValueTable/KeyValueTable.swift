@@ -29,7 +29,7 @@ struct KeyValueTablePreviews: PreviewProvider {
     KeyValueTable(keyValueItems: [
       KeyValueItem(key: "Test", value: "Test"),
       KeyValueItem(key: "Test2", value: "Test2"),
-      KeyValueItem(key: "Test3", value: "Test3\nasd\nasaTest"),
+      KeyValueItem(key: "Test3", value: "Test3\nTest4\nTest5"),
     ])
   }
 }
