@@ -14,16 +14,7 @@ struct AppSection: View {
   var body: some View {
     switch appEnvironment.selectedSection {
     case .server:
-      KeyValueTable(
-        viewModel: KeyValueTableViewModel(
-          keyValueItems: [
-            KeyValueItem(key: "Test", value: "Test"),
-            KeyValueItem(key: "Test2", value: "Test2"),
-            KeyValueItem(key: "Test3", value: "Test3\nasd\nasaTest"),
-          ],
-          mode: .write
-        )
-      )
+      ServerSection()
     
     case .editor:
       ServerSection()
