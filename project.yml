@@ -29,6 +29,7 @@ targets:
       ProvisioningStyle: Automatic
     settings:
       PRODUCT_NAME: "Mocka"
+      PRODUCT_MODULE_NAME: "MockaApp"
     sources:
       - path: Sources/App
     dependencies:
@@ -56,6 +57,8 @@ targets:
   MockaAppTests:
     type: bundle.unit-test
     platform: macOS
+    settings:
+      TEST_HOST: "$(BUILT_PRODUCTS_DIR)/Mocka.app/Contents/MacOS/Mocka"
     sources:
       - path: Tests/AppTests
     dependencies:
