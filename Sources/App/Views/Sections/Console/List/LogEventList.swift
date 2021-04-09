@@ -1,5 +1,7 @@
-import AppKit
-import Combine
+//
+//  Mocka
+//
+
 import MockaServer
 import SwiftUI
 
@@ -34,30 +36,38 @@ struct LogEventList: View {
             }
           }
         }
-        .background(Color.doppio)
-      }
-      .toolbar {
-        ToolbarItem(placement: .principal) {
-          HStack {
-            RoundedTextField(title: "Filter", text: $viewModel.filterText)
-              .frame(width: Size.minimumFilterTextFieldWidth)
-
-            StartAndStopServerButton()
-
-            RestartServerButton()
-
-            SymbolButton(
-              symbolName: .trash,
-              action: {
-                appEnvironment.server.clearBufferedConsoleLogEvents()
-                viewModel.clearLogEvents()
-              }
-            )
-          }
-        }
       }
       .padding(.bottom, 10)
       .background(Color.doppio)
+    }
+    .toolbar {
+      ToolbarItem {
+        SymbolButton(
+          symbolName: .sidebarSquaresLeft,
+          action: {
+            NSApp.keyWindow?.firstResponder?.tryToPerform(#selector(NSSplitViewController.toggleSidebar(_:)), with: nil)
+          }
+        )
+      }
+
+      ToolbarItem(placement: .principal) {
+        HStack {
+          RoundedTextField(title: "Filter", text: $viewModel.filterText)
+            .frame(width: Size.minimumFilterTextFieldWidth)
+
+          StartAndStopServerButton()
+
+          RestartServerButton()
+
+          SymbolButton(
+            symbolName: .trash,
+            action: {
+              appEnvironment.server.clearBufferedConsoleLogEvents()
+              viewModel.clearLogEvents()
+            }
+          )
+        }
+      }
     }
   }
 }

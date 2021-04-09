@@ -1,3 +1,7 @@
+//
+//  Mocka
+//
+
 import MockaServer
 import SwiftUI
 
@@ -19,9 +23,9 @@ struct LogEventListItem: View {
         .foregroundColor(Color.latte)
         .padding(.leading, 24)
 
-      Text(viewModel.formattedDateText)
+      Text(viewModel.logEvent.date.timeIntervalSince1970.timestampPrint)
         .font(.system(size: 16, weight: .regular, design: .default))
-        .frame(width: 126)
+        .frame(width: 210)
         .padding(.leading, 40)
         .foregroundColor(Color.macchiato)
 
@@ -30,11 +34,11 @@ struct LogEventListItem: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.leading, 32)
     }
-    .padding(.vertical, 4)
     .frame(minHeight: 26)
-    .background(viewModel.backgroundColor)
-    .cornerRadius(4)
+    .cornerRadius(5)
+    .padding(.vertical, 4)
     .padding(.horizontal, 16)
+    .background(viewModel.backgroundColor)
   }
 }
 
