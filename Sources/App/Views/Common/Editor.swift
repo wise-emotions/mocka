@@ -5,8 +5,11 @@
 import SwiftUI
 import UniformTypeIdentifiers
 
-struct APIEditorView: View {
-  @ObservedObject var viewModel = APIEditorViewModel()
+/// The editor view.
+/// Used to edit an API body.
+struct Editor: View {
+  /// The associated ViewModel.
+  @ObservedObject var viewModel = EditorViewModel()
   
   var body: some View {
     ZStack() {
@@ -14,12 +17,13 @@ struct APIEditorView: View {
         HStack {
           Text("Response Body")
             .frame(maxWidth: .infinity, alignment: .leading)
-            .font(.system(size: 13, weight: .semibold, design: .default))
+            .font(.headline)
             .foregroundColor(Color.latte)
             .padding(.leading)
           
           Spacer()
-          Button("Importa"){
+
+          Button("Importa") {
             viewModel.isPresented = true
           }
           .fileImporter(isPresented: $viewModel.isPresented, allowedContentTypes: [UTType.json], allowsMultipleSelection: false, onCompletion: { result in
@@ -39,11 +43,10 @@ struct APIEditorView: View {
     }
     .onDrop(of: ["public.file-url"], isTargeted: $viewModel.isDraggingOver, perform: viewModel.handleOnDrop(providers:))
   }
-  
-  struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-      APIEditorView(viewModel: APIEditorViewModel())
-    }
-  }
 }
 
+struct EditorPreviews: PreviewProvider {
+  static var previews: some View {
+    Editor(viewModel: EditorViewModel())
+  }
+}

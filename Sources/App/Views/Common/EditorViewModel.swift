@@ -4,7 +4,8 @@
 
 import SwiftUI
 
-class APIEditorViewModel: ObservableObject {
+/// The ViewModel of the `Editor`.
+class EditorViewModel: ObservableObject {
   @Published var textInput: String = ""
   @Published var isDraggingOver = false
   @Published var isPresented = false
@@ -37,6 +38,8 @@ class APIEditorViewModel: ObservableObject {
   // MARK: - Functions
   
   /// Imports a JSON from the fileImporter.
+  /// - Parameter result: The `URL` selected by the `fileImporter`.
+  /// - Returns: Returns the selected path as `String`.
   func importJSON(from result: Result<[URL], Error>) {
     guard
       let selectedFileURL = try? result.get().first,
@@ -49,7 +52,8 @@ class APIEditorViewModel: ObservableObject {
     textInput = jsonInput
     selectedFileURL.stopAccessingSecurityScopedResource()
   }
-  
+
+  /// Pretty print the json.
   func processJSON() {
     guard let validJSON = textInput.asPrettyPrintedJSON else {
       return
@@ -63,18 +67,21 @@ class APIEditorViewModel: ObservableObject {
       return false
     }
     
-    provider.loadDataRepresentation(forTypeIdentifier: "public.file-url", completionHandler: { (urlData, error) in
-      DispatchQueue.main.async { [weak self] in
-        guard
-          let data = urlData,
-          let json = (NSURL(absoluteURLWithDataRepresentation: data, relativeTo: nil) as URL).prettyPrintedJSON
-        else {
-          return
+    provider.loadDataRepresentation(
+      forTypeIdentifier: "public.file-url",
+      completionHandler: { urlData, error in
+        DispatchQueue.main.async { [weak self] in
+          guard
+            let data = urlData,
+            let json = (NSURL(absoluteURLWithDataRepresentation: data, relativeTo: nil) as URL).prettyPrintedJSON
+          else {
+            return
+          }
+
+          self?.textInput = json
         }
-        
-        self?.textInput = json
       }
-    })
+    )
     
     return true
   }

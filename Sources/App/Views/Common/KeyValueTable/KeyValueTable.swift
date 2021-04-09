@@ -6,6 +6,7 @@ import SwiftUI
 
 /// The key-value table structure.
 struct KeyValueTable: View {
+  /// The associated ViewModel.
   @ObservedObject var viewModel: KeyValueTableViewModel
 
   var body: some View {

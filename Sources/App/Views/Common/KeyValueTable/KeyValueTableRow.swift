@@ -9,6 +9,8 @@ struct KeyValueTableRow: View {
   /// The item to show inside the row.
   @State var item: KeyValueItem
 
+  /// The row mode.
+  /// Useful to disable user interaction on `read` mode.
   @State var mode: KeyValueTableViewModel.Mode
   
   /// The index of the item.

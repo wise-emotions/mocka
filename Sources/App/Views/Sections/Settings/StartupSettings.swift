@@ -54,14 +54,9 @@ struct StartupSettings: View {
               .foregroundColor(.macchiato)
           }
 
-          Button(
-            action: {
-              viewModel.fileImporterIsPresented.toggle()
-            },
-            label: {
-              Text("Select folder")
-            }
-          )
+          Button("Select folder") {
+            viewModel.fileImporterIsPresented.toggle()
+          }
           .frame(height: 30)
           .fileImporter(
             isPresented: $viewModel.fileImporterIsPresented,
