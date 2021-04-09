@@ -6,6 +6,9 @@ import SwiftUI
 
 /// The ViewModel of the `Editor`.
 class EditorViewModel: ObservableObject {
+
+  // MARK: - Stored Properties
+
   /// The text of the editor.
   @Published var text: String = ""
 
