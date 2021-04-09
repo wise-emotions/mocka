@@ -9,7 +9,7 @@ import UniformTypeIdentifiers
 /// Used to edit an API body.
 struct Editor: View {
   /// The associated ViewModel.
-  @ObservedObject var viewModel = EditorViewModel()
+  @StateObject var viewModel = EditorViewModel()
   
   var body: some View {
     ZStack() {
@@ -24,24 +24,33 @@ struct Editor: View {
           Spacer()
 
           Button("Importa") {
-            viewModel.isPresented = true
+            viewModel.fileImporterIsPresented = true
           }
-          .fileImporter(isPresented: $viewModel.isPresented, allowedContentTypes: [UTType.json], allowsMultipleSelection: false, onCompletion: { result in
-            viewModel.importJSON(from: result)
-          })
+          .fileImporter(
+            isPresented: $viewModel.fileImporterIsPresented,
+            allowedContentTypes: [UTType.json],
+            allowsMultipleSelection: false,
+            onCompletion: viewModel.importFile(from:)
+          )
           .padding(.trailing)
         }
         
-        TextEditor(text: $viewModel.textInput)
+        TextEditor(text: $viewModel.text)
           .font(.body)
           .border(viewModel.borderColor)
-          .onChange(of: viewModel.textInput, perform: { value in
-            viewModel.processJSON()
-          })
+          .onChange(
+            of: viewModel.text, perform: { _ in
+              viewModel.prettyPrintJSON()
+            }
+          )
           .padding(.horizontal)
       }
     }
-    .onDrop(of: ["public.file-url"], isTargeted: $viewModel.isDraggingOver, perform: viewModel.handleOnDrop(providers:))
+    .onDrop(
+      of: ["public.file-url"],
+      isTargeted: $viewModel.isDraggingOver,
+      perform: viewModel.handleOnDrop(providers:)
+    )
   }
 }
 

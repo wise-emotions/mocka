@@ -6,15 +6,20 @@ import SwiftUI
 
 /// The ViewModel of the `Editor`.
 class EditorViewModel: ObservableObject {
-  @Published var textInput: String = ""
+  /// The text of the editor.
+  @Published var text: String = ""
+
+  /// Wether the user is dragging a file over the editor.
   @Published var isDraggingOver = false
-  @Published var isPresented = false
+
+  /// Whether the `fileImporter` is presented.
+  @Published var fileImporterIsPresented = false
   
   // MARK: - Computed Properties
   
   /// Whether or not the input is a valid json.
   var isValidJSON: Bool {
-    textInput.asPrettyPrintedJSON != nil
+    text.asPrettyPrintedJSON != nil
   }
   
   /// The color of the border of the text editor.
@@ -23,7 +28,7 @@ class EditorViewModel: ObservableObject {
       return Color.irish
     }
     
-    guard !textInput.isEmpty else {
+    guard !text.isEmpty else {
       return .clear
     }
     
@@ -37,31 +42,35 @@ class EditorViewModel: ObservableObject {
   
   // MARK: - Functions
   
-  /// Imports a JSON from the fileImporter.
+  /// Imports a file from the `fileImporter`.
   /// - Parameter result: The `URL` selected by the `fileImporter`.
   /// - Returns: Returns the selected path as `String`.
-  func importJSON(from result: Result<[URL], Error>) {
+  func importFile(from result: Result<[URL], Error>) {
     guard
       let selectedFileURL = try? result.get().first,
       selectedFileURL.startAccessingSecurityScopedResource(),
-      let jsonInput = selectedFileURL.prettyPrintedJSON
+      let input = selectedFileURL.prettyPrintedJSON
     else {
       return
     }
     
-    textInput = jsonInput
+    text = input
     selectedFileURL.stopAccessingSecurityScopedResource()
   }
 
   /// Pretty print the json.
-  func processJSON() {
-    guard let validJSON = textInput.asPrettyPrintedJSON else {
+  func prettyPrintJSON() {
+    guard let prettyPrintedJSON = text.asPrettyPrintedJSON else {
       return
     }
     
-    textInput = validJSON
+    text = prettyPrintedJSON
   }
-  
+
+  /// This function handles the `onDrop` event.
+  /// - Parameter providers: The array of `NSItemProvider` for conveying
+  ///                        data or a file between processes during drag and drop.
+  /// - Returns: Returns `true` if is a valid file, otherwise `false`.
   func handleOnDrop(providers: [NSItemProvider]) -> Bool {
     guard let provider = providers.first else {
       return false
@@ -78,7 +87,7 @@ class EditorViewModel: ObservableObject {
             return
           }
 
-          self?.textInput = json
+          self?.text = json
         }
       }
     )

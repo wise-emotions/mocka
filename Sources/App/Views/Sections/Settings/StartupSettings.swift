@@ -62,9 +62,7 @@ struct StartupSettings: View {
             isPresented: $viewModel.fileImporterIsPresented,
             allowedContentTypes: [UTType.folder],
             allowsMultipleSelection: false,
-            onCompletion: { result in
-              viewModel.selectFolder(with: result)
-            }
+            onCompletion: viewModel.selectFolder(with:)
           )
         }
 
