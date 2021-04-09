@@ -9,9 +9,14 @@ class KeyValueTableViewModel: ObservableObject {
 
   // MARK: - Data Structure
 
+  /// The table mode.
+  /// Use `write` mode to allow the user edit each `TextField` and to be able to add new ones.
+  /// Use `read` mode to disable user interactions.
   enum Mode {
+    /// The write mode that allows the user to edit each `TextField` and to be able to add new ones.
     case write
-    
+
+    /// The read mode that disable user interactions.
     case read
   }
 
