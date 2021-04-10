@@ -15,7 +15,7 @@ extension RequestInfoView {
     var body: some View {
       ScrollView {
         LazyVStack(alignment: .leading, spacing: 24) {
-          SectionView(title: "URL") {
+          RequestInfoViewSectionView(title: "URL") {
             TextField(viewModel.path, text: .constant(viewModel.path))
               .padding()
               .textFieldStyle(PlainTextFieldStyle())
@@ -24,18 +24,18 @@ extension RequestInfoView {
           }
 
           if viewModel.isQuerySectionVisible {
-            SectionView(title: "Query") {
+            RequestInfoViewSectionView(title: "Query") {
               KeyValueTable(viewModel: KeyValueTableViewModel(keyValueItems: viewModel.queryParameters, mode: .read))
             }
           }
 
           if viewModel.isHeadersSectionVisible {
-            SectionView(title: "Headers") {
+            RequestInfoViewSectionView(title: "Headers") {
               KeyValueTable(viewModel: KeyValueTableViewModel(keyValueItems: viewModel.headers, mode: .read))
             }
           }
 
-          SectionView(title: "Body") {
+          RequestInfoViewSectionView(title: "Body") {
             TextEditor(text: .constant(viewModel.body))
               .padding()
               .font(.system(size: 13, weight: .regular, design: .default))
@@ -50,7 +50,7 @@ extension RequestInfoView {
 
 // MARK: - Preview
 
-struct ScrollableSection_Previews: PreviewProvider {
+struct RequestInfoViewPreviews: PreviewProvider {
   static var previews: some View {
     RequestInfoView.ContainerSectionView(
       viewModel: RequestInfoViewModel.ContainerSectionViewModel(

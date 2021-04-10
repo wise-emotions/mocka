@@ -14,6 +14,7 @@ struct RequestInfoView: View {
         .tabItem {
           Text(viewModel.titleForRequestTab)
         }
+
       ContainerSectionView(viewModel: viewModel.modelForResponseTab)
         .tabItem {
           Text(viewModel.titleForResponseTab)
@@ -26,7 +27,7 @@ struct RequestInfoView: View {
 
 // MARK: - Preview
 
-struct RequestInfoContainerView_Previews: PreviewProvider {
+struct RequestInfoContainerViewPreviews: PreviewProvider {
   static var previews: some View {
     RequestInfoView(
       viewModel: RequestInfoViewModel(networkExchange: NetworkExchange.mock)

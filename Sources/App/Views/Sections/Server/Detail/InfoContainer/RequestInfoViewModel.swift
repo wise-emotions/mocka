@@ -3,9 +3,8 @@
 //
 
 import MockaServer
-import SwiftUI
 
-/// The view model of the `RequestInfoContainerView`.
+/// The ViewModel of the `RequestInfoContainerView`.
 struct RequestInfoViewModel {
   
   // MARK: - Structured Data

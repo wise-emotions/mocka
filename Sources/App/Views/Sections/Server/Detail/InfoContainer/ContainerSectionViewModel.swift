@@ -63,12 +63,12 @@ extension RequestInfoViewModel {
 
     /// Whether the Query section is visible or not.
     var isQuerySectionVisible: Bool {
-      kind == .request && queryParameters.isEmpty.isFalse
+      kind == .request && !queryParameters.isEmpty
     }
 
     /// Whether the Headers section is visible or not.
     var isHeadersSectionVisible: Bool {
-      headers.isEmpty.isFalse
+      !headers.isEmpty
     }
     
     // MARK: - Functions
