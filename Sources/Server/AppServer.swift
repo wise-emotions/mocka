@@ -121,7 +121,7 @@ public class AppServer {
 
   /// Clears the buffered log events from the `networkExchangesSubject`.
   public func clearBufferedNetworkExchanges() {
-    consoleLogsSubject.clearBuffer()
+    networkExchangesSubject.clearBuffer()
   }
 
   /// Registers a route for every request.
@@ -136,7 +136,7 @@ public class AppServer {
       application?
         .on($0.method.vaporMethod, $0.vaporParameter) { [unowned self] request -> EventLoopFuture<ClientResponse> in
           // This property is force-unwrapped because it can never fail,
-          // since the raw value passed is an identical copy of SWIFTNIO's `HTTPMethod`.
+          // since the raw value passed is an identical copy of SwiftNIO's `HTTPMethod`.
           let httpMethod = HTTPMethod(rawValue: request.method.rawValue)!
           let receivedRequestTimeStamp = Date().timeIntervalSince1970
 
