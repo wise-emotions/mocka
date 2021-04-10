@@ -19,11 +19,49 @@ struct KeyValueTableRow: View {
   var body: some View {
     HStack {
       Group {
-        TextField(item.key, text: $item.key)
-          .disabled(mode == .read)
+        switch mode {
+        case .read:
+          Text(item.key)
+            .contextMenu {
+              Button(action: {
+                NSPasteboard.general.clearContents()
+                NSPasteboard.general.setString(item.key, forType: .string)
+              }) {
+                Text("Copy Key")
+              }
+            }
 
-        TextField(item.value, text: $item.value)
-          .disabled(mode == .read)
+          Text(item.value)
+            .contextMenu {
+              Button(action: {
+                NSPasteboard.general.clearContents()
+                NSPasteboard.general.setString(item.value, forType: .string)
+              }) {
+                Text("Copy Value")
+              }
+            }
+
+        case .write:
+          TextField(item.key, text: $item.key)
+            .contextMenu {
+              Button(action: {
+                NSPasteboard.general.clearContents()
+                NSPasteboard.general.setString(item.key, forType: .string)
+              }) {
+                Text("Copy Key")
+              }
+            }
+
+          TextField(item.value, text: $item.value)
+            .contextMenu {
+              Button(action: {
+                NSPasteboard.general.clearContents()
+                NSPasteboard.general.setString(item.value, forType: .string)
+              }) {
+                Text("Copy Value")
+              }
+            }
+        }
       }
       .frame(maxWidth: .infinity, alignment: .leading)
       .padding(EdgeInsets(top: 6, leading: 10, bottom: 6, trailing: 10))

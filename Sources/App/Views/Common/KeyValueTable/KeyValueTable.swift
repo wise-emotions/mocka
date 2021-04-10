@@ -13,17 +13,14 @@ struct KeyValueTable: View {
     VStack {
       KeyValueTableHeader()
 
-      ScrollView {
-        LazyVStack(spacing: 0) {
-          ForEach(Array(viewModel.keyValueItems.enumerated()), id: \.offset) { index, item in
-            KeyValueTableRow(
-              item: item,
-              mode: viewModel.mode,
-              index: index
-            )
-          }
-        }
+      ForEach(Array(viewModel.keyValueItems.enumerated()), id: \.offset) { index, item in
+        KeyValueTableRow(
+          item: item,
+          mode: viewModel.mode,
+          index: index
+        )
       }
+      .drawingGroup(on: viewModel.mode == .read)
 
       if viewModel.mode == .write {
         HStack {
@@ -58,6 +55,13 @@ struct KeyValueTablePreviews: PreviewProvider {
       viewModel: KeyValueTableViewModel(
         keyValueItems: rows,
         mode: .write
+      )
+    )
+
+    KeyValueTable(
+      viewModel: KeyValueTableViewModel(
+        keyValueItems: rows,
+        mode: .read
       )
     )
   }
