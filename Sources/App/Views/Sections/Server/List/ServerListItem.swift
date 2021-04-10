@@ -24,7 +24,7 @@ struct ServerListItem: View {
             .background(Color.ristretto)
             .cornerRadius(100)
             .foregroundColor(.latte)
-            .frame(width: 77, alignment: .leading)
+            .frame(alignment: .leading)
           Text(viewModel.networkExchange.request.uri.path)
             .font(.system(size: 12))
             .foregroundColor(.latte)

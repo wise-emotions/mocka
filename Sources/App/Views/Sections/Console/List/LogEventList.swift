@@ -28,7 +28,6 @@ struct LogEventList: View {
                 )
               )
             }
-            .listRowInsets(EdgeInsets())
           }
           .onChange(of: viewModel.filteredLogEvents.count) { _ in
             withAnimation {
@@ -36,8 +35,8 @@ struct LogEventList: View {
             }
           }
         }
+        .drawingGroup()
       }
-      .padding(.bottom, 10)
       .background(Color.doppio)
     }
     .toolbar {

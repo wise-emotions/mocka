@@ -32,8 +32,8 @@ struct ServerList: View {
         }
       }
       .background(Color.doppio)
+      .frame(minWidth: Size.minimumListWidth)
     }
-    .frame(minWidth: Size.minimumListWidth)
     .toolbar {
       ToolbarItem {
         HStack {

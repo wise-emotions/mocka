@@ -11,7 +11,7 @@ struct LogEventListItem: View {
   let viewModel: LogEventListItemViewModel
 
   var body: some View {
-    HStack(alignment: .center) {
+    HStack {
       Circle()
         .fill(viewModel.circleColor)
         .frame(width: 10, height: 10)
@@ -34,11 +34,11 @@ struct LogEventListItem: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.leading, 32)
     }
-    .frame(minHeight: 26)
-    .cornerRadius(5)
     .padding(.vertical, 4)
-    .padding(.horizontal, 16)
+    .frame(minHeight: 26)
     .background(viewModel.backgroundColor)
+    .cornerRadius(5)
+    .padding(.horizontal, 16)
   }
 }
 
