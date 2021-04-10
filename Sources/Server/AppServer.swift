@@ -13,16 +13,16 @@ public class AppServer {
   /// The `Vapor` `Application` instance.
   internal private(set) var application: Application?
 
-  /// The `PassthroughSubject` of `LogEvent`s.
+  /// The `BufferedSubject` of `LogEvent`s.
   /// This subject is used to send and subscribe to `LogEvent`s.
   /// - Note: This property is marked `internal` to allow only the `Server` to send events.
   private let consoleLogsSubject = BufferedSubject<LogEvent, Never>()
 
-  /// The `PassthroughSubject` of `NetworkExchange`s.
+  /// The `BufferedSubject` of `NetworkExchange`s.
   /// This subject is used to send and subscribe to `NetworkExchange`s.
   /// Anytime a request/response exchange happens, a detailed version of the actors is generated and injected in this object.
   /// - Note: This property is marked `internal` to allow only the `Server` to send events.
-  private let networkExchangesSubject = PassthroughSubject<NetworkExchange, Never>()
+  private let networkExchangesSubject = BufferedSubject<NetworkExchange, Never>()
 
   /// The `Set` containing the list of subscriptions.
   private var subscriptions = Set<AnyCancellable>()
@@ -116,6 +116,11 @@ public class AppServer {
 
   /// Clears the buffered log events from the `consoleLogsSubject`.
   public func clearBufferedConsoleLogEvents() {
+    consoleLogsSubject.clearBuffer()
+  }
+
+  /// Clears the buffered log events from the `networkExchangesSubject`.
+  public func clearBufferedNetworkExchanges() {
     consoleLogsSubject.clearBuffer()
   }
 

@@ -1,18 +1,12 @@
-import Foundation
+//
+//  Mocka
+//
+
 import MockaServer
 import SwiftUI
 
 /// The ViewModel of the `LogEventListItem`.
 struct LogEventListItemViewModel {
-
-  // MARK: - Constants
-
-  /// The `DateFormatter` used to format the date of the `LogEvent`.
-  private static let dateFormatter: DateFormatter = {
-    let logDateFormatter = DateFormatter()
-    logDateFormatter.dateFormat = "dd/MM/yy • HH:mm"
-    return logDateFormatter
-  }()
 
   // MARK: - Stored Properties
 
@@ -41,10 +35,5 @@ struct LogEventListItemViewModel {
     case .error, .critical:
       return Color.redEye
     }
-  }
-
-  /// The formatted date of the `LogEvent`.
-  var formattedDateText: String {
-    LogEventListItemViewModel.dateFormatter.string(from: logEvent.date)
   }
 }

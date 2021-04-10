@@ -25,7 +25,7 @@ struct KeyValueTableRow: View {
       .foregroundColor(.latte)
     }
     .background(index.isMultiple(of: 2) ? Color.lungo : Color.doppio)
-    .cornerRadius(4)
+    .cornerRadius(5)
   }
 }
 
