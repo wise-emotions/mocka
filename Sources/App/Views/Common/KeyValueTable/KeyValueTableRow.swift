@@ -40,7 +40,7 @@ struct KeyValueTableRow: View {
             .contextMenuCopy(item.value)
         }
       }
-      .frame(maxWidth: .infinity, alignment: .leading)
+      .frame(maxWidth: .infinity, maxHeight: 30, alignment: .leading)
       .padding(EdgeInsets(top: 6, leading: 10, bottom: 6, trailing: 10))
       .textFieldStyle(PlainTextFieldStyle())
       .foregroundColor(Color.latte)
