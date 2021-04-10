@@ -22,45 +22,18 @@ struct KeyValueTableRow: View {
         switch mode {
         case .read:
           Text(item.key)
-            .contextMenu {
-              Button(action: {
-                NSPasteboard.general.clearContents()
-                NSPasteboard.general.setString(item.key, forType: .string)
-              }) {
-                Text("Copy Key")
-              }
-            }
+            .frame(alignment: .top)
+            .contextMenuCopy(item.key)
 
           Text(item.value)
-            .contextMenu {
-              Button(action: {
-                NSPasteboard.general.clearContents()
-                NSPasteboard.general.setString(item.value, forType: .string)
-              }) {
-                Text("Copy Value")
-              }
-            }
+            .contextMenuCopy(item.value)
 
         case .write:
           TextField(item.key, text: $item.key)
-            .contextMenu {
-              Button(action: {
-                NSPasteboard.general.clearContents()
-                NSPasteboard.general.setString(item.key, forType: .string)
-              }) {
-                Text("Copy Key")
-              }
-            }
+            .contextMenuCopy(item.key)
 
           TextField(item.value, text: $item.value)
-            .contextMenu {
-              Button(action: {
-                NSPasteboard.general.clearContents()
-                NSPasteboard.general.setString(item.value, forType: .string)
-              }) {
-                Text("Copy Value")
-              }
-            }
+            .contextMenuCopy(item.value)
         }
       }
       .frame(maxWidth: .infinity, alignment: .leading)

@@ -22,6 +22,7 @@ extension View {
   /// - Parameters:
   ///   - hidden: Set to `false` to show the view. Set to `true` to hide the view.
   ///   - remove: Boolean value indicating whether or not to remove the view.
+  /// - Returns: Returns the `View` with the applied modifier.
   @ViewBuilder func isHidden(_ hidden: Bool, remove: Bool = false) -> some View {
     if hidden {
       if !remove {
@@ -58,6 +59,26 @@ extension View {
       self.drawingGroup()
     } else {
       self
+    }
+  }
+
+  /// Creates a `Copy Value` context menu.
+  ///
+  /// Example of usage:
+  ///
+  ///     Text(text)
+  ///       .contextMenuCopy(text)
+  ///
+  /// - Parameter string: The `String` to be copied into the pasteboard.
+  /// - Returns: Returns the `View` with the applied modifier.
+  @ViewBuilder func contextMenuCopy(_ string: String) -> some View {
+    self.contextMenu {
+      Button(action: {
+        NSPasteboard.general.clearContents()
+        NSPasteboard.general.setString(string, forType: .string)
+      }) {
+        Text("Copy Value")
+      }
     }
   }
 }
