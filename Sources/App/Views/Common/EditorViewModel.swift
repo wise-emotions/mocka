@@ -52,7 +52,7 @@ class EditorViewModel: ObservableObject {
     guard
       let selectedFileURL = try? result.get().first,
       selectedFileURL.startAccessingSecurityScopedResource(),
-      let input = selectedFileURL.prettyPrintedJSON
+      let input = try? Data(contentsOf: selectedFileURL).asPrettyPrintedJSON
     else {
       return
     }
@@ -85,7 +85,7 @@ class EditorViewModel: ObservableObject {
         DispatchQueue.main.async { [weak self] in
           guard
             let data = urlData,
-            let json = (NSURL(absoluteURLWithDataRepresentation: data, relativeTo: nil) as URL).prettyPrintedJSON
+            let json = data.asPrettyPrintedJSON
           else {
             return
           }
