@@ -5,8 +5,12 @@ import Foundation
 /// The View containing the details of the Request and Response pair.
 struct RequestInfoView: View {
 
+  // MARK: - Stored Properties
+
   /// The  view model of this `RequestInfoView`.
   let viewModel: RequestInfoViewModel
+
+  // MARK: - Body
 
   var body: some View {
     TabView {

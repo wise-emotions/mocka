@@ -6,8 +6,13 @@ import SwiftUI
 
 /// An iOS-style `TextField`.
 struct FilterTextField: View {
+
+  // MARK: - Store Properties
+
   /// The text to display and edit.
   @Binding var text: String
+
+  // MARK: - Body
 
   var body: some View {
     HStack(alignment: .firstTextBaseline, spacing: 4) {
@@ -23,7 +28,9 @@ struct FilterTextField: View {
   }
 }
 
-struct SearchTextFieldPreview: PreviewProvider {
+// MARK: - Previews
+
+struct FilterTextFieldPreview: PreviewProvider {
   static var previews: some View {
     Group {
       FilterTextField(text: .constant(""))
@@ -36,7 +43,9 @@ struct SearchTextFieldPreview: PreviewProvider {
   }
 }
 
-struct SearchTextFieldLibraryContent: LibraryContentProvider {
+// MARK: - Library
+
+struct FilterTextFieldLibraryContent: LibraryContentProvider {
   let text = Binding.constant("TextField")
 
   @LibraryContentBuilder

@@ -7,8 +7,13 @@ import SwiftUI
 
 /// The server list item. To be used inside a `ServerList` element.
 struct ServerListItem: View {
+
+  // MARK: - Stored Properties
+
   /// The `ViewModel` of the view.
   let viewModel: ServerListItemViewModel
+
+  // MARK: - Body
 
   var body: some View {
     HStack {
@@ -52,19 +57,10 @@ struct ServerListItem: View {
   }
 }
 
+// MARK: - Previews
+
 struct ItemPreviews: PreviewProvider {
   static var previews: some View {
     ServerListItem(viewModel: ServerListItemViewModel(networkExchange: NetworkExchange.mock))
-  }
-}
-
-struct ItemLibraryContent: LibraryContentProvider {
-  let viewModel: ServerListItemViewModel = ServerListItemViewModel(networkExchange: NetworkExchange.mock)
-
-  @LibraryContentBuilder
-  var views: [LibraryItem] {
-    LibraryItem(
-      ServerListItem(viewModel: ServerListItemViewModel(networkExchange: NetworkExchange.mock))
-    )
   }
 }

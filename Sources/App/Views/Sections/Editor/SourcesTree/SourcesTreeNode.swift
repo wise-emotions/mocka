@@ -6,11 +6,16 @@ import SwiftUI
 
 /// A view that displays a node into a tree.
 struct SourcesTreeNode: View {
+
+  // MARK: - Stored Properties
+
   /// The name of the file or folder.
   let name: String
 
   /// Whether the node represents a folder or not.
   let isFolder: Bool
+
+  // MARK: - Body
 
   var body: some View {
     HStack {

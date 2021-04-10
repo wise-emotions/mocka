@@ -7,7 +7,12 @@ import MockaServer
 import SwiftUI 
 
 struct ServerDetail: View {
+
+  // MARK: - Stored Properties
+
   @State var viewModel: ServerDetailViewModel?
+
+  // MARK: - Body
 
   var body: some View {
     VStack {
@@ -32,6 +37,8 @@ struct ServerDetail: View {
     .frame(minWidth: Size.minimumDetailWidth)
   }
 }
+
+// MARK: - Previews
 
 struct ServerDetailPreview: PreviewProvider {
   static var previews: some View {

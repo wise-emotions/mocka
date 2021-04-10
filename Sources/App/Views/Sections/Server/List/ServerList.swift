@@ -8,11 +8,16 @@ import SwiftUI
 /// The server list view.
 /// This view handle the list of all the API called to the server.
 struct ServerList: View {
+
+  // MARK: - Stored Properties
+
   /// The app environment object.
   @EnvironmentObject var appEnvironment: AppEnvironment
 
   /// The associated ViewModel.
   @StateObject var viewModel: ServerListViewModel
+
+  // MARK: - Body
 
   var body: some View {
     VStack {
@@ -68,6 +73,8 @@ struct ServerList: View {
     }
   }
 }
+
+// MARK: - Previews
 
 struct ServerListPreviews: PreviewProvider {
   static let networkExchanges = [NetworkExchange](

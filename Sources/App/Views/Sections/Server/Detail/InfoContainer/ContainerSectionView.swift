@@ -9,9 +9,13 @@ extension RequestInfoView {
   /// The scrollable section containing the information about the request/response pair.
   struct ContainerSectionView: View {
 
+    // MARK: - Stored Properties
+
     /// The view model of this `ContainerSectionView`.
     let viewModel: RequestInfoViewModel.ContainerSectionViewModel
-    
+
+    // MARK: - Body
+
     var body: some View {
       ScrollView {
         LazyVStack(alignment: .leading, spacing: 24) {

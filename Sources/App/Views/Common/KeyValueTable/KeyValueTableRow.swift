@@ -6,6 +6,9 @@ import SwiftUI
 
 /// The row of the `KeyValueTable`.
 struct KeyValueTableRow: View {
+
+  // MARK: - Stored Properties
+
   /// The item to show inside the row.
   @State var item: KeyValueItem
 
@@ -15,6 +18,8 @@ struct KeyValueTableRow: View {
 
   /// The index of the item.
   var index: Int
+
+  // MARK: - Body
 
   var body: some View {
     HStack {
@@ -45,6 +50,8 @@ struct KeyValueTableRow: View {
     .cornerRadius(5)
   }
 }
+
+// MARK: - Previews
 
 struct KeyValueTableRowPreviews: PreviewProvider {
   static var previews: some View {

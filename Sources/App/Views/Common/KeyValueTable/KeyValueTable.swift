@@ -6,8 +6,13 @@ import SwiftUI
 
 /// The key-value table structure.
 struct KeyValueTable: View {
+
+  // MARK: - Stored Properties
+
   /// The associated ViewModel.
   @ObservedObject var viewModel: KeyValueTableViewModel
+
+  // MARK: - Body
 
   var body: some View {
     VStack {
@@ -41,6 +46,8 @@ struct KeyValueTable: View {
   }
 }
 
+// MARK: - Previews
+
 struct KeyValueTablePreviews: PreviewProvider {
   static let rows = [KeyValueItem](
     repeating: KeyValueItem(
@@ -66,6 +73,8 @@ struct KeyValueTablePreviews: PreviewProvider {
     )
   }
 }
+
+// MARK: - Library
 
 struct KeyValueTableLibraryContent: LibraryContentProvider {
   let keyValueItems: [KeyValueItem] = []

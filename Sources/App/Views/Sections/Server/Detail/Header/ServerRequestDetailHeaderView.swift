@@ -8,13 +8,17 @@ import SwiftUI
 /// The header of the `ServerRequestDetailView`.
 struct ServerRequestDetailHeaderView: View {
 
+  // MARK: - Stored Properties
+
   /// The  view model of this `ServerRequestDetailHeaderView`.
   let viewModel: ServerRequestDetailHeaderViewModel
+
+  // MARK: - Body
 
   var body: some View {
     VStack(alignment: .leading, spacing: 16){
       HStack(alignment: .top, spacing: 8) {
-        TextPillView(text: viewModel.httpMethod.rawValue)
+        TextPill(text: viewModel.httpMethod.rawValue)
         Text(viewModel.urlString)
           .font(.system(size: 13))
           .foregroundColor(Color.latte)

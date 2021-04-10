@@ -5,9 +5,14 @@
 import SwiftUI
 
 struct EmptyState: View {
+
+  // MARK: - Stored Properties
+
   let symbol: SFSymbol
 
   let text: String
+
+  // MARK: - Body
 
   var body: some View {
     Spacer()
