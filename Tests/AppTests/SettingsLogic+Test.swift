@@ -31,7 +31,7 @@ class SettingsLogicTests: XCTestCase {
   }
 
   // MARK: Tests
-  
+
   // Test that the creation of the server configuration file occurs at the root path.
   func testSettingsFileCreationAtWorkspaceRoot() {
     XCTAssertFalse(FileManager.default.fileExists(atPath: Logic.Settings.serverConfigurationFileName))
