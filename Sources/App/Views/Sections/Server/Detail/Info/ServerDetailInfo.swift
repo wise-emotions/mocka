@@ -35,7 +35,7 @@ struct ServerDetailInfo: View {
 
 // MARK: - Preview
 
-struct RequestInfoContainerViewPreviews: PreviewProvider {
+struct ServerDetailInfoViewPreviews: PreviewProvider {
   static var previews: some View {
     ServerDetailInfo(
       viewModel: ServerDetailInfoViewModel(networkExchange: NetworkExchange.mock)

@@ -6,7 +6,7 @@ import MockaServer
 import SwiftUI
 
 /// A Section with a `title` and a `content` view as body.
-struct RequestInfoViewSectionView<ContentView: View>: View {
+struct ServerDetailInfoSubSection<ContentView: View>: View {
 
   // MARK: - Stored Properties
 
@@ -34,9 +34,9 @@ struct RequestInfoViewSectionView<ContentView: View>: View {
 
 // MARK: - Preview
 
-struct RequestInfoViewSectionViewPreviews: PreviewProvider {
+struct ServerDetailInfoSubSectionViewPreviews: PreviewProvider {
   static var previews: some View {
-    RequestInfoViewSectionView(title: "URL") {
+    ServerDetailInfoSubSection(title: "URL") {
       TextField(NetworkExchange.mock.request.uri.string, text: .constant(NetworkExchange.mock.request.uri.string))
         .padding()
         .textFieldStyle(PlainTextFieldStyle())

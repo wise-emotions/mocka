@@ -18,7 +18,7 @@ struct ServerDetailInfoSection: View {
   var body: some View {
     ScrollView {
       LazyVStack(alignment: .leading, spacing: 24) {
-        RequestInfoViewSectionView(title: "URL") {
+        ServerDetailInfoSubSection(title: "URL") {
           Text(viewModel.urlString)
             .padding()
             .frame(minWidth: 100, maxWidth: .infinity, alignment: .leading)
@@ -28,19 +28,19 @@ struct ServerDetailInfoSection: View {
         }
 
         if viewModel.isQuerySectionVisible {
-          RequestInfoViewSectionView(title: "Query") {
+          ServerDetailInfoSubSection(title: "Query") {
             KeyValueTable(viewModel: KeyValueTableViewModel(keyValueItems: viewModel.queryParameters, mode: .read))
           }
         }
 
         if viewModel.isHeadersSectionVisible {
-          RequestInfoViewSectionView(title: "Headers") {
+          ServerDetailInfoSubSection(title: "Headers") {
             KeyValueTable(viewModel: KeyValueTableViewModel(keyValueItems: viewModel.headers, mode: .read))
           }
         }
 
         if viewModel.isBodySectionVisible {
-          RequestInfoViewSectionView(title: "Body") {
+          ServerDetailInfoSubSection(title: "Body") {
             TextEditor(text: .constant(viewModel.body))
               .padding()
               .font(.system(size: 13, weight: .regular, design: .default))
