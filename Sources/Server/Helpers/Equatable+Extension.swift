@@ -18,6 +18,6 @@ public extension Equatable {
   /// - Parameter options: The list of options we want to compare `self` to.
   /// - Returns: Returns `true` if the options contain an element equal to `self`, otherwise `false`.
   func isAny(of options: [Self]) -> Bool {
-    options.contains { $0 == self }
+    !isNone(of: options)
   }
 }
