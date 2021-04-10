@@ -5,8 +5,8 @@
 import MockaServer
 import UniformTypeIdentifiers
 
-/// The ViewModel of the `SourcesTree`.
-final class SourcesTreeViewModel: ObservableObject {
+/// The ViewModel of the `SourceTree`.
+final class SourceTreeViewModel: ObservableObject {
 
   // MARK: - Constants
 
@@ -55,7 +55,7 @@ final class SourcesTreeViewModel: ObservableObject {
 
   // MARK: - Init
 
-  /// Returns an instance of `SourcesTreeViewModel`.
+  /// Returns an instance of `SourceTreeViewModel`.
   ///
   /// This instantiation will fail if the workspace path value has not been set yet.
   /// - Parameter workspacePath: The user workspace path.

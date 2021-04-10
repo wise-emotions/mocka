@@ -5,7 +5,7 @@
 import SwiftUI
 
 /// A view that displays a node into a tree.
-struct SourcesTreeNode: View {
+struct SourceTreeNode: View {
 
   // MARK: - Stored Properties
 

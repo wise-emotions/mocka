@@ -5,19 +5,19 @@
 import SwiftUI
 
 /// A view that displays the content of directories containing a request/response? pair in the form of a tree.
-struct SourcesTree: View {
+struct SourceTree: View {
 
   // MARK: - Stored Properties
 
   /// The associated ViewModel.
-  @StateObject var viewModel: SourcesTreeViewModel
+  @StateObject var viewModel: SourceTreeViewModel
 
   // MARK: - Body
 
   var body: some View {
     List(viewModel.directoryContent, children: \.children) { node in
       NavigationLink(destination: Text(node.url.path)) {
-        SourcesTreeNode(name: node.name, isFolder: node.isFolder)
+        SourceTreeNode(name: node.name, isFolder: node.isFolder)
       }
       .contextMenu(
         ContextMenu(
@@ -34,8 +34,8 @@ struct SourcesTree: View {
 
 // MARK: - Previews
 
-struct SourcesTreePreviews: PreviewProvider {
+struct SourceTreePreviews: PreviewProvider {
   static var previews: some View {
-    SourcesTree(viewModel: try! SourcesTreeViewModel(workspacePath: nil))
+    SourceTree(viewModel: try! SourceTreeViewModel(workspacePath: nil))
   }
 }
