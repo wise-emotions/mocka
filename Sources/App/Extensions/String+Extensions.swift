@@ -13,7 +13,8 @@ extension String {
     return predicate.evaluate(with: self)
   }
 
-  var asPrettyPrintedJSON: String? {
-    data(using: .utf8)?.asPrettyPrintedJSON
+  /// Converts the `String` to a pretty printed JSON.
+  var prettyPrintedJSON: String? {
+    data(using: .utf8)?.prettyPrintedJSON
   }
 }

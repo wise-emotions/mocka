@@ -22,7 +22,7 @@ class EditorViewModel: ObservableObject {
 
   /// Whether or not the input is a valid json.
   var isValidJSON: Bool {
-    text.asPrettyPrintedJSON != nil
+    text.prettyPrintedJSON != nil
   }
 
   /// The color of the border of the text editor.
@@ -52,7 +52,7 @@ class EditorViewModel: ObservableObject {
     guard
       let selectedFileURL = try? result.get().first,
       selectedFileURL.startAccessingSecurityScopedResource(),
-      let input = try? Data(contentsOf: selectedFileURL).asPrettyPrintedJSON
+      let input = try? Data(contentsOf: selectedFileURL).prettyPrintedJSON
     else {
       return
     }
@@ -63,7 +63,7 @@ class EditorViewModel: ObservableObject {
 
   /// Pretty print the json.
   func prettyPrintJSON() {
-    guard let prettyPrintedJSON = text.asPrettyPrintedJSON else {
+    guard let prettyPrintedJSON = text.prettyPrintedJSON else {
       return
     }
 
@@ -87,6 +87,7 @@ class EditorViewModel: ObservableObject {
             let data = urlData,
             let json = data.asPrettyPrintedJSON
           else {
+          guard let data = urlData, let json = data.prettyPrintedJSON else {
             return
           }
 

@@ -5,7 +5,8 @@
 import Foundation
 
 extension Data {
-  var asPrettyPrintedJSON: String? {
+  /// Converts the `Data` to a pretty printed JSON `String`.
+  var prettyPrintedJSON: String? {
     guard
       let jsonObject = try? JSONSerialization.jsonObject(with: self, options: []),
       let jsonData = try? JSONSerialization.data(withJSONObject: jsonObject, options: [.prettyPrinted]),
