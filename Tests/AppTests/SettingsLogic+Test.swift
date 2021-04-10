@@ -36,7 +36,7 @@ class SettingsLogicTests: XCTestCase {
   func testSettingsFileCreationAtWorkspaceRoot() {
     XCTAssertFalse(FileManager.default.fileExists(atPath: Logic.Settings.serverConfigurationFileName))
     UserDefaults.standard.set(Self.temporaryWorkspaceURL, forKey: UserDefaultKey.workspaceURL)
-    try? Logic.Settings.createConfiguration()
+    try? Logic.Settings.updateServerConfigurationFile(ServerConnectionConfiguration())
     XCTAssertTrue(FileManager.default.fileExists(atPath: configurationFilePath))
   }
 
@@ -44,7 +44,7 @@ class SettingsLogicTests: XCTestCase {
   func testSettingsFileCreationFailsWithoutWorkspaceRoot() {
     UserDefaults.standard.set(nil, forKey: UserDefaultKey.workspaceURL)
     do {
-      try Logic.Settings.createConfiguration()
+      try Logic.Settings.updateServerConfigurationFile(ServerConnectionConfiguration())
       XCTFail("Was expecting the test to fail, but succeeded instead")
     } catch {
       guard case .workspacePathDoesNotExist = error as? MockaError else {
