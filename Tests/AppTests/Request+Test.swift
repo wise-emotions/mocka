@@ -8,6 +8,7 @@ import XCTest
 @testable import MockaServer
 
 class RequestTests: XCTestCase {
+  // Test request is created properly using code that has no body.
   func testNoContentRequestCodeCreation() {
     let request = MockaApp.Request(
       path: ["api", "test"],
@@ -27,6 +28,7 @@ class RequestTests: XCTestCase {
     XCTAssertEqual(request.expectedResponse.fileName, nil)
   }
 
+  // Test request is created properly using code that has a body.
   func testJSONContentRequestCodeCreation() {
     let request = MockaApp.Request(
       path: ["api", "test"],
@@ -34,7 +36,7 @@ class RequestTests: XCTestCase {
       expectedResponse: Response(
         statusCode: 200,
         contentType: .applicationJSON,
-        headers: [.init(key: "Content-Type", value: "application/json")]
+        headers: [HTTPHeader(key: "Content-Type", value: "application/json")]
       )
     )
 
@@ -42,10 +44,11 @@ class RequestTests: XCTestCase {
     XCTAssertEqual(request.method, .get)
     XCTAssertEqual(request.expectedResponse.statusCode, 200)
     XCTAssertEqual(request.expectedResponse.contentType, .applicationJSON)
-    XCTAssertEqual(request.expectedResponse.headers, [.init(key: "Content-Type", value: "application/json")])
+    XCTAssertEqual(request.expectedResponse.headers, [HTTPHeader(key: "Content-Type", value: "application/json")])
     XCTAssertEqual(request.expectedResponse.fileName, "response.json")
   }
 
+  // Test that the request is properly encoded with the right param names.
   func testRequestEncoding() {
     let request = MockaApp.Request(
       path: ["api", "test"],
@@ -53,7 +56,7 @@ class RequestTests: XCTestCase {
       expectedResponse: Response(
         statusCode: 200,
         contentType: .applicationJSON,
-        headers: [.init(key: "Content-Type", value: "application/json")]
+        headers: [HTTPHeader(key: "Content-Type", value: "application/json")]
       )
     )
 
@@ -85,6 +88,7 @@ class RequestTests: XCTestCase {
     XCTAssertEqual(String(data: encodedRequest, encoding: .utf8), expectedOutput)
   }
 
+  // Test a request is properly decoded given a data.
   func testRequestDecoding() {
     let expectedOutput = MockaApp.Request(
       path: ["api", "test"],
@@ -92,7 +96,7 @@ class RequestTests: XCTestCase {
       expectedResponse: Response(
         statusCode: 200,
         contentType: .applicationJSON,
-        headers: [.init(key: "Content-Type", value: "application/json")]
+        headers: [HTTPHeader(key: "Content-Type", value: "application/json")]
       )
     )
 

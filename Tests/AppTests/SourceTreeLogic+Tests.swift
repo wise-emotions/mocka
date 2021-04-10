@@ -100,7 +100,7 @@ class SourceTreeLogicTests: XCTestCase {
       expectedResponse: Response(
         statusCode: 200,
         contentType: .applicationJSON,
-        headers: [.init(key: "Content-Type", value: "application/json")]
+        headers: [HTTPHeader(key: "Content-Type", value: "application/json")]
       )
     )
 
@@ -149,7 +149,9 @@ extension SourceTreeLogicTests {
       )
     )
 
-    let data = try! JSONEncoder().encode(request)
+    let encoder = JSONEncoder()
+    encoder.outputFormatting = .prettyPrinted
+    let data = try! encoder.encode(request)
     let requestFilePath = url.appendingPathComponent("request.json", isDirectory: false)
     try! String(data: data, encoding: .utf8)!.write(toFile: requestFilePath.path, atomically: true, encoding: String.Encoding.utf8)
   }
@@ -166,11 +168,13 @@ extension SourceTreeLogicTests {
       expectedResponse: Response(
         statusCode: 200,
         contentType: .applicationJSON,
-        headers: [.init(key: "Content-Type", value: "application/json")]
+        headers: [HTTPHeader(key: "Content-Type", value: "application/json")]
       )
     )
 
-    let data = try! JSONEncoder().encode(request)
+    let encoder = JSONEncoder()
+    encoder.outputFormatting = .prettyPrinted
+    let data = try! encoder.encode(request)
     let requestFilePath = url.appendingPathComponent("request.json", isDirectory: false)
     try! String(data: data, encoding: .utf8)!.write(toFile: requestFilePath.path, atomically: true, encoding: String.Encoding.utf8)
 
