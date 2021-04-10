@@ -24,7 +24,7 @@ class SettingsLogicTests: XCTestCase {
     temporaryWorkspaceURL = URL(fileURLWithPath: NSTemporaryDirectory().appending("Mocka"))
     try? FileManager.default.createDirectory(atPath: temporaryWorkspaceURL.path, withIntermediateDirectories: true, attributes: nil)
   }
-
+  
   override func tearDown() {
     try? FileManager.default.removeItem(at: temporaryWorkspaceURL)
     UserDefaults.standard.set(nil, forKey: UserDefaultKey.workspaceURL)
@@ -48,8 +48,10 @@ class SettingsLogicTests: XCTestCase {
   // Test `isWorkspaceURLValid` returns false because it cannot find the serverConfiguration file in `workspaceURL`.
   func testIsWorkspaceURLValidReturnsFalseForMissingServerConfiguration() {
     XCTAssertFalse(Logic.Settings.isWorkspaceURLValid)
-    XCTAssertFalse(FileManager.default.fileExists(
-                    atPath: temporaryWorkspaceURL.appendingPathComponent(Logic.Settings.serverConfigurationFileName, isDirectory: false).path)
+    XCTAssertFalse(
+      FileManager.default.fileExists(
+        atPath: temporaryWorkspaceURL.appendingPathComponent(Logic.Settings.serverConfigurationFileName, isDirectory: false).path
+      )
     )
   }
 
