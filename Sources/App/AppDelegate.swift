@@ -4,7 +4,7 @@
 
 import AppKit
 
-class AppDelegate: NSObject, NSApplicationDelegate {
+final class AppDelegate: NSObject, NSApplicationDelegate {
   func applicationDidFinishLaunching(_ notification: Notification) {
     // Disable the Tab Bar feature.
     disableTabBar()

@@ -6,8 +6,8 @@ import SwiftUI
 
 /// The key-value table structure.
 struct KeyValueTable: View {
-  /// List of key-value items.
-  var keyValueItems: [KeyValueItem]
+  /// The associated ViewModel.
+  @ObservedObject var viewModel: KeyValueTableViewModel
 
   var body: some View {
     VStack {
@@ -15,10 +15,28 @@ struct KeyValueTable: View {
 
       ScrollView {
         LazyVStack(spacing: 0) {
-          ForEach(Array(keyValueItems.enumerated()), id: \.offset) { index, item in
-            KeyValueTableRow(item: item, index: index)
+          ForEach(Array(viewModel.keyValueItems.enumerated()), id: \.offset) { index, item in
+            KeyValueTableRow(
+              item: item,
+              mode: viewModel.mode,
+              index: index
+            )
           }
         }
+      }
+
+      if viewModel.mode == .write {
+        HStack {
+          Spacer()
+
+          SymbolButton(
+            symbolName: .plusCircle,
+            action: {
+              viewModel.keyValueItems.append(KeyValueItem(key: "", value: ""))
+            }
+          )
+        }
+        .frame(minWidth: 20, maxWidth: .infinity)
       }
     }
     .padding()
@@ -27,20 +45,30 @@ struct KeyValueTable: View {
 }
 
 struct KeyValueTablePreviews: PreviewProvider {
+  static let rows = [KeyValueItem](
+    repeating: KeyValueItem(
+      key: "Hello",
+      value: "World"
+    ),
+    count: 10
+  )
+
   static var previews: some View {
-    KeyValueTable(keyValueItems: [
-      KeyValueItem(key: "Test", value: "Test"),
-      KeyValueItem(key: "Test2", value: "Test2"),
-      KeyValueItem(key: "Test3", value: "Test3\nTest4\nTest5"),
-    ])
+    KeyValueTable(
+      viewModel: KeyValueTableViewModel(
+        keyValueItems: rows,
+        mode: .write
+      )
+    )
   }
 }
 
 struct KeyValueTableLibraryContent: LibraryContentProvider {
   let keyValueItems: [KeyValueItem] = []
+  let mode: KeyValueTableViewModel.Mode = .read
 
   @LibraryContentBuilder
   var views: [LibraryItem] {
-    LibraryItem(KeyValueTable(keyValueItems: keyValueItems))
+    LibraryItem(KeyValueTable(viewModel: KeyValueTableViewModel(keyValueItems: keyValueItems, mode: mode)))
   }
 }

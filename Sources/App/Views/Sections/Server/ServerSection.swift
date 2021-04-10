@@ -15,10 +15,11 @@ struct ServerSection: View {
     NavigationView {
       Sidebar(selectedSection: $appEnvironment.selectedSection)
 
-      ServerList(networkExchanges: .constant([]))
+      ServerList(viewModel: ServerListViewModel(networkExchangesPublisher: appEnvironment.server.networkExchangesPublisher))
 
       ServerDetail()
     }
+    .background(Color.doppio)
   }
 }
 

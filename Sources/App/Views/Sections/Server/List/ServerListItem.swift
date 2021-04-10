@@ -7,50 +7,38 @@ import SwiftUI
 
 /// The server list item. To be used inside a `ServerList` element.
 struct ServerListItem: View {
-  /// The `HTTPMethod` of the request.
-  let httpMethod: HTTPMethod
-
-  /// The `HTTPStatus` of the response`
-  let httpStatus: UInt
-
-  /// The meaning of the respective status code.
-  let httpStatusMeaning: String
-
-  /// The timestamp of the response.
-  let timestamp: String
-
-  /// The path of the request.
-  let path: String
+  /// The `ViewModel` of the view.
+  let viewModel: ServerListItemViewModel
 
   var body: some View {
     HStack {
-      HTTPStatusCodeEllipse(httpStatus: httpStatus)
+      HTTPStatusCodeEllipse(httpStatus: viewModel.networkExchange.response.status.code)
         .padding(.leading, 8)
 
       VStack(alignment: .leading, spacing: 10) {
         HStack {
-          Text(httpMethod.rawValue)
+          Text(viewModel.networkExchange.request.httpMethod.rawValue)
             .font(.system(size: 12, weight: .bold))
             .padding(8)
             .frame(height: 20)
             .background(Color.ristretto)
             .cornerRadius(100)
             .foregroundColor(.latte)
-            .frame(width: 77, alignment: .leading)
-          Text(path)
+            .frame(alignment: .leading)
+          Text(viewModel.networkExchange.request.uri.path)
             .font(.system(size: 12))
             .foregroundColor(.latte)
             .padding(.trailing, 8)
         }
         HStack(spacing: 4) {
-          Text(String(httpStatus))
+          Text(String(viewModel.networkExchange.response.status.code))
             .font(.system(size: 11, weight: .bold))
             .foregroundColor(.macchiato)
-          Text(httpStatusMeaning)
+          Text(viewModel.networkExchange.response.status.reasonPhrase)
             .font(.system(size: 11))
             .foregroundColor(.macchiato)
           Spacer()
-          Text(timestamp)
+          Text(viewModel.networkExchange.response.timestamp.timestampPrint)
             .font(.system(size: 11))
             .foregroundColor(.macchiato)
             .padding(.trailing, 4)
@@ -59,33 +47,23 @@ struct ServerListItem: View {
       .padding(EdgeInsets(top: 20, leading: 0, bottom: 8, trailing: 8))
     }
     .background(Color.lungo)
-    .clipShape(RoundedRectangle(cornerRadius: 5))
+    .cornerRadius(5)
   }
 }
 
 struct ItemPreviews: PreviewProvider {
   static var previews: some View {
-    ServerListItem(httpMethod: .connect, httpStatus: 200, httpStatusMeaning: "Ok", timestamp: "09:41:00.000", path: "/api/v1/list")
+    ServerListItem(viewModel: ServerListItemViewModel(networkExchange: NetworkExchange.mock))
   }
 }
 
 struct ItemLibraryContent: LibraryContentProvider {
-  let httpMethod: HTTPMethod = .get
-  let httpStatus: UInt = 200
-  let httpStatusMeaning = "Ok"
-  let timestamp = "09:41:00.000"
-  let path = "/api/v1/list"
+  let viewModel: ServerListItemViewModel = ServerListItemViewModel(networkExchange: NetworkExchange.mock)
 
   @LibraryContentBuilder
   var views: [LibraryItem] {
     LibraryItem(
-      ServerListItem(
-        httpMethod: httpMethod,
-        httpStatus: httpStatus,
-        httpStatusMeaning: httpStatusMeaning,
-        timestamp: timestamp,
-        path: path
-      )
+      ServerListItem(viewModel: ServerListItemViewModel(networkExchange: NetworkExchange.mock))
     )
   }
 }
