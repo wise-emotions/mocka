@@ -24,7 +24,7 @@ class SettingsLogicTests: XCTestCase {
     temporaryWorkspaceURL = URL(fileURLWithPath: NSTemporaryDirectory().appending("Mocka"))
     try? FileManager.default.createDirectory(atPath: temporaryWorkspaceURL.path, withIntermediateDirectories: true, attributes: nil)
   }
-  
+
   override func tearDown() {
     try? FileManager.default.removeItem(at: temporaryWorkspaceURL)
     UserDefaults.standard.set(nil, forKey: UserDefaultKey.workspaceURL)
