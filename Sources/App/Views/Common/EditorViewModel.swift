@@ -3,6 +3,7 @@
 //
 
 import SwiftUI
+import UniformTypeIdentifiers
 
 /// The ViewModel of the `Editor`.
 class EditorViewModel: ObservableObject {
@@ -80,13 +81,9 @@ class EditorViewModel: ObservableObject {
     }
 
     provider.loadDataRepresentation(
-      forTypeIdentifier: "public.file-url",
+      forTypeIdentifier: UTType.fileURL.identifier,
       completionHandler: { urlData, error in
         DispatchQueue.main.async { [weak self] in
-          guard
-            let data = urlData,
-            let json = data.asPrettyPrintedJSON
-          else {
           guard let data = urlData, let json = data.prettyPrintedJSON else {
             return
           }

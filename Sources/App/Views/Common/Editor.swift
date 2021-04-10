@@ -28,7 +28,7 @@ struct Editor: View {
           }
           .fileImporter(
             isPresented: $viewModel.fileImporterIsPresented,
-            allowedContentTypes: [UTType.json],
+            allowedContentTypes: [.html, .css, .csv, .text, .json, .xml],
             allowsMultipleSelection: false,
             onCompletion: viewModel.importFile(from:)
           )
@@ -48,7 +48,7 @@ struct Editor: View {
       }
     }
     .onDrop(
-      of: ["public.file-url"],
+      of: [UTType.fileURL.identifier],
       isTargeted: $viewModel.isDraggingOver,
       perform: viewModel.handleOnDrop(providers:)
     )
