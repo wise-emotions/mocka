@@ -21,6 +21,7 @@ extension RequestInfoView {
               .textFieldStyle(PlainTextFieldStyle())
               .font(.system(size: 13, weight: .regular, design: .default))
               .foregroundColor(Color.latte)
+              .contextMenuCopy(viewModel.urlString)
           }
 
           if viewModel.isQuerySectionVisible {

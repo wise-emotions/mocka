@@ -20,6 +20,7 @@ struct ServerRequestDetailHeaderView: View {
           .font(.system(size: 13))
           .foregroundColor(Color.latte)
           .fixedSize(horizontal: false, vertical: true)
+          .contextMenuCopy(viewModel.urlString)
       }
       HStack(spacing: 10) {
         HTTPStatusCodeEllipse(httpStatus: viewModel.httpStatus)

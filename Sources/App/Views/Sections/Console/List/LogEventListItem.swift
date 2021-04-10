@@ -33,6 +33,7 @@ struct LogEventListItem: View {
         .font(.system(size: 16, weight: .regular, design: .default))
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.leading, 32)
+        .contextMenuCopy(viewModel.logEvent.message)
     }
     .padding(.vertical, 4)
     .frame(minHeight: 26)
