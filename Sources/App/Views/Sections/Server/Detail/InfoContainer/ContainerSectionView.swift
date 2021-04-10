@@ -16,9 +16,9 @@ extension RequestInfoView {
       ScrollView {
         LazyVStack(alignment: .leading, spacing: 24) {
           RequestInfoViewSectionView(title: "URL") {
-            TextField(viewModel.path, text: .constant(viewModel.path))
+            Text(viewModel.urlString)
               .padding()
-              .textFieldStyle(PlainTextFieldStyle())
+              .frame(minWidth: 100, maxWidth: .infinity, alignment: .leading)
               .font(.system(size: 13, weight: .regular, design: .default))
               .foregroundColor(Color.latte)
               .contextMenuCopy(viewModel.urlString)
@@ -36,14 +36,17 @@ extension RequestInfoView {
             }
           }
 
-          RequestInfoViewSectionView(title: "Body") {
-            TextEditor(text: .constant(viewModel.body))
-              .padding()
-              .font(.system(size: 13, weight: .regular, design: .default))
-              .foregroundColor(Color.latte)
+          if viewModel.isBodySectionVisible {
+            RequestInfoViewSectionView(title: "Body") {
+              TextEditor(text: .constant(viewModel.body))
+                .padding()
+                .font(.system(size: 13, weight: .regular, design: .default))
+                .foregroundColor(Color.latte)
+            }
           }
         }
-        .padding()
+        .padding(.horizontal)
+        .padding(.bottom)
       }
     }
   }

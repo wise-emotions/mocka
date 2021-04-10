@@ -14,13 +14,19 @@ struct ServerDetail: View {
       Divider()
 
       if let viewModel = viewModel {
-        RequestInfoView(viewModel: RequestInfoViewModel(networkExchange: viewModel.networkExchange))
+        ServerRequestDetailHeaderView(
+          viewModel: ServerRequestDetailHeaderViewModel(
+            networkExchange: viewModel.networkExchange
+          )
+        )
+
+        RequestInfoView(
+          viewModel: RequestInfoViewModel(
+            networkExchange: viewModel.networkExchange
+          )
+        )
       } else {
-        Spacer()
-
-        Text("Tap an API call on the list on the left")
-
-        Spacer()
+        EmptyState(symbol: .tableCells, text: "Tap an API call on the left to see its details here")
       }
     }
     .frame(minWidth: Size.minimumDetailWidth)

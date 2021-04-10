@@ -25,10 +25,11 @@ struct ServerListItem: View {
             .cornerRadius(100)
             .foregroundColor(.latte)
             .frame(alignment: .leading)
-          Text(viewModel.networkExchange.request.uri.path)
+          Text(viewModel.networkExchange.request.uri.string)
             .font(.system(size: 12))
             .foregroundColor(.latte)
             .padding(.trailing, 8)
+            .frame(height: 16)
         }
         HStack(spacing: 4) {
           Text(String(viewModel.networkExchange.response.status.code))

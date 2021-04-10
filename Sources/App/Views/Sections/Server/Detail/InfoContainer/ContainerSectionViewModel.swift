@@ -29,14 +29,14 @@ extension RequestInfoViewModel {
       networkExchange.response
     }
 
-    /// The Path of the response or request.
-    var path: String {
+    /// The URL of the response or request.
+    var urlString: String {
       switch kind {
       case .request:
-        return request.uri.path
+        return request.uri.string
 
       case .response:
-        return response.uri.path
+        return response.uri.string
       }
     }
 
@@ -58,7 +58,7 @@ extension RequestInfoViewModel {
 
     /// The body of the request or response.
     var body: String {
-      formattedBody(for: kind) ?? "Invalid body"
+      formattedBody(for: kind) ?? ""
     }
 
     /// Whether the Query section is visible or not.
@@ -69,6 +69,11 @@ extension RequestInfoViewModel {
     /// Whether the Headers section is visible or not.
     var isHeadersSectionVisible: Bool {
       !headers.isEmpty
+    }
+
+    /// Whether the Body section is visible or not.
+    var isBodySectionVisible: Bool {
+      !body.isEmpty
     }
     
     // MARK: - Functions
