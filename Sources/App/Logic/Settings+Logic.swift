@@ -11,6 +11,9 @@ extension Logic {
 }
 
 extension Logic.Settings {
+  /// The name of the file containing the server's configuration.
+  internal static let serverConfigurationFileName = "serverConfiguration.json"
+  
   /// /// Create a server configuration file, if one does not already exist at the workspace root folder.
   /// - Throws: `MockaError.workspacePathDoesNotExist`,
   ///           `MockaError.failedToEncode`.
@@ -42,9 +45,6 @@ extension Logic.Settings {
 }
 
 private extension Logic.Settings {
-  /// The name of the file containing the server's configuration.
-  private static let serverConfigurationFileName = "serverConfiguration.json"
-
   /// Checks if the passed path includes a server configuration file.
   /// - Parameter path: The `URL` where the configuration file is present.
   /// - Returns: Returns `true` if the server configuration file exist, otherwise `false`.

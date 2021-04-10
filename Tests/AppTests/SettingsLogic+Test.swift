@@ -10,12 +10,9 @@ class SettingsLogicTests: XCTestCase {
   // The `URL` of a temporary folder we will use for this test.
   static var temporaryWorkspaceURL: URL!
 
-  // The name of the configuration file that will be created.
-  private let configurationFileName = "serverConfiguration.json"
-
   // The full path where the configuration file should be present.
   private var configurationFilePath: String {
-    Self.temporaryWorkspaceURL.appendingPathComponent(configurationFileName).path
+    Self.temporaryWorkspaceURL.appendingPathComponent(Logic.Settings.serverConfigurationFileName).path
   }
 
   override class func setUp() {
@@ -30,7 +27,7 @@ class SettingsLogicTests: XCTestCase {
 
   // Test that the creation of the server configuration file occurs at the root path.
   func testSettingsFileCreationAtWorkspaceRoot() {
-    XCTAssertFalse(FileManager.default.fileExists(atPath: configurationFileName))
+    XCTAssertFalse(FileManager.default.fileExists(atPath: Logic.Settings.serverConfigurationFileName))
     UserDefaults.standard.set(Self.temporaryWorkspaceURL, forKey: UserDefaultKey.workspaceURL)
     try? Logic.Settings.createConfiguration()
     XCTAssertTrue(FileManager.default.fileExists(atPath: configurationFilePath))

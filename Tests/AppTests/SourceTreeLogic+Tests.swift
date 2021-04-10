@@ -10,12 +10,9 @@ class SourceTreeLogicTests: XCTestCase {
   // The `URL` of a temporary folder we will use for this test.
   static var temporaryWorkspaceURL: URL!
 
-  // The name of the configuration file that will be created.
-  private let configurationFileName = "serverConfiguration.json"
-
   // The full path where the configuration file should be present.
   private var configurationFilePath: String {
-    Self.temporaryWorkspaceURL.appendingPathComponent(configurationFileName).path
+    Self.temporaryWorkspaceURL.appendingPathComponent(Logic.Settings.serverConfigurationFileName).path
   }
 
   override class func setUp() {
