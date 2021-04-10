@@ -8,6 +8,9 @@ import UniformTypeIdentifiers
 /// The startup settings view.
 /// This view is shown in case the `workspaceURL` doesn't exist.
 struct StartupSettings: View {
+
+  // MARK: - Stored Properties
+
   /// A binding to the current presentation mode of the view associated with this environment.
   @Environment(\.presentationMode) var presentationMode
 
@@ -16,6 +19,8 @@ struct StartupSettings: View {
 
   /// The associated ViewModel.
   @StateObject var viewModel = StartupSettingsViewModel()
+
+  // MARK: - Body
 
   var body: some View {
     let workspacePathBinding = Binding {
@@ -104,7 +109,9 @@ struct StartupSettings: View {
   }
 }
 
-struct SettingsPreviews: PreviewProvider {
+// MARK: - Previews
+
+struct StartupSettingsPreviews: PreviewProvider {
   static var previews: some View {
     StartupSettings()
   }

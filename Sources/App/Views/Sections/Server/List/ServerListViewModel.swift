@@ -15,7 +15,7 @@ final class ServerListViewModel: ObservableObject {
   @Published var filterText: String = ""
 
   /// The array of `NetworkExchange`s.
-  @Published private var networkExchanges: [NetworkExchange] = []
+  @Published var networkExchanges: [NetworkExchange] = []
 
   /// The `Set` containing the list of subscriptions.
   var subscriptions = Set<AnyCancellable>()
@@ -28,7 +28,7 @@ final class ServerListViewModel: ObservableObject {
       return networkExchanges
     } else {
       return networkExchanges.filter {
-        $0.request.uri.path.lowercased().contains(filterText.lowercased())
+        $0.request.uri.string.lowercased().contains(filterText.lowercased())
           || $0.request.httpMethod.rawValue.lowercased().contains(filterText.lowercased())
           || String($0.response.status.code).contains(filterText.lowercased())
       }

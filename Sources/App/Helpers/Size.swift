@@ -23,7 +23,7 @@ enum Size {
 
   /// Minimum Filter text field width.
   static var minimumFilterTextFieldWidth: CGFloat {
-    minimumListWidth - 130
+    minimumListWidth - 140
   }
 
   /// Minimum App section width.

@@ -8,8 +8,13 @@ import UniformTypeIdentifiers
 /// The editor view.
 /// Used to edit an API body.
 struct Editor: View {
+
+  // MARK: - Stored Properties
+
   /// The associated ViewModel.
   @StateObject var viewModel = EditorViewModel()
+
+  // MARK: - Body
 
   var body: some View {
     ZStack {
@@ -54,6 +59,8 @@ struct Editor: View {
     )
   }
 }
+
+// MARK: - Previews
 
 struct EditorPreviews: PreviewProvider {
   static var previews: some View {

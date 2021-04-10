@@ -6,6 +6,9 @@ import SwiftUI
 
 /// The row of the `KeyValueTable`.
 struct KeyValueTableRow: View {
+
+  // MARK: - Stored Properties
+
   /// The item to show inside the row.
   @State var item: KeyValueItem
 
@@ -16,14 +19,26 @@ struct KeyValueTableRow: View {
   /// The index of the item.
   var index: Int
 
+  // MARK: - Body
+
   var body: some View {
     HStack {
       Group {
-        TextField(item.key, text: $item.key)
-          .disabled(mode == .read)
+        switch mode {
+        case .read:
+          Text(item.key)
+            .contextMenuCopy(item.key)
 
-        TextField(item.value, text: $item.value)
-          .disabled(mode == .read)
+          Text(item.value)
+            .contextMenuCopy(item.value)
+
+        case .write:
+          TextField(item.key, text: $item.key)
+            .contextMenuCopy(item.key)
+
+          TextField(item.value, text: $item.value)
+            .contextMenuCopy(item.value)
+        }
       }
       .frame(maxWidth: .infinity, alignment: .leading)
       .padding(EdgeInsets(top: 6, leading: 10, bottom: 6, trailing: 10))
@@ -34,6 +49,8 @@ struct KeyValueTableRow: View {
     .cornerRadius(5)
   }
 }
+
+// MARK: - Previews
 
 struct KeyValueTableRowPreviews: PreviewProvider {
   static var previews: some View {

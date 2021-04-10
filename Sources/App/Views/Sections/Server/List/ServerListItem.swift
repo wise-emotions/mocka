@@ -7,8 +7,13 @@ import SwiftUI
 
 /// The server list item. To be used inside a `ServerList` element.
 struct ServerListItem: View {
+
+  // MARK: - Stored Properties
+
   /// The `ViewModel` of the view.
   let viewModel: ServerListItemViewModel
+
+  // MARK: - Body
 
   var body: some View {
     HStack {
@@ -17,27 +22,26 @@ struct ServerListItem: View {
 
       VStack(alignment: .leading, spacing: 10) {
         HStack {
-          Text(viewModel.networkExchange.request.httpMethod.rawValue)
-            .font(.system(size: 12, weight: .bold))
-            .padding(8)
-            .frame(height: 20)
-            .background(Color.ristretto)
-            .cornerRadius(100)
-            .foregroundColor(.latte)
-            .frame(alignment: .leading)
-          Text(viewModel.networkExchange.request.uri.path)
+          TextPill(text: viewModel.networkExchange.request.httpMethod.rawValue)
+
+          Text(viewModel.networkExchange.request.uri.string)
             .font(.system(size: 12))
             .foregroundColor(.latte)
             .padding(.trailing, 8)
+            .frame(height: 16)
         }
+
         HStack(spacing: 4) {
           Text(String(viewModel.networkExchange.response.status.code))
             .font(.system(size: 11, weight: .bold))
             .foregroundColor(.macchiato)
+
           Text(viewModel.networkExchange.response.status.reasonPhrase)
             .font(.system(size: 11))
             .foregroundColor(.macchiato)
+
           Spacer()
+
           Text(viewModel.networkExchange.response.timestamp.timestampPrint)
             .font(.system(size: 11))
             .foregroundColor(.macchiato)
@@ -51,19 +55,10 @@ struct ServerListItem: View {
   }
 }
 
+// MARK: - Previews
+
 struct ItemPreviews: PreviewProvider {
   static var previews: some View {
     ServerListItem(viewModel: ServerListItemViewModel(networkExchange: NetworkExchange.mock))
-  }
-}
-
-struct ItemLibraryContent: LibraryContentProvider {
-  let viewModel: ServerListItemViewModel = ServerListItemViewModel(networkExchange: NetworkExchange.mock)
-
-  @LibraryContentBuilder
-  var views: [LibraryItem] {
-    LibraryItem(
-      ServerListItem(viewModel: ServerListItemViewModel(networkExchange: NetworkExchange.mock))
-    )
   }
 }

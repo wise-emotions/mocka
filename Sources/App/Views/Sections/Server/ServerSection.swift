@@ -8,8 +8,13 @@ import SwiftUI
 /// This is the server section of the app.
 /// It shows the list of the `NetworkExchange`s and its details.
 struct ServerSection: View {
+
+  // MARK: - Stored Properties
+
   /// The app environment object.
   @EnvironmentObject var appEnvironment: AppEnvironment
+
+  // MARK: - Body
 
   var body: some View {
     NavigationView {
@@ -22,6 +27,8 @@ struct ServerSection: View {
     .background(Color.doppio)
   }
 }
+
+// MARK: - Previews
 
 struct ServerSectionPreview: PreviewProvider {
   static var previews: some View {

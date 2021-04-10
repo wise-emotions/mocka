@@ -6,6 +6,9 @@ import SwiftUI
 
 /// The header of the `KeyValueTable`.
 struct KeyValueTableHeader: View {
+
+  // MARK: - Body
+
   var body: some View {
     HStack {
       Group {
@@ -19,6 +22,8 @@ struct KeyValueTableHeader: View {
     }
   }
 }
+
+// MARK: - Previews
 
 struct KeyValueTableHeaderPreviews: PreviewProvider {
   static var previews: some View {
