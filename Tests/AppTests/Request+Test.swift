@@ -8,6 +8,9 @@ import XCTest
 @testable import MockaServer
 
 class RequestTests: XCTestCase {
+
+  // MARK: Tests
+
   // Test request is created properly using code that has no body.
   func testNoContentRequestCodeCreation() {
     let request = MockaApp.Request(

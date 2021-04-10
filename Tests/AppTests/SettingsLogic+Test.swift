@@ -7,6 +7,9 @@ import XCTest
 @testable import MockaApp
 
 class SettingsLogicTests: XCTestCase {
+
+  // MARK: Variables
+
   // The `URL` of a temporary folder we will use for this test.
   static var temporaryWorkspaceURL: URL!
 
@@ -14,6 +17,8 @@ class SettingsLogicTests: XCTestCase {
   private var configurationFilePath: String {
     Self.temporaryWorkspaceURL.appendingPathComponent(Logic.Settings.serverConfigurationFileName).path
   }
+
+  // MARK: Set up and tear down
 
   override class func setUp() {
     temporaryWorkspaceURL = URL(fileURLWithPath: NSTemporaryDirectory().appending("Mocka"))
@@ -25,6 +30,8 @@ class SettingsLogicTests: XCTestCase {
     UserDefaults.standard.set(nil, forKey: UserDefaultKey.workspaceURL)
   }
 
+  // MARK: Tests
+  
   // Test that the creation of the server configuration file occurs at the root path.
   func testSettingsFileCreationAtWorkspaceRoot() {
     XCTAssertFalse(FileManager.default.fileExists(atPath: Logic.Settings.serverConfigurationFileName))
