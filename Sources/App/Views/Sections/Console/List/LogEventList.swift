@@ -24,7 +24,7 @@ struct LogEventList: View {
               LogEventListItem(
                 viewModel: LogEventListItemViewModel(
                   logEvent: event,
-                  isOddCell: !index.isMultiple(of: 2)
+                  isOddCell: index.isMultiple(of: 2)
                 )
               )
             }

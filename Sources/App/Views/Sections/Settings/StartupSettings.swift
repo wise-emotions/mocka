@@ -54,22 +54,15 @@ struct StartupSettings: View {
               .foregroundColor(.macchiato)
           }
 
-          Button(
-            action: {
-              viewModel.fileImporterIsPresented.toggle()
-            },
-            label: {
-              Text("Select folder")
-            }
-          )
+          Button("Select folder") {
+            viewModel.fileImporterIsPresented.toggle()
+          }
           .frame(height: 30)
           .fileImporter(
             isPresented: $viewModel.fileImporterIsPresented,
             allowedContentTypes: [UTType.folder],
             allowsMultipleSelection: false,
-            onCompletion: { result in
-              viewModel.selectFolder(with: result)
-            }
+            onCompletion: viewModel.selectFolder(with:)
           )
         }
 
