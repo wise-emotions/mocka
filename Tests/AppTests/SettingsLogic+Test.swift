@@ -48,8 +48,9 @@ class SettingsLogicTests: XCTestCase {
   // Test `isWorkspaceURLValid` returns false because it cannot find the serverConfiguration file in `workspaceURL`.
   func testIsWorkspaceURLValidReturnsFalseForMissingServerConfiguration() {
     XCTAssertFalse(Logic.Settings.isWorkspaceURLValid)
-    XCTAssertFalse(FileManager.default.fileExists(
-                    atPath: temporaryWorkspaceURL.appendingPathComponent(Logic.Settings.serverConfigurationFileName, isDirectory: false).path)
+    XCTAssertFalse(
+      FileManager.default.fileExists(
+        atPath: temporaryWorkspaceURL.appendingPathComponent(Logic.Settings.serverConfigurationFileName, isDirectory: false).path)
     )
   }
 
@@ -81,7 +82,7 @@ class SettingsLogicTests: XCTestCase {
     contents = FileManager.default.contents(
       atPath: temporaryWorkspaceURL.appendingPathComponent(Logic.Settings.serverConfigurationFileName, isDirectory: false).path
     )
-    
+
     let newConfiguration = try! JSONDecoder().decode(ServerConnectionConfiguration.self, from: contents!)
     XCTAssertEqual(newConfiguration.hostname, "localhost")
     XCTAssertEqual(newConfiguration.port, 3000)

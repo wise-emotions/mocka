@@ -48,7 +48,6 @@ extension Logic {
 
 extension Logic.Settings {
 
-
   /// Updates the server configuration file or creates it at the workspace root folder.
   /// - Throws: `MockaError.workspacePathDoesNotExist`,
   ///           `MockaError.failedToEncode`.
