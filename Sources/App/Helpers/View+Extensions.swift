@@ -73,10 +73,12 @@ extension View {
   /// - Returns: Returns the `View` with the applied modifier.
   @ViewBuilder func contextMenuCopy(_ string: String) -> some View {
     self.contextMenu {
-      Button(action: {
-        NSPasteboard.general.clearContents()
-        NSPasteboard.general.setString(string, forType: .string)
-      }) {
+      Button(
+        action: {
+          NSPasteboard.general.clearContents()
+          NSPasteboard.general.setString(string, forType: .string)
+        }
+      ) {
         Text("Copy Value")
       }
     }
