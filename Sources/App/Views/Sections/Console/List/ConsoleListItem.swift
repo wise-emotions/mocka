@@ -6,9 +6,14 @@ import MockaServer
 import SwiftUI
 
 /// The view that displays a `LogEvent`.
-struct LogEventListItem: View {
+struct ConsoleListItem: View {
+
+  // MARK: - Stored Properties
+
   /// The `ViewModel` of the view.
-  let viewModel: LogEventListItemViewModel
+  let viewModel: ConsoleListItemViewModel
+
+  // MARK: - Body
 
   var body: some View {
     HStack {
@@ -43,25 +48,27 @@ struct LogEventListItem: View {
   }
 }
 
-struct LogEventListItemPreviews: PreviewProvider {
+// MARK: - Previews
+
+struct ConsoleListItemPreviews: PreviewProvider {
   static var previews: some View {
     Group {
-      LogEventListItem(
-        viewModel: LogEventListItemViewModel(
+      ConsoleListItem(
+        viewModel: ConsoleListItemViewModel(
           logEvent: LogEvent(level: .debug, message: "Server started\non 2 lines"),
           isOddCell: false
         )
       )
 
-      LogEventListItem(
-        viewModel: LogEventListItemViewModel(
+      ConsoleListItem(
+        viewModel: ConsoleListItemViewModel(
           logEvent: LogEvent(level: .warning, message: "Server started"),
           isOddCell: true
         )
       )
 
-      LogEventListItem(
-        viewModel: LogEventListItemViewModel(
+      ConsoleListItem(
+        viewModel: ConsoleListItemViewModel(
           logEvent: LogEvent(level: .error, message: "Server started"),
           isOddCell: false
         )

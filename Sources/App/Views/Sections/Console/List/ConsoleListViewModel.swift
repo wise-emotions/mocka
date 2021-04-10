@@ -7,8 +7,8 @@ import Foundation
 import MockaServer
 import SwiftUI
 
-/// The `ViewModel` of the `ConsoleSection`.
-final class LogEventListViewModel: ObservableObject {
+/// The `ViewModel` of the `ConsoleList`.
+final class ConsoleListViewModel: ObservableObject {
 
   // MARK: - Stored Properties
 

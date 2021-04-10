@@ -6,12 +6,17 @@ import MockaServer
 import SwiftUI
 
 /// The view that displays a list of `LogEvent`s.
-struct LogEventList: View {
+struct ConsoleList: View {
+
+  // MARK: - Stored Properties
+
   /// The app environment object.
   @EnvironmentObject var appEnvironment: AppEnvironment
 
   /// The associated ViewModel.
-  @StateObject var viewModel: LogEventListViewModel
+  @StateObject var viewModel: ConsoleListViewModel
+
+  // MARK: - Body
 
   var body: some View {
     VStack {
@@ -24,8 +29,8 @@ struct LogEventList: View {
           ScrollViewReader { scrollView in
             LazyVStack {
               ForEach(Array(viewModel.filteredLogEvents.enumerated()), id: \.offset) { index, event in
-                LogEventListItem(
-                  viewModel: LogEventListItemViewModel(
+                ConsoleListItem(
+                  viewModel: ConsoleListItemViewModel(
                     logEvent: event,
                     isOddCell: index.isMultiple(of: 2)
                   )
@@ -70,7 +75,9 @@ struct LogEventList: View {
   }
 }
 
-struct LogEventListPreviews: PreviewProvider {
+// MARK: - Previews
+
+struct ConsoleListPreviews: PreviewProvider {
   static let events = [LogEvent](
     repeating: LogEvent(
       level: .critical,
@@ -80,10 +87,10 @@ struct LogEventListPreviews: PreviewProvider {
   )
 
   static var previews: some View {
-    LogEventList(viewModel: LogEventListViewModel(consoleLogsPublisher: events.publisher.eraseToAnyPublisher()))
+    ConsoleList(viewModel: ConsoleListViewModel(consoleLogsPublisher: events.publisher.eraseToAnyPublisher()))
       .environmentObject(AppEnvironment())
 
-    LogEventList(viewModel: LogEventListViewModel(consoleLogsPublisher: [].publisher.eraseToAnyPublisher()))
+    ConsoleList(viewModel: ConsoleListViewModel(consoleLogsPublisher: [].publisher.eraseToAnyPublisher()))
       .environmentObject(AppEnvironment())
   }
 }
