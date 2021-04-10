@@ -19,6 +19,7 @@ struct ServerSection: View {
 
       ServerDetail()
     }
+    .background(Color.doppio)
   }
 }
 
