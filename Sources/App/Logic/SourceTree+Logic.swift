@@ -8,17 +8,17 @@ import UniformTypeIdentifiers
 
 extension Logic {
   /// The logic related to the source tree starting at the root path and containing all the requests and responses.
-  struct SourceTree {
+  enum SourceTree {
     /// The resource keys for the infos to extract from a `URL`.
     /// `.nameKey` returns the name of the file.
     /// `.contentTypeKey` returns the type of the file. Example "public.json".
-    private let resourceKeys: Set<URLResourceKey> = [.nameKey, .contentTypeKey]
+    private static let resourceKeys: Set<URLResourceKey> = [.nameKey, .contentTypeKey]
 
     /// The allowed name for a file containing a request.
-    private let allowedRequestFileName = "request.json"
+    private static let allowedRequestFileName = "request.json"
 
     /// The regex the name of the folder should match to be allowed in the tree.
-    private var folderNameRegex: String {
+    private static var folderNameRegex: String {
       let allSupportedMethods = HTTPMethod.allCases
         .map {
           $0.rawValue
@@ -36,7 +36,7 @@ extension Logic.SourceTree {
   /// Enumerates the contents of a directory.
   /// - Parameter url: The `URL` of the directory to scan.
   /// - Returns: An array of `FileSystemNode` containing all sub-nodes of the directory.
-  func contents(of url: URL) -> [FileSystemNode] {
+  static func contents(of url: URL) -> [FileSystemNode] {
     guard
       let directoryEnumerator = FileManager.default.enumerator(
         at: url,
@@ -59,7 +59,7 @@ extension Logic.SourceTree {
   /// Fetches all the requests under the root workspace `URL`.
   /// - Throws: `MockaError.workspacePathDoesNotExist`
   /// - Returns: A `Set` containing all the found requests.
-  func requests() throws -> Set<MockaServer.Request> {
+  static func requests() throws -> Set<MockaServer.Request> {
     guard let rootPath = UserDefaults.standard.url(forKey: UserDefaultKey.workspaceURL) else {
       throw MockaError.workspacePathDoesNotExist
     }
@@ -79,7 +79,7 @@ extension Logic.SourceTree {
   /// Recursively looks up all the `Request`s in a `FileSystemNode` and its children.
   /// - Parameter node: The root `FileSystemNode`.
   /// - Returns: An array containing all the found requests.
-  private func allRequests(in node: FileSystemNode) -> [Request] {
+  private static func allRequests(in node: FileSystemNode) -> [Request] {
     var requests: [Request] = []
 
     switch node.kind {
@@ -98,7 +98,7 @@ extension Logic.SourceTree {
   /// Gets the filesystem node at the specified `URL`.
   /// - Parameter url: The `URL` of the node to retrieve.
   /// - Returns: A `FileSystemNode` representing the node at the specified `URL`.
-  private func node(at url: URL) -> FileSystemNode? {
+  private static func node(at url: URL) -> FileSystemNode? {
     guard let (name, contentType) = resourceValues(for: url) else {
       return nil
     }
@@ -116,7 +116,7 @@ extension Logic.SourceTree {
   /// - Parameter url: The `URL` of the folder node to retrieve.
   /// - Returns: A `FileSystemNode` representing the node at the specified `URL`.
   ///            `nil` if the `URL` doesn't point to a folder or the folder is not valid.
-  private func folderNode(for url: URL) -> FileSystemNode? {
+  private static func folderNode(for url: URL) -> FileSystemNode? {
     guard let (name, contentType) = resourceValues(for: url), contentType == .folder else {
       return nil
     }
@@ -144,7 +144,7 @@ extension Logic.SourceTree {
   /// Returns informations about the specified `URL`.
   /// - Parameter url: The `URL` to retrieve information from.
   /// - Returns: A tuple containing the name of the directory or file and the `UTType` of the file or folder.
-  private func resourceValues(for url: URL) -> (name: String, contentType: UTType)? {
+  private static func resourceValues(for url: URL) -> (name: String, contentType: UTType)? {
     guard
       let resourceValues = try? url.resourceValues(forKeys: resourceKeys),
       let name = resourceValues.name,
@@ -161,7 +161,7 @@ extension Logic.SourceTree {
   /// the function will return nil.
   /// - Parameter url: The `url` from which to extract the path.
   /// - Returns: A `MockaApp.Request` if found and is valid, otherwise nil.
-  private func requestFile(at url: URL) -> Request? {
+  private static func requestFile(at url: URL) -> Request? {
     // Extract the data of the file.
     guard
       let data = FileManager.default.contents(atPath: url.path),

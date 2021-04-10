@@ -17,7 +17,12 @@ final class StartAndStopServerButtonViewModel: ObservableObject {
       try? appEnvironment.server.stop()
 
     case false:
-      try? appEnvironment.server.start(with: appEnvironment.serverConfiguration)
+      guard let serverConfiguration = appEnvironment.serverConfiguration else {
+        appEnvironment.shouldShowStartupSettings = true
+        return
+      }
+
+      try? appEnvironment.server.start(with: serverConfiguration)
     }
 
     appEnvironment.isServerRunning.toggle()

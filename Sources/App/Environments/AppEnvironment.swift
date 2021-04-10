@@ -18,12 +18,14 @@ final class AppEnvironment: ObservableObject {
   @Published var server: AppServer = AppServer()
 
   /// Whether the startup settings should be shown or not.
-  @Published var shouldShowStartupSettings = UserDefaults.standard.url(forKey: UserDefaultKey.workspaceURL) == nil
+  @Published var shouldShowStartupSettings = !Logic.Settings.isWorkspaceURLValid
 
   /// The value of the workspace path.
   /// When this value is updated, the value in the user defaults is updated as well.
   @AppStorage(UserDefaultKey.workspaceURL) var workspaceURL: URL?
 
   /// The global server configuration.
-  let serverConfiguration = ServerConfiguration(requests: [])
+  var serverConfiguration: ServerConfiguration? {
+    Logic.Settings.serverConfiguration
+  }
 }
