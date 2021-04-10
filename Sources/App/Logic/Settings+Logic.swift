@@ -7,7 +7,7 @@ import UniformTypeIdentifiers
 
 extension Logic {
   /// The logic related to settings of the app.
-  struct Settings {
+  enum Settings {
     /// The name of the file containing the server's configuration.
     static let serverConfigurationFileName = "serverConfiguration.json"
 

@@ -8,7 +8,7 @@ import UniformTypeIdentifiers
 
 extension Logic {
   /// The logic related to the source tree starting at the root path and containing all the requests and responses.
-  struct SourceTree {
+  enum SourceTree {
     /// The resource keys for the infos to extract from a `URL`.
     /// `.nameKey` returns the name of the file.
     /// `.contentTypeKey` returns the type of the file. Example "public.json".
