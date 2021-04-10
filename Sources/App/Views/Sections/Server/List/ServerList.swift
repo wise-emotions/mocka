@@ -20,7 +20,13 @@ struct ServerList: View {
 
       ScrollViewReader { scrollView in
         List(Array(viewModel.filteredNetworkExchanges.enumerated()), id: \.offset) { index, networkExchange in
-          NavigationLink(destination: Text(networkExchange.response.uri.path)) {
+          NavigationLink(
+            destination: ServerDetail(
+              viewModel: ServerDetailViewModel(
+                networkExchange: networkExchange
+              )
+            )
+          ) {
             ServerListItem(viewModel: ServerListItemViewModel(networkExchange: networkExchange))
           }
         }
