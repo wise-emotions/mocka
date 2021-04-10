@@ -13,7 +13,7 @@ extension Logic {
 extension Logic.Settings {
   /// The name of the file containing the server's configuration.
   internal static let serverConfigurationFileName = "serverConfiguration.json"
-  
+
   /// /// Create a server configuration file, if one does not already exist at the workspace root folder.
   /// - Throws: `MockaError.workspacePathDoesNotExist`,
   ///           `MockaError.failedToEncode`.
