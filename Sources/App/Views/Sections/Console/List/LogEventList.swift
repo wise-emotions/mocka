@@ -17,28 +17,32 @@ struct LogEventList: View {
     VStack {
       Divider()
 
-      ScrollView {
-        ScrollViewReader { scrollView in
-          LazyVStack {
-            ForEach(Array(viewModel.filteredLogEvents.enumerated()), id: \.offset) { index, event in
-              LogEventListItem(
-                viewModel: LogEventListItemViewModel(
-                  logEvent: event,
-                  isOddCell: index.isMultiple(of: 2)
+      if viewModel.logEvents.isEmpty {
+        EmptyState(symbol: .scroll, text: "Tap the 􀊕 button on the toolbar to start the server")
+      } else {
+        ScrollView {
+          ScrollViewReader { scrollView in
+            LazyVStack {
+              ForEach(Array(viewModel.filteredLogEvents.enumerated()), id: \.offset) { index, event in
+                LogEventListItem(
+                  viewModel: LogEventListItemViewModel(
+                    logEvent: event,
+                    isOddCell: index.isMultiple(of: 2)
+                  )
                 )
-              )
+              }
+            }
+            .onChange(of: viewModel.filteredLogEvents.count) { _ in
+              withAnimation {
+                scrollView.scrollTo(viewModel.filteredLogEvents.count - 1)
+              }
             }
           }
-          .onChange(of: viewModel.filteredLogEvents.count) { _ in
-            withAnimation {
-              scrollView.scrollTo(viewModel.filteredLogEvents.count - 1)
-            }
-          }
+          .drawingGroup()
         }
-        .drawingGroup()
       }
-      .background(Color.doppio)
     }
+    .background(Color.doppio)
     .toolbar {
       ToolbarItem {
         SidebarButton()
@@ -77,6 +81,9 @@ struct LogEventListPreviews: PreviewProvider {
 
   static var previews: some View {
     LogEventList(viewModel: LogEventListViewModel(consoleLogsPublisher: events.publisher.eraseToAnyPublisher()))
+      .environmentObject(AppEnvironment())
+
+    LogEventList(viewModel: LogEventListViewModel(consoleLogsPublisher: [].publisher.eraseToAnyPublisher()))
       .environmentObject(AppEnvironment())
   }
 }

@@ -18,28 +18,32 @@ struct ServerList: View {
     VStack {
       Divider()
 
-      ScrollViewReader { scrollView in
-        List(Array(viewModel.filteredNetworkExchanges.enumerated()), id: \.offset) { index, networkExchange in
-          NavigationLink(
-            destination: ServerDetail(
-              viewModel: ServerDetailViewModel(
-                networkExchange: networkExchange
+      if viewModel.networkExchanges.isEmpty {
+        EmptyState(symbol: .scroll, text: "Tap the 􀊕 button on the toolbar to start the server")
+      } else {
+        ScrollViewReader { scrollView in
+          List(Array(viewModel.filteredNetworkExchanges.enumerated()), id: \.offset) { index, networkExchange in
+            NavigationLink(
+              destination: ServerDetail(
+                viewModel: ServerDetailViewModel(
+                  networkExchange: networkExchange
+                )
               )
-            )
-          ) {
-            ServerListItem(viewModel: ServerListItemViewModel(networkExchange: networkExchange))
+            ) {
+              ServerListItem(viewModel: ServerListItemViewModel(networkExchange: networkExchange))
+            }
           }
-        }
-        .padding(.top, -8)
-        .onChange(of: viewModel.filteredNetworkExchanges.count) { _ in
-          withAnimation {
-            scrollView.scrollTo(viewModel.filteredNetworkExchanges.count - 1)
+          .padding(.top, -8)
+          .onChange(of: viewModel.filteredNetworkExchanges.count) { _ in
+            withAnimation {
+              scrollView.scrollTo(viewModel.filteredNetworkExchanges.count - 1)
+            }
           }
         }
       }
-      .background(Color.doppio)
-      .frame(minWidth: Size.minimumListWidth)
     }
+    .background(Color.doppio)
+    .frame(minWidth: Size.minimumListWidth)
     .toolbar {
       ToolbarItem {
         HStack {
@@ -73,6 +77,9 @@ struct ServerListPreviews: PreviewProvider {
 
   static var previews: some View {
     ServerList(viewModel: ServerListViewModel(networkExchangesPublisher: networkExchanges.publisher.eraseToAnyPublisher()))
+      .environmentObject(AppEnvironment())
+
+    ServerList(viewModel: ServerListViewModel(networkExchangesPublisher: [].publisher.eraseToAnyPublisher()))
       .environmentObject(AppEnvironment())
   }
 }

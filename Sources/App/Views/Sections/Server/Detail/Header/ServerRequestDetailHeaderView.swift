@@ -1,10 +1,9 @@
 //
-// Mocka
+//  Mocka
 //
 
 import MockaServer
 import SwiftUI
-
 
 /// The header of the `ServerRequestDetailView`.
 struct ServerRequestDetailHeaderView: View {
@@ -16,7 +15,7 @@ struct ServerRequestDetailHeaderView: View {
     VStack(alignment: .leading, spacing: 16){
       HStack(alignment: .top, spacing: 8) {
         TextPillView(text: viewModel.httpMethod.rawValue)
-        Text(viewModel.path)
+        Text(viewModel.urlString)
           .font(.system(size: 13))
           .foregroundColor(Color.latte)
           .fixedSize(horizontal: false, vertical: true)
@@ -40,13 +39,12 @@ struct ServerRequestDetailHeaderView: View {
 
 // MARK: - Preview
 
-struct ServerRequestDetailHeaderView_Previews: PreviewProvider {
+struct ServerRequestDetailHeaderViewPreviews: PreviewProvider {
   static var previews: some View {
     ServerRequestDetailHeaderView(
       viewModel: ServerRequestDetailHeaderViewModel(
         networkExchange: NetworkExchange.mock
       )
     )
-    .frame(minWidth: 0, idealWidth: 100, maxWidth: .infinity, minHeight: 0, idealHeight: 100, maxHeight: .infinity)
   }
 }

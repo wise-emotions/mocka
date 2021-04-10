@@ -36,7 +36,7 @@ struct ServerRequestDetailHeaderViewModel {
   }
 
   /// The path of the request.
-  var path: String {
-    networkExchange.request.uri.path
+  var urlString: String {
+    networkExchange.request.uri.string
   }
 }

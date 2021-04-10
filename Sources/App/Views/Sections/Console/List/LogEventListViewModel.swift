@@ -16,7 +16,7 @@ final class LogEventListViewModel: ObservableObject {
   @Published var filterText: String = ""
 
   /// The array of `LogEvent`s.
-  @Published private var logEvents: [LogEvent] = []
+  @Published var logEvents: [LogEvent] = []
 
   /// The `Set` containing the list of subscriptions.
   var subscriptions = Set<AnyCancellable>()
