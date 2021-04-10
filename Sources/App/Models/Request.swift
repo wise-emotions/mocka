@@ -7,7 +7,7 @@ import MockaServer
 
 /// An object containing information related to a server request.
 /// This object is saved to and retrieved from the file system.
-struct Request: Codable {
+struct Request: Codable, Hashable {
   /// The path of the `API`. This should not consider any query parameters.
   let path: Path
 
@@ -22,7 +22,7 @@ struct Request: Codable {
   ///   - path: The path of the `API`. This should not consider any query parameters.
   ///   - method: The method associated with the request.
   ///   - response: The expected response when this request is invoked.
-  init(path: Path, method: HTTPMethod, responseCode: Int, expectedResponse: Response) {
+  init(path: Path, method: HTTPMethod, expectedResponse: Response) {
     self.path = path
     self.method = method
     self.expectedResponse = expectedResponse
@@ -39,7 +39,7 @@ struct Request: Codable {
       path: path,
       requestedResponse: RequestedResponse(
         status: HTTPResponseStatus(statusCode: response.statusCode),
-        headers: response.headers,
+        headers: HTTPHeaders(response.headers.map { $0.tuple }),
         body: ResponseBody(contentType: response.contentType, fileLocation: url)
       )
     )

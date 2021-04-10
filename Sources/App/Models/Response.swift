@@ -6,7 +6,7 @@ import Foundation
 import MockaServer
 
 /// An object containing information regarding the response for a server request.
-struct Response: Codable {
+struct Response: Codable, Hashable {
   /// The `HTTP` response status code.
   let statusCode: Int
 
@@ -14,7 +14,7 @@ struct Response: Codable {
   let contentType: ResponseBody.ContentType
 
   /// The HTTPHeaders to be returned alongside the response.
-  let headers: HTTPHeaders
+  let headers: [HTTPHeader]
 
   /// The name of the file where the response is present, if any.
   let fileName: String?
@@ -27,7 +27,7 @@ struct Response: Codable {
   init(
     statusCode: Int,
     contentType: ResponseBody.ContentType,
-    headers: HTTPHeaders
+    headers: [HTTPHeader]
   ) {
     self.statusCode = statusCode
     self.contentType = contentType
