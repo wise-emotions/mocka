@@ -1,4 +1,4 @@
-name: Build Mocka App
+name: Test Server Module
 
 # Controls when the action will run.
 on:
@@ -32,5 +32,5 @@ jobs:
         run: ./setup.sh
 
       # Tests the macOS Server module.
-      - name: Mocka App Tests
+      - name: Server Module Tests
         run: xcodebuild test -scheme MockaServer -destination platform=macOS
