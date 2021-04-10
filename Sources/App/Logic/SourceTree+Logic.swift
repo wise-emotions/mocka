@@ -155,6 +155,12 @@ extension Logic.SourceTree {
     return (name, contentType)
   }
 
+
+  /// Decodes the contents of the file at the specified `URL` as a `MockaApp.Request`, and validates it.
+  /// If the content of the file at the specified `URL` fails to decode, or does not pass validity checks,
+  /// the function will return nil.
+  /// - Parameter url: The `url` from which to extract the path.
+  /// - Returns: A `MockaApp.Request` if found and is valid, otherwise nil.
   private func requestFile(at url: URL) -> Request? {
     // Extract the data of the file.
     guard
