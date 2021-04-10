@@ -19,10 +19,11 @@ extension Logic {
 
     /// The regex the name of the folder should match to be allowed in the tree.
     private var folderNameRegex: String {
-      let allSupportedMethods = HTTPMethod.allCases.map {
-        $0.rawValue
-      }
-      .joined(separator: "|")
+      let allSupportedMethods = HTTPMethod.allCases
+        .map {
+          $0.rawValue
+        }
+        .joined(separator: "|")
 
       return "(\(allSupportedMethods)) - .*"
     }
@@ -171,7 +172,6 @@ extension Logic.SourceTree {
         return nil
       }
     }
-
 
     // If the content type has an expected file extension, that is, is associated to a body content,
     // we make sure that the response file with the correct extension exists.
