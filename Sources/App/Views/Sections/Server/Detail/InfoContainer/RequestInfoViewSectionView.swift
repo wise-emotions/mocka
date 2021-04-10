@@ -1,3 +1,8 @@
+//
+//  Mocka
+//
+
+import MockaServer
 import SwiftUI
 
 /// A Section with a `title` and a `content` view as body.
@@ -32,7 +37,7 @@ struct RequestInfoViewSectionView<ContentView: View>: View {
 struct RequestInfoViewSectionViewPreviews: PreviewProvider {
   static var previews: some View {
     RequestInfoViewSectionView(title: "URL") {
-      TextField("/api/v1/transactions/*/pippo", text: .constant("/api/v1/transactions/*/pippo"))
+      TextField(NetworkExchange.mock.request.uri.string, text: .constant(NetworkExchange.mock.request.uri.string))
         .padding()
         .textFieldStyle(PlainTextFieldStyle())
         .font(.system(size: 13, weight: .regular, design: .default))

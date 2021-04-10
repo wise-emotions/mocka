@@ -5,7 +5,7 @@
 import Foundation
 import MockaServer
 
-/// The view model of the `ContainerSectionView`.
+/// The ViewModel of the `ServerDetailInfoSection`.
 struct ServerDetailInfoSectionViewModel {
 
   // MARK: Stored Properties

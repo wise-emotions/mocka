@@ -27,7 +27,6 @@ struct KeyValueTableRow: View {
         switch mode {
         case .read:
           Text(item.key)
-            .frame(alignment: .top)
             .contextMenuCopy(item.key)
 
           Text(item.value)

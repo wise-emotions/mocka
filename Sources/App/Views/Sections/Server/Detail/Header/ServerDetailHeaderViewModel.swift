@@ -5,8 +5,8 @@
 import MockaServer
 import SwiftUI
 
-/// The view model of the `ServerRequestDetailHeaderView`.
-struct ServerRequestDetailHeaderViewModel {
+/// The ViewModel of the `ServerDetailHeader`.
+struct ServerDetailHeaderViewModel {
 
   // MARK: Stored Properties
 

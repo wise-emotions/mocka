@@ -20,8 +20,8 @@ struct ServerDetail: View {
       Divider()
 
       if let viewModel = viewModel {
-        ServerRequestDetailHeaderView(
-          viewModel: ServerRequestDetailHeaderViewModel(
+        ServerDetailHeader(
+          viewModel: ServerDetailHeaderViewModel(
             networkExchange: viewModel.networkExchange
           )
         )

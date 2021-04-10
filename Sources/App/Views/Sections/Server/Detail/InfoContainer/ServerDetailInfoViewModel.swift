@@ -4,7 +4,7 @@
 
 import MockaServer
 
-/// The ViewModel of `ServerDetailInfo`.
+/// The ViewModel of the `ServerDetailInfo`.
 struct ServerDetailInfoViewModel {
   
   // MARK: - Structured Data

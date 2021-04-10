@@ -5,13 +5,13 @@
 import MockaServer
 import SwiftUI
 
-/// The header of the `ServerRequestDetailView`.
-struct ServerRequestDetailHeaderView: View {
+/// The header of the `ServerDetail`.
+struct ServerDetailHeader: View {
 
   // MARK: - Stored Properties
 
-  /// The  view model of this `ServerRequestDetailHeaderView`.
-  let viewModel: ServerRequestDetailHeaderViewModel
+  /// The associated ViewModel.
+  let viewModel: ServerDetailHeaderViewModel
 
   // MARK: - Body
 
@@ -45,8 +45,8 @@ struct ServerRequestDetailHeaderView: View {
 
 struct ServerRequestDetailHeaderViewPreviews: PreviewProvider {
   static var previews: some View {
-    ServerRequestDetailHeaderView(
-      viewModel: ServerRequestDetailHeaderViewModel(
+    ServerDetailHeader(
+      viewModel: ServerDetailHeaderViewModel(
         networkExchange: NetworkExchange.mock
       )
     )
