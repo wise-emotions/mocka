@@ -12,8 +12,8 @@ final class StartupSettingsViewModel: ObservableObject {
 
   /// The workspace path to be set.
   ///
-  /// It isn't a nullable property because it's used
-  /// inside a `Binding` object that needs a `String`.
+  /// It's important to keep it nullable because by default
+  /// it will use the observed `workspaceURL` property.
   @Published var workspacePath: String?
 
   /// The hostname of the server for the connection.
