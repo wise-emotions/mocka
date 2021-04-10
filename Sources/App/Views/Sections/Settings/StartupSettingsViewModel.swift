@@ -14,13 +14,17 @@ final class StartupSettingsViewModel: ObservableObject {
   ///
   /// It isn't a nullable property because it's used
   /// inside a `Binding` object that needs a `String`.
-  @Published var workspacePath: String = ""
+  @Published var workspacePath: String?
 
   /// Handle the workspace path error.
   @Published var workspacePathError: MockaError? = nil
 
   /// Whether the `fileImporter` is presented.
   @Published var fileImporterIsPresented: Bool = false
+
+  /// The value of the workspace path.
+  /// When this value is updated, the value in the user defaults is updated as well.
+  @AppStorage(UserDefaultKey.workspaceURL) var workspaceURL: URL?
 
   // MARK: - Functions
 
@@ -29,6 +33,7 @@ final class StartupSettingsViewModel: ObservableObject {
   func checkURL(_ path: String) {
     do {
       try Logic.WorkspacePath.isFolder(URL(fileURLWithPath: path))
+
       workspacePath = path
       workspacePathError = nil
     } catch {
@@ -59,14 +64,18 @@ final class StartupSettingsViewModel: ObservableObject {
   /// Confirms the selected startup settings
   /// by creating the configuration file in the right path.
   /// In case of error the `workspaceURL` returns to `nil`.
-  /// - Parameters:
-  ///   - appEnvironment: The `AppEnvironment` instance.
-  ///   - presentationMode: The `View` `PresentationMode`.
-  func confirmSettings(for appEnvironment: AppEnvironment, with presentationMode: Binding<PresentationMode>) {
+  /// - Parameter presentationMode: The `View` `PresentationMode`.
+  func confirmSettings(with presentationMode: Binding<PresentationMode>) {
+    guard let workspacePath = workspacePath else {
+      self.workspaceURL = nil
+      self.workspacePathError = workspacePathError
+      return
+    }
+
     let workspaceURL = URL(fileURLWithPath: workspacePath)
 
     do {
-      appEnvironment.workspaceURL = workspaceURL
+      self.workspaceURL = workspaceURL
 
       try Logic.WorkspacePath.isFolder(workspaceURL)
       try Logic.Settings.createConfiguration()
@@ -78,7 +87,7 @@ final class StartupSettingsViewModel: ObservableObject {
         return
       }
 
-      appEnvironment.workspaceURL = nil
+      self.workspaceURL = nil
       self.workspacePathError = workspacePathError
     }
   }

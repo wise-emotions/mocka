@@ -11,11 +11,10 @@ struct StartupSettings: View {
 
   // MARK: - Stored Properties
 
+  let isShownFromSettings: Bool
+
   /// A binding to the current presentation mode of the view associated with this environment.
   @Environment(\.presentationMode) var presentationMode
-
-  /// The app environment object.
-  @EnvironmentObject var appEnvironment: AppEnvironment
 
   /// The associated ViewModel.
   @StateObject var viewModel = StartupSettingsViewModel()
@@ -23,8 +22,13 @@ struct StartupSettings: View {
   // MARK: - Body
 
   var body: some View {
+    // We create a custom binding to be able to do a live check of the selected folder.
+    // We cannot use the `viewModel.workspaceURL` directly because it would not allow to
+    // edit it due to the `set` of this binding that calls the `viewModel.checkURL($0)`.
+    // At the first show of this view the `viewModel.workspacePath` will be `nil` and `viewModel.workspaceURL` too.
+    // At the following starts the `viewModel.workspacePath` will be `nil`, but `viewModel.workspaceURL` will not.
     let workspacePathBinding = Binding {
-      viewModel.workspacePath
+      viewModel.workspacePath ?? viewModel.workspaceURL?.path ?? ""
     } set: {
       viewModel.checkURL($0)
     }
@@ -32,11 +36,13 @@ struct StartupSettings: View {
     VStack {
       Text("Welcome to Mocka")
         .font(.largeTitle)
+        .isHidden(isShownFromSettings, remove: true)
 
       Text("Before starting you need to select a workspace path.\nYou can also set an optional server's address and port.")
         .frame(height: 32)
         .font(.body)
         .padding(.vertical)
+        .isHidden(isShownFromSettings, remove: true)
 
       VStack(alignment: .leading) {
         HStack(alignment: .top) {
@@ -93,7 +99,7 @@ struct StartupSettings: View {
       VStack(alignment: .trailing) {
         Button(
           action: {
-            viewModel.confirmSettings(for: appEnvironment, with: presentationMode)
+            viewModel.confirmSettings(with: presentationMode)
           },
           label: {
             Text("OK")
@@ -113,6 +119,8 @@ struct StartupSettings: View {
 
 struct StartupSettingsPreviews: PreviewProvider {
   static var previews: some View {
-    StartupSettings()
+    StartupSettings(isShownFromSettings: false)
+
+    StartupSettings(isShownFromSettings: true)
   }
 }
