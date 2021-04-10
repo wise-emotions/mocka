@@ -41,12 +41,7 @@ struct LogEventList: View {
     }
     .toolbar {
       ToolbarItem {
-        SymbolButton(
-          symbolName: .sidebarSquaresLeft,
-          action: {
-            NSApp.keyWindow?.firstResponder?.tryToPerform(#selector(NSSplitViewController.toggleSidebar(_:)), with: nil)
-          }
-        )
+        SidebarButton()
       }
 
       ToolbarItem(placement: .principal) {

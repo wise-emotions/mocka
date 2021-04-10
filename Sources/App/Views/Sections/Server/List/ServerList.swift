@@ -37,12 +37,7 @@ struct ServerList: View {
     .toolbar {
       ToolbarItem {
         HStack {
-          SymbolButton(
-            symbolName: .sidebarSquaresLeft,
-            action: {
-              NSApp.keyWindow?.firstResponder?.tryToPerform(#selector(NSSplitViewController.toggleSidebar(_:)), with: nil)
-            }
-          )
+          SidebarButton()
 
           RoundedTextField(title: "Filter", text: $viewModel.filterText)
             .frame(width: Size.minimumFilterTextFieldWidth)
