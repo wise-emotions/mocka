@@ -14,7 +14,7 @@ final class ServerListViewModel: ObservableObject {
   /// The text that filters the requests.
   @Published var filterText: String = ""
 
-  /// The array of `LogEvent`s.
+  /// The array of `NetworkExchange`s.
   @Published private var networkExchanges: [NetworkExchange] = []
 
   /// The `Set` containing the list of subscriptions.
@@ -22,7 +22,7 @@ final class ServerListViewModel: ObservableObject {
 
   // MARK: - Computed Properties
 
-  /// The array of `LogEvent`s filtered by the `filterText`.
+  /// The array of `NetworkExchange`s filtered by the `filterText`.
   var filteredNetworkExchanges: [NetworkExchange] {
     if filterText.isEmpty {
       return networkExchanges

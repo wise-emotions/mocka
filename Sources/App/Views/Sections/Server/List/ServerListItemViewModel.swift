@@ -10,6 +10,6 @@ struct ServerListItemViewModel {
 
   // MARK: - Stored Properties
 
-  /// The `LogEvent` displayed by the cell.
+  /// The `NetworkExchange` displayed by the cell.
   let networkExchange: NetworkExchange
 }
