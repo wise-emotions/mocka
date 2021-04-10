@@ -83,7 +83,7 @@ extension RequestInfoViewModel {
         
         switch contentType {
         case .applicationJSON:
-          return dataBody.asPrettyPrintedJSON
+          return dataBody.prettyPrintedJSON
           
         case .textCSS, .textCSV, .textHTML, .textPlain, .textXML:
           return String(data: dataBody, encoding: .utf8)
@@ -96,7 +96,7 @@ extension RequestInfoViewModel {
         
         switch contentType {
         case .applicationJSON:
-          return response.body?.asPrettyPrintedJSON
+          return response.body?.prettyPrintedJSON
         
         case .textCSS, .textCSV, .textHTML, .textPlain, .textXML:
           return String(data: dataBody, encoding: .utf8)

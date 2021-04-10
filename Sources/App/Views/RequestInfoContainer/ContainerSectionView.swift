@@ -25,13 +25,13 @@ extension RequestInfoView {
 
           if viewModel.isQuerySectionVisible {
             SectionView(title: "Query") {
-              KeyValueTable(keyValueItems: viewModel.queryParameters)
+              KeyValueTable(viewModel: KeyValueTableViewModel(keyValueItems: viewModel.queryParameters, mode: .read))
             }
           }
 
           if viewModel.isHeadersSectionVisible {
             SectionView(title: "Headers") {
-              KeyValueTable(keyValueItems: viewModel.headers)
+              KeyValueTable(viewModel: KeyValueTableViewModel(keyValueItems: viewModel.headers, mode: .read))
             }
           }
 
