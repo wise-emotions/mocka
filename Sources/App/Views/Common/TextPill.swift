@@ -6,14 +6,14 @@ import SwiftUI
 
 /// A pill containing an uppercased text.
 struct TextPill: View {
-  
+
   // MARK: - Stored Properties
-  
+
   /// The `text` inside the `TextPill`.
   let text: String
-  
+
   // MARK: - Body
-  
+
   var body: some View {
     Text(text.uppercased())
       .font(.system(size: 12, weight: .bold))

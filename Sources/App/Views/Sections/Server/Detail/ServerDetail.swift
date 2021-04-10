@@ -4,7 +4,7 @@
 
 import Foundation
 import MockaServer
-import SwiftUI 
+import SwiftUI
 
 struct ServerDetail: View {
 

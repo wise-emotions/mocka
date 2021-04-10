@@ -6,9 +6,9 @@ import MockaServer
 
 /// The ViewModel of the `ServerDetailInfo`.
 struct ServerDetailInfoViewModel {
-  
+
   // MARK: - Structured Data
-  
+
   /// The kind of info selected from the SegmentedControl.
   enum Kind: String, CaseIterable {
     /// Request selected.
@@ -45,4 +45,3 @@ struct ServerDetailInfoViewModel {
     Kind.response.rawValue
   }
 }
-

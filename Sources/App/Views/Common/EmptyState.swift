@@ -24,7 +24,7 @@ struct EmptyState: View {
       .font(.body)
     Text(text)
       .font(.body)
-    
+
     Spacer()
   }
 }

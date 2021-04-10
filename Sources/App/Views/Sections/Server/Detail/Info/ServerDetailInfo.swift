@@ -2,9 +2,9 @@
 //  Mocka
 //
 
+import Foundation
 import MockaServer
 import SwiftUI
-import Foundation
 
 /// The View containing the details of the Request and Response pair.
 struct ServerDetailInfo: View {

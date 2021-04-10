@@ -16,7 +16,7 @@ struct ServerDetailHeader: View {
   // MARK: - Body
 
   var body: some View {
-    VStack(alignment: .leading, spacing: 16){
+    VStack(alignment: .leading, spacing: 16) {
       HStack(alignment: .top, spacing: 8) {
         TextPill(text: viewModel.httpMethod.rawValue)
         Text(viewModel.urlString)

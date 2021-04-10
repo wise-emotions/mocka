@@ -30,7 +30,7 @@ struct ServerListItem: View {
             .padding(.trailing, 8)
             .frame(height: 16)
         }
-        
+
         HStack(spacing: 4) {
           Text(String(viewModel.networkExchange.response.status.code))
             .font(.system(size: 11, weight: .bold))
@@ -41,7 +41,7 @@ struct ServerListItem: View {
             .foregroundColor(.macchiato)
 
           Spacer()
-          
+
           Text(viewModel.networkExchange.response.timestamp.timestampPrint)
             .font(.system(size: 11))
             .foregroundColor(.macchiato)
