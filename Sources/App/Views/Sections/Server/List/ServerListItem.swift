@@ -22,28 +22,26 @@ struct ServerListItem: View {
 
       VStack(alignment: .leading, spacing: 10) {
         HStack {
-          Text(viewModel.networkExchange.request.httpMethod.rawValue)
-            .font(.system(size: 12, weight: .bold))
-            .padding(8)
-            .frame(height: 20)
-            .background(Color.ristretto)
-            .cornerRadius(100)
-            .foregroundColor(.latte)
-            .frame(alignment: .leading)
+          TextPill(text: viewModel.networkExchange.request.httpMethod.rawValue)
+
           Text(viewModel.networkExchange.request.uri.string)
             .font(.system(size: 12))
             .foregroundColor(.latte)
             .padding(.trailing, 8)
             .frame(height: 16)
         }
+        
         HStack(spacing: 4) {
           Text(String(viewModel.networkExchange.response.status.code))
             .font(.system(size: 11, weight: .bold))
             .foregroundColor(.macchiato)
+
           Text(viewModel.networkExchange.response.status.reasonPhrase)
             .font(.system(size: 11))
             .foregroundColor(.macchiato)
+
           Spacer()
+          
           Text(viewModel.networkExchange.response.timestamp.timestampPrint)
             .font(.system(size: 11))
             .foregroundColor(.macchiato)

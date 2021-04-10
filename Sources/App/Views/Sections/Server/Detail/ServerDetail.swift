@@ -10,6 +10,7 @@ struct ServerDetail: View {
 
   // MARK: - Stored Properties
 
+  /// The associated ViewModel.
   @State var viewModel: ServerDetailViewModel?
 
   // MARK: - Body
@@ -25,8 +26,8 @@ struct ServerDetail: View {
           )
         )
 
-        RequestInfoView(
-          viewModel: RequestInfoViewModel(
+        ServerDetailInfo(
+          viewModel: ServerDetailInfoViewModel(
             networkExchange: viewModel.networkExchange
           )
         )

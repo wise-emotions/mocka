@@ -3,23 +3,23 @@ import SwiftUI
 import Foundation
 
 /// The View containing the details of the Request and Response pair.
-struct RequestInfoView: View {
+struct ServerDetailInfo: View {
 
   // MARK: - Stored Properties
 
-  /// The  view model of this `RequestInfoView`.
-  let viewModel: RequestInfoViewModel
+  /// The associated ViewModel.
+  let viewModel: ServerDetailInfoViewModel
 
   // MARK: - Body
 
   var body: some View {
     TabView {
-      ContainerSectionView(viewModel: viewModel.modelForRequestTab)
+      ServerDetailInfoSection(viewModel: viewModel.modelForRequestTab)
         .tabItem {
           Text(viewModel.titleForRequestTab)
         }
 
-      ContainerSectionView(viewModel: viewModel.modelForResponseTab)
+      ServerDetailInfoSection(viewModel: viewModel.modelForResponseTab)
         .tabItem {
           Text(viewModel.titleForResponseTab)
         }
@@ -33,8 +33,8 @@ struct RequestInfoView: View {
 
 struct RequestInfoContainerViewPreviews: PreviewProvider {
   static var previews: some View {
-    RequestInfoView(
-      viewModel: RequestInfoViewModel(networkExchange: NetworkExchange.mock)
+    ServerDetailInfo(
+      viewModel: ServerDetailInfoViewModel(networkExchange: NetworkExchange.mock)
     )
   }
 }

@@ -4,8 +4,8 @@
 
 import MockaServer
 
-/// The ViewModel of the `RequestInfoContainerView`.
-struct RequestInfoViewModel {
+/// The ViewModel of `ServerDetailInfo`.
+struct ServerDetailInfoViewModel {
   
   // MARK: - Structured Data
   
@@ -25,14 +25,14 @@ struct RequestInfoViewModel {
 
   // MARK: Computed Properties
 
-  /// The model for the `ContainerSectionView` of the Request Tab.
-  var modelForRequestTab: ContainerSectionViewModel {
-    ContainerSectionViewModel(networkExchange: networkExchange, kind: .request)
+  /// The model for the `ServerDetailInfoSection` of the Request Tab.
+  var modelForRequestTab: ServerDetailInfoSectionViewModel {
+    ServerDetailInfoSectionViewModel(networkExchange: networkExchange, kind: .request)
   }
 
-  /// The model for the `ContainerSectionView` of the Response Tab.
-  var modelForResponseTab: ContainerSectionViewModel {
-    ContainerSectionViewModel(networkExchange: networkExchange, kind: .response)
+  /// The model for the `ServerDetailInfoSection` of the Response Tab.
+  var modelForResponseTab: ServerDetailInfoSectionViewModel {
+    ServerDetailInfoSectionViewModel(networkExchange: networkExchange, kind: .response)
   }
 
   /// The title of the Request Tab.
