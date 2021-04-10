@@ -19,18 +19,23 @@ struct ServerDetailHeader: View {
     VStack(alignment: .leading, spacing: 16) {
       HStack(alignment: .top, spacing: 8) {
         TextPill(text: viewModel.httpMethod.rawValue)
+
         Text(viewModel.urlString)
           .font(.system(size: 13))
           .foregroundColor(Color.latte)
           .fixedSize(horizontal: false, vertical: true)
           .contextMenuCopy(viewModel.urlString)
       }
+
       HStack(spacing: 10) {
         HTTPStatusCodeEllipse(httpStatus: viewModel.httpStatus)
+
         Text(String("\(viewModel.httpStatus) \(viewModel.httpStatusMeaning)"))
           .font(.system(size: 13))
           .foregroundColor(Color.macchiato)
+
         Spacer()
+
         Text(viewModel.timestamp)
           .font(.system(size: 13))
           .foregroundColor(Color.macchiato)
