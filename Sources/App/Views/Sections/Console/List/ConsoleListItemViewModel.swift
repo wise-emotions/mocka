@@ -6,7 +6,7 @@ import MockaServer
 import SwiftUI
 
 /// The ViewModel of the `LogEventListItem`.
-struct LogEventListItemViewModel {
+struct ConsoleListItemViewModel {
 
   // MARK: - Stored Properties
 

@@ -6,12 +6,17 @@ import SwiftUI
 
 /// An iOS-style `TextField`.
 struct RoundedTextField: View {
+
+  // MARK: - Stored Properties
+
   /// The rounded text field title, aka placeholder.
   /// This is named `title` to keep the SwiftUI `TextField` style.
   let title: String
 
   /// The text to display and edit.
   @Binding var text: String
+
+  // MARK: - Body
 
   var body: some View {
     HStack(alignment: .firstTextBaseline, spacing: 8) {
@@ -26,6 +31,8 @@ struct RoundedTextField: View {
   }
 }
 
+// MARK: - Previews
+
 struct RoundedTextFieldPreview: PreviewProvider {
   static var previews: some View {
     Group {
@@ -38,6 +45,8 @@ struct RoundedTextFieldPreview: PreviewProvider {
     .previewLayout(.fixed(width: 370, height: 48))
   }
 }
+
+// MARK: - Library
 
 struct RoundedTextFieldLibraryContent: LibraryContentProvider {
   let title = "Title"

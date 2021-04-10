@@ -6,16 +6,23 @@ import SwiftUI
 
 /// A button displaying a section of the app.
 struct SidebarItem: View {
+
+  // MARK: - Stored Properties
+
   /// The selected section.
   @Binding var selectedSection: SidebarSection
 
   /// The section of the app to bind to the button.
   let section: SidebarSection
 
+  // MARK: - Computed Properties
+
   /// Whether the button should be displayed as selected.
   private var isSelected: Bool {
     selectedSection == section
   }
+
+  // MARK: - Body
 
   var body: some View {
     Button(
@@ -45,6 +52,8 @@ struct SidebarItem: View {
     .buttonStyle(PlainButtonStyle())
   }
 }
+
+// MARK: - Previews
 
 struct SidebarItemPreviews: PreviewProvider {
   static var previews: some View {

@@ -6,24 +6,26 @@ import SwiftUI
 
 /// The key-value table structure.
 struct KeyValueTable: View {
+
+  // MARK: - Stored Properties
+
   /// The associated ViewModel.
   @ObservedObject var viewModel: KeyValueTableViewModel
+
+  // MARK: - Body
 
   var body: some View {
     VStack {
       KeyValueTableHeader()
 
-      ScrollView {
-        LazyVStack(spacing: 0) {
-          ForEach(Array(viewModel.keyValueItems.enumerated()), id: \.offset) { index, item in
-            KeyValueTableRow(
-              item: item,
-              mode: viewModel.mode,
-              index: index
-            )
-          }
-        }
+      ForEach(Array(viewModel.keyValueItems.enumerated()), id: \.offset) { index, item in
+        KeyValueTableRow(
+          item: item,
+          mode: viewModel.mode,
+          index: index
+        )
       }
+      .drawingGroup(on: viewModel.mode == .read)
 
       if viewModel.mode == .write {
         HStack {
@@ -44,6 +46,8 @@ struct KeyValueTable: View {
   }
 }
 
+// MARK: - Previews
+
 struct KeyValueTablePreviews: PreviewProvider {
   static let rows = [KeyValueItem](
     repeating: KeyValueItem(
@@ -60,8 +64,17 @@ struct KeyValueTablePreviews: PreviewProvider {
         mode: .write
       )
     )
+
+    KeyValueTable(
+      viewModel: KeyValueTableViewModel(
+        keyValueItems: rows,
+        mode: .read
+      )
+    )
   }
 }
+
+// MARK: - Library
 
 struct KeyValueTableLibraryContent: LibraryContentProvider {
   let keyValueItems: [KeyValueItem] = []

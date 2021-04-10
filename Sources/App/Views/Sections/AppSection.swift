@@ -8,8 +8,13 @@ import SwiftUI
 /// This `View` is responsible for rendering the right section based on the
 /// `appEnvironment.selectedSection` property.
 struct AppSection: View {
+
+  // MARK: - Stored Properties
+
   /// The app environment object.
   @EnvironmentObject var appEnvironment: AppEnvironment
+
+  // MARK: - Body
 
   var body: some View {
     switch appEnvironment.selectedSection {
@@ -24,6 +29,8 @@ struct AppSection: View {
     }
   }
 }
+
+// MARK: - Previews
 
 struct AppSectionPreview: PreviewProvider {
   static var previews: some View {

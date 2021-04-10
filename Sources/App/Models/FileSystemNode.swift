@@ -4,7 +4,7 @@
 
 import Foundation
 
-/// An object representing a node (i.e: directory or file) in the filesystem.
+/// An object representing a node (directory or file) in the filesystem.
 struct FileSystemNode: Identifiable, Hashable {
 
   // MARK: - Stored Properties
