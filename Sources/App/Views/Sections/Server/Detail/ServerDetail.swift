@@ -6,6 +6,8 @@ import Foundation
 import MockaServer
 import SwiftUI
 
+/// The server detail view.
+/// This view handle the details of an API called to the server.
 struct ServerDetail: View {
 
   // MARK: - Stored Properties

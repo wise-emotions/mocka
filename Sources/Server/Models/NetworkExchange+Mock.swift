@@ -14,14 +14,14 @@ public extension NetworkExchange {
         "token": "ThISisATokEN",
         "Content-Type": "application/json",
       ],
-      body: "{\"name\": \"john\"}".data(using: .utf8),
+      body: "{\"name\": \"john\"}, \"surname\": \"Apple\"}".data(using: .utf8),
       timestamp: Date().timeIntervalSince1970
     ),
     response: DetailedResponse(
       uri: URI(path: "api/*/user"),
       headers: ["Content-Type": "application/json"],
-      status: HTTPResponseStatus(statusCode: 200),
-      body: "{\"name\": \"john\", \"age\": 18, \"surname\": \"Apple\"}".data(using: .utf8),
+      status: HTTPResponseStatus(statusCode: 201),
+      body: "{\"name\": \"John\", \"surname\": \"Apple\"}".data(using: .utf8),
       timestamp: Date().timeIntervalSince1970
     )
   )
