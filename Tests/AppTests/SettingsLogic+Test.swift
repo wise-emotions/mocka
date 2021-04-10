@@ -41,6 +41,7 @@ class SettingsLogicTests: XCTestCase {
     UserDefaults.standard.set(nil, forKey: UserDefaultKey.workspaceURL)
     do {
       try Logic.Settings.createConfiguration()
+      XCTFail("Was expecting the test to fail, but succeeded instead")
     } catch {
       guard case .workspacePathDoesNotExist = error as? MockaError else {
         XCTFail("Expected a `MockaError.workspacePathDoesNotExist` but got \(error) instead")
