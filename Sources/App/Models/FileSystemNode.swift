@@ -22,18 +22,27 @@ struct FileSystemNode: Identifiable, Hashable {
   let url: URL
 
   /// The children nodes of the directory. `nil` if the node represents a file.
-  let children: [FileSystemNode]?
+  var children: [FileSystemNode]? {
+    switch kind {
+    case let .folder(children):
+      return children
+
+    case .requestFile:
+      return nil
+    }
+  }
 
   // MARK: - Computed Properties
 
   /// Whether the node represents a directory in the filesystem.
   var isFolder: Bool {
-    kind == .folder
-  }
+    switch kind {
+    case .folder:
+      return true
 
-  /// Whether the node represents a file in the filesystem.
-  var isFile: Bool {
-    kind == .file
+    case .requestFile:
+      return false
+    }
   }
 
   // MARK: - Init
@@ -43,12 +52,10 @@ struct FileSystemNode: Identifiable, Hashable {
   ///   - name: The name of the file or folder.
   ///   - url: The `URL` to the node.
   ///   - kind: The kind of the node. Folder or `file`.
-  ///   - children: The children nodes of the directory. `nil` if the node represents a file.
-  init(name: String, url: URL, kind: FileSystemNode.Kind, children: [FileSystemNode]? = nil) {
+  init(name: String, url: URL, kind: FileSystemNode.Kind) {
     self.name = name
     self.url = url
     self.kind = kind
-    self.children = children
   }
 }
 
@@ -56,11 +63,11 @@ struct FileSystemNode: Identifiable, Hashable {
 
 extension FileSystemNode {
   /// The possibile kinds of `FileSystemNode`.
-  enum Kind {
+  enum Kind: Hashable {
     /// The node is a folder.
-    case folder
+    case folder(children: [FileSystemNode])
 
-    /// The node is a file.
-    case file
+    /// The node is a request file.
+    case requestFile(_ request: Request)
   }
 }

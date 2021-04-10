@@ -17,6 +17,11 @@ struct Request: Codable, Hashable {
   /// The expected response when this request is invoked.
   let expectedResponse: Response
 
+  /// Whether or not the request has a response body.
+  var hasResponseBody: Bool {
+    HTTPResponseStatus(statusCode: expectedResponse.statusCode).mayHaveResponseBody && expectedResponse.fileName != nil
+  }
+
   /// Creates a `Request` object.
   /// - Parameters:
   ///   - path: The path of the `API`. This should not consider any query parameters.
@@ -30,17 +35,16 @@ struct Request: Codable, Hashable {
 
   /// Converts a `MockaApp.Request` into a `MockaServer.Request`.
   /// - Parameters:
-  ///   - response: The `MockaApp.Response` object containing the information of the response.
-  ///   - url: The `URL` where the `response.json` lives. This is the same the request's.
+  ///   - url: The `URL` where the response file lives. This is the same the request's.
   /// - Returns: An instance of `MockaServer.Request`.
-  func mockaRequest(with response: Response, at url: URL) -> MockaServer.Request {
+  func mockaRequest(withResponseAt url: URL?) -> MockaServer.Request {
     MockaServer.Request(
       method: method,
       path: path,
       requestedResponse: RequestedResponse(
-        status: HTTPResponseStatus(statusCode: response.statusCode),
-        headers: HTTPHeaders(response.headers.map { $0.tuple }),
-        body: ResponseBody(contentType: response.contentType, fileLocation: url)
+        status: HTTPResponseStatus(statusCode: expectedResponse.statusCode),
+        headers: HTTPHeaders(expectedResponse.headers.map { $0.tuple }),
+        body: hasResponseBody ? ResponseBody(contentType: expectedResponse.contentType, fileLocation: url!) : nil
       )
     )
   }
