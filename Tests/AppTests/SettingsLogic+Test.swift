@@ -83,7 +83,7 @@ class SettingsLogicTests: XCTestCase {
     contents = FileManager.default.contents(
       atPath: temporaryWorkspaceURL.appendingPathComponent(Logic.Settings.serverConfigurationFileName, isDirectory: false).path
     )
-    
+
     let newConfiguration = try! JSONDecoder().decode(ServerConnectionConfiguration.self, from: contents!)
     XCTAssertEqual(newConfiguration.hostname, "localhost")
     XCTAssertEqual(newConfiguration.port, 3000)
