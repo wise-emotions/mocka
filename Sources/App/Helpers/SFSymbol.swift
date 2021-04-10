@@ -21,6 +21,9 @@ enum SFSymbol: String {
   /// Play circle icon.
   case playCircle = "play.circle"
 
+  /// Plus circle icon.
+  case plusCircle = "plus.circle"
+
   /// Sidebar squares left icon.
   case sidebarSquaresLeft = "sidebar.squares.left"
 

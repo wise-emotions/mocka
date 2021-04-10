@@ -7,7 +7,11 @@ import SwiftUI
 /// The row of the `KeyValueTable`.
 struct KeyValueTableRow: View {
   /// The item to show inside the row.
-  var item: KeyValueItem
+  @State var item: KeyValueItem
+
+  /// The row mode.
+  /// Useful to disable user interaction on `read` mode.
+  @State var mode: KeyValueTableViewModel.Mode
 
   /// The index of the item.
   var index: Int
@@ -15,14 +19,16 @@ struct KeyValueTableRow: View {
   var body: some View {
     HStack {
       Group {
-        TextField(item.key, text: .constant(item.key))
+        TextField(item.key, text: $item.key)
+          .disabled(mode == .read)
 
-        TextField(item.value, text: .constant(item.value))
+        TextField(item.value, text: $item.value)
+          .disabled(mode == .read)
       }
       .frame(maxWidth: .infinity, alignment: .leading)
       .padding(EdgeInsets(top: 6, leading: 10, bottom: 6, trailing: 10))
       .textFieldStyle(PlainTextFieldStyle())
-      .foregroundColor(.latte)
+      .foregroundColor(Color.latte)
     }
     .background(index.isMultiple(of: 2) ? Color.lungo : Color.doppio)
     .cornerRadius(5)
@@ -31,6 +37,12 @@ struct KeyValueTableRow: View {
 
 struct KeyValueTableRowPreviews: PreviewProvider {
   static var previews: some View {
-    KeyValueTableRow(item: KeyValueItem(key: "Test", value: "Multiline\nTest\nTest"), index: 0)
+    KeyValueTableRow(item: KeyValueItem(key: "Key", value: "Value"), mode: .read, index: 0)
+
+    KeyValueTableRow(item: KeyValueItem(key: "", value: ""), mode: .read, index: 1)
+
+    KeyValueTableRow(item: KeyValueItem(key: "Key", value: "Value"), mode: .write, index: 0)
+
+    KeyValueTableRow(item: KeyValueItem(key: "", value: ""), mode: .write, index: 1)
   }
 }
