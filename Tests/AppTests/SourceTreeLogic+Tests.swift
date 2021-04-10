@@ -9,6 +9,7 @@ import XCTest
 class SourceTreeLogicTests: XCTestCase {
 
   // MARK: Variables
+
   // The `URL` of a temporary folder we will use for this test.
   static var temporaryWorkspaceURL: URL!
 
@@ -17,7 +18,8 @@ class SourceTreeLogicTests: XCTestCase {
     Self.temporaryWorkspaceURL.appendingPathComponent(Logic.Settings.serverConfigurationFileName).path
   }
 
-  // MARK: Set up and tear down
+  // MARK: Set Up and Tear Down
+
   override class func setUp() {
     temporaryWorkspaceURL = URL(fileURLWithPath: NSTemporaryDirectory().appending("Mocka"))
 
@@ -63,7 +65,7 @@ class SourceTreeLogicTests: XCTestCase {
 
   // Test only valid folders are considered.
   func testOnlyContentOfValidStructuresIsConsidered() {
-    let contents = Logic.SourceTree().contents(of: Self.temporaryWorkspaceURL)
+    let contents = Logic.SourceTree.contents(of: Self.temporaryWorkspaceURL)
 
     // One folder in the workspace.
     XCTAssertEqual(contents.count, 1)
@@ -77,7 +79,7 @@ class SourceTreeLogicTests: XCTestCase {
     UserDefaults.standard.set(nil, forKey: UserDefaultKey.workspaceURL)
 
     do {
-      let _ = try Logic.SourceTree().requests()
+      let _ = try Logic.SourceTree.requests()
       XCTFail("Was expecting the test to fail, but succeeded instead")
     } catch {
       guard case .workspacePathDoesNotExist = error as? MockaError else {
@@ -89,7 +91,7 @@ class SourceTreeLogicTests: XCTestCase {
 
   // Test MockaRequests are fetched correctly from the source tree.
   func testFetchingMockaRequestsFromSourceTree() {
-    let requests = try! Logic.SourceTree().requests()
+    let requests = try! Logic.SourceTree.requests()
       .sorted {
         $0.requestedResponse.status.code < $1.requestedResponse.status.code
       }

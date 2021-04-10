@@ -65,6 +65,6 @@ final class SourceTreeViewModel: ObservableObject {
       throw MockaError.missingWorkspacePathValue
     }
 
-    directoryContent = Logic.SourceTree().contents(of: workspaceDirectory)
+    directoryContent = Logic.SourceTree.contents(of: workspaceDirectory)
   }
 }

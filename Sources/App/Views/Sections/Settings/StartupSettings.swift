@@ -82,7 +82,7 @@ struct StartupSettings: View {
             .font(.headline)
             .frame(width: 120, alignment: .trailing)
 
-          RoundedTextField(title: "Server address", text: .constant("127.0.0.1"))
+          RoundedTextField(title: "Server address", text: $viewModel.hostname)
             .frame(width: 300)
         }
 
@@ -91,7 +91,7 @@ struct StartupSettings: View {
             .font(.headline)
             .frame(width: 120, alignment: .trailing)
 
-          RoundedTextField(title: "Server port", text: .constant("8080"))
+          RoundedTextField(title: "Server port", text: $viewModel.port)
             .frame(width: 300)
         }
       }

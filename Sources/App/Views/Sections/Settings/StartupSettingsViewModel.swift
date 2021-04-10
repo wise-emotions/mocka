@@ -16,6 +16,19 @@ final class StartupSettingsViewModel: ObservableObject {
   /// inside a `Binding` object that needs a `String`.
   @Published var workspacePath: String?
 
+  /// The hostname of the server for the connection.
+  ///
+  /// It isn't a nullable property because it's used
+  /// inside a `Binding` object that needs a `String`.
+  @Published var hostname: String = "127.0.0.1"
+
+  /// The port of the server for the connection.
+  /// If the value passed cannot be casted as an Integer, this will default to `8080`.
+  ///
+  /// It isn't an Integer, not it is nullable because it's used
+  /// inside a `Binding` object that needs a `String`.
+  @Published var port: String = "8080"
+
   /// Handle the workspace path error.
   @Published var workspacePathError: MockaError? = nil
 
@@ -78,7 +91,9 @@ final class StartupSettingsViewModel: ObservableObject {
       self.workspaceURL = workspaceURL
 
       try Logic.WorkspacePath.isFolder(workspaceURL)
-      try Logic.Settings.createConfiguration()
+      try Logic.Settings.updateServerConfigurationFile(
+        ServerConnectionConfiguration(hostname: hostname, port: Int(port) ?? 8080)
+      )
 
       // This is how the dismiss in handled in SwiftUI.
       presentationMode.wrappedValue.dismiss()
