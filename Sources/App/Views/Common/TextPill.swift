@@ -5,11 +5,11 @@
 import SwiftUI
 
 /// A pill containing an uppercased text.
-struct TextPillView: View {
+struct TextPill: View {
   
   // MARK: - Stored Properties
   
-  /// The `text` inside the `TextPillView`.
+  /// The `text` inside the `TextPill`.
   let text: String
   
   // MARK: - Body
@@ -25,8 +25,10 @@ struct TextPillView: View {
   }
 }
 
-struct RequestTypePillView_Previews: PreviewProvider {
+// MARK: - Previews
+
+struct TextPillViewPreviews: PreviewProvider {
   static var previews: some View {
-    TextPillView(text: "delete")
+    TextPill(text: "delete")
   }
 }
