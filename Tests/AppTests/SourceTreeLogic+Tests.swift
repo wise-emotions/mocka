@@ -89,9 +89,10 @@ class SourceTreeLogicTests: XCTestCase {
 
   // Test MockaRequests are fetched correctly from the source tree.
   func testFetchingMockaRequestsFromSourceTree() {
-    let requests = try! Logic.SourceTree().requests().sorted {
-      $0.requestedResponse.status.code < $1.requestedResponse.status.code
-    }
+    let requests = try! Logic.SourceTree().requests()
+      .sorted {
+        $0.requestedResponse.status.code < $1.requestedResponse.status.code
+      }
 
     let expectedRequestOne = MockaApp.Request(
       path: ["api", "users"],
@@ -179,15 +180,15 @@ extension SourceTreeLogicTests {
 
     // Add the response
     let response = """
-    [
-      {
-        "name": "userOne"
-      },
-      {
-        "name": "userTwo"
-      }
-    ]
-    """
+      [
+        {
+          "name": "userOne"
+        },
+        {
+          "name": "userTwo"
+        }
+      ]
+      """
 
     let responseFilePath = url.appendingPathComponent("response.json", isDirectory: false)
     try! response.write(toFile: responseFilePath.path, atomically: true, encoding: String.Encoding.utf8)

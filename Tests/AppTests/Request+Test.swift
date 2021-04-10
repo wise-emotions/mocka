@@ -58,25 +58,25 @@ class RequestTests: XCTestCase {
     )
 
     let expectedOutput = """
-    {
-      "path" : [
-        "api",
-        "test"
-      ],
-      "method" : "GET",
-      "expectedResponse" : {
-        "statusCode" : 200,
-        "fileName" : "response.json",
-        "headers" : [
-          {
-            "key" : "Content-Type",
-            "value" : "application\\/json"
-          }
+      {
+        "path" : [
+          "api",
+          "test"
         ],
-        "contentType" : "application\\/json"
+        "method" : "GET",
+        "expectedResponse" : {
+          "statusCode" : 200,
+          "fileName" : "response.json",
+          "headers" : [
+            {
+              "key" : "Content-Type",
+              "value" : "application\\/json"
+            }
+          ],
+          "contentType" : "application\\/json"
+        }
       }
-    }
-    """
+      """
 
     let encoder = JSONEncoder()
     encoder.outputFormatting = .prettyPrinted
@@ -97,25 +97,26 @@ class RequestTests: XCTestCase {
     )
 
     let encodedRequest = """
-    {
-      "path" : [
-        "api",
-        "test"
-      ],
-      "method" : "GET",
-      "expectedResponse" : {
-        "statusCode" : 200,
-        "fileName" : "response.json",
-        "headers" : [
-          {
-            "key" : "Content-Type",
-            "value" : "application\\/json"
-          }
+      {
+        "path" : [
+          "api",
+          "test"
         ],
-        "contentType" : "application\\/json"
+        "method" : "GET",
+        "expectedResponse" : {
+          "statusCode" : 200,
+          "fileName" : "response.json",
+          "headers" : [
+            {
+              "key" : "Content-Type",
+              "value" : "application\\/json"
+            }
+          ],
+          "contentType" : "application\\/json"
+        }
       }
-    }
-    """.data(using: .utf8)!
+      """
+      .data(using: .utf8)!
 
     let request = try! JSONDecoder().decode(MockaApp.Request.self, from: encodedRequest)
     XCTAssertEqual(expectedOutput, request)
