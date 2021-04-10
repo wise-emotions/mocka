@@ -9,8 +9,6 @@ import XCTest
 class SourceTreeLogicTests: XCTestCase {
 
   // MARK: Variables
-
-
   // The `URL` of a temporary folder we will use for this test.
   static var temporaryWorkspaceURL: URL!
 
@@ -20,8 +18,6 @@ class SourceTreeLogicTests: XCTestCase {
   }
 
   // MARK: Set up and tear down
-
-
   override class func setUp() {
     temporaryWorkspaceURL = URL(fileURLWithPath: NSTemporaryDirectory().appending("Mocka"))
 

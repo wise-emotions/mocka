@@ -18,7 +18,7 @@ class SettingsLogicTests: XCTestCase {
     Self.temporaryWorkspaceURL.appendingPathComponent(Logic.Settings.serverConfigurationFileName).path
   }
 
-  // MARK: Set up and tear down
+  // MARK: Set Up and Tear Down
 
   override class func setUp() {
     temporaryWorkspaceURL = URL(fileURLWithPath: NSTemporaryDirectory().appending("Mocka"))
@@ -40,7 +40,7 @@ class SettingsLogicTests: XCTestCase {
     XCTAssertTrue(FileManager.default.fileExists(atPath: configurationFilePath))
   }
 
-  // Test that the creation of the server configuration file throws MockaError.workspacePathDoesNotExist if workspace URL is not set.
+  // Test that the creation of the server configuration file throws `MockaError.workspacePathDoesNotExist` if workspace URL is not set.
   func testSettingsFileCreationFailsWithoutWorkspaceRoot() {
     UserDefaults.standard.set(nil, forKey: UserDefaultKey.workspaceURL)
     do {
