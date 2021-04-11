@@ -38,6 +38,21 @@ final class SourceTreeViewModel: ObservableObject {
     try refreshContent()
   }
 
+  // MARK: - Functions
+
+  /// Creates the correct `EditorDetailViewModel` for the node.
+  /// - Parameter node: The node we want to generate the `EditorDetailViewModel` for.
+  /// - Returns: An instance of `EditorDetailViewModel`.
+  func detailViewModel(for node: FileSystemNode) -> EditorDetailViewModel {
+    switch node.kind {
+    case .folder:
+      return EditorDetailViewModel()
+
+    case let .requestFile(request):
+      return EditorDetailViewModel(selectedRequest: request)
+    }
+  }
+
   /// Updates the `directoryContent` by iterating over the contents of the workspace directory.
   func refreshContent() throws {
     guard let workspaceDirectory = workspaceURL else {

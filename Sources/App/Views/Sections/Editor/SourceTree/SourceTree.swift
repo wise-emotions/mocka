@@ -9,9 +9,6 @@ struct SourceTree: View {
 
   // MARK: - Stored Properties
 
-  /// The app environment object.
-  @EnvironmentObject var appEnvironment: AppEnvironment
-
   /// The associated ViewModel.
   @StateObject var viewModel: SourceTreeViewModel
 
@@ -27,7 +24,7 @@ struct SourceTree: View {
         EmptyState(symbol: .document, text: "Could not find any API requests with this name")
       } else {
         List(viewModel.filteredNodes, children: \.children) { node in
-          NavigationLink(destination: Text(node.url.path)) {
+          NavigationLink(destination: EditorDetail(viewModel: viewModel.detailViewModel(for: node))) {
             SourceTreeNode(name: node.name, isFolder: node.isFolder)
           }
           .contextMenu(
