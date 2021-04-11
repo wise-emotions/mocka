@@ -59,6 +59,23 @@ struct FileSystemNode: Identifiable, Hashable {
     self.url = url
     self.kind = kind
   }
+
+  // MARK: - Functions
+
+  /// Returns a set containing the node alongside all its children.
+  func flatten() -> Set<FileSystemNode> {
+    var nodes: Set<FileSystemNode> = [self]
+
+    guard let children = children else {
+      return nodes
+    }
+
+    nodes = children.reduce(into: nodes) {
+      $0.formUnion($1.flatten())
+    }
+
+    return nodes
+  }
 }
 
 // MARK: - Data Structure
@@ -73,5 +90,14 @@ extension FileSystemNode {
 
     /// The node is a request file.
     case requestFile(_ request: Request)
+  }
+}
+
+extension Array where Element == FileSystemNode {
+  /// Returns a set containing all the node alongside their children.
+  func flatten() -> Set<Element> {
+    self.reduce(into: Set<FileSystemNode>()) {
+      $0.formUnion($1.flatten())
+    }
   }
 }
