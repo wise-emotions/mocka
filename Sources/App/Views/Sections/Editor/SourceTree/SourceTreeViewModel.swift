@@ -3,65 +3,44 @@
 //
 
 import MockaServer
-import UniformTypeIdentifiers
+import SwiftUI
 
 /// The ViewModel of the `SourceTree`.
 final class SourceTreeViewModel: ObservableObject {
 
-  // MARK: - Constants
-
-  /// The resource keys for the infos to extract from a `URL`.
-  /// `.nameKey` returns the name of the file.
-  /// `.contentTypeKey` returns the type of the file. Example "public.json".
-  private static let resourceKeys: Set<URLResourceKey> = [.nameKey, .contentTypeKey]
-
-  /// The list of types allowed in the tree.
-  private static let allowedTypes: Set<UTType> = ResponseBody.ContentType.allCases.reduce(into: Set<UTType>()) {
-    guard let uniformTypeIdentifier = $1.uniformTypeIdentifier else {
-      return
-    }
-
-    $0.insert(uniformTypeIdentifier)
-  }
-
-  /// The allowed name for a file containing a request.
-  private static let allowedRequestFileName = "request.json"
-
-  /// The list of allowed file names for a response.
-  /// This list is used to filter out what files will be displayed in the sources tree.
-  private static let allowedResponseFileNames = ResponseBody.ContentType.allCases.reduce(into: Set<String>()) {
-    guard let fileExtension = $1.expectedFileExtension else {
-      return
-    }
-
-    $0.insert("response.\(fileExtension)")
-  }
-
-  /// The regex the name of the folder should match to be allowed in the tree.
-  private static var folderNameRegex: String {
-    let allSupportedMethods = HTTPMethod.allCases
-      .map {
-        $0.rawValue
-      }
-      .joined(separator: "|")
-
-    return "(\(allSupportedMethods))-[A-Za-z0-9-]*"
-  }
-
   // MARK: - Stored Properties
+
+  /// The text that filters the requests.
+  @Published var filterText: String = ""
 
   /// The contents of the directory.
   @Published var directoryContent: [FileSystemNode] = []
+
+  /// The value of the workspace path.
+  /// When this value is updated, the value in the user defaults is updated as well.
+  @AppStorage(UserDefaultKey.workspaceURL) private var workspaceURL: URL?
+
+  // MARK: - Computed Properties
+
+  /// The directories contents filtered based on the the filtered text, if any.
+  var filteredNodes: [FileSystemNode] {
+    #warning("Needs implementation.")
+    return directoryContent
+  }
 
   // MARK: - Init
 
   /// Returns an instance of `SourceTreeViewModel`.
   ///
   /// This instantiation will fail if the workspace path value has not been set yet.
-  /// - Parameter workspacePath: The user workspace path.
   /// - Throws: `MockaError.missingWorkspacePathValue` if `path` is `nil`.
-  init(workspacePath: URL?) throws {
-    guard let workspaceDirectory = workspacePath else {
+  init() throws {
+    try refreshContent()
+  }
+
+  /// Updates the `directoryContent` by iterating over the contents of the workspace directory.
+  func refreshContent() throws {
+    guard let workspaceDirectory = workspaceURL else {
       throw MockaError.missingWorkspacePathValue
     }
 

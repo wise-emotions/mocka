@@ -22,7 +22,7 @@ struct AppSection: View {
       ServerSection()
 
     case .editor:
-      ServerSection()
+      EditorSection()
 
     case .console:
       ConsoleSection()
