@@ -5,8 +5,8 @@
 import SwiftUI
 import UniformTypeIdentifiers
 
-/// The ViewModel of the `StartupSettings`.
-final class StartupSettingsViewModel: ObservableObject {
+/// The ViewModel of the `ServerSettings`.
+final class ServerSettingsViewModel: ObservableObject {
 
   // MARK: - Stored Properties
 

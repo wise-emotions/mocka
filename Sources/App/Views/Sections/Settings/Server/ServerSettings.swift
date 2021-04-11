@@ -7,17 +7,18 @@ import UniformTypeIdentifiers
 
 /// The startup settings view.
 /// This view is shown in case the `workspaceURL` doesn't exist.
-struct StartupSettings: View {
+struct ServerSettings: View {
 
   // MARK: - Stored Properties
 
+  /// Specify if the `StartupSettings` has been opened from the main app settings `Settings`.
   let isShownFromSettings: Bool
 
   /// A binding to the current presentation mode of the view associated with this environment.
   @Environment(\.presentationMode) var presentationMode
 
   /// The associated ViewModel.
-  @StateObject var viewModel = StartupSettingsViewModel()
+  @StateObject var viewModel = ServerSettingsViewModel()
 
   // MARK: - Body
 
@@ -108,8 +109,8 @@ struct StartupSettings: View {
 
 struct StartupSettingsPreviews: PreviewProvider {
   static var previews: some View {
-    StartupSettings(isShownFromSettings: false)
+    ServerSettings(isShownFromSettings: false)
 
-    StartupSettings(isShownFromSettings: true)
+    ServerSettings(isShownFromSettings: true)
   }
 }
