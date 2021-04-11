@@ -63,7 +63,7 @@ class SourceTreeLogicTests: XCTestCase {
 
   // MARK: Tests
 
-  // Tests the performance creating a realistic high number of requests nested vertically and horizontally
+  // Tests the performance creating a realistic high number of requests nested vertically and horizontally.
   func testPerformanceForHighLevelOfRequests() {
     (0...200)
       .forEach { number in
