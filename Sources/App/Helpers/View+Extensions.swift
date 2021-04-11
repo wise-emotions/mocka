@@ -69,9 +69,11 @@ extension View {
   ///     Text(text)
   ///       .contextMenuCopy(text)
   ///
-  /// - Parameter string: The `String` to be copied into the pasteboard.
+  /// - Parameters:
+  ///   - text: The context menu text. Default is `Copy Value`.
+  ///   - string: The `String` to be copied into the pasteboard.
   /// - Returns: Returns the `View` with the applied modifier.
-  @ViewBuilder func contextMenuCopy(_ string: String) -> some View {
+  @ViewBuilder func contextMenuCopy(text: String = "Copy Value", _ string: String) -> some View {
     self.contextMenu {
       Button(
         action: {
@@ -79,7 +81,7 @@ extension View {
           NSPasteboard.general.setString(string, forType: .string)
         }
       ) {
-        Text("Copy Value")
+        Text(text)
       }
     }
   }
