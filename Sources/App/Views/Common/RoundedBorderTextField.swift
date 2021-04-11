@@ -9,15 +9,15 @@ import SwiftUI
 struct RoundedBorderTextField: View {
 
   // MARK: - Stored Properties
-  
+
   /// The title of the text field. This is displayed when no text has been entered in the field.
   let title: String
 
   /// The text entered in the field.
   @Binding var text: String
- 
+
   // MARK: - Computed Properties
-   
+
   /// An overlay that draws a rounded border on the view.
   private var borderOverlay: some View {
     RoundedRectangle(cornerRadius: 6, style: .continuous)
@@ -25,7 +25,7 @@ struct RoundedBorderTextField: View {
   }
 
   // MARK: - Body
-  
+
   var body: some View {
     TextField(title, text: $text)
       .textFieldStyle(PlainTextFieldStyle())

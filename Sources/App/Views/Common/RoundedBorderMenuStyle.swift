@@ -11,7 +11,7 @@ struct RoundedBorderMenuStyle: MenuStyle {
     RoundedRectangle(cornerRadius: 6, style: .continuous)
       .stroke(Color.americano, lineWidth: 1)
   }
-  
+
   func makeBody(configuration: Configuration) -> some View {
     Menu(configuration)
       .menuStyle(BorderlessButtonMenuStyle())

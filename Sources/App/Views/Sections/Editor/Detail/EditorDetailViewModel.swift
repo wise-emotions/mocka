@@ -59,7 +59,7 @@ final class EditorDetailViewModel: ObservableObject {
       self.selectedRequest = nil
       return
     }
-    
+
     self.selectedRequest = request
     self.requestPath = request.path.joined(separator: "/")
     self.requestName = requestName

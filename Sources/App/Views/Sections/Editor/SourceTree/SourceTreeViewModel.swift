@@ -55,9 +55,11 @@ final class SourceTreeViewModel: ObservableObject {
       // The parent namespace folder.
       let parent = flatDirectories.first { $0.children?.contains(requestFolderNode) ?? false }
 
-      let requestNameTrimmingLowerBound = requestFolderNode.name.range(
-        of: "\(request.method.rawValue) - "
-      )?.upperBound ?? requestFolderNode.name.endIndex
+      let requestNameTrimmingLowerBound =
+        requestFolderNode.name.range(
+          of: "\(request.method.rawValue) - "
+        )?
+        .upperBound ?? requestFolderNode.name.endIndex
 
       let requestName = String(requestFolderNode.name[requestNameTrimmingLowerBound..<requestFolderNode.name.endIndex])
 

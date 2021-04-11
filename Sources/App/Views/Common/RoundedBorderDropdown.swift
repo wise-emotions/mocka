@@ -9,7 +9,7 @@ import SwiftUI
 struct RoundedBorderDropdown<Item: Hashable>: View {
 
   // MARK: - Stored Properties
-  
+
   /// The title of the dropdown.
   let title: String
 
@@ -21,9 +21,9 @@ struct RoundedBorderDropdown<Item: Hashable>: View {
 
   /// The selected item.
   @Binding var selection: Item?
-  
+
   // MARK: - Body
-  
+
   var body: some View {
     Menu {
       ForEach(items, id: \.hashValue) { item in
