@@ -63,6 +63,30 @@ class SourceTreeLogicTests: XCTestCase {
 
   // MARK: Tests
 
+  // Tests the performance creating a realistic high number of requests nested vertically and horizontally.
+  func testPerformanceForHighLevelOfRequests() {
+    (0...200)
+      .forEach { number in
+        // Create a "/App/GET - get all users" under workspace root folder with a valid request.
+        let getAllUsersURL = Self.temporaryWorkspaceURL.appendingPathComponent("App/\(number)/GET - get all users")
+        Self.addDirectory(at: getAllUsersURL.path)
+        Self.addRequestWithJSONResponse(to: getAllUsersURL)
+      }
+
+    (0...200)
+      .forEach { number in
+        let numberPath = (0...number).map { String($0) }.joined(separator: "/")
+        // Create a "/App/GET - get all users" under workspace root folder with a valid request.
+        let getAllUsersURL = Self.temporaryWorkspaceURL.appendingPathComponent("App/Test/\(numberPath)/GET - get all users")
+        Self.addDirectory(at: getAllUsersURL.path)
+        Self.addRequestWithJSONResponse(to: getAllUsersURL)
+      }
+
+    measure {
+      _ = Logic.SourceTree.contents(of: Self.temporaryWorkspaceURL)
+    }
+  }
+
   // Test only valid folders are considered.
   func testOnlyContentOfValidStructuresIsConsidered() {
     let contents = Logic.SourceTree.contents(of: Self.temporaryWorkspaceURL)
@@ -70,8 +94,9 @@ class SourceTreeLogicTests: XCTestCase {
     // One folder in the workspace.
     XCTAssertEqual(contents.count, 1)
 
-    // The folder has only two valid folders out of the existing 5.
-    XCTAssertEqual(contents[0].children?.count, 2)
+    // The folder has only 4 valid folders out of the existing 6.
+    // GET - get all users, V2, Void and Generic.
+    XCTAssertEqual(contents[0].children?.count, 4)
   }
 
   // Test fetching requests without setting workspace url fails.
@@ -125,6 +150,21 @@ class SourceTreeLogicTests: XCTestCase {
     XCTAssertEqual(requests[1].method, expectedRequestTwo.method)
     XCTAssertEqual(Int(requests[1].requestedResponse.status.code), expectedRequestTwo.expectedResponse.statusCode)
     XCTAssertEqual(requests[1].requestedResponse.headers.contentType, nil)
+  }
+
+  // Test `namespaceFolders` returns an empty array if the workspace url has not been set.
+  func testNamespaceFoldersWithoutWorkspaceURLSetReturnEmptyArray() {
+    UserDefaults.standard.set(nil, forKey: UserDefaultKey.workspaceURL)
+
+    XCTAssertEqual(Logic.SourceTree.namespaceFolders(), [])
+  }
+
+  // Test `namespaceFolders` returns an array containing all the folders that serve as a namespace.
+  func testNamespaceFoldersReturnArrayWithCorrectFolders() {
+    let namespaceFolder = Logic.SourceTree.namespaceFolders()
+
+    XCTAssertEqual(namespaceFolder.count, 4)
+    XCTAssertEqual(namespaceFolder.map { $0.name }.sorted(by: <), ["App", "Generic", "V2", "Void"])
   }
 }
 

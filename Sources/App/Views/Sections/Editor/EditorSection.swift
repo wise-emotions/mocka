@@ -22,7 +22,7 @@ struct EditorSection: View {
 
       SourceTree(viewModel: try! SourceTreeViewModel())
 
-      ServerDetail()
+      EditorDetail(viewModel: EditorDetailViewModel())
     }
     .background(Color.doppio)
   }
