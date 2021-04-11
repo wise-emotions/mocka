@@ -24,6 +24,9 @@ enum SFSymbol: String {
   /// Plus circle icon.
   case plusCircle = "plus.circle"
 
+  /// Refresh icon.
+  case refresh = "arrow.triangle.2.circlepath"
+
   /// Scroll icon.
   case scroll
 

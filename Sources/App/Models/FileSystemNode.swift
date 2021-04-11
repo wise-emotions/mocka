@@ -21,6 +21,8 @@ struct FileSystemNode: Identifiable, Hashable {
   /// The `URL` to the node.
   let url: URL
 
+  // MARK: - Computed Properties
+
   /// The children nodes of the directory. `nil` if the node represents a file.
   var children: [FileSystemNode]? {
     switch kind {
