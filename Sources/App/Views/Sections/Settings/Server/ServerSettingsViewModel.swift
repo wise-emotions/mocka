@@ -124,8 +124,8 @@ final class ServerSettingsViewModel: ObservableObject {
   /// - Parameter presentationMode: The `View` `PresentationMode`.
   func confirmSettings(with presentationMode: Binding<PresentationMode>) {
     guard let workspacePath = workspacePath else {
-      self.workspaceURL = nil
-      self.workspacePathError = workspacePathError
+      workspaceURL = nil
+      workspacePathError = .missingWorkspacePathValue
       return
     }
 
