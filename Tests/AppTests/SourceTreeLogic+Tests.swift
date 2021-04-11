@@ -63,6 +63,28 @@ class SourceTreeLogicTests: XCTestCase {
 
   // MARK: Tests
 
+  // Tests the performance creating a realistic high number of requests nested vertically and horizontally
+  func testPerformanceForHighLevelOfRequests() {
+    (0...200).forEach { number in
+      // Create a "/App/GET - get all users" under workspace root folder with a valid request.
+      let getAllUsersURL = Self.temporaryWorkspaceURL.appendingPathComponent("App/\(number)/GET - get all users")
+      Self.addDirectory(at: getAllUsersURL.path)
+      Self.addRequestWithJSONResponse(to: getAllUsersURL)
+    }
+
+    (0...200).forEach { number in
+      let numberPath = (0...number).map { String($0) }.joined(separator: "/")
+        // Create a "/App/GET - get all users" under workspace root folder with a valid request.
+        let getAllUsersURL = Self.temporaryWorkspaceURL.appendingPathComponent("App/Test/\(numberPath)/GET - get all users")
+        Self.addDirectory(at: getAllUsersURL.path)
+        Self.addRequestWithJSONResponse(to: getAllUsersURL)
+    }
+
+    measure {
+      _ = Logic.SourceTree.contents(of: Self.temporaryWorkspaceURL)
+    }
+  }
+
   // Test only valid folders are considered.
   func testOnlyContentOfValidStructuresIsConsidered() {
     let contents = Logic.SourceTree.contents(of: Self.temporaryWorkspaceURL)
