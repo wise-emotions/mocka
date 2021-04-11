@@ -54,11 +54,13 @@ final class SourceTreeViewModel: ObservableObject {
       // The parent namespace folder.
       let parent = directoryContent.flatten().first { $0.children?.contains(requestFolderNode) ?? false }
 
-      return EditorDetailViewModel(
-        selectedRequest: request,
-        requestName: requestFolderNode.name.split(separator: "-")[1...].joined(),
-        requestParentFolder: parent
-      )
+      let requestNameTrimmingLowerBound = requestFolderNode.name.range(
+        of: "\(request.method.rawValue) - "
+      )?.upperBound ?? requestFolderNode.name.endIndex
+
+      let requestName = String(requestFolderNode.name[requestNameTrimmingLowerBound..<requestFolderNode.name.endIndex])
+
+      return EditorDetailViewModel(selectedRequest: request, requestName: requestName, requestParentFolder: parent)
     }
   }
 
