@@ -52,9 +52,9 @@ struct RoundedBorderDropdownPreview: PreviewProvider {
   static var previews: some View {
     RoundedBorderDropdown(
       title: "Method",
-      selection: .constant(HTTPMethod.get),
       items: HTTPMethod.allCases,
-      itemTitleKeyPath: \.rawValue
+      itemTitleKeyPath: \.rawValue,
+      selection: .constant(HTTPMethod.get)
     )
     .previewLayout(.fixed(width: 160, height: 64))
   }

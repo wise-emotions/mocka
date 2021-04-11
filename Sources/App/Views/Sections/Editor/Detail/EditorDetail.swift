@@ -26,9 +26,9 @@ struct EditorDetail: View {
 
           RoundedBorderDropdown(
             title: "Parent Folder",
-            selection: $viewModel.requestParentFolder,
             items: viewModel.namespaceFolders,
-            itemTitleKeyPath: \.name
+            itemTitleKeyPath: \.name,
+            selection: $viewModel.requestParentFolder
           )
           .padding(.horizontal, 26)
           .padding(.vertical, 5)
@@ -39,18 +39,18 @@ struct EditorDetail: View {
 
           RoundedBorderDropdown(
             title: "HTTP Method",
-            selection: $viewModel.selectedHTTPMethod,
             items: viewModel.allHTTPMethods,
-            itemTitleKeyPath: \.rawValue
+            itemTitleKeyPath: \.rawValue,
+            selection: $viewModel.selectedHTTPMethod
           )
           .padding(.horizontal, 26)
           .padding(.vertical, 5)
 
           RoundedBorderDropdown(
             title: "Response Content-Type",
-            selection: $viewModel.selectedContentType,
             items: viewModel.allContentTypes,
-            itemTitleKeyPath: \.rawValue
+            itemTitleKeyPath: \.rawValue,
+            selection: $viewModel.selectedContentType
           )
           .padding(.horizontal, 26)
           .padding(.vertical, 5)
