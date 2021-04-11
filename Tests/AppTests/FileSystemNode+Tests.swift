@@ -39,7 +39,6 @@ class FileSystemNodeTests: XCTestCase {
       kind: .folder(children: [versionFolder, appFolder], isRequestFolder: false)
     )
 
-
     let output = rootFolder.flatten()
 
     XCTAssertEqual(output.count, 4)

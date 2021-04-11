@@ -26,7 +26,7 @@ final class EditorDetailViewModel: ObservableObject {
   @Published var requestName: String = ""
 
   /// The custom name of the request.
-  @Published var requestPath: String =  ""
+  @Published var requestPath: String = ""
 
   /// The parent folder where to put the request.
   @Published var requestParentFolder: FileSystemNode?
