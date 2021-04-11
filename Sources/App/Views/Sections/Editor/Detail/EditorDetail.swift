@@ -19,7 +19,54 @@ struct EditorDetail: View {
       if viewModel.shouldShowEmptyState {
         EmptyState(symbol: .document, text: "Select a request to display its details")
       } else {
-        Text("Detail")
+        ScrollView {
+          RoundedTextField(title: "API custom name", text: $viewModel.requestName)
+            .padding(.horizontal, 26)
+            .padding(.vertical, 5)
+
+          RoundedBorderDropdown(
+            title: "Parent Folder",
+            selection: $viewModel.requestParentFolder,
+            items: viewModel.namespaceFolders,
+            itemTitleKeyPath: \.name
+          )
+          .padding(.horizontal, 26)
+          .padding(.vertical, 5)
+
+          RoundedTextField(title: "Path", text: $viewModel.requestPath)
+            .padding(.horizontal, 26)
+            .padding(.vertical, 5)
+
+          RoundedBorderDropdown(
+            title: "HTTP Method",
+            selection: $viewModel.selectedHTTPMethod,
+            items: viewModel.allHTTPMethods,
+            itemTitleKeyPath: \.rawValue
+          )
+          .padding(.horizontal, 26)
+          .padding(.vertical, 5)
+
+          RoundedBorderDropdown(
+            title: "Response Content-Type",
+            selection: $viewModel.selectedContentType,
+            items: viewModel.allContentTypes,
+            itemTitleKeyPath: \.rawValue
+          )
+          .padding(.horizontal, 26)
+          .padding(.vertical, 5)
+        }
+        .padding(.top, 24)
+      }
+    }
+    .frame(minWidth: Size.minimumListWidth)
+    .toolbar {
+      ToolbarItem {
+        HStack {
+          Text(viewModel.requestName)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .font(.title)
+            .foregroundColor(.latte)
+        }
       }
     }
   }

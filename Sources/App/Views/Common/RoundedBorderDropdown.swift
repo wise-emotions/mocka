@@ -24,10 +24,13 @@ struct RoundedBorderDropdown<Item: Hashable>: View {
       ForEach(items, id: \.hashValue) { item in
         Button(item[keyPath: itemTitleKeyPath]) {
           onSelect(item)
-        }.tag(item.hashValue)
+        }
+        .foregroundColor(.latte)
+        .tag(item.hashValue)
       }
     } label: {
       Text(selection?[keyPath: itemTitleKeyPath] ?? title)
+        .foregroundColor(.latte)
     }
     .menuStyle(RoundedBorderMenuStyle())
   }

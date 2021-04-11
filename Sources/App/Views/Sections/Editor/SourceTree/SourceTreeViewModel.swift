@@ -49,7 +49,16 @@ final class SourceTreeViewModel: ObservableObject {
       return EditorDetailViewModel()
 
     case let .requestFile(request):
-      return EditorDetailViewModel(selectedRequest: request)
+      // The parent of the node, but that is the folder with the regex `METHOD - name of API`.
+      let requestFolderNode = directoryContent.flatten().first { $0.children?.contains(node) ?? false }!
+      // The parent namespace folder.
+      let parent = directoryContent.flatten().first { $0.children?.contains(requestFolderNode) ?? false }
+
+      return EditorDetailViewModel(
+        selectedRequest: request,
+        requestName: requestFolderNode.name.split(separator: "-")[1...].joined(),
+        requestParentFolder: parent
+      )
     }
   }
 
