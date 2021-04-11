@@ -12,7 +12,7 @@ final class SourceTreeViewModel: ObservableObject {
 
   /// The text that filters the requests.
   @Published var filterText: String = ""
-  
+
   /// The contents of the directory.
   @Published var directoryContent: [FileSystemNode] = []
 
