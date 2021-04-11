@@ -38,7 +38,7 @@ struct ServerSettings: View {
             .frame(width: 120, height: 30, alignment: .trailing)
 
           VStack {
-            RoundedTextField(title: "Workspace folder", text: viewModel.workspacePathBinding)
+            RoundedTextField(title: "Workspace folder", text: $viewModel.workspacePath)
               .frame(width: 300)
               .overlay(
                 RoundedRectangle(cornerRadius: 6)

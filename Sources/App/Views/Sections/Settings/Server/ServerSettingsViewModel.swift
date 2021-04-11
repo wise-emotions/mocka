@@ -17,7 +17,11 @@ final class ServerSettingsViewModel: ObservableObject {
   ///
   /// It's important to keep it nullable because by default
   /// it will use the observed `workspaceURL` property.
-  @Published var workspacePath: String?
+  @Published var workspacePath: String = UserDefaults.standard.url(forKey: UserDefaultKey.workspaceURL)?.path ?? "" {
+    didSet {
+      checkURL(workspacePath)
+    }
+  }
 
   /// The hostname of the server for the connection.
   ///
@@ -58,30 +62,6 @@ final class ServerSettingsViewModel: ObservableObject {
   /// When this value is updated, the value in the user defaults is updated as well.
   @AppStorage(UserDefaultKey.workspaceURL) private var workspaceURL: URL?
 
-  /// We create a custom binding to be able to do a live check of the selected folder.
-  /// We cannot use the `viewModel.workspaceURL` directly because it would not allow the user to
-  /// edit it due to the `set` of this binding that calls the `viewModel.checkURL($0)`.
-  /// At the first show of this view the `viewModel.workspacePath` will be `nil` and `viewModel.workspaceURL` too.
-  /// At the following starts the `viewModel.workspacePath` will be `nil`, but `viewModel.workspaceURL` will not.
-  lazy var workspacePathBinding = Binding { [weak self] () -> String in
-    guard let self = self else {
-      return ""
-    }
-
-    if self.workspacePath == nil {
-      if self.workspaceURL?.path == nil {
-        return ""
-      } else {
-        self.workspacePath = self.workspaceURL?.path
-        return self.workspacePath ?? ""
-      }
-    } else {
-      return self.workspacePath ?? ""
-    }
-  } set: { [weak self] in
-    guard let self = self else {
-      return
-    }
   // MARK: - Init
 
   /// Creates the `ServerSettingsViewModel`.
@@ -98,11 +78,8 @@ final class ServerSettingsViewModel: ObservableObject {
     do {
       try Logic.WorkspacePath.isFolder(URL(fileURLWithPath: path))
 
-      workspacePath = path
       workspacePathError = nil
     } catch {
-      workspacePath = path
-
       guard let workspacePathError = error as? MockaError else {
         return
       }
@@ -130,12 +107,6 @@ final class ServerSettingsViewModel: ObservableObject {
   /// In case of error the `workspaceURL` returns to `nil`.
   /// - Parameter presentationMode: The `View` `PresentationMode`.
   func confirmSettings(with presentationMode: Binding<PresentationMode>) {
-    guard let workspacePath = workspacePath else {
-      workspaceURL = nil
-      workspacePathError = .missingWorkspacePathValue
-      return
-    }
-
     let workspaceURL = URL(fileURLWithPath: workspacePath)
 
     do {
