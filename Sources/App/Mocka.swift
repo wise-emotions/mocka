@@ -28,7 +28,7 @@ struct Mocka: App {
         .sheet(
           isPresented: $appEnvironment.shouldShowStartupSettings
         ) {
-          StartupSettings(isShownFromSettings: false)
+          ServerSettings(isShownFromSettings: false)
         }
     }
     .windowStyle(HiddenTitleBarWindowStyle())
@@ -39,7 +39,7 @@ struct Mocka: App {
     }
 
     Settings {
-      ServerSettings()
+      AppSettings()
     }
   }
 }

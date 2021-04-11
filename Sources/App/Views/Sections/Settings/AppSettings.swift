@@ -4,10 +4,14 @@
 
 import SwiftUI
 
-struct ServerSettings: View {
+/// This is the main app settings `Settings`.
+struct AppSettings: View {
+
+  // MARK: - Body
+
   var body: some View {
     TabView {
-      StartupSettings(isShownFromSettings: true)
+      ServerSettings(isShownFromSettings: true)
         .tabItem {
           Label("Server", systemImage: SFSymbol.document.rawValue)
         }
