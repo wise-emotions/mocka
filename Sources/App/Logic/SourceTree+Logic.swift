@@ -76,6 +76,47 @@ extension Logic.SourceTree {
       }
   }
 
+  /// The list of all folders used as a namespace in all of the workspace.
+  static func namespaceFolders() -> Set<FileSystemNode> {
+    guard let rootPath = UserDefaults.standard.url(forKey: UserDefaultKey.workspaceURL) else {
+      return []
+    }
+
+    return contents(of: rootPath)
+      .reduce(into: Set<FileSystemNode>()) { result, node in
+        namespaceFolders(in: node)
+          .forEach {
+            result.insert($0)
+          }
+      }
+  }
+
+
+  /// /// The list of all folders used as a namespace inside a specific node.
+  /// - Parameter node: The node to look up its content.
+  /// - Returns: An array of all found nodes.
+  private static func namespaceFolders(in node: FileSystemNode) -> [FileSystemNode] {
+    var folders: [FileSystemNode] = []
+
+    switch node.kind {
+    case let .folder(children, isRequestFolder):
+      if isRequestFolder {
+        break
+      }
+
+      folders.append(node)
+
+      children.forEach {
+        folders.append(contentsOf: namespaceFolders(in: $0))
+      }
+
+    case .requestFile:
+      break
+    }
+
+    return folders
+  }
+
   /// Recursively looks up all the `Request`s in a `FileSystemNode` and its children.
   /// - Parameter node: The root `FileSystemNode`.
   /// - Returns: An array containing all the found requests.
@@ -83,9 +124,9 @@ extension Logic.SourceTree {
     var requests: [Request] = []
 
     switch node.kind {
-    case let .folder(children):
-      for child in children {
-        requests.append(contentsOf: allRequests(in: child))
+    case let .folder(children, _):
+      children.forEach {
+        requests.append(contentsOf: allRequests(in: $0))
       }
 
     case let .requestFile(request):
@@ -125,19 +166,20 @@ extension Logic.SourceTree {
 
     // If the folder contains other folder, return the node.
     if children.contains(where: { $0.isFolder }) {
-      return FileSystemNode(name: name, url: url, kind: .folder(children: children))
+      return FileSystemNode(name: name, url: url, kind: .folder(children: children, isRequestFolder: false))
     } else {
       // Check if the folder name is sound. If not, return nil.
       // Check if the folder contains at least a request. If not, return nil.
       // Some folders can contain no response.
-      guard
-        name.matchesRegex(folderNameRegex),
-        let request = children.first(where: { $0.name == allowedRequestFileName })
-      else {
-        return nil
-      }
+      if name.matchesRegex(folderNameRegex) {
+        guard let request = children.first(where: { $0.name == allowedRequestFileName }) else {
+          return nil
+        }
 
-      return FileSystemNode(name: name, url: url, kind: .folder(children: [request]))
+        return FileSystemNode(name: name, url: url, kind: .folder(children: [request], isRequestFolder: true))
+      } else {
+        return FileSystemNode(name: name, url: url, kind: .folder(children: [], isRequestFolder: false))
+      }
     }
   }
 

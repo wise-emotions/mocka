@@ -26,7 +26,7 @@ struct FileSystemNode: Identifiable, Hashable {
   /// The children nodes of the directory. `nil` if the node represents a file.
   var children: [FileSystemNode]? {
     switch kind {
-    case let .folder(children):
+    case let .folder(children, _):
       return children
 
     case .requestFile:
@@ -67,7 +67,9 @@ extension FileSystemNode {
   /// The possibile kinds of `FileSystemNode`.
   enum Kind: Hashable {
     /// The node is a folder.
-    case folder(children: [FileSystemNode])
+    /// `children` are the nodes inside of the folder.
+    /// `isRequestFolder` is `true` when the folder contains a request.
+    case folder(children: [FileSystemNode], isRequestFolder: Bool)
 
     /// The node is a request file.
     case requestFile(_ request: Request)
