@@ -45,6 +45,7 @@ struct ConsoleList: View {
           }
           .drawingGroup()
         }
+        .padding(.bottom, 8)
       }
     }
     .background(Color.doppio)

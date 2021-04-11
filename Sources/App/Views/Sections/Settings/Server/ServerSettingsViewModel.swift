@@ -5,35 +5,83 @@
 import SwiftUI
 import UniformTypeIdentifiers
 
-/// The ViewModel of the `StartupSettings`.
-final class StartupSettingsViewModel: ObservableObject {
+/// The ViewModel of the `ServerSettings`.
+final class ServerSettingsViewModel: ObservableObject {
 
   // MARK: - Stored Properties
 
   /// The workspace path to be set.
   ///
-  /// It isn't a nullable property because it's used
-  /// inside a `Binding` object that needs a `String`.
-  @Published var workspacePath: String = ""
+  /// It's important to keep it nullable because by default
+  /// it will use the observed `workspaceURL` property.
+  @Published var workspacePath: String?
 
   /// The hostname of the server for the connection.
   ///
   /// It isn't a nullable property because it's used
   /// inside a `Binding` object that needs a `String`.
-  @Published var hostname: String = "127.0.0.1"
+  @Published var hostname: String = Logic.Settings.serverConfiguration?.hostname ?? "127.0.0.1" {
+    didSet {
+      let filtered = hostname.filter { $0.isNumber || $0 == "." }
+
+      if hostname != filtered {
+        hostname = filtered
+      }
+    }
+  }
 
   /// The port of the server for the connection.
   /// If the value passed cannot be casted as an Integer, this will default to `8080`.
   ///
   /// It isn't an Integer, not it is nullable because it's used
   /// inside a `Binding` object that needs a `String`.
-  @Published var port: String = "8080"
+  @Published var port: String = String(Logic.Settings.serverConfiguration?.port ?? 8080) {
+    didSet {
+      let filtered = port.filter { $0.isNumber }
+
+      if port != filtered {
+        port = filtered
+      }
+    }
+  }
 
   /// Handle the workspace path error.
   @Published var workspacePathError: MockaError? = nil
 
   /// Whether the `fileImporter` is presented.
   @Published var fileImporterIsPresented: Bool = false
+
+  /// The value of the workspace path.
+  /// When this value is updated, the value in the user defaults is updated as well.
+  @AppStorage(UserDefaultKey.workspaceURL) private var workspaceURL: URL?
+
+  /// We create a custom binding to be able to do a live check of the selected folder.
+  /// We cannot use the `viewModel.workspaceURL` directly because it would not allow the user to
+  /// edit it due to the `set` of this binding that calls the `viewModel.checkURL($0)`.
+  /// At the first show of this view the `viewModel.workspacePath` will be `nil` and `viewModel.workspaceURL` too.
+  /// At the following starts the `viewModel.workspacePath` will be `nil`, but `viewModel.workspaceURL` will not.
+  lazy var workspacePathBinding = Binding { [weak self] () -> String in
+    guard let self = self else {
+      return ""
+    }
+
+    if self.workspacePath == nil {
+      if self.workspaceURL?.path == nil {
+        return ""
+      } else {
+        self.workspacePath = self.workspaceURL?.path
+        return self.workspacePath ?? ""
+      }
+    } else {
+      return self.workspacePath ?? ""
+    }
+  } set: { [weak self] in
+    guard let self = self else {
+      return
+    }
+
+    self.checkURL($0)
+  }
 
   // MARK: - Functions
 
@@ -42,6 +90,7 @@ final class StartupSettingsViewModel: ObservableObject {
   func checkURL(_ path: String) {
     do {
       try Logic.WorkspacePath.isFolder(URL(fileURLWithPath: path))
+
       workspacePath = path
       workspacePathError = nil
     } catch {
@@ -72,14 +121,18 @@ final class StartupSettingsViewModel: ObservableObject {
   /// Confirms the selected startup settings
   /// by creating the configuration file in the right path.
   /// In case of error the `workspaceURL` returns to `nil`.
-  /// - Parameters:
-  ///   - appEnvironment: The `AppEnvironment` instance.
-  ///   - presentationMode: The `View` `PresentationMode`.
-  func confirmSettings(for appEnvironment: AppEnvironment, with presentationMode: Binding<PresentationMode>) {
+  /// - Parameter presentationMode: The `View` `PresentationMode`.
+  func confirmSettings(with presentationMode: Binding<PresentationMode>) {
+    guard let workspacePath = workspacePath else {
+      workspaceURL = nil
+      workspacePathError = .missingWorkspacePathValue
+      return
+    }
+
     let workspaceURL = URL(fileURLWithPath: workspacePath)
 
     do {
-      appEnvironment.workspaceURL = workspaceURL
+      self.workspaceURL = workspaceURL
 
       try Logic.WorkspacePath.isFolder(workspaceURL)
       try Logic.Settings.updateServerConfigurationFile(
@@ -93,7 +146,7 @@ final class StartupSettingsViewModel: ObservableObject {
         return
       }
 
-      appEnvironment.workspaceURL = nil
+      self.workspaceURL = nil
       self.workspacePathError = workspacePathError
     }
   }
