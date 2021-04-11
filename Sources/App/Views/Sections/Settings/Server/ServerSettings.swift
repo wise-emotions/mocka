@@ -11,14 +11,11 @@ struct ServerSettings: View {
 
   // MARK: - Stored Properties
 
-  /// Specify if the `StartupSettings` has been opened from the main app settings `Settings`.
-  let isShownFromSettings: Bool
-
   /// A binding to the current presentation mode of the view associated with this environment.
   @Environment(\.presentationMode) var presentationMode
 
   /// The associated ViewModel.
-  @StateObject var viewModel = ServerSettingsViewModel()
+  @StateObject var viewModel: ServerSettingsViewModel
 
   // MARK: - Body
 
@@ -26,13 +23,13 @@ struct ServerSettings: View {
     VStack {
       Text("Welcome to Mocka")
         .font(.largeTitle)
-        .isHidden(isShownFromSettings, remove: true)
+        .isHidden(viewModel.isShownFromSettings, remove: true)
 
       Text("Before starting you need to select a workspace path.\nYou can also set an optional server's address and port.")
         .frame(height: 32)
         .font(.body)
         .padding(.vertical)
-        .isHidden(isShownFromSettings, remove: true)
+        .isHidden(viewModel.isShownFromSettings, remove: true)
 
       VStack(alignment: .leading) {
         HStack(alignment: .top) {
@@ -109,8 +106,8 @@ struct ServerSettings: View {
 
 struct StartupSettingsPreviews: PreviewProvider {
   static var previews: some View {
-    ServerSettings(isShownFromSettings: false)
+    ServerSettings(viewModel: ServerSettingsViewModel(isShownFromSettings: false))
 
-    ServerSettings(isShownFromSettings: true)
+    ServerSettings(viewModel: ServerSettingsViewModel(isShownFromSettings: true))
   }
 }

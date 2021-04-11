@@ -11,7 +11,7 @@ struct AppSettings: View {
 
   var body: some View {
     TabView {
-      ServerSettings(isShownFromSettings: true)
+      ServerSettings(viewModel: ServerSettingsViewModel(isShownFromSettings: true))
         .tabItem {
           Label("Server", systemImage: SFSymbol.document.rawValue)
         }

@@ -10,6 +10,9 @@ final class ServerSettingsViewModel: ObservableObject {
 
   // MARK: - Stored Properties
 
+  /// Specify if the `StartupSettings` has been opened from the main app settings `Settings`.
+  let isShownFromSettings: Bool
+
   /// The workspace path to be set.
   ///
   /// It's important to keep it nullable because by default
@@ -79,8 +82,12 @@ final class ServerSettingsViewModel: ObservableObject {
     guard let self = self else {
       return
     }
+  // MARK: - Init
 
-    self.checkURL($0)
+  /// Creates the `ServerSettingsViewModel`.
+  /// - Parameter isShownFromSettings: Specify if the `View` is opened by the `Settings` window or not.
+  init(isShownFromSettings: Bool) {
+    self.isShownFromSettings = isShownFromSettings
   }
 
   // MARK: - Functions
@@ -139,8 +146,13 @@ final class ServerSettingsViewModel: ObservableObject {
         ServerConnectionConfiguration(hostname: hostname, port: Int(port) ?? 8080)
       )
 
-      // This is how the dismiss in handled in SwiftUI.
-      presentationMode.wrappedValue.dismiss()
+      if isShownFromSettings {
+        // Currently we can't close a window from SwiftUI.
+        NSApplication.shared.keyWindow?.close()
+      } else {
+        // This is how the dismiss in handled in SwiftUI.
+        presentationMode.wrappedValue.dismiss()
+      }
     } catch {
       guard let workspacePathError = error as? MockaError else {
         return
