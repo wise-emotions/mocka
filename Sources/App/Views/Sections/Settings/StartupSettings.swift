@@ -22,17 +22,6 @@ struct StartupSettings: View {
   // MARK: - Body
 
   var body: some View {
-    // We create a custom binding to be able to do a live check of the selected folder.
-    // We cannot use the `viewModel.workspaceURL` directly because it would not allow to
-    // edit it due to the `set` of this binding that calls the `viewModel.checkURL($0)`.
-    // At the first show of this view the `viewModel.workspacePath` will be `nil` and `viewModel.workspaceURL` too.
-    // At the following starts the `viewModel.workspacePath` will be `nil`, but `viewModel.workspaceURL` will not.
-    let workspacePathBinding = Binding {
-      viewModel.workspacePath ?? viewModel.workspaceURL?.path ?? ""
-    } set: {
-      viewModel.checkURL($0)
-    }
-
     VStack {
       Text("Welcome to Mocka")
         .font(.largeTitle)
@@ -51,7 +40,7 @@ struct StartupSettings: View {
             .frame(width: 120, height: 30, alignment: .trailing)
 
           VStack {
-            RoundedTextField(title: "Workspace folder", text: workspacePathBinding)
+            RoundedTextField(title: "Workspace folder", text: viewModel.workspacePathBinding)
               .frame(width: 300)
               .overlay(
                 RoundedRectangle(cornerRadius: 6)

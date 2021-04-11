@@ -20,14 +20,30 @@ final class StartupSettingsViewModel: ObservableObject {
   ///
   /// It isn't a nullable property because it's used
   /// inside a `Binding` object that needs a `String`.
-  @Published var hostname: String = "127.0.0.1"
+  @Published var hostname: String = Logic.Settings.serverConfiguration?.hostname ?? "127.0.0.1" {
+    didSet {
+      let filtered = hostname.filter { $0.isNumber || $0 == "." }
+
+      if hostname != filtered {
+        hostname = filtered
+      }
+    }
+  }
 
   /// The port of the server for the connection.
   /// If the value passed cannot be casted as an Integer, this will default to `8080`.
   ///
   /// It isn't an Integer, not it is nullable because it's used
   /// inside a `Binding` object that needs a `String`.
-  @Published var port: String = "8080"
+  @Published var port: String = String(Logic.Settings.serverConfiguration?.port ?? 8080) {
+    didSet {
+      let filtered = port.filter { $0.isNumber }
+
+      if port != filtered {
+        port = filtered
+      }
+    }
+  }
 
   /// Handle the workspace path error.
   @Published var workspacePathError: MockaError? = nil
@@ -38,6 +54,34 @@ final class StartupSettingsViewModel: ObservableObject {
   /// The value of the workspace path.
   /// When this value is updated, the value in the user defaults is updated as well.
   @AppStorage(UserDefaultKey.workspaceURL) var workspaceURL: URL?
+
+  // We create a custom binding to be able to do a live check of the selected folder.
+  // We cannot use the `viewModel.workspaceURL` directly because it would not allow to
+  // edit it due to the `set` of this binding that calls the `viewModel.checkURL($0)`.
+  // At the first show of this view the `viewModel.workspacePath` will be `nil` and `viewModel.workspaceURL` too.
+  // At the following starts the `viewModel.workspacePath` will be `nil`, but `viewModel.workspaceURL` will not.
+  lazy var workspacePathBinding = Binding { [weak self] () -> String in
+    guard let self = self else {
+      return ""
+    }
+
+    if self.workspacePath == nil {
+      if self.workspaceURL?.path == nil {
+        return ""
+      } else {
+        self.workspacePath = self.workspaceURL?.path
+        return self.workspacePath ?? ""
+      }
+    } else {
+      return self.workspacePath ?? ""
+    }
+  } set: { [weak self] in
+    guard let self = self else {
+      return
+    }
+
+    self.checkURL($0)
+  }
 
   // MARK: - Functions
 
