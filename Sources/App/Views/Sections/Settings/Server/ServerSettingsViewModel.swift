@@ -55,11 +55,11 @@ final class ServerSettingsViewModel: ObservableObject {
   /// When this value is updated, the value in the user defaults is updated as well.
   @AppStorage(UserDefaultKey.workspaceURL) var workspaceURL: URL?
 
-  // We create a custom binding to be able to do a live check of the selected folder.
-  // We cannot use the `viewModel.workspaceURL` directly because it would not allow to
-  // edit it due to the `set` of this binding that calls the `viewModel.checkURL($0)`.
-  // At the first show of this view the `viewModel.workspacePath` will be `nil` and `viewModel.workspaceURL` too.
-  // At the following starts the `viewModel.workspacePath` will be `nil`, but `viewModel.workspaceURL` will not.
+  /// We create a custom binding to be able to do a live check of the selected folder.
+  /// We cannot use the `viewModel.workspaceURL` directly because it would not allow the user to
+  /// edit it due to the `set` of this binding that calls the `viewModel.checkURL($0)`.
+  /// At the first show of this view the `viewModel.workspacePath` will be `nil` and `viewModel.workspaceURL` too.
+  /// At the following starts the `viewModel.workspacePath` will be `nil`, but `viewModel.workspaceURL` will not.
   lazy var workspacePathBinding = Binding { [weak self] () -> String in
     guard let self = self else {
       return ""
