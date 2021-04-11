@@ -11,10 +11,10 @@ struct RoundedTextField: View {
 
   /// The height size of the `RoundedTextField`.
   enum Size {
-    /// Height = 28
+    /// Height set to 28.
     case medium
 
-    /// Height = 36
+    /// Height set to 36.
     case large
   }
 
