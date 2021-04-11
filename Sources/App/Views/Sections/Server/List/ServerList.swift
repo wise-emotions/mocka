@@ -54,7 +54,7 @@ struct ServerList: View {
         HStack {
           SidebarButton()
 
-          RoundedTextField(title: "Filter", text: $viewModel.filterText)
+          RoundedTextField(title: "Filter", size: .medium, text: $viewModel.filterText)
             .frame(width: Size.minimumFilterTextFieldWidth)
 
           StartAndStopServerButton()

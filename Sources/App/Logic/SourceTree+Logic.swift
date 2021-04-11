@@ -77,20 +77,19 @@ extension Logic.SourceTree {
   }
 
   /// The list of all folders used as a namespace in all of the workspace.
-  static func namespaceFolders() -> Set<FileSystemNode> {
+  static func namespaceFolders() -> [FileSystemNode] {
     guard let rootPath = UserDefaults.standard.url(forKey: UserDefaultKey.workspaceURL) else {
       return []
     }
 
     return contents(of: rootPath)
-      .reduce(into: Set<FileSystemNode>()) { result, node in
+      .reduce(into: [FileSystemNode]()) { result, node in
         namespaceFolders(in: node)
           .forEach {
-            result.insert($0)
+            result.append($0)
           }
       }
   }
-
 
   /// /// The list of all folders used as a namespace inside a specific node.
   /// - Parameter node: The node to look up its content.

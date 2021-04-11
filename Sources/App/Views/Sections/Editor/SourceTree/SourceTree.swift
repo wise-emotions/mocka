@@ -42,11 +42,11 @@ struct SourceTree: View {
     }
     .frame(minWidth: Size.minimumListWidth)
     .toolbar {
-      ToolbarItem(placement: .confirmationAction) {
+      ToolbarItem {
         HStack {
           SidebarButton()
 
-          RoundedTextField(title: "Filter", text: $viewModel.filterText)
+          RoundedTextField(title: "Filter", size: .medium, text: $viewModel.filterText)
             .frame(width: Size.minimumFilterTextFieldWidth)
             .disabled(true)
 
