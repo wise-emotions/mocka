@@ -25,7 +25,7 @@ extension View {
   /// - Returns: Returns the `View` with the applied modifier.
   @ViewBuilder func isHidden(_ hidden: Bool, remove: Bool = false) -> some View {
     if hidden {
-      if !remove {
+      if remove.isFalse {
         self.hidden()
       }
     } else {
