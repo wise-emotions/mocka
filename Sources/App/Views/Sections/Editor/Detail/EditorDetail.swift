@@ -63,7 +63,8 @@ struct EditorDetail: View {
       ToolbarItem {
         HStack {
           Text(viewModel.requestName)
-            .frame(maxWidth: .infinity, alignment: .leading)
+            // The `minWidth: 1` is due to a bug in SwiftUI where not including any minWidth generates a warning.
+            .frame(minWidth: 1, maxWidth: .infinity, alignment: .leading)
             .font(.title)
             .foregroundColor(.latte)
         }
