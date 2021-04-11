@@ -44,7 +44,6 @@ final class EditorDetailViewModel: ObservableObject {
     selectedRequest == nil
   }
 
-
   /// Creates an instance of `EditorDetailViewModel`.
   /// - Parameters:
   ///   - selectedRequest: The `MockaApp.Request` we want to display its details. Defaults to `nil`.
