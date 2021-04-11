@@ -44,9 +44,12 @@ final class EditorDetailViewModel: ObservableObject {
     selectedRequest == nil
   }
 
+
   /// Creates an instance of `EditorDetailViewModel`.
-  /// - Parameter selectedRequest: The `MockaApp.Request` we want to display its details. Defaults to `nil`.
-  /// - Parameter requestName: The custom name of the request.
+  /// - Parameters:
+  ///   - selectedRequest: The `MockaApp.Request` we want to display its details. Defaults to `nil`.
+  ///   - requestName: The custom name of the request. Defaults to empty string.
+  ///   - requestParentFolder: The parent folder holding the folder of the request. Defaults to `nil`. Should not be `nil` if `selectedRequest` isn't.
   init(
     selectedRequest: Request? = nil,
     requestName: String = "",
