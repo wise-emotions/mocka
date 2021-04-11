@@ -53,7 +53,7 @@ final class ServerSettingsViewModel: ObservableObject {
 
   /// The value of the workspace path.
   /// When this value is updated, the value in the user defaults is updated as well.
-  @AppStorage(UserDefaultKey.workspaceURL) var workspaceURL: URL?
+  @AppStorage(UserDefaultKey.workspaceURL) private var workspaceURL: URL?
 
   /// We create a custom binding to be able to do a live check of the selected folder.
   /// We cannot use the `viewModel.workspaceURL` directly because it would not allow the user to
