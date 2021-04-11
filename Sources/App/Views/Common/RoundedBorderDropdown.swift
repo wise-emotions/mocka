@@ -7,11 +7,11 @@ import SwiftUI
 
 /// A dropdown with rounded border.
 struct RoundedBorderDropdown<Item: Hashable>: View {
+
+  // MARK: - Stored Properties
+  
   /// The title of the dropdown.
   let title: String
-
-  /// The selected item.
-  @Binding var selection: Item?
 
   /// A list of item to display in the menu.
   let items: [Item]
@@ -19,6 +19,11 @@ struct RoundedBorderDropdown<Item: Hashable>: View {
   /// The `KeyPath` leading to a `String` describing the item.
   let itemTitleKeyPath: KeyPath<Item, String>
 
+  /// The selected item.
+  @Binding var selection: Item?
+  
+  // MARK: - Body
+  
   var body: some View {
     Menu {
       ForEach(items, id: \.hashValue) { item in
@@ -40,6 +45,8 @@ struct RoundedBorderDropdown<Item: Hashable>: View {
     selection = item
   }
 }
+
+// MARK: - Previews
 
 struct RoundedBorderDropdownPreview: PreviewProvider {
   static var previews: some View {

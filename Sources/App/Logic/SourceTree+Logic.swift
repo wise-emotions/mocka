@@ -91,7 +91,7 @@ extension Logic.SourceTree {
       }
   }
 
-  /// /// The list of all folders used as a namespace inside a specific node.
+  /// The list of all folders used as a namespace inside a specific node.
   /// - Parameter node: The node to look up its content.
   /// - Returns: An array of all found nodes.
   private static func namespaceFolders(in node: FileSystemNode) -> [FileSystemNode] {

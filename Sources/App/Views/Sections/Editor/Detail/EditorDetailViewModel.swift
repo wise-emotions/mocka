@@ -25,10 +25,11 @@ final class EditorDetailViewModel: ObservableObject {
   /// The custom name of the request.
   @Published var requestName: String = ""
 
-  /// The custom name of the request.
+  /// The path of the request as a `String`.
   @Published var requestPath: String = ""
 
   /// The parent folder where to put the request.
+  /// This is not the `METHOD - name of request folder` but rather the parent of that latter.
   @Published var requestParentFolder: FileSystemNode?
 
   /// The `HTTPMethod` of the request.
@@ -58,6 +59,7 @@ final class EditorDetailViewModel: ObservableObject {
       self.selectedRequest = nil
       return
     }
+    
     self.selectedRequest = request
     self.requestPath = request.path.joined(separator: "/")
     self.requestName = requestName
