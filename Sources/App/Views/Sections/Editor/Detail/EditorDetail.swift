@@ -77,17 +77,21 @@ struct EditorDetail: View {
         Spacer()
 
         Button("Cancel") {
-          viewModel.didTapCancel()
+          viewModel.cancelRequestCreation()
         }
         .frame(height: 25)
         .isHidden(viewModel.shouldShowEmptyState)
 
-        Button("Save") {
-          viewModel.didTapSave()
-        }
+        Button(
+          action: {
+            viewModel.createAndSaveRequest()
+          },
+          label: {
+            Text("Save")
+              .frame(width: 80, height: 21)
+          }
+        )
         .buttonStyle(AccentButtonStyle())
-        .frame(height: 25)
-        .isHidden(viewModel.shouldShowEmptyState)
       }
     }
   }
