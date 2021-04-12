@@ -24,7 +24,6 @@ struct Editor: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .font(.headline)
             .foregroundColor(Color.latte)
-            .padding(.leading)
 
           Spacer()
 
@@ -37,11 +36,13 @@ struct Editor: View {
             allowsMultipleSelection: false,
             onCompletion: viewModel.importFile(from:)
           )
-          .padding(.trailing)
         }
 
         TextEditor(text: $viewModel.text)
           .font(.body)
+          .frame(minHeight: 40)
+          .background(Color.doppio)
+          .cornerRadius(8)
           .border(viewModel.borderColor)
           .onChange(
             of: viewModel.text,
@@ -49,7 +50,7 @@ struct Editor: View {
               viewModel.prettyPrintJSON()
             }
           )
-          .padding(.horizontal)
+          .disabled(viewModel.mode == .read)
       }
     }
     .onDrop(

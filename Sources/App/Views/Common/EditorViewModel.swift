@@ -8,16 +8,32 @@ import UniformTypeIdentifiers
 /// The ViewModel of the `Editor`.
 class EditorViewModel: ObservableObject {
 
+  // MARK: - Data Structure
+
+  /// The editor mode.
+  /// Use `write` mode to allow the user edit the `TextEditor`.
+  /// Use `read` mode to disable user interactions.
+  enum Mode {
+    /// The write mode that allows the user to edit the `TextEditor`.
+    case write
+
+    /// The read mode that disable user interactions.
+    case read
+  }
+
   // MARK: - Stored Properties
 
   /// The text of the editor.
-  @Published var text: String = ""
+  @Published var text: String
 
   /// Wether the user is dragging a file over the editor.
   @Published var isDraggingOver = false
 
   /// Whether the `fileImporter` is presented.
   @Published var fileImporterIsPresented = false
+
+  /// The table mode. In `write` mode an add button will be added.
+  @Published var mode: Mode
 
   // MARK: - Computed Properties
 
@@ -42,6 +58,11 @@ class EditorViewModel: ObservableObject {
   /// Whether or not the error label is visible.
   var isErrorLabelVisible: Bool {
     isValidJSON.isFalse
+  }
+
+  init(text: String = "", mode: Mode = .read) {
+    self.text = text
+    self.mode = mode
   }
 
   // MARK: - Functions

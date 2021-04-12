@@ -43,6 +43,7 @@ struct KeyValueTable: View {
     }
     .padding()
     .background(Color.doppio)
+    .cornerRadius(6)
   }
 }
 
