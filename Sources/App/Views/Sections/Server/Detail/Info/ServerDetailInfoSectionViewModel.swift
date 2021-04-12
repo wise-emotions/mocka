@@ -32,7 +32,7 @@ struct ServerDetailInfoSectionViewModel {
   var urlString: String {
     switch kind {
     case .request:
-      return request.uri.scheme ?? "" + request.uri.path
+      return "\(request.uri.scheme ?? "")://\(request.uri.host ?? "")\(request.uri.path)"
 
     case .response:
       return response.uri.string
