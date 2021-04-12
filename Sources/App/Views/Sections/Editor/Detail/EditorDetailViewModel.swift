@@ -194,7 +194,7 @@ final class EditorDetailViewModel: ObservableObject {
       let currentRequestFolder = currentRequestFolder,
       let currentRequestParentFolder = currentRequestParentFolder
     else {
-      // we are in create mode.
+      // We are in create mode.
       return
     }
 
