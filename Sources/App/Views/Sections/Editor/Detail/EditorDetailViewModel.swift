@@ -93,7 +93,6 @@ final class EditorDetailViewModel: ObservableObject {
     }
   }
 
-
   /// If `true` the textfield for `RequestName` will be enabled. Otherwise, disabled.
   @Published var isRequestNameTextFieldEnabled: Bool
 
