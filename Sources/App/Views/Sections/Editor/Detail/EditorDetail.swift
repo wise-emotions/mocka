@@ -85,7 +85,6 @@ struct EditorDetail: View {
         .cornerRadius(6)
         .isHidden(viewModel.shouldShowEmptyState)
 
-
         Button("Salva") {
           viewModel.didTapSave()
         }

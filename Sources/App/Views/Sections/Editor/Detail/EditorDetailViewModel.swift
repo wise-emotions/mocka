@@ -100,7 +100,7 @@ final class EditorDetailViewModel: ObservableObject {
     completion: Interaction? = nil
   ) {
     userDoneEditing = completion
-    
+
     guard case let .requestFile(request) = requestFile?.kind, let requestFolder = requestFolder, let requestParentFolder = requestParentFolder else {
       self.currentRequest = nil
       self.currentRequestFolder = nil
@@ -193,8 +193,7 @@ final class EditorDetailViewModel: ObservableObject {
     try? Logic.SourceTree.addDirectory(at: selectedRequestParentFolder!.url, named: requestFolderName)
 
     // Add response, if needed.
-    if
-      displayedResponseBody.isNotEmpty,
+    if displayedResponseBody.isNotEmpty,
       let expectedFileExtension = selectedContentType?.expectedFileExtension,
       let statusCode = Int(displayedStatusCode),
       HTTPResponseStatus(statusCode: statusCode).mayHaveResponseBody
