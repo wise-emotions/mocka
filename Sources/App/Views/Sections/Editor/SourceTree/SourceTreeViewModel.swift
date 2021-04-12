@@ -38,6 +38,29 @@ final class SourceTreeViewModel: ObservableObject {
     try refreshContent()
   }
 
+  // MARK: - Functions
+
+  /// Creates the correct `EditorDetailViewModel` for the node.
+  /// - Parameter node: The node we want to generate the `EditorDetailViewModel` for.
+  /// - Returns: An instance of `EditorDetailViewModel`.
+  func detailViewModel(for node: FileSystemNode) -> EditorDetailViewModel {
+    switch node.kind {
+    case .folder:
+      return EditorDetailViewModel()
+
+    case .requestFile:
+      let flatDirectories = directoryContent.flatten()
+      // The parent of the node, but that is the folder with the regex `METHOD - name of API`.
+      let requestFolderNode = flatDirectories.first { $0.children?.contains(node) ?? false }!
+      // The parent namespace folder.
+      let parent = flatDirectories.first { $0.children?.contains(requestFolderNode) ?? false }!
+
+      return EditorDetailViewModel(requestFile: node, requestFolder: requestFolderNode, requestParentFolder: parent) { [weak self] in
+        try? self?.refreshContent()
+      }
+    }
+  }
+
   /// Updates the `directoryContent` by iterating over the contents of the workspace directory.
   func refreshContent() throws {
     guard let workspaceDirectory = workspaceURL else {

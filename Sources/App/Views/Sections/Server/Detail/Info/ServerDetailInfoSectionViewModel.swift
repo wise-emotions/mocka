@@ -32,7 +32,7 @@ struct ServerDetailInfoSectionViewModel {
   var urlString: String {
     switch kind {
     case .request:
-      return request.uri.string
+      return request.uri.scheme ?? "" + request.uri.path
 
     case .response:
       return response.uri.string
@@ -62,17 +62,17 @@ struct ServerDetailInfoSectionViewModel {
 
   /// Whether the Query section is visible or not.
   var isQuerySectionVisible: Bool {
-    kind == .request && !queryParameters.isEmpty
+    kind == .request && queryParameters.isNotEmpty
   }
 
   /// Whether the Headers section is visible or not.
   var isHeadersSectionVisible: Bool {
-    !headers.isEmpty
+    headers.isNotEmpty
   }
 
   /// Whether the Body section is visible or not.
   var isBodySectionVisible: Bool {
-    !body.isEmpty
+    body.isNotEmpty
   }
 
   // MARK: - Functions

@@ -76,6 +76,122 @@ extension Logic.SourceTree {
       }
   }
 
+  /// The list of all folders used as a namespace in all of the workspace.
+  static func namespaceFolders() -> [FileSystemNode] {
+    guard let rootPath = UserDefaults.standard.url(forKey: UserDefaultKey.workspaceURL) else {
+      return []
+    }
+
+    return contents(of: rootPath)
+      .reduce(into: [FileSystemNode]()) { result, node in
+        namespaceFolders(in: node)
+          .forEach {
+            result.append($0)
+          }
+      }
+  }
+
+  /// Adds a directory while creating intermediate directories.
+  /// - Throws: `MockaError.failedToCreateDirectory`
+  /// - Parameters:
+  ///   - url: The `URL` of the hosting directory.
+  ///   - named: The name of the new directory.
+  static func addDirectory(at url: URL, named: String) throws {
+    do {
+      try FileManager.default.createDirectory(atPath: url.appendingPathComponent(named).path, withIntermediateDirectories: false, attributes: nil)
+    } catch {
+      throw MockaError.failedToCreateDirectory(path: url.appendingPathComponent(named).path)
+    }
+  }
+
+  /// Adds a directory while creating intermediate directories.
+  /// - Parameter path: The path where to create that directory.
+  /// - Throws: `MockaError.failedToDeleteDirectory`
+  static func deleteDirectory(at path: String) throws {
+    do {
+      try FileManager.default.removeItem(atPath: path)
+    } catch {
+      throw MockaError.failedToDeleteDirectory(path: path)
+    }
+  }
+
+  /// Writes a string to a `response.\(type)` file at a `URL`.
+  /// - Parameters:
+  ///   - string: The string to write to the file.
+  ///   - type: The extension of the file.
+  ///   - url: The `URL` where to save the response.
+  /// - Throws: `MockaError.failedToWriteToFile`
+  static func addResponse(_ string: String, type: String, to url: URL) throws {
+    let responseFilePath = url.appendingPathComponent("response.\(type)", isDirectory: false).path
+    do {
+      try string.write(toFile: responseFilePath, atomically: true, encoding: String.Encoding.utf8)
+    } catch {
+      throw MockaError.failedToWriteToFile(content: string, path: responseFilePath)
+    }
+  }
+
+  /// Encodes the request and pretty prints it to a `request.json` file at a give url.
+  /// - Parameters:
+  ///   - request: The request to encode.
+  ///   - url: The `URL` where to save the file.
+  /// - Throws: `MockaError.failedToEncode` and `MockaError.failedToWriteToFile`.
+  static func addRequest(_ request: Request, to url: URL) throws {
+    let encoder = JSONEncoder()
+    encoder.outputFormatting = .prettyPrinted
+
+    var content: String!
+
+    do {
+      let data = try encoder.encode(request)
+      content = String(data: data, encoding: .utf8)
+    } catch {
+      throw MockaError.failedToEncode
+    }
+
+    do {
+      try content.write(to: url.appendingPathComponent("request.json"), atomically: false, encoding: .utf8)
+    } catch {
+      throw MockaError.failedToWriteToFile(content: content, path: url.appendingPathComponent("request.json").path)
+    }
+  }
+
+  /// Extracts the content of a file at a given `URL`.
+  /// Should the extraction encounter any problem, `nil` is returned.
+  /// - Parameter url: The `URL` of the file.
+  /// - Returns: The content of the file as a `.utf8` `String` if found, otherwise `nil`.
+  static func content(of url: URL) -> String? {
+    guard let data = FileManager.default.contents(atPath: url.path) else {
+      return nil
+    }
+
+    return String(data: data, encoding: .utf8)
+  }
+
+  /// The list of all folders used as a namespace inside a specific node.
+  /// - Parameter node: The node to look up its content.
+  /// - Returns: An array of all found nodes.
+  private static func namespaceFolders(in node: FileSystemNode) -> [FileSystemNode] {
+    var folders: [FileSystemNode] = []
+
+    switch node.kind {
+    case let .folder(children, isRequestFolder):
+      if isRequestFolder {
+        break
+      }
+
+      folders.append(node)
+
+      children.forEach {
+        folders.append(contentsOf: namespaceFolders(in: $0))
+      }
+
+    case .requestFile:
+      break
+    }
+
+    return folders
+  }
+
   /// Recursively looks up all the `Request`s in a `FileSystemNode` and its children.
   /// - Parameter node: The root `FileSystemNode`.
   /// - Returns: An array containing all the found requests.
@@ -83,9 +199,9 @@ extension Logic.SourceTree {
     var requests: [Request] = []
 
     switch node.kind {
-    case let .folder(children):
-      for child in children {
-        requests.append(contentsOf: allRequests(in: child))
+    case let .folder(children, _):
+      children.forEach {
+        requests.append(contentsOf: allRequests(in: $0))
       }
 
     case let .requestFile(request):
@@ -125,19 +241,20 @@ extension Logic.SourceTree {
 
     // If the folder contains other folder, return the node.
     if children.contains(where: { $0.isFolder }) {
-      return FileSystemNode(name: name, url: url, kind: .folder(children: children))
+      return FileSystemNode(name: name, url: url, kind: .folder(children: children, isRequestFolder: false))
     } else {
       // Check if the folder name is sound. If not, return nil.
       // Check if the folder contains at least a request. If not, return nil.
       // Some folders can contain no response.
-      guard
-        name.matchesRegex(folderNameRegex),
-        let request = children.first(where: { $0.name == allowedRequestFileName })
-      else {
-        return nil
-      }
+      if name.matchesRegex(folderNameRegex) {
+        guard let request = children.first(where: { $0.name == allowedRequestFileName }) else {
+          return nil
+        }
 
-      return FileSystemNode(name: name, url: url, kind: .folder(children: [request]))
+        return FileSystemNode(name: name, url: url, kind: .folder(children: [request], isRequestFolder: true))
+      } else {
+        return FileSystemNode(name: name, url: url, kind: .folder(children: [], isRequestFolder: false))
+      }
     }
   }
 

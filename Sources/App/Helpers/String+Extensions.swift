@@ -17,4 +17,9 @@ extension String {
   var prettyPrintedJSON: String? {
     data(using: .utf8)?.prettyPrintedJSON
   }
+
+  /// The opposite of `isEmpty`.
+  var isNotEmpty: Bool {
+    !isEmpty
+  }
 }

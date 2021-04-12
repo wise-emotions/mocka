@@ -28,11 +28,11 @@ class EditorViewModel: ObservableObject {
 
   /// The color of the border of the text editor.
   var borderColor: Color {
-    guard !isDraggingOver else {
+    guard isDraggingOver.isFalse else {
       return Color.irish
     }
 
-    guard !text.isEmpty else {
+    guard text.isNotEmpty else {
       return .clear
     }
 
@@ -41,7 +41,7 @@ class EditorViewModel: ObservableObject {
 
   /// Whether or not the error label is visible.
   var isErrorLabelVisible: Bool {
-    !isValidJSON
+    isValidJSON.isFalse
   }
 
   // MARK: - Functions
