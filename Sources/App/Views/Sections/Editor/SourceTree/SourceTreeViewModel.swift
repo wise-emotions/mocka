@@ -29,7 +29,7 @@ final class SourceTreeViewModel: ObservableObject {
 
   /// The directories contents filtered based on the the filtered text, if any.
   var filteredNodes: [FileSystemNode] {
-    #warning("Needs implementation.")
+    #warning("Needs implementation")
     return directoryContent
   }
 

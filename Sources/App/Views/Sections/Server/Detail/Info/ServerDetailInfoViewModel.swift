@@ -7,7 +7,7 @@ import MockaServer
 /// The ViewModel of the `ServerDetailInfo`.
 struct ServerDetailInfoViewModel {
 
-  // MARK: - Structured Data
+  // MARK: - Data Structures
 
   /// The kind of info selected from the SegmentedControl.
   enum Kind: String, CaseIterable {
