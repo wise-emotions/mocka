@@ -76,22 +76,17 @@ struct EditorDetail: View {
       ToolbarItemGroup {
         Spacer()
 
-        Button("Annulla") {
+        Button("Cancel") {
           viewModel.didTapCancel()
         }
-        .background(Color.macchiato)
-        .foregroundColor(.latte)
         .frame(height: 25)
-        .cornerRadius(6)
         .isHidden(viewModel.shouldShowEmptyState)
 
-        Button("Salva") {
+        Button("Save") {
           viewModel.didTapSave()
         }
-        .background(Color.accentColor)
-        .foregroundColor(.latte)
+        .buttonStyle(AccentButtonStyle())
         .frame(height: 25)
-        .cornerRadius(6)
         .isHidden(viewModel.shouldShowEmptyState)
       }
     }

@@ -102,18 +102,18 @@ final class EditorDetailViewModel: ObservableObject {
     userDoneEditing = completion
 
     guard case let .requestFile(request) = requestFile?.kind, let requestFolder = requestFolder, let requestParentFolder = requestParentFolder else {
-      self.currentRequest = nil
-      self.currentRequestFolder = nil
-      self.currentRequestParentFolder = nil
-      self.currentResponseBody = nil
+      currentRequest = nil
+      currentRequestFolder = nil
+      currentRequestParentFolder = nil
+      currentResponseBody = nil
       return
     }
 
     shouldShowEmptyState = false
 
-    self.currentRequest = request
-    self.currentRequestFolder = requestFolder
-    self.selectedRequestParentFolder = requestParentFolder
+    currentRequest = request
+    currentRequestFolder = requestFolder
+    selectedRequestParentFolder = requestParentFolder
 
     displayedRequestName = Self.requestName(request, requestFolderNode: requestFolder)
     displayedRequestPath = request.path.joined(separator: "/")
@@ -159,7 +159,7 @@ final class EditorDetailViewModel: ObservableObject {
   }
 
   /// The user tapped the `Cancel` button.
-  func didTapCancel() {
+  func cancelRequestCreation() {
     // Case when cancel is tapped during request creation.
     guard let request = currentRequest, let selectedRequestFolder = currentRequestFolder else {
       emptyStateContent()
@@ -176,7 +176,7 @@ final class EditorDetailViewModel: ObservableObject {
   }
 
   /// The user tapped the save button.
-  func didTapSave() {
+  func createAndSaveRequest() {
     let request = Request(
       path: displayedRequestName.split(separator: "/").map { String($0) },
       method: selectedHTTPMethod!,
