@@ -20,8 +20,20 @@ struct SourceTree: View {
 
       if viewModel.directoryContent.isEmpty {
         EmptyState(symbol: .scroll, text: "Tap the 􀁌 to add an API request")
+          .background(
+            NavigationLink(
+              destination: EditorDetail(viewModel: viewModel.detailViewModel(for: nil)),
+              isActive: $viewModel.isShowingCreateRequestDetailView
+            ) {}
+          )
       } else if viewModel.filteredNodes.isEmpty {
         EmptyState(symbol: .document, text: "Could not find any API requests with this name")
+          .background(
+            NavigationLink(
+              destination: EditorDetail(viewModel: viewModel.detailViewModel(for: nil)),
+              isActive: $viewModel.isShowingCreateRequestDetailView
+            ) {}
+          )
       } else {
         List(viewModel.filteredNodes, children: \.children) { node in
           NavigationLink(destination: EditorDetail(viewModel: viewModel.detailViewModel(for: node))) {

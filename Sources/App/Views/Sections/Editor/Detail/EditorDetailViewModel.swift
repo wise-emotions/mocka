@@ -57,8 +57,6 @@ final class EditorDetailViewModel: ObservableObject {
     }
   }
 
-  // MARK: Content displayed on the UI
-
   /// The custom name of the request.
   @Published var displayedRequestName: String = ""
 
@@ -114,10 +112,10 @@ final class EditorDetailViewModel: ObservableObject {
   @Published var isContentTypeTextFieldEnabled: Bool
 
   /// If `true` the `TextField` for `ResponseHeaders` will be enabled. Otherwise, disabled.
-  @Published var isResponseHeadersTextFieldEnabled: Bool
+  @Published var isResponseHeadersKeyValueTableEnabled: Bool
 
   /// If `true` the `TextField` for `ResponseBody` will be enabled. Otherwise, disabled.
-  @Published var isResponseBodyTextFieldEnabled: Bool
+  @Published var isResponseBodyEditorEnabled: Bool
 
   /// If true, the `UI` should display the empty state `UI`.
   @Published var shouldShowEmptyState: Bool
@@ -161,8 +159,8 @@ final class EditorDetailViewModel: ObservableObject {
       isHTTPMethodTextFieldEnabled = true
       isStatusCodeTextFieldEnabled = true
       isContentTypeTextFieldEnabled = true
-      isResponseHeadersTextFieldEnabled = true
-      isResponseBodyTextFieldEnabled = true
+      isResponseHeadersKeyValueTableEnabled = true
+      isResponseBodyEditorEnabled = true
     } else {
       isRequestNameTextFieldEnabled = false
       isRequestPathTextFieldEnabled = false
@@ -170,8 +168,8 @@ final class EditorDetailViewModel: ObservableObject {
       isHTTPMethodTextFieldEnabled = false
       isStatusCodeTextFieldEnabled = false
       isContentTypeTextFieldEnabled = false
-      isResponseHeadersTextFieldEnabled = false
-      isResponseBodyTextFieldEnabled = false
+      isResponseHeadersKeyValueTableEnabled = false
+      isResponseBodyEditorEnabled = false
     }
 
     guard case let .requestFile(request) = requestFile?.kind, let requestFolder = requestFolder, let requestParentFolder = requestParentFolder else {
@@ -256,6 +254,10 @@ final class EditorDetailViewModel: ObservableObject {
     displayedRequestPath = request.path.joined(separator: "/")
     selectedHTTPMethod = request.method
     selectedContentType = request.expectedResponse.contentType
+
+    // End editing mode.
+    currentMode = .read
+    userDoneEditing?()
   }
 
   /// The user tapped the save button.
@@ -345,8 +347,8 @@ final class EditorDetailViewModel: ObservableObject {
     isHTTPMethodTextFieldEnabled = false
     isStatusCodeTextFieldEnabled = false
     isContentTypeTextFieldEnabled = false
-    isResponseHeadersTextFieldEnabled = false
-    isResponseBodyTextFieldEnabled = false
+    isResponseHeadersKeyValueTableEnabled = false
+    isResponseBodyEditorEnabled = false
   }
 
   /// Sets all control variables to `true` (enabled).
@@ -357,7 +359,7 @@ final class EditorDetailViewModel: ObservableObject {
     isHTTPMethodTextFieldEnabled = true
     isStatusCodeTextFieldEnabled = true
     isContentTypeTextFieldEnabled = true
-    isResponseHeadersTextFieldEnabled = true
-    isResponseBodyTextFieldEnabled = true
+    isResponseHeadersKeyValueTableEnabled = true
+    isResponseBodyEditorEnabled = true
   }
 }
