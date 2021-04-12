@@ -43,6 +43,9 @@ final class EditorDetailViewModel: ObservableObject {
   /// The status code of the response a `String`.
   @Published var displayedStatusCode: String = ""
 
+  /// The desired headers of the response.
+  @Published var displayedResponseHeaders: [HTTPHeader] = []
+
   /// The text body of the response, if any.
   @Published var displayedResponseBody: String = ""
 
@@ -67,11 +70,8 @@ final class EditorDetailViewModel: ObservableObject {
     }
   }
 
-  /// The desired headers of the response.
-  @Published var displayedResponseHeaders: [HTTPHeader] = []
-
   /// If true, the `UI` should display the empty state `UI`.
-  @Published var shouldShowEmptyState: Bool = true
+  @Published var shouldShowEmptyState: Bool
 
   // MARK: - Computed Properties
 
@@ -93,11 +93,12 @@ final class EditorDetailViewModel: ObservableObject {
   ///   - requestFolder: The folder containing the request.
   ///   - requestParentFolder: The parent folder holding the folder of the request.
   ///                          Defaults to `nil`. Should not be `nil` if `selectedRequest` isn't.
+  ///   - completion: A closure to invoke when the user taps the `Save` button.
   init(
     requestFile: FileSystemNode? = nil,
     requestFolder: FileSystemNode? = nil,
     requestParentFolder: FileSystemNode? = nil,
-    completion: Interaction? = nil
+    onSave completion: Interaction? = nil
   ) {
     userDoneEditing = completion
 
@@ -106,6 +107,7 @@ final class EditorDetailViewModel: ObservableObject {
       currentRequestFolder = nil
       currentRequestParentFolder = nil
       currentResponseBody = nil
+      shouldShowEmptyState = true
       return
     }
 
@@ -122,6 +124,8 @@ final class EditorDetailViewModel: ObservableObject {
     selectedContentType = request.expectedResponse.contentType
     displayedResponseHeaders = request.expectedResponse.headers
     displayedStatusCode = String(request.expectedResponse.statusCode)
+
+    //    FileManager.default.move
 
     if let responseFileName = request.expectedResponse.fileName {
       currentResponseBody = Logic.SourceTree.content(of: requestFolder.url.appendingPathComponent(responseFileName))
@@ -177,6 +181,7 @@ final class EditorDetailViewModel: ObservableObject {
 
   /// The user tapped the save button.
   func createAndSaveRequest() {
+    // The new created request.
     let request = Request(
       path: displayedRequestName.split(separator: "/").map { String($0) },
       method: selectedHTTPMethod!,
@@ -187,13 +192,32 @@ final class EditorDetailViewModel: ObservableObject {
       )
     )
 
-    let requestFolderName = Self.requestFolderName(request, requestName: displayedRequestName)
+    guard
+      let oldRequest = currentRequest,
+      let currentRequestFolder = currentRequestFolder,
+      let currentRequestParentFolder = currentRequestParentFolder
+    else {
+      // we are in create mode.
+      return
+    }
 
-    // Create new request folder.
-    try? Logic.SourceTree.addDirectory(at: selectedRequestParentFolder!.url, named: requestFolderName)
+    let newRequestFolderName = Self.requestFolderName(request, requestName: displayedRequestName)
+
+    // If we changed the method, custom name, or parent folder, we create a new request folder at a new path.
+    let hasNewPath = newRequestFolderName != currentRequestFolder.name || currentRequestParentFolder != selectedRequestParentFolder
+
+
+    if hasNewPath {
+      // Create new request folder.
+      try? Logic.SourceTree.addDirectory(at: selectedRequestParentFolder!.url, named: newRequestFolderName)
+      // Delete old request folder.
+      try? Logic.SourceTree.deleteDirectory(at: currentRequestFolder.url.path)
+    }
+
 
     // Add response, if needed.
-    if displayedResponseBody.isNotEmpty,
+    if
+      displayedResponseBody.isNotEmpty,
       let expectedFileExtension = selectedContentType?.expectedFileExtension,
       let statusCode = Int(displayedStatusCode),
       HTTPResponseStatus(statusCode: statusCode).mayHaveResponseBody
@@ -201,15 +225,12 @@ final class EditorDetailViewModel: ObservableObject {
       try? Logic.SourceTree.addResponse(
         displayedResponseBody,
         type: expectedFileExtension,
-        to: selectedRequestParentFolder!.url.appendingPathComponent(requestFolderName)
+        to: selectedRequestParentFolder!.url.appendingPathComponent(newRequestFolderName)
       )
     }
 
     // Add request.
-    try? Logic.SourceTree.addRequest(request, to: selectedRequestParentFolder!.url.appendingPathComponent(requestFolderName))
-
-    // Delete old request
-    try? Logic.SourceTree.deleteDirectory(at: currentRequestFolder!.url.path)
+    try? Logic.SourceTree.addRequest(request, to: selectedRequestParentFolder!.url.appendingPathComponent(newRequestFolderName))
 
     userDoneEditing?()
     shouldShowEmptyState = true
