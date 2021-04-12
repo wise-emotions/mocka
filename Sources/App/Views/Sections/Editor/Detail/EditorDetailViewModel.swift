@@ -124,9 +124,6 @@ final class EditorDetailViewModel: ObservableObject {
     selectedContentType = request.expectedResponse.contentType
     displayedResponseHeaders = request.expectedResponse.headers
     displayedStatusCode = String(request.expectedResponse.statusCode)
-
-    //    FileManager.default.move
-
     if let responseFileName = request.expectedResponse.fileName {
       currentResponseBody = Logic.SourceTree.content(of: requestFolder.url.appendingPathComponent(responseFileName))
       displayedResponseBody = currentResponseBody ?? ""
