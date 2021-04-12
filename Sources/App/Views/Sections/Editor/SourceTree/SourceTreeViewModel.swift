@@ -48,22 +48,16 @@ final class SourceTreeViewModel: ObservableObject {
     case .folder:
       return EditorDetailViewModel()
 
-    case let .requestFile(request):
+    case .requestFile:
       let flatDirectories = directoryContent.flatten()
       // The parent of the node, but that is the folder with the regex `METHOD - name of API`.
       let requestFolderNode = flatDirectories.first { $0.children?.contains(node) ?? false }!
       // The parent namespace folder.
-      let parent = flatDirectories.first { $0.children?.contains(requestFolderNode) ?? false }
+      let parent = flatDirectories.first { $0.children?.contains(requestFolderNode) ?? false }!
 
-      let requestNameTrimmingLowerBound =
-        requestFolderNode.name.range(
-          of: "\(request.method.rawValue) - "
-        )?
-        .upperBound ?? requestFolderNode.name.endIndex
-
-      let requestName = String(requestFolderNode.name[requestNameTrimmingLowerBound..<requestFolderNode.name.endIndex])
-
-      return EditorDetailViewModel(selectedRequest: request, requestName: requestName, requestParentFolder: parent)
+      return EditorDetailViewModel(requestFile: node, requestFolder: requestFolderNode, requestParentFolder: parent) { [weak self] in
+        try? self?.refreshContent()
+      }
     }
   }
 

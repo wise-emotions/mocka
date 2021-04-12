@@ -91,6 +91,82 @@ extension Logic.SourceTree {
       }
   }
 
+  /// Adds a directory while creating intermediate directories.
+  /// - Throws: `MockaError.failedToCreateDirectory`
+  /// - Parameters:
+  ///   - url: The `URL` of the hosting directory.
+  ///   - named: The name of the new directory.
+  static func addDirectory(at url: URL, named: String) throws {
+    do {
+      try FileManager.default.createDirectory(atPath: url.appendingPathComponent(named).path, withIntermediateDirectories: false, attributes: nil)
+    } catch {
+      throw MockaError.failedToCreateDirectory(path: url.appendingPathComponent(named).path)
+    }
+  }
+
+  /// Adds a directory while creating intermediate directories.
+  /// - Parameter path: The path where to create that directory.
+  /// - Throws: `MockaError.failedToDeleteDirectory`
+  static func deleteDirectory(at path: String) throws {
+    do {
+      try FileManager.default.removeItem(atPath: path)
+    } catch {
+      throw MockaError.failedToDeleteDirectory(path: path)
+    }
+  }
+
+  /// Writes a string to a `response.\(type)` file at a `URL`.
+  /// - Parameters:
+  ///   - string: The string to write to the file.
+  ///   - type: The extension of the file.
+  ///   - url: The `URL` where to save the response.
+  /// - Throws: `MockaError.failedToWriteToFile`
+  static func addResponse(_ string: String, type: String, to url: URL) throws {
+    let responseFilePath = url.appendingPathComponent("response.\(type)", isDirectory: false).path
+    do {
+      try string.write(toFile: responseFilePath, atomically: true, encoding: String.Encoding.utf8)
+    } catch {
+      throw MockaError.failedToWriteToFile(content: string, path: responseFilePath)
+    }
+  }
+
+  /// Encodes the request and pretty prints it to a `request.json` file at a give url.
+  /// - Parameters:
+  ///   - request: The request to encode.
+  ///   - url: The `URL` where to save the file.
+  /// - Throws: `MockaError.failedToEncode` and `MockaError.failedToWriteToFile`.
+  static func addRequest(_ request: Request, to url: URL) throws {
+    let encoder = JSONEncoder()
+    encoder.outputFormatting = .prettyPrinted
+
+    var content: String!
+
+    do {
+      let data = try encoder.encode(request)
+      content = String(data: data, encoding: .utf8)
+    } catch {
+      throw MockaError.failedToEncode
+    }
+
+    do {
+      try content.write(to: url.appendingPathComponent("request.json"), atomically: false, encoding: .utf8)
+    } catch {
+      throw MockaError.failedToWriteToFile(content: content, path: url.appendingPathComponent("request.json").path)
+    }
+  }
+
+  /// Extracts the content of a file at a given `URL`.
+  /// Should the extraction encounter any problem, `nil` is returned.
+  /// - Parameter url: The `URL` of the file.
+  /// - Returns: The content of the file as a `.utf8` `String` if found, otherwise `nil`.
+  static func content(of url: URL) -> String? {
+    guard let data = FileManager.default.contents(atPath: url.path) else {
+      return nil
+    }
+
+    return String(data: data, encoding: .utf8)
+  }
+
   /// The list of all folders used as a namespace inside a specific node.
   /// - Parameter node: The node to look up its content.
   /// - Returns: An array of all found nodes.
