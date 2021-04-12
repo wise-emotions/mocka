@@ -57,6 +57,8 @@ extension Logic.Settings {
       throw MockaError.workspacePathDoesNotExist
     }
 
+    let filePath = unwrappedURL.appendingPathComponent(serverConfigurationFileName, isDirectory: false)
+
     do {
       let encoder = JSONEncoder()
       encoder.outputFormatting = .prettyPrinted
@@ -66,10 +68,9 @@ extension Logic.Settings {
         throw MockaError.failedToEncode
       }
 
-      let filePath = unwrappedURL.appendingPathComponent(serverConfigurationFileName, isDirectory: false)
       try string.write(toFile: filePath.path, atomically: true, encoding: String.Encoding.utf8)
     } catch {
-      throw MockaError.failedToEncode
+      throw MockaError.failedToWriteToFile(content: serverConfigurationFileName, path: filePath.path)
     }
   }
 
