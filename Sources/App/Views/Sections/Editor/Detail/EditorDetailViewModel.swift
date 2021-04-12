@@ -193,7 +193,7 @@ final class EditorDetailViewModel: ObservableObject {
     )
 
     guard
-      let oldRequest = currentRequest,
+      currentRequest != nil,
       let currentRequestFolder = currentRequestFolder,
       let currentRequestParentFolder = currentRequestParentFolder
     else {
