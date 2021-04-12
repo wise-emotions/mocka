@@ -20,4 +20,16 @@ enum MockaError: Error {
 
   /// An error occurred when trying to encode a file.
   case failedToEncode
+
+  /// Could not create directory at request path.
+  /// The path is passed included with the error.
+  case failedToCreateDirectory(path: String)
+
+  /// Could not delete directory at request path.
+  /// The path is passed included with the error.
+  case failedToDeleteDirectory(path: String)
+
+  /// Failed to write a string at a path.
+  /// The content and the path are included with the error.
+  case failedToWriteToFile(content: String, path: String)
 }

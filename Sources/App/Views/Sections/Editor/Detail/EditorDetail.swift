@@ -20,7 +20,7 @@ struct EditorDetail: View {
         EmptyState(symbol: .document, text: "Select a request to display its details")
       } else {
         ScrollView {
-          RoundedTextField(title: "API custom name", text: $viewModel.requestName)
+          RoundedTextField(title: "API custom name", text: $viewModel.displayedRequestName)
             .padding(.horizontal, 26)
             .padding(.vertical, 5)
 
@@ -28,12 +28,12 @@ struct EditorDetail: View {
             title: "Parent Folder",
             items: viewModel.namespaceFolders,
             itemTitleKeyPath: \.name,
-            selection: $viewModel.requestParentFolder
+            selection: $viewModel.selectedRequestParentFolder
           )
           .padding(.horizontal, 26)
           .padding(.vertical, 5)
 
-          RoundedTextField(title: "Path", text: $viewModel.requestPath)
+          RoundedTextField(title: "Path", text: $viewModel.displayedRequestPath)
             .padding(.horizontal, 26)
             .padding(.vertical, 5)
 
@@ -45,6 +45,10 @@ struct EditorDetail: View {
           )
           .padding(.horizontal, 26)
           .padding(.vertical, 5)
+
+          RoundedTextField(title: "Response status code", text: $viewModel.displayedStatusCode)
+            .padding(.horizontal, 26)
+            .padding(.vertical, 5)
 
           RoundedBorderDropdown(
             title: "Response Content-Type",
@@ -62,12 +66,32 @@ struct EditorDetail: View {
     .toolbar {
       ToolbarItem {
         HStack {
-          Text(viewModel.requestName)
+          Text(viewModel.displayedRequestName)
             // The `minWidth` equal to `1` is due to a bug in SwiftUI where not including any minWidth generates a warning.
-            .frame(minWidth: 1, maxWidth: .infinity, alignment: .leading)
+            .frame(minWidth: 1, maxWidth: 200, alignment: .leading)
             .font(.title)
             .foregroundColor(.latte)
         }
+      }
+      ToolbarItemGroup {
+        Spacer()
+
+        Button("Cancel") {
+          viewModel.cancelRequestCreation()
+        }
+        .frame(height: 25)
+        .isHidden(viewModel.shouldShowEmptyState)
+
+        Button(
+          action: {
+            viewModel.createAndSaveRequest()
+          },
+          label: {
+            Text("Save")
+              .frame(width: 80, height: 21)
+          }
+        )
+        .buttonStyle(AccentButtonStyle())
       }
     }
   }
