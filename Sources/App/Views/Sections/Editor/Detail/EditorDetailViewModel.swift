@@ -206,7 +206,6 @@ final class EditorDetailViewModel: ObservableObject {
     // If we changed the method, custom name, or parent folder, we create a new request folder at a new path.
     let hasNewPath = newRequestFolderName != currentRequestFolder.name || currentRequestParentFolder != selectedRequestParentFolder
 
-
     if hasNewPath {
       // Create new request folder.
       try? Logic.SourceTree.addDirectory(at: selectedRequestParentFolder!.url, named: newRequestFolderName)
@@ -214,10 +213,8 @@ final class EditorDetailViewModel: ObservableObject {
       try? Logic.SourceTree.deleteDirectory(at: currentRequestFolder.url.path)
     }
 
-
     // Add response, if needed.
-    if
-      displayedResponseBody.isNotEmpty,
+    if displayedResponseBody.isNotEmpty,
       let expectedFileExtension = selectedContentType?.expectedFileExtension,
       let statusCode = Int(displayedStatusCode),
       HTTPResponseStatus(statusCode: statusCode).mayHaveResponseBody
