@@ -38,6 +38,12 @@ struct SourceTree: View {
         }
         .listStyle(SidebarListStyle())
         .padding(.top, -8)
+        .background(
+          NavigationLink(
+            destination: EditorDetail(viewModel: viewModel.detailViewModel(for: nil)),
+            isActive: $viewModel.isShowingCreateRequestDetailView
+          ) {}
+        )
       }
     }
     .frame(minWidth: Size.minimumListWidth)
@@ -60,7 +66,7 @@ struct SourceTree: View {
           SymbolButton(
             symbolName: .plusCircle,
             action: {
-              try? viewModel.refreshContent()
+              viewModel.isShowingCreateRequestDetailView = true
             }
           )
         }

@@ -16,6 +16,11 @@ final class SourceTreeViewModel: ObservableObject {
   /// The contents of the directory.
   @Published var directoryContent: [FileSystemNode] = []
 
+  /// When true the `EditorDetail` in `.create` mode will be shown.
+  ///
+  /// This is needed due to a limitation in `SwiftUI` where the toolbar cannot have its own navigation link invoked from a button.
+  @Published var isShowingCreateRequestDetailView = false
+
   /// The value of the workspace path.
   /// When this value is updated, the value in the user defaults is updated as well.
   @AppStorage(UserDefaultKey.workspaceURL) private var workspaceURL: URL?
@@ -24,7 +29,7 @@ final class SourceTreeViewModel: ObservableObject {
 
   /// The directories contents filtered based on the the filtered text, if any.
   var filteredNodes: [FileSystemNode] {
-    #warning("Needs implementation.")
+    #warning("Needs implementation")
     return directoryContent
   }
 
@@ -43,7 +48,12 @@ final class SourceTreeViewModel: ObservableObject {
   /// Creates the correct `EditorDetailViewModel` for the node.
   /// - Parameter node: The node we want to generate the `EditorDetailViewModel` for.
   /// - Returns: An instance of `EditorDetailViewModel`.
-  func detailViewModel(for node: FileSystemNode) -> EditorDetailViewModel {
+  func detailViewModel(for node: FileSystemNode?) -> EditorDetailViewModel {
+    guard let node = node else {
+      // Case when we tap the `add new` button.
+      return EditorDetailViewModel(mode: .create)
+    }
+
     switch node.kind {
     case .folder:
       return EditorDetailViewModel()

@@ -23,6 +23,7 @@ struct EditorDetail: View {
           RoundedTextField(title: "API custom name", text: $viewModel.displayedRequestName)
             .padding(.horizontal, 26)
             .padding(.vertical, 5)
+            .disabled(viewModel.isRequestNameTextFieldEnabled.isFalse)
 
           RoundedBorderDropdown(
             title: "Parent Folder",
@@ -32,10 +33,12 @@ struct EditorDetail: View {
           )
           .padding(.horizontal, 26)
           .padding(.vertical, 5)
+          .disabled(viewModel.isRequestParentFolderTextFieldEnabled.isFalse)
 
           RoundedTextField(title: "Path", text: $viewModel.displayedRequestPath)
             .padding(.horizontal, 26)
             .padding(.vertical, 5)
+            .disabled(viewModel.isRequestPathTextFieldEnabled.isFalse)
 
           RoundedBorderDropdown(
             title: "HTTP Method",
@@ -45,10 +48,12 @@ struct EditorDetail: View {
           )
           .padding(.horizontal, 26)
           .padding(.vertical, 5)
+          .disabled(viewModel.isHTTPMethodTextFieldEnabled.isFalse)
 
           RoundedTextField(title: "Response status code", text: $viewModel.displayedStatusCode)
             .padding(.horizontal, 26)
             .padding(.vertical, 5)
+            .disabled(viewModel.isStatusCodeTextFieldEnabled.isFalse)
 
           RoundedBorderDropdown(
             title: "Response Content-Type",
@@ -58,6 +63,7 @@ struct EditorDetail: View {
           )
           .padding(.horizontal, 26)
           .padding(.vertical, 5)
+          .disabled(viewModel.isContentTypeTextFieldEnabled.isFalse)
         }
         .padding(.top, 24)
       }
@@ -80,18 +86,23 @@ struct EditorDetail: View {
           viewModel.cancelRequestCreation()
         }
         .frame(height: 25)
-        .isHidden(viewModel.shouldShowEmptyState)
+        .isHidden(viewModel.shouldShowEmptyState || viewModel.currentMode == .read)
 
         Button(
           action: {
-            viewModel.createAndSaveRequest()
+            if viewModel.currentMode.isAny(of: [.edit, .create]) {
+              viewModel.createAndSaveRequest()
+            } else if viewModel.currentMode == .read {
+              viewModel.enableEditMode()
+            }
           },
           label: {
-            Text("Save")
+            Text(viewModel.currentMode == .read ? "Edit" : "Save")
               .frame(width: 80, height: 21)
           }
         )
         .buttonStyle(AccentButtonStyle())
+        .isHidden(viewModel.shouldShowEmptyState)
       }
     }
   }
