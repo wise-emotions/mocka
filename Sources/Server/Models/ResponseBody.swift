@@ -110,7 +110,7 @@ public extension ResponseBody.ContentType {
 internal extension ResponseBody.ContentType {
   /// The value associated to `Content-Type` in the response header.
   var contentTypeHeader: String? {
-    guard self.isNone(of: [.none]) else {
+    guard self != .none else {
       return nil
     }
 
