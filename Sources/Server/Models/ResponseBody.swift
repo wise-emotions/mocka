@@ -6,15 +6,15 @@ public struct ResponseBody {
   public let contentType: ContentType
 
   /// The url of the file holding the content.
-  public let fileLocation: URL
+  public let pathToFile: String
 
   /// Creates a `ResponseBody` object.
   /// - Parameters:
   ///   - contentType: The kind of the content of the response.
-  ///   - fileLocation: The url of the file holding the content.
-  public init(contentType: ResponseBody.ContentType, fileLocation: URL) {
+  ///   - pathToFile: The path to the file holding the content.
+  public init(contentType: ResponseBody.ContentType, pathToFile: String) {
     self.contentType = contentType
-    self.fileLocation = fileLocation
+    self.pathToFile = pathToFile
   }
 }
 
@@ -66,7 +66,7 @@ internal extension ResponseBody {
       return true
     }
 
-    guard let fileExtension = fileLocation.absoluteString.split(separator: ".").last else {
+    guard let fileExtension = pathToFile.split(separator: ".").last else {
       return false
     }
 

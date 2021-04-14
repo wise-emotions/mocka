@@ -174,7 +174,7 @@ public class AppServer {
           }
 
           return request.fileio
-            .collectFile(at: responseBody.fileLocation.path)
+            .collectFile(at: responseBody.pathToFile)
             .flatMap { buffer -> EventLoopFuture<ClientResponse> in
               clientResponse = ClientResponse(status: requestedResponse.status, headers: requestedResponse.headers, body: buffer)
               networkExchangesSubject.send(networkExchange)
@@ -182,7 +182,7 @@ public class AppServer {
             }
             .flatMapError { error in
               // So far, only logical error is the file not being found.
-              let failReason = "File not found at \(responseBody.fileLocation.path)"
+              let failReason = "File not found at \(responseBody.pathToFile)"
               clientResponse = ClientResponse(status: .badRequest, headers: [:], body: ByteBuffer(string: failReason))
               networkExchangesSubject.send(networkExchange)
               return request.eventLoop.makeFailedFuture(Abort(.badRequest, reason: failReason))
