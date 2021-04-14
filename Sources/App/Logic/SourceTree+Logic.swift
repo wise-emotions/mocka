@@ -290,7 +290,7 @@ extension Logic.SourceTree {
     if HTTPResponseStatus(statusCode: request.expectedResponse.statusCode).mayHaveResponseBody == false {
       // If the status code does not support a body, there should be no file associated with the request.
       // Otherwise we consider the request corrupt.
-      guard request.expectedResponse.contentType.isAny(of: [.custom, .none]), request.expectedResponse.fileName == nil else {
+      guard request.expectedResponse.contentType == .none, request.expectedResponse.fileName == nil else {
         return nil
       }
     }
