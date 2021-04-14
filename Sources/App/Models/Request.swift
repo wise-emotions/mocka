@@ -49,7 +49,7 @@ struct Request: Codable, Hashable {
         body: hasResponseBody
           ? ResponseBody(
             contentType: expectedResponse.contentType,
-            // it is ok to force-unwrap because `hasResponseBody` already verifies that fileName exists.
+            // It is ok to force-unwrap because `hasResponseBody` already verifies that fileName exists.
             pathToFile: url!.appendingPathComponent(expectedResponse.fileName!).path
           ) : nil
       )
