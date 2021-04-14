@@ -46,8 +46,8 @@ struct Request: Codable, Hashable {
       requestedResponse: RequestedResponse(
         status: HTTPResponseStatus(statusCode: expectedResponse.statusCode),
         headers: HTTPHeaders(expectedResponse.headers.map { $0.tuple }),
-        body: hasResponseBody ?
-          ResponseBody(
+        body: hasResponseBody
+          ? ResponseBody(
             contentType: expectedResponse.contentType,
             // it is ok to force-unwrap because `hasResponseBody` already verifies that fileName exists.
             pathToFile: url!.appendingPathComponent(expectedResponse.fileName!).path
