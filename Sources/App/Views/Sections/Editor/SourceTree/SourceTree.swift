@@ -31,9 +31,11 @@ struct SourceTree: View {
             ContextMenu(
               menuItems: {
                 ForEach(node.availableActions, id: \.self) { action in
-                  Button(viewModel.actionName(action: action), action: {
-                    viewModel.performAction(action, on: node)
-                  })
+                  Button(
+                    viewModel.actionName(action: action),
+                    action: {
+                      viewModel.performAction(action, on: node)
+                    })
                 }
               }
             )

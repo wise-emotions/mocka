@@ -166,10 +166,9 @@ final class EditorDetailViewModel: ObservableObject {
 
   /// The user finished editing.
   var userDoneEditing: Interaction?
-  
+
   /// The user cancelled editing.
   var userCancelled: Interaction?
-  
 
   // MARK - Init
 
@@ -214,7 +213,9 @@ final class EditorDetailViewModel: ObservableObject {
       isResponseBodyTextFieldEnabled = false
     }
 
-    guard case let .requestFile(request) = requestFile?.kind, let requestFolder = requestFolder, let unwrappedRequestParentFolder = requestParentFolder else {
+    guard case let .requestFile(request) = requestFile?.kind, let requestFolder = requestFolder,
+      let unwrappedRequestParentFolder = requestParentFolder
+    else {
       currentRequest = nil
       currentRequestFolder = nil
       currentRequestParentFolder = requestParentFolder

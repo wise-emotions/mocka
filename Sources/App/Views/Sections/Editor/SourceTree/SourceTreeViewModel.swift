@@ -24,10 +24,10 @@ final class SourceTreeViewModel: ObservableObject {
   /// The value of the workspace path.
   /// When this value is updated, the value in the user defaults is updated as well.
   @AppStorage(UserDefaultKey.workspaceURL) private var workspaceURL: URL?
-  
+
   /// The selected `FileSystemNode`.
   var selectedNode: FileSystemNode? = nil
-  
+
   // MARK: - Computed Properties
 
   /// The directories contents filtered based on the the filtered text, if any.
@@ -64,11 +64,13 @@ final class SourceTreeViewModel: ObservableObject {
         }
       )
     }
-    
+
     guard let node = node else {
-      return EditorDetailViewModel(mode: .create, onCancel: { [weak self] in
-        self?.isShowingCreateRequestDetailView = false
-      })
+      return EditorDetailViewModel(
+        mode: .create,
+        onCancel: { [weak self] in
+          self?.isShowingCreateRequestDetailView = false
+        })
     }
 
     switch node.kind {
@@ -82,9 +84,11 @@ final class SourceTreeViewModel: ObservableObject {
       // The parent namespace folder.
       let parent = flatDirectories.first { $0.children?.contains(requestFolderNode) ?? false }!
 
-      return EditorDetailViewModel(requestFile: node, requestFolder: requestFolderNode, requestParentFolder: parent, onSave: { [weak self] in
-        try? self?.refreshContent()
-      })
+      return EditorDetailViewModel(
+        requestFile: node, requestFolder: requestFolderNode, requestParentFolder: parent,
+        onSave: { [weak self] in
+          try? self?.refreshContent()
+        })
     }
   }
 
@@ -112,17 +116,17 @@ final class SourceTreeViewModel: ObservableObject {
       return "􀈋  Edit"
     }
   }
-  
+
   func performAction(_ action: FileSystemNode.Action, on node: FileSystemNode? = nil) {
     selectedNode = node
-    
+
     switch action {
     case .create:
       isShowingCreateRequestDetailView = true
-      
+
     case .delete:
       break
-      
+
     case .edit:
       break
     }
