@@ -12,7 +12,7 @@ struct Editor: View {
   // MARK: - Stored Properties
 
   /// The associated ViewModel.
-  @ObservedObject var viewModel = EditorViewModel()
+  @ObservedObject var viewModel: EditorViewModel
 
   // MARK: - Body
 
@@ -39,7 +39,7 @@ struct Editor: View {
         }
 
         TextEditor(
-          text: viewModel.mode == .write ? $viewModel.text : .constant(viewModel.text)
+          text: viewModel.mode == .write ? viewModel.text : .constant(viewModel.text.wrappedValue)
         )
         .font(.body)
         .frame(minHeight: 40)

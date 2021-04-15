@@ -33,7 +33,7 @@ struct EditorDetailHeadersBodyPreviews: PreviewProvider {
     EditorDetailHeadersBody(
       viewModel: EditorDetailHeadersBodyViewModel(
         headers: [HTTPHeader(key: "Test", value: "Test")],
-        body: "{\"test\":\"test\"}",
+        body: .constant( "{\"test\":\"test\"}"),
         mode: .write
       )
     )

@@ -68,7 +68,7 @@ struct EditorDetail: View {
           EditorDetailHeadersBody(
             viewModel: EditorDetailHeadersBodyViewModel(
               headers: viewModel.displayedResponseHeaders,
-              body: viewModel.displayedResponseBody,
+              body: $viewModel.displayedResponseBody,
               mode: viewModel.currentMode.isAny(of: [.create, .edit]) ? .write : .read
             )
           )
