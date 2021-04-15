@@ -89,7 +89,7 @@ struct ServerDetailInfoSectionViewModel {
       case .applicationJSON:
         return dataBody.prettyPrintedJSON
 
-      case .textCSS, .textCSV, .textHTML, .textPlain, .textXML, .custom, .none:
+      case .textCSS, .textCSV, .textHTML, .textPlain, .textXML, .none:
         return String(data: dataBody, encoding: .utf8)
       }
 
@@ -102,7 +102,7 @@ struct ServerDetailInfoSectionViewModel {
       case .applicationJSON:
         return response.body?.prettyPrintedJSON
 
-      case .textCSS, .textCSV, .textHTML, .textPlain, .textXML, .custom, .none:
+      case .textCSS, .textCSV, .textHTML, .textPlain, .textXML, .none:
         return String(data: dataBody, encoding: .utf8)
       }
     }

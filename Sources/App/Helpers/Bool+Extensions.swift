@@ -31,4 +31,9 @@ extension Bool {
   var isFalse: Bool {
     !isTrue
   }
+
+  /// Returns an inverted value of `self`. `true` becomes `false` and viceversa.
+  func inverted() -> Bool {
+    !self
+  }
 }
