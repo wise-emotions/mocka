@@ -133,6 +133,35 @@ final class EditorDetailViewModel: ObservableObject {
     return contentType != .none
   }
 
+  /// Computes whether or not the primary button ("edit" or "save") is enabled.
+  var isPrimaryButtonEnabled: Bool {
+    currentMode == .read ? true : isSaveButtonEnabled
+  }
+
+  /// Controls all necessary fields are properly filled, if so, returns `true`.
+  var isSaveButtonEnabled: Bool {
+    guard
+      displayedRequestName.isNotEmpty,
+      displayedRequestPath.isNotEmpty,
+      Int(displayedStatusCode) != nil,
+      selectedRequestParentFolder != nil,
+      selectedHTTPMethod != nil,
+      let contentType = selectedContentType
+    else {
+      return false
+    }
+
+    if contentType == .none {
+      return true
+    }
+
+    guard displayedResponseHeaders.isNotEmpty, displayedResponseBody.isNotEmpty else {
+      return false
+    }
+
+    return true
+  }
+
   // MARK: - Interaction
 
   /// The user finished editing.
