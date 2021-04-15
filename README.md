@@ -25,21 +25,21 @@
 
 ---
 
-Mocka — A Mock Server Made for Developers by Developers. All made in Swift.
+Mocka — A Mock Server for Developers by Developers, made with Swift ❤️.
 
 ☕️ Getting Mocka
 ===============
 
-If you just want to download and use the app, download the latest release now from the [GitHub Releases Page](https://github.com/wise-emotions/mocka/releases).
+Download the latest release now from the [GitHub Releases Page](https://github.com/wise-emotions/mocka/releases).
 
-Otherwise, you can build it by yourself, and maybe help us on the app development. Look at the [Development](https://github.com/wise-emotions/mocka#-development) section for more information.
+To build it yourself or to contribute, look at the [Development](https://github.com/wise-emotions/mocka#-development) section for more information.
 
 🚀 Features
 ===========
 
 Here is the list of the most important currently implemented features:
 - [x] Server section with a list for all the network exchanges automatically updated
-- [x] API Editor included in the app with live JSON validation
+- [x] API Editor included in the app
 - [x] Console section with a list for all the logs automatically updated
 - [x] Wildcard components in order to be able to define `*` paths
 - [x] App fully written in Swift by using SwiftUI, Combine, and Vapor
@@ -79,13 +79,10 @@ For example you can type: `./setup.sh close clean open` to close the current Xco
 🐛 Known Issues
 ===============
 
-1. In the Editor section, while looking at an API detail, the headers and body are not disabled, even if you are not in editing mode
-2. You cannot add an API in the root workspace path
-3. You cannot add a folder from the Editor list
-4. The `RoundedBorderDropdown` used while editing an API in the Editor section, always start as grayed out (disabled like), even in editing mode
-5. Every time an API is added, or the refresh button is pressed, the list in the Editor section will be closed. The same thing happen when close and reopen the Editor section by pressing on any other section
-6. macOS Light mode is currently not supported
-7. The JSON formatter does not work in editing mode in the Editor section
+1. You cannot add an API in the root workspace path
+2. You cannot add a folder from the Editor list
+3. The `RoundedBorderDropdown` used while editing an API in the Editor section, always start as grayed out (disabled like), even in editing mode (SwiftUI bug)
+4. Every time an API is added, or the refresh button is pressed, the list in the Editor section will be closed. The same thing happen when close and reopen the Editor section by pressing on any other section
 
 If you find other issues, please [open a bug report](https://github.com/wise-emotions/mocka/issues).
 
@@ -121,7 +118,7 @@ To see what has changed in recent versions of Mocka, see the **[CHANGELOG.md](ht
 ================
 
 - If you need help, open an issue.
-- If you found a bug, open an issue.
+- If you find a bug, open an issue.
 - If you have a feature request, open an issue.
 - If you want to contribute, see [Contributing](https://github.com/wise-emotions/mocka#-contributing) section.
 
