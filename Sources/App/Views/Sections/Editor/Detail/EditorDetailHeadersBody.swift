@@ -7,7 +7,7 @@ import SwiftUI
 struct EditorDetailHeadersBody: View {
 
   /// The associated ViewModel.
-  @StateObject var viewModel: EditorDetailHeadersBodyViewModel
+  @ObservedObject var viewModel: EditorDetailHeadersBodyViewModel
 
   var body: some View {
     VStack(alignment: .leading, spacing: 8) {
