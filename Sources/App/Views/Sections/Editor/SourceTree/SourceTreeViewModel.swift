@@ -118,7 +118,7 @@ final class SourceTreeViewModel: ObservableObject {
       return "􀈋  Edit"
     }
   }
-  
+
   /// Performs the action associated with the context menu item.
   /// - Parameters:
   ///   - action: The `FileSystemNode.Action`.
