@@ -33,6 +33,22 @@ extension View {
     }
   }
 
+  /// Adds a condition that controls whether users can interact with this view.
+  ///
+  /// The higher views in a view hierarchy can override the value you set on this view.
+  /// In the following example, the button isn’t interactive because the outer enabled(_:) modifier overrides the inner one:
+  /// ```swift
+  /// HStack {
+  ///   Button(Text("Press")) {}
+  ///     .enabled(true)
+  /// }
+  /// .enabled(false)
+  /// ```
+  /// - Parameter enabled: A Boolean value that determines whether users can interact with this view.
+  @ViewBuilder func enabled(_ enabled: Bool) -> some View {
+    disabled(enabled.inverted())
+  }
+
   /// Conditionally composites this view’s contents into an offscreen image before final display.
   ///
   /// Example for drawing:

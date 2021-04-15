@@ -85,7 +85,7 @@ final class EditorDetailViewModel: ObservableObject {
       // Remove existing value, if any.
       displayedResponseHeaders.removeAll { $0.key == "Content-Type" }
 
-      guard let contentType = selectedContentType, contentType.isNone(of: [.none, .custom]) else {
+      guard let contentType = selectedContentType, contentType != .none else {
         return
       }
 
@@ -124,7 +124,40 @@ final class EditorDetailViewModel: ObservableObject {
 
   /// If `true` the response body block should be displayed.
   var shouldDisplayBodyBlock: Bool {
-    selectedContentType?.isNone(of: [.none, .custom]) ?? false
+    guard let contentType = selectedContentType else {
+      return false
+    }
+
+    return contentType != .none
+  }
+
+  /// Computes whether or not the primary button ("edit" or "save") is enabled.
+  var isPrimaryButtonEnabled: Bool {
+    currentMode == .read ? true : isSaveButtonEnabled
+  }
+
+  /// Controls all necessary fields are properly filled, if so, returns `true`.
+  var isSaveButtonEnabled: Bool {
+    guard
+      displayedRequestName.isNotEmpty,
+      displayedRequestPath.isNotEmpty,
+      Int(displayedStatusCode) != nil,
+      selectedRequestParentFolder != nil,
+      selectedHTTPMethod != nil,
+      let contentType = selectedContentType
+    else {
+      return false
+    }
+
+    if contentType == .none {
+      return true
+    }
+
+    guard displayedResponseHeaders.isNotEmpty, displayedResponseBody.isNotEmpty else {
+      return false
+    }
+
+    return true
   }
 
   // MARK: - Interaction
