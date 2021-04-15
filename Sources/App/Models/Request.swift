@@ -7,7 +7,7 @@ import MockaServer
 
 /// An object containing information related to a server request.
 /// This object is saved to and retrieved from the file system.
-struct Request: Codable, Hashable {
+struct Request: Hashable {
   /// The path of the `API`. This should not consider any query parameters.
   let path: Path
 
@@ -54,5 +54,31 @@ struct Request: Codable, Hashable {
           ) : nil
       )
     )
+  }
+}
+
+extension Request: Codable {
+  enum CodingKeys: String, CodingKey {
+    case path
+    case method
+    case expectedResponse
+  }
+
+  init(from decoder: Decoder) throws {
+    let container = try decoder.container(keyedBy: CodingKeys.self)
+    
+    let stringPath = try container.decode(String.self, forKey: .path)
+    path = stringPath.components(separatedBy: "/")
+    method = try container.decode(HTTPMethod.self, forKey: .method)
+    expectedResponse = try container.decode(Response.self, forKey: .expectedResponse)
+  }
+
+  func encode(to encoder: Encoder) throws {
+    var container = encoder.container(keyedBy: CodingKeys.self)
+    
+    let stringPath = path.joined(separator: "/")
+    try container.encode(stringPath, forKey: .path)
+    try container.encode(method, forKey: .method)
+    try container.encode(expectedResponse, forKey: .expectedResponse)
   }
 }
