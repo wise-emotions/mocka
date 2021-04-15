@@ -57,6 +57,12 @@ struct Request: Equatable, Hashable {
   }
 }
 
+// MARK : - Custom Coding
+
+// To simplify how the data is edited inside the `request.json` file,
+// we customize how we encode and extract the data.
+//
+// Without the custom encoder we would have `path` as an array of strings, whereas a `String` is more reasonable.
 extension Request: Codable {
   enum CodingKeys: String, CodingKey {
     case path
