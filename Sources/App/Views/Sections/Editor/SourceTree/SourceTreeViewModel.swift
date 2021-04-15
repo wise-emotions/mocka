@@ -79,4 +79,20 @@ final class SourceTreeViewModel: ObservableObject {
 
     directoryContent = Logic.SourceTree.contents(of: workspaceDirectory)
   }
+  
+  /// Returns the name of the action.
+  /// - Parameter action: The `FileSystemNode.Action`.
+  /// - Returns: The name of the action.
+  func actionName(action: FileSystemNode.Action) -> String {
+    switch action {
+    case .create:
+      return "􀁌  Add"
+      
+    case .delete:
+      return "􀈓  Delete"
+      
+    case .edit:
+      return "􀈋  Edit"
+    }
+  }
 }

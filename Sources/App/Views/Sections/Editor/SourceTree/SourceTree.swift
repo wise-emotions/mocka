@@ -30,8 +30,9 @@ struct SourceTree: View {
           .contextMenu(
             ContextMenu(
               menuItems: {
-                Button("Delete", action: {})
-                Button("Edit", action: {})
+                ForEach(node.availableActions, id: \.self) {
+                  Button(viewModel.actionName(action: $0), action: {})
+                }
               }
             )
           )
