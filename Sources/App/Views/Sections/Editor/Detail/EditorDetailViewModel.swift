@@ -133,6 +133,30 @@ final class EditorDetailViewModel: ObservableObject {
     return contentType != .none
   }
 
+  /// Controls all necessary fields are properly filled, if so, returns `true`.
+  var isSaveButtonEnabled: Bool {
+    guard
+      displayedRequestName.isNotEmpty,
+      displayedRequestPath.isNotEmpty,
+      displayedStatusCode.isNotEmpty,
+      selectedRequestParentFolder != nil,
+      selectedHTTPMethod != nil,
+      let contentType = selectedContentType
+    else {
+      return false
+    }
+
+    if contentType == .none {
+      return true
+    }
+
+    guard displayedResponseHeaders.isNotEmpty, displayedResponseBody.isNotEmpty else {
+      return false
+    }
+
+    return true
+  }
+
   // MARK: - Interaction
 
   /// The user finished editing.

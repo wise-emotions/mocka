@@ -101,8 +101,9 @@ struct EditorDetail: View {
               .frame(width: 80, height: 21)
           }
         )
-        .buttonStyle(AccentButtonStyle())
+        .buttonStyle(AccentButtonStyle(isEnabled: viewModel.isSaveButtonEnabled))
         .isHidden(viewModel.shouldShowEmptyState)
+        .enabled(viewModel.currentMode == .read ? true : viewModel.isSaveButtonEnabled)
       }
     }
   }
