@@ -25,7 +25,7 @@ extension ServerTestsHelpers {
           headers: ["Content-Type": "application/json"],
           body: ResponseBody(
             contentType: .applicationJSON,
-            fileLocation: ServerTestsHelpers.getFilePath(for: "DummyJSON", extension: "json")
+            pathToFile: ServerTestsHelpers.getFilePath(for: "DummyJSON", extension: "json")
           )
         )
       )
@@ -48,7 +48,7 @@ extension ServerTestsHelpers {
   ///   - name: The name of the file.
   ///   - extension: The extension of the file.
   /// - Returns: The path of the file inside the tests bundle.
-  static func getFilePath(for name: String, `extension`: String) -> URL {
-    URL(string: Bundle.tests.path(forResource: name, ofType: `extension`)!)!
+  static func getFilePath(for name: String, `extension`: String) -> String {
+    URL(string: Bundle.tests.path(forResource: name, ofType: `extension`)!)!.path
   }
 }
