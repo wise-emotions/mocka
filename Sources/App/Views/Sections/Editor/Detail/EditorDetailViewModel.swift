@@ -138,7 +138,7 @@ final class EditorDetailViewModel: ObservableObject {
     guard
       displayedRequestName.isNotEmpty,
       displayedRequestPath.isNotEmpty,
-      displayedStatusCode.isNotEmpty,
+      Int(displayedStatusCode) != nil,
       selectedRequestParentFolder != nil,
       selectedHTTPMethod != nil,
       let contentType = selectedContentType
