@@ -10,7 +10,7 @@ struct EditorDetail: View {
   // MARK: - Stored Properties
 
   /// The associated ViewModel.
-  @StateObject var viewModel: EditorDetailViewModel
+  @ObservedObject var viewModel: EditorDetailViewModel
 
   // MARK: - Body
 

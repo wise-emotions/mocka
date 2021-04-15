@@ -24,7 +24,7 @@ class EditorViewModel: ObservableObject {
   // MARK: - Stored Properties
 
   /// The text of the editor.
-  @Published var text: String
+  @Published var text: String 
 
   /// Wether the user is dragging a file over the editor.
   @Published var isDraggingOver = false
