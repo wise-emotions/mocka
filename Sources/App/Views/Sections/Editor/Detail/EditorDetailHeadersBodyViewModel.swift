@@ -11,10 +11,17 @@ final class EditorDetailHeadersBodyViewModel: ObservableObject {
   /// The text body of the response, if any.
   @Published var body: String = ""
 
+  /// The table mode.
   @Published var mode: KeyValueTableViewModel.Mode
 
+  /// The list of the key value items.
   @Published var keyValueHeaders: [KeyValueItem] = []
 
+  /// Create a new `EditorDetailHeadersBodyViewModel`.
+  /// - Parameters:
+  ///   - headers: The headers `Array`.
+  ///   - body: The body `String`.
+  ///   - mode: The editing mode.
   init(headers: [HTTPHeader], body: String, mode: KeyValueTableViewModel.Mode) {
     self.headers = headers
     self.body = body

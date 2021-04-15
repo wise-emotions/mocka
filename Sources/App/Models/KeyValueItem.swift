@@ -25,6 +25,8 @@ class KeyValueItem: Identifiable, ObservableObject {
   }
 }
 
+// MARK: - Hashable
+
 extension KeyValueItem: Hashable {
   static func == (lhs: KeyValueItem, rhs: KeyValueItem) -> Bool {
     lhs.id == rhs.id && lhs.key == rhs.key && lhs.value == rhs.value

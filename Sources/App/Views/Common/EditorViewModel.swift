@@ -35,8 +35,12 @@ final class EditorViewModel: ObservableObject {
   /// The table mode. In `write` mode an add button will be added.
   @Published var mode: Mode
 
-  // MARK: - Computed Properties
+  // MARK: - Init
 
+  /// Create a new `EditorViewModel`.
+  /// - Parameters:
+  ///   - text: The text of the editor.
+  ///   - mode: The editor mode.
   init(text: String = "", mode: Mode = .read) {
     self.text = text
     self.mode = mode
