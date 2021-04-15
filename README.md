@@ -32,7 +32,7 @@ Mocka — A Mock Server Made for Developers by Developers. All made in Swift.
 
 If you just want to download and use the app, download the latest release now from the [GitHub Releases Page](https://github.com/wise-emotions/mocka/releases).
 
-Otherwise, you can build it by yourself, and maybe help us on the app development. Look at the [Development](https://github.com/wise-emotions/mocka#development) section for more information.
+Otherwise, you can build it by yourself, and maybe help us on the app development. Look at the [Development](https://github.com/wise-emotions/mocka#-development) section for more information.
 
 🚀 Features
 ===========
@@ -44,7 +44,7 @@ Here is the list of the most important currently implemented features:
 - [x] Wildcard components in order to be able to define `*` paths
 - [x] App fully written in Swift by using SwiftUI, Combine, and Vapor
 
-If you want to see what's next, read the [Wanted Features](https://github.com/wise-emotions/mocka#wanted-features) section.
+If you want to see what's next, read the [Wanted Features](https://github.com/wise-emotions/mocka#-wanted-features) section.
 
 You can also go to the [GitHub Project](https://github.com/wise-emotions/mocka/projects/1) board to see the Mocka backlog.
 
@@ -55,7 +55,7 @@ You can also go to the [GitHub Project](https://github.com/wise-emotions/mocka/p
 |-----------|-----------|
 | 0.1.0     | 11.2      |
 
-Build Requirements ⚙️
+⚙️ Build Requirements
 ====================
 
 | **Mocka** | **Swift** | **Xcode** |
@@ -87,7 +87,9 @@ For example you can type: `./setup.sh close clean open` to close the current Xco
 6. macOS Light mode is currently not supported
 7. The JSON formatter does not work in editing mode in the Editor section
 
-If you find other issues, please [open a bug report](https://github.com/wise-emotions/mocka/issues). If you would like to fix a bug, please follow the [Contributing](https://github.com/wise-emotions/mocka#contributing) section.
+If you find other issues, please [open a bug report](https://github.com/wise-emotions/mocka/issues).
+
+If you would like to fix a bug, please follow the [Contributing](https://github.com/wise-emotions/mocka#-contributing) section.
 
 🌈 Wanted Features
 ==================
@@ -106,7 +108,9 @@ The following list is not ordered, if you would like to see what will be include
 - Swagger Import
 - Command Line Support
 
-If you you would like to request another feature, please [open a feature request](https://github.com/wise-emotions/mocka/issues). If you would like to add a feature, please follow the [Contributing](https://github.com/wise-emotions/mocka#contributing) section.
+If you you would like to request another feature, please [open a feature request](https://github.com/wise-emotions/mocka/issues).
+
+If you would like to add a feature, please follow the [Contributing](https://github.com/wise-emotions/mocka#-contributing) section.
 
 📃 Changelog
 ============
@@ -119,7 +123,7 @@ To see what has changed in recent versions of Mocka, see the **[CHANGELOG.md](ht
 - If you need help, open an issue.
 - If you found a bug, open an issue.
 - If you have a feature request, open an issue.
-- If you want to contribute, see [Contributing](https://github.com/wise-emotions/mocka#contributing) section.
+- If you want to contribute, see [Contributing](https://github.com/wise-emotions/mocka#-contributing) section.
 
 💥 Contributing
 ===============
