@@ -165,6 +165,9 @@ final class EditorDetailViewModel: ObservableObject {
   /// The user finished editing.
   var userDoneEditing: Interaction?
 
+  /// The user cancelled editing.
+  var userCancelled: Interaction?
+
   // MARK - Init
 
   /// Creates an instance of `EditorDetailViewModel`.
@@ -174,15 +177,18 @@ final class EditorDetailViewModel: ObservableObject {
   ///   - requestParentFolder: The parent folder holding the folder of the request.
   ///                          Defaults to `nil`. Should not be `nil` if `selectedRequest` isn't.
   ///   - mode: The mode in which view should be displayed.
-  ///   - completion: A closure to invoke when the user taps the `Save` button.
+  ///   - onSave: A closure to invoke when the user taps the `Save` button.
+  ///   - onCancel: A closure to invoke when the user taps the `Cancel` button.
   init(
     requestFile: FileSystemNode? = nil,
     requestFolder: FileSystemNode? = nil,
     requestParentFolder: FileSystemNode? = nil,
     mode: Mode = .read,
-    onSave completion: Interaction? = nil
+    onSave: Interaction? = nil,
+    onCancel: Interaction? = nil
   ) {
-    userDoneEditing = completion
+    userDoneEditing = onSave
+    userCancelled = onCancel
     currentMode = mode
 
     if mode.isAny(of: [.create, .edit]) {
@@ -205,10 +211,15 @@ final class EditorDetailViewModel: ObservableObject {
       isResponseBodyEditorEnabled = false
     }
 
-    guard case let .requestFile(request) = requestFile?.kind, let requestFolder = requestFolder, let requestParentFolder = requestParentFolder else {
+    guard
+      case let .requestFile(request) = requestFile?.kind,
+      let unwrappedRequestFolder = requestFolder,
+      let unwrappedRequestParentFolder = requestParentFolder
+    else {
       currentRequest = nil
       currentRequestFolder = nil
-      currentRequestParentFolder = nil
+      currentRequestParentFolder = requestParentFolder
+      selectedRequestParentFolder = requestParentFolder
       currentResponseBody = nil
       shouldShowEmptyState = mode != .create
       return
@@ -217,19 +228,19 @@ final class EditorDetailViewModel: ObservableObject {
     shouldShowEmptyState = false
 
     currentRequest = request
-    currentRequestFolder = requestFolder
-    selectedRequestParentFolder = requestParentFolder
+    currentRequestFolder = unwrappedRequestFolder
+    selectedRequestParentFolder = unwrappedRequestParentFolder
 
-    displayedRequestName = Self.requestName(request, requestFolderNode: requestFolder)
+    displayedRequestName = Self.requestName(request, requestFolderNode: unwrappedRequestFolder)
     displayedRequestPath = request.path.joined(separator: "/")
-    currentRequestParentFolder = requestParentFolder
+    currentRequestParentFolder = unwrappedRequestParentFolder
     selectedHTTPMethod = request.method
     selectedContentType = request.expectedResponse.contentType
     displayedResponseHeaders = request.expectedResponse.headers
     displayedStatusCode = String(request.expectedResponse.statusCode)
 
     if let responseFileName = request.expectedResponse.fileName {
-      currentResponseBody = Logic.SourceTree.content(of: requestFolder.url.appendingPathComponent(responseFileName))
+      currentResponseBody = Logic.SourceTree.content(of: unwrappedRequestFolder.url.appendingPathComponent(responseFileName))
       displayedResponseBody = currentResponseBody ?? ""
     } else {
       currentResponseBody = nil
@@ -278,6 +289,7 @@ final class EditorDetailViewModel: ObservableObject {
     guard let request = currentRequest, let selectedRequestFolder = currentRequestFolder else {
       emptyStateContent()
       shouldShowEmptyState = true
+      userCancelled?()
       return
     }
 
