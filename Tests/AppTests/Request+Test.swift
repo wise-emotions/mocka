@@ -65,20 +65,14 @@ class RequestTests: XCTestCase {
 
     let expectedOutput = """
       {
-        "path" : [
-          "api",
-          "test"
-        ],
+        "path" : "api\\/test",
         "method" : "GET",
         "expectedResponse" : {
           "statusCode" : 200,
           "fileName" : "response.json",
-          "headers" : [
-            {
-              "key" : "Content-Type",
-              "value" : "application\\/json"
-            }
-          ],
+          "headers" : {
+            "Content-Type" : "application\\/json"
+          },
           "contentType" : "application\\/json"
         }
       }
@@ -105,20 +99,14 @@ class RequestTests: XCTestCase {
 
     let encodedRequest = """
       {
-        "path" : [
-          "api",
-          "test"
-        ],
+        "path" : "api/test",
         "method" : "GET",
         "expectedResponse" : {
           "statusCode" : 200,
           "fileName" : "response.json",
-          "headers" : [
-            {
-              "key" : "Content-Type",
-              "value" : "application\\/json"
-            }
-          ],
+          "headers" : {
+            "Content-Type": "application\\/json"
+          },
           "contentType" : "application\\/json"
         }
       }
