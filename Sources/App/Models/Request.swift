@@ -66,7 +66,7 @@ extension Request: Codable {
 
   init(from decoder: Decoder) throws {
     let container = try decoder.container(keyedBy: CodingKeys.self)
-    
+
     let stringPath = try container.decode(String.self, forKey: .path)
     path = stringPath.components(separatedBy: "/")
     method = try container.decode(HTTPMethod.self, forKey: .method)
@@ -75,7 +75,7 @@ extension Request: Codable {
 
   func encode(to encoder: Encoder) throws {
     var container = encoder.container(keyedBy: CodingKeys.self)
-    
+
     let stringPath = path.joined(separator: "/")
     try container.encode(stringPath, forKey: .path)
     try container.encode(method, forKey: .method)
