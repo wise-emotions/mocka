@@ -10,7 +10,7 @@ struct EditorDetail: View {
   // MARK: - Stored Properties
 
   /// The associated ViewModel.
-  @StateObject var viewModel: EditorDetailViewModel
+  @ObservedObject var viewModel: EditorDetailViewModel
 
   // MARK: - Body
 
@@ -64,6 +64,15 @@ struct EditorDetail: View {
           .padding(.horizontal, 26)
           .padding(.vertical, 5)
           .disabled(viewModel.isContentTypeTextFieldEnabled.isFalse)
+
+          EditorDetailHeadersBody(
+            viewModel: EditorDetailHeadersBodyViewModel(
+              headers: viewModel.displayedResponseHeaders,
+              body: $viewModel.displayedResponseBody,
+              mode: viewModel.currentMode.isAny(of: [.create, .edit]) ? .write : .read
+            )
+          )
+          .disabled(viewModel.isResponseHeadersKeyValueTableEnabled.isFalse || viewModel.isResponseBodyEditorEnabled.isFalse)
         }
         .padding(.top, 24)
       }
@@ -85,7 +94,6 @@ struct EditorDetail: View {
         Button("Cancel") {
           viewModel.cancelRequestCreation()
         }
-        .frame(height: 25)
         .isHidden(viewModel.shouldShowEmptyState || viewModel.currentMode == .read)
 
         Button(
@@ -98,7 +106,7 @@ struct EditorDetail: View {
           },
           label: {
             Text(viewModel.currentMode == .read ? "Edit" : "Save")
-              .frame(width: 80, height: 21)
+              .frame(width: 80, height: 26)
           }
         )
         .buttonStyle(AccentButtonStyle(isEnabled: viewModel.isSaveButtonEnabled))

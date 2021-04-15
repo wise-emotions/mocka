@@ -12,7 +12,7 @@ struct Editor: View {
   // MARK: - Stored Properties
 
   /// The associated ViewModel.
-  @StateObject var viewModel = EditorViewModel()
+  @ObservedObject var viewModel: EditorViewModel
 
   // MARK: - Body
 
@@ -24,7 +24,6 @@ struct Editor: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .font(.headline)
             .foregroundColor(Color.latte)
-            .padding(.leading)
 
           Spacer()
 
@@ -37,19 +36,16 @@ struct Editor: View {
             allowsMultipleSelection: false,
             onCompletion: viewModel.importFile(from:)
           )
-          .padding(.trailing)
         }
 
-        TextEditor(text: $viewModel.text)
-          .font(.body)
-          .border(viewModel.borderColor)
-          .onChange(
-            of: viewModel.text,
-            perform: { _ in
-              viewModel.prettyPrintJSON()
-            }
-          )
-          .padding(.horizontal)
+        TextEditor(
+          text: viewModel.mode == .write ? viewModel.text : .constant(viewModel.text.wrappedValue)
+        )
+        .font(.body)
+        .frame(minHeight: 40)
+        .background(Color.doppio)
+        .cornerRadius(8)
+        .border(viewModel.borderColor)
       }
     }
     .onDrop(

@@ -23,7 +23,7 @@ struct EmptyState: View {
 
       Image(systemName: symbol.rawValue)
         .resizable()
-        .frame(width: 45, height: 45)
+        .frame(maxWidth: 45, maxHeight: 45)
         .padding()
         .font(.body)
       Text(text)
