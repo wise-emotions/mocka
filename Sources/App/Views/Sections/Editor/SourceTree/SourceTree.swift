@@ -30,8 +30,14 @@ struct SourceTree: View {
           .contextMenu(
             ContextMenu(
               menuItems: {
-                Button("Delete", action: {})
-                Button("Edit", action: {})
+                ForEach(node.availableActions, id: \.self) { action in
+                  Button(
+                    viewModel.actionName(action: action),
+                    action: {
+                      viewModel.performAction(action, on: node)
+                    }
+                  )
+                }
               }
             )
           )
@@ -66,6 +72,7 @@ struct SourceTree: View {
           SymbolButton(
             symbolName: .plusCircle,
             action: {
+              viewModel.selectedNode = nil
               viewModel.isShowingCreateRequestDetailView = true
             }
           )

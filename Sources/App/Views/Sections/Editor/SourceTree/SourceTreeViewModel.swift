@@ -25,6 +25,9 @@ final class SourceTreeViewModel: ObservableObject {
   /// When this value is updated, the value in the user defaults is updated as well.
   @AppStorage(UserDefaultKey.workspaceURL) private var workspaceURL: URL?
 
+  /// The selected `FileSystemNode`.
+  var selectedNode: FileSystemNode? = nil
+
   // MARK: - Computed Properties
 
   /// The directories contents filtered based on the the filtered text, if any.
@@ -49,9 +52,26 @@ final class SourceTreeViewModel: ObservableObject {
   /// - Parameter node: The node we want to generate the `EditorDetailViewModel` for.
   /// - Returns: An instance of `EditorDetailViewModel`.
   func detailViewModel(for node: FileSystemNode?) -> EditorDetailViewModel {
+    if let selectedNode = selectedNode, selectedNode.isFolder {
+      return EditorDetailViewModel(
+        requestParentFolder: selectedNode,
+        mode: .create,
+        onSave: { [weak self] in
+          try? self?.refreshContent()
+        },
+        onCancel: { [weak self] in
+          self?.isShowingCreateRequestDetailView = false
+        }
+      )
+    }
+
     guard let node = node else {
-      // Case when we tap the `add new` button.
-      return EditorDetailViewModel(mode: .create)
+      return EditorDetailViewModel(
+        mode: .create,
+        onCancel: { [weak self] in
+          self?.isShowingCreateRequestDetailView = false
+        }
+      )
     }
 
     switch node.kind {
@@ -65,9 +85,12 @@ final class SourceTreeViewModel: ObservableObject {
       // The parent namespace folder.
       let parent = flatDirectories.first { $0.children?.contains(requestFolderNode) ?? false }!
 
-      return EditorDetailViewModel(requestFile: node, requestFolder: requestFolderNode, requestParentFolder: parent) { [weak self] in
-        try? self?.refreshContent()
-      }
+      return EditorDetailViewModel(
+        requestFile: node, requestFolder: requestFolderNode, requestParentFolder: parent,
+        onSave: { [weak self] in
+          try? self?.refreshContent()
+        }
+      )
     }
   }
 
@@ -78,5 +101,28 @@ final class SourceTreeViewModel: ObservableObject {
     }
 
     directoryContent = Logic.SourceTree.contents(of: workspaceDirectory)
+  }
+
+  /// Returns the name of the action.
+  /// - Parameter action: The `FileSystemNode.Action`.
+  /// - Returns: The name of the action.
+  func actionName(action: FileSystemNode.Action) -> String {
+    switch action {
+    case .create:
+      return "􀁌  Add"
+    }
+  }
+
+  /// Performs the action associated with the context menu item.
+  /// - Parameters:
+  ///   - action: The `FileSystemNode.Action`.
+  ///   - node: The `FileSystemNode`.
+  func performAction(_ action: FileSystemNode.Action, on node: FileSystemNode? = nil) {
+    selectedNode = node
+
+    switch action {
+    case .create:
+      isShowingCreateRequestDetailView = true
+    }
   }
 }
