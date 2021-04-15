@@ -44,13 +44,13 @@ struct FileSystemNode: Identifiable, Hashable {
       return false
     }
   }
-  
+
   /// The list of available actions that can be performed on the node.
   var availableActions: [Action] {
     switch kind {
     case let .folder(children: _, isRequestFolder: isRequestFolder):
       return isRequestFolder ? [.edit, .delete] : [.create]
-      
+
     case .requestFile(_):
       return [.edit, .delete]
     }
@@ -94,10 +94,10 @@ extension FileSystemNode {
   enum Action {
     /// A child node can be created under the node.
     case create
-    
+
     /// The node can be deleted.
     case delete
-    
+
     /// The node can be edited.
     case edit
   }
