@@ -12,7 +12,7 @@ struct Editor: View {
   // MARK: - Stored Properties
 
   /// The associated ViewModel.
-  @StateObject var viewModel = EditorViewModel()
+  @ObservedObject var viewModel: EditorViewModel
 
   // MARK: - Body
 
@@ -50,7 +50,6 @@ struct Editor: View {
               viewModel.prettyPrintJSON()
             }
           )
-          .disabled(viewModel.mode == .read)
       }
     }
     .onDrop(

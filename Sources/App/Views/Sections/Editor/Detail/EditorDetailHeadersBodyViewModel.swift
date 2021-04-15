@@ -11,7 +11,7 @@ final class EditorDetailHeadersBodyViewModel: ObservableObject {
   /// The text body of the response, if any.
   @Published var body: String = ""
 
-  let mode: KeyValueTableViewModel.Mode
+  @Published var mode: KeyValueTableViewModel.Mode
 
   @Published var keyValueHeaders: [KeyValueItem] = []
 
