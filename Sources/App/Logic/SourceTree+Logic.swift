@@ -115,21 +115,6 @@ extension Logic.SourceTree {
     }
   }
 
-  /// Writes a string to a `response.\(type)` file at a `URL`.
-  /// - Parameters:
-  ///   - string: The string to write to the file.
-  ///   - type: The extension of the file.
-  ///   - url: The `URL` where to save the response.
-  /// - Throws: `MockaError.failedToWriteToFile`
-  static func addResponse(_ string: String, type: String, to url: URL) throws {
-    let responseFilePath = url.appendingPathComponent("response.\(type)", isDirectory: false).path
-    do {
-      try string.write(toFile: responseFilePath, atomically: true, encoding: String.Encoding.utf8)
-    } catch {
-      throw MockaError.failedToWriteToFile(content: string, path: responseFilePath)
-    }
-  }
-
   /// Encodes the request and pretty prints it to a `request.json` file at a give url.
   /// - Parameters:
   ///   - request: The request to encode.
@@ -152,6 +137,20 @@ extension Logic.SourceTree {
       try content.write(to: url.appendingPathComponent("request.json"), atomically: false, encoding: .utf8)
     } catch {
       throw MockaError.failedToWriteToFile(content: content, path: url.appendingPathComponent("request.json").path)
+    }
+  }
+
+  /// Writes the response to a file with the proper extension to a url.
+  /// - Parameters:
+  ///   - response: The string of the response.
+  ///   - extension: The extension with which to save the response file.
+  ///   - url: the `URL` where to save the file.
+  /// - Throws: `MockaError.failedToWriteToFile`.
+  static func addResponse(_ response: String, ofType extension: String, to url: URL) throws {
+    do {
+      try response.write(to: url.appendingPathComponent("response.\(`extension`)"), atomically: false, encoding: .utf8)
+    } catch {
+      throw MockaError.failedToWriteToFile(content: response, path: url.appendingPathComponent("response.\(`extension`)").path)
     }
   }
 

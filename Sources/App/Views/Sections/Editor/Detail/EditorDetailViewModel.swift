@@ -330,7 +330,13 @@ final class EditorDetailViewModel: ObservableObject {
       try? Logic.SourceTree.addDirectory(at: selectedRequestParentFolder!.url, named: newRequestFolderName)
 
       // Add response, if any.
-      #warning("Add implementation")
+      if displayedResponseBody.isNotEmpty, let expectedFileExtension = selectedContentType?.expectedFileExtension {
+        try? Logic.SourceTree.addResponse(
+          displayedResponseBody,
+          ofType: expectedFileExtension,
+          to: selectedRequestParentFolder!.url.appendingPathComponent(newRequestFolderName)
+        )
+      }
 
       // Add request.
       try? Logic.SourceTree.addRequest(request, to: selectedRequestParentFolder!.url.appendingPathComponent(newRequestFolderName))
@@ -360,7 +366,7 @@ final class EditorDetailViewModel: ObservableObject {
     {
       try? Logic.SourceTree.addResponse(
         displayedResponseBody,
-        type: expectedFileExtension,
+        ofType: expectedFileExtension,
         to: selectedRequestParentFolder!.url.appendingPathComponent(newRequestFolderName)
       )
     }
