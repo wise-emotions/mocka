@@ -45,8 +45,27 @@ struct Response: Hashable {
   }
 }
 
-// MARK: - Custom Coding
+// MARK : - Custom Coding
 
+// To simplify how the data is edited inside the `request.json` file,
+// we customize how we encode and extract the data.
+//
+// Without the custom encoder we would have:
+// ```
+// headers: [
+//   {
+//     "key": "someKey",
+//     "value: "someValue
+//   }
+// ]
+// ```
+//
+// With the custom encoder we will have:
+// ```
+// headers: {
+//   "key": "value"
+// }
+// ```
 extension Response: Codable {
   enum CodingKeys: String, CodingKey {
     case statusCode
@@ -75,7 +94,7 @@ extension Response: Codable {
     fileName = try container.decodeIfPresent(String.self, forKey: .fileName)
 
     let decodedHeaders = try container.decode([String: String].self, forKey: .headers)
-    headers = decodedHeaders.reduce(into: [HTTPHeader]())  {
+    headers = decodedHeaders.reduce(into: [HTTPHeader]()) {
       $0.append(HTTPHeader(key: $1.key, value: $1.value))
     }
   }
