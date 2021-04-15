@@ -6,7 +6,7 @@ import SwiftUI
 import UniformTypeIdentifiers
 
 /// The ViewModel of the `Editor`.
-class EditorViewModel: ObservableObject {
+final class EditorViewModel: ObservableObject {
 
   // MARK: - Data Structure
 
@@ -36,29 +36,6 @@ class EditorViewModel: ObservableObject {
   @Published var mode: Mode
 
   // MARK: - Computed Properties
-
-  /// Whether or not the input is a valid json.
-  var isValidJSON: Bool {
-    text.prettyPrintedJSON != nil
-  }
-
-  /// The color of the border of the text editor.
-  var borderColor: Color {
-    guard isDraggingOver.isFalse else {
-      return Color.irish
-    }
-
-    guard text.isNotEmpty else {
-      return .clear
-    }
-
-    return isValidJSON ? .clear : Color.redEye
-  }
-
-  /// Whether or not the error label is visible.
-  var isErrorLabelVisible: Bool {
-    isValidJSON.isFalse
-  }
 
   init(text: String = "", mode: Mode = .read) {
     self.text = text
