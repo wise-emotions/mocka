@@ -5,7 +5,7 @@
 import SwiftUI
 
 /// The ViewModel of the `KeyValueTable`.
-class KeyValueTableViewModel: ObservableObject {
+final class KeyValueTableViewModel: ObservableObject {
 
   // MARK: - Data Structure
 
@@ -33,9 +33,20 @@ class KeyValueTableViewModel: ObservableObject {
   init(keyValueItems: [KeyValueItem], mode: Mode) {
     self.keyValueItems = keyValueItems
     self.mode = mode
+  }
 
-    if mode == .write {
-      self.keyValueItems.append(KeyValueItem(key: "", value: ""))
+  // MARK: - Functions
+
+  /// Add a new row to the `KeyValueTable`.
+  func addNewRow() {
+    if
+      let lastKeyValueItem = keyValueItems.last,
+      lastKeyValueItem.key.isNotEmpty,
+      lastKeyValueItem.value.isNotEmpty
+    {
+      keyValueItems.append(KeyValueItem(key: "", value: ""))
+    } else if keyValueItems.count == 0 {
+      keyValueItems.append(KeyValueItem(key: "", value: ""))
     }
   }
 }

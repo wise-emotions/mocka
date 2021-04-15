@@ -34,7 +34,7 @@ struct KeyValueTable: View {
           SymbolButton(
             symbolName: .plusCircle,
             action: {
-              viewModel.keyValueItems.append(KeyValueItem(key: "", value: ""))
+              viewModel.addNewRow()
             }
           )
         }
