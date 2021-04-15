@@ -94,7 +94,7 @@ extension Response: Codable {
     fileName = try container.decodeIfPresent(String.self, forKey: .fileName)
 
     let decodedHeaders = try container.decode([String: String].self, forKey: .headers)
-    headers = decodedHeaders.reduce(into: [HTTPHeader]()) {
+    headers = decodedHeaders.reduce(into: [HTTPHeader]()) {
       $0.append(HTTPHeader(key: $1.key, value: $1.value))
     }
   }
