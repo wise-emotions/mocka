@@ -215,7 +215,7 @@ final class EditorDetailViewModel: ObservableObject {
 
     guard
       case let .requestFile(request) = requestFile?.kind,
-      let requestFolder = requestFolder,
+      let unwrappedRequestFolder = requestFolder,
       let unwrappedRequestParentFolder = requestParentFolder
     else {
       currentRequest = nil
@@ -230,10 +230,10 @@ final class EditorDetailViewModel: ObservableObject {
     shouldShowEmptyState = false
 
     currentRequest = request
-    currentRequestFolder = requestFolder
+    currentRequestFolder = unwrappedRequestFolder
     selectedRequestParentFolder = unwrappedRequestParentFolder
 
-    displayedRequestName = Self.requestName(request, requestFolderNode: requestFolder)
+    displayedRequestName = Self.requestName(request, requestFolderNode: unwrappedRequestFolder)
     displayedRequestPath = request.path.joined(separator: "/")
     currentRequestParentFolder = unwrappedRequestParentFolder
     selectedHTTPMethod = request.method
@@ -242,7 +242,7 @@ final class EditorDetailViewModel: ObservableObject {
     displayedStatusCode = String(request.expectedResponse.statusCode)
 
     if let responseFileName = request.expectedResponse.fileName {
-      currentResponseBody = Logic.SourceTree.content(of: requestFolder.url.appendingPathComponent(responseFileName))
+      currentResponseBody = Logic.SourceTree.content(of: unwrappedRequestFolder.url.appendingPathComponent(responseFileName))
       displayedResponseBody = currentResponseBody ?? ""
     } else {
       currentResponseBody = nil

@@ -110,12 +110,6 @@ final class SourceTreeViewModel: ObservableObject {
     switch action {
     case .create:
       return "􀁌  Add"
-
-    case .delete:
-      return "􀈓  Delete"
-
-    case .edit:
-      return "􀈋  Edit"
     }
   }
 
@@ -129,12 +123,6 @@ final class SourceTreeViewModel: ObservableObject {
     switch action {
     case .create:
       isShowingCreateRequestDetailView = true
-
-    case .delete:
-      break
-
-    case .edit:
-      break
     }
   }
 }

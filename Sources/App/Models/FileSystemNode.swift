@@ -94,12 +94,6 @@ extension FileSystemNode {
   enum Action {
     /// A child node can be created under the node.
     case create
-
-    /// The node can be deleted.
-    case delete
-
-    /// The node can be edited.
-    case edit
   }
 
   /// The possibile kinds of `FileSystemNode`.
