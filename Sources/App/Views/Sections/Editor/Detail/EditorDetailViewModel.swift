@@ -179,17 +179,17 @@ final class EditorDetailViewModel: ObservableObject {
   ///   - requestParentFolder: The parent folder holding the folder of the request.
   ///                          Defaults to `nil`. Should not be `nil` if `selectedRequest` isn't.
   ///   - mode: The mode in which view should be displayed.
-  ///   - completion: A closure to invoke when the user taps the `Save` button.
+  ///   - onSave: A closure to invoke when the user taps the `Save` button.
   ///   - onCancel: A closure to invoke when the user taps the `Cancel` button.
   init(
     requestFile: FileSystemNode? = nil,
     requestFolder: FileSystemNode? = nil,
     requestParentFolder: FileSystemNode? = nil,
     mode: Mode = .read,
-    onSave completion: Interaction? = nil,
+    onSave: Interaction? = nil,
     onCancel: Interaction? = nil
   ) {
-    userDoneEditing = completion
+    userDoneEditing = onSave
     userCancelled = onCancel
     currentMode = mode
 
@@ -213,7 +213,9 @@ final class EditorDetailViewModel: ObservableObject {
       isResponseBodyTextFieldEnabled = false
     }
 
-    guard case let .requestFile(request) = requestFile?.kind, let requestFolder = requestFolder,
+    guard
+      case let .requestFile(request) = requestFile?.kind,
+      let requestFolder = requestFolder,
       let unwrappedRequestParentFolder = requestParentFolder
     else {
       currentRequest = nil

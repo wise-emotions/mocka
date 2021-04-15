@@ -35,7 +35,8 @@ struct SourceTree: View {
                     viewModel.actionName(action: action),
                     action: {
                       viewModel.performAction(action, on: node)
-                    })
+                    }
+                  )
                 }
               }
             )

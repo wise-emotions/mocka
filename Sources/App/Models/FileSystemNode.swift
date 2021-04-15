@@ -48,11 +48,11 @@ struct FileSystemNode: Identifiable, Hashable {
   /// The list of available actions that can be performed on the node.
   var availableActions: [Action] {
     switch kind {
-    case let .folder(_, isRequestFolder: isRequestFolder):
-      return isRequestFolder ? [.edit, .delete] : [.create]
+    case let .folder(_, isRequestFolder):
+      return isRequestFolder ? [] : [.create]
 
     case .requestFile:
-      return [.edit, .delete]
+      return []
     }
   }
 

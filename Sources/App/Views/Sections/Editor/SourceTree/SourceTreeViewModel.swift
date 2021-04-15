@@ -70,7 +70,8 @@ final class SourceTreeViewModel: ObservableObject {
         mode: .create,
         onCancel: { [weak self] in
           self?.isShowingCreateRequestDetailView = false
-        })
+        }
+      )
     }
 
     switch node.kind {
@@ -88,7 +89,8 @@ final class SourceTreeViewModel: ObservableObject {
         requestFile: node, requestFolder: requestFolderNode, requestParentFolder: parent,
         onSave: { [weak self] in
           try? self?.refreshContent()
-        })
+        }
+      )
     }
   }
 
@@ -116,7 +118,11 @@ final class SourceTreeViewModel: ObservableObject {
       return "􀈋  Edit"
     }
   }
-
+  
+  /// Performs the action associated with the context menu item.
+  /// - Parameters:
+  ///   - action: The `FileSystemNode.Action`.
+  ///   - node: The `FileSystemNode`.
   func performAction(_ action: FileSystemNode.Action, on node: FileSystemNode? = nil) {
     selectedNode = node
 
