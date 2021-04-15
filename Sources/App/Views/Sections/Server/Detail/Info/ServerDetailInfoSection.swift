@@ -34,13 +34,13 @@ struct ServerDetailInfoSection: View {
         }
 
         if viewModel.isHeadersSectionVisible {
-          ServerDetailInfoSubSection(title: "Headers") {
+          ServerDetailInfoSubSection(title: "Response Headers") {
             KeyValueTable(viewModel: KeyValueTableViewModel(keyValueItems: viewModel.headers, mode: .read))
           }
         }
 
         if viewModel.isBodySectionVisible {
-          ServerDetailInfoSubSection(title: "Body") {
+          ServerDetailInfoSubSection(title: "Response Body") {
             TextEditor(text: .constant(viewModel.body))
               .padding()
               .font(.system(size: 13, weight: .regular, design: .default))
