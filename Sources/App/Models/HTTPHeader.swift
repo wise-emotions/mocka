@@ -23,17 +23,17 @@ struct HTTPHeader: Hashable {
 extension HTTPHeader: Codable {
   init(from decoder: Decoder) throws {
     let container = try decoder.singleValueContainer()
-    
+
     let header = try container.decode([String: String].self)
     assert(header.keys.count == 1 && header.values.count == 1)
     guard let key = header.keys.first, let value = header.values.first else {
       throw DecodingError.dataCorruptedError(in: container, debugDescription: "Failed decoding HTTPHeader")
     }
-    
+
     self.key = key
     self.value = value
   }
-  
+
   func encode(to encoder: Encoder) throws {
     var container = encoder.singleValueContainer()
     try container.encode([key: value])
