@@ -4,14 +4,14 @@
 
 import SwiftUI
 
-struct EditorDetailHeadersBody: View {
+struct EditorDetailResponseInformation: View {
 
   /// The associated ViewModel.
-  @ObservedObject var viewModel: EditorDetailHeadersBodyViewModel
+  @ObservedObject var viewModel: EditorDetailResponseInformationViewModel
 
   var body: some View {
     VStack(alignment: .leading, spacing: 8) {
-      Text("Headers")
+      Text("Response Headers")
         .font(.system(size: 13, weight: .semibold, design: .default))
         .foregroundColor(Color.latte)
 
@@ -28,10 +28,10 @@ struct EditorDetailHeadersBody: View {
 
 // MARK: - Preview
 
-struct EditorDetailHeadersBodyPreviews: PreviewProvider {
+struct EditorDetailResponseInformationPreviews: PreviewProvider {
   static var previews: some View {
-    EditorDetailHeadersBody(
-      viewModel: EditorDetailHeadersBodyViewModel(
+    EditorDetailResponseInformation(
+      viewModel: EditorDetailResponseInformationViewModel(
         headers: [HTTPHeader(key: "Test", value: "Test")],
         body: "{\"test\":\"test\"}",
         mode: .write

@@ -4,7 +4,7 @@
 
 import SwiftUI
 
-final class EditorDetailHeadersBodyViewModel: ObservableObject {
+final class EditorDetailResponseInformationViewModel: ObservableObject {
   /// The desired headers of the response.
   @Published var headers: [HTTPHeader] = []
 
@@ -17,7 +17,7 @@ final class EditorDetailHeadersBodyViewModel: ObservableObject {
   /// The list of the key value items.
   @Published var keyValueHeaders: [KeyValueItem] = []
 
-  /// Create a new `EditorDetailHeadersBodyViewModel`.
+  /// Create a new `EditorDetailResponseInformationViewModel`.
   /// - Parameters:
   ///   - headers: The headers `Array`.
   ///   - body: The body `String`.

@@ -65,8 +65,8 @@ struct EditorDetail: View {
           .padding(.vertical, 5)
           .disabled(viewModel.isContentTypeTextFieldEnabled.isFalse)
 
-          EditorDetailHeadersBody(
-            viewModel: EditorDetailHeadersBodyViewModel(
+          EditorDetailResponseInformation(
+            viewModel: EditorDetailResponseInformationViewModel(
               headers: viewModel.displayedResponseHeaders,
               body: viewModel.displayedResponseBody,
               mode: viewModel.currentMode.isAny(of: [.create, .edit]) ? .write : .read
