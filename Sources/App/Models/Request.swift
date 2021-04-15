@@ -19,7 +19,9 @@ struct Request: Codable, Hashable {
 
   /// Whether or not the request has a response body.
   var hasResponseBody: Bool {
-    HTTPResponseStatus(statusCode: expectedResponse.statusCode).mayHaveResponseBody && expectedResponse.fileName != nil
+    HTTPResponseStatus(statusCode: expectedResponse.statusCode).mayHaveResponseBody
+      && expectedResponse.fileName != nil
+      && expectedResponse.contentType != .none
   }
 
   /// Creates a `Request` object.
@@ -38,13 +40,18 @@ struct Request: Codable, Hashable {
   ///   - url: The `URL` where the response file lives. This is the same the request's.
   /// - Returns: An instance of `MockaServer.Request`.
   func mockaRequest(withResponseAt url: URL?) -> MockaServer.Request {
-    MockaServer.Request(
+    return MockaServer.Request(
       method: method,
       path: path,
       requestedResponse: RequestedResponse(
         status: HTTPResponseStatus(statusCode: expectedResponse.statusCode),
         headers: HTTPHeaders(expectedResponse.headers.map { $0.tuple }),
-        body: hasResponseBody ? ResponseBody(contentType: expectedResponse.contentType, fileLocation: url!) : nil
+        body: hasResponseBody
+          ? ResponseBody(
+            contentType: expectedResponse.contentType,
+            // It is ok to force-unwrap because `hasResponseBody` already verifies that fileName exists.
+            pathToFile: url!.appendingPathComponent(expectedResponse.fileName!).path
+          ) : nil
       )
     )
   }

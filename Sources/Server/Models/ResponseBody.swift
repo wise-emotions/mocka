@@ -6,15 +6,15 @@ public struct ResponseBody {
   public let contentType: ContentType
 
   /// The url of the file holding the content.
-  public let fileLocation: URL
+  public let pathToFile: String
 
   /// Creates a `ResponseBody` object.
   /// - Parameters:
   ///   - contentType: The kind of the content of the response.
-  ///   - fileLocation: The url of the file holding the content.
-  public init(contentType: ResponseBody.ContentType, fileLocation: URL) {
+  ///   - pathToFile: The path to the file holding the content.
+  public init(contentType: ResponseBody.ContentType, pathToFile: String) {
     self.contentType = contentType
-    self.fileLocation = fileLocation
+    self.pathToFile = pathToFile
   }
 }
 
@@ -48,10 +48,6 @@ public extension ResponseBody {
 
     // MARK: Custom
 
-    /// No preset configuration.
-    /// This preset does not provide any validation.
-    case custom = "custom"
-
     /// No content in the body.
     ///
     /// Example: HTTP Status 204.
@@ -64,17 +60,17 @@ public extension ResponseBody {
 internal extension ResponseBody {
   /// Checks if the actual file extension in the `URL` matches the expected one for the body type.
   func isValidFileFormat() -> Bool {
-    // When the `ContentType` is `.custom` or `.none`,
+    // When the `ContentType` is `.none`,
     // we do not check the validity of the format, and return `true`.
-    guard contentType.isNone(of: [.custom, .none]) else {
+    guard contentType != .none else {
       return true
     }
 
-    guard let fileExtension = fileLocation.absoluteString.split(separator: ".").last else {
+    guard let fileExtension = pathToFile.split(separator: ".").last else {
       return false
     }
 
-    // We can force unwrap because the only value that returns `nil` is `.custom` which we guard already that `kind != .custom`.
+    // We can force unwrap because the only value that returns `nil` is `.none` which we guard already that `contentType != .none`.
     return fileExtension == contentType.expectedFileExtension!
   }
 }
@@ -103,7 +99,7 @@ public extension ResponseBody.ContentType {
     case .textXML:
       return "xml"
 
-    case .custom, .none:
+    case .none:
       return nil
     }
   }
@@ -114,7 +110,7 @@ public extension ResponseBody.ContentType {
 internal extension ResponseBody.ContentType {
   /// The value associated to `Content-Type` in the response header.
   var contentTypeHeader: String? {
-    guard self.isNone(of: [.custom, .none]) else {
+    guard self != .none else {
       return nil
     }
 

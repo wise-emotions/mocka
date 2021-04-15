@@ -68,7 +68,7 @@ extension Logic.SourceTree {
       .reduce(into: Set<MockaServer.Request>()) { result, node in
         allRequests(in: node)
           .map {
-            $0.mockaRequest(withResponseAt: node.url)
+            $0.request.mockaRequest(withResponseAt: $0.request.hasResponseBody ? $0.location : nil)
           }
           .forEach {
             result.insert($0)
@@ -195,8 +195,8 @@ extension Logic.SourceTree {
   /// Recursively looks up all the `Request`s in a `FileSystemNode` and its children.
   /// - Parameter node: The root `FileSystemNode`.
   /// - Returns: An array containing all the found requests.
-  private static func allRequests(in node: FileSystemNode) -> [Request] {
-    var requests: [Request] = []
+  private static func allRequests(in node: FileSystemNode) -> [(request: Request, location: URL)] {
+    var requests: [(request: Request, location: URL)] = []
 
     switch node.kind {
     case let .folder(children, _):
@@ -205,7 +205,7 @@ extension Logic.SourceTree {
       }
 
     case let .requestFile(request):
-      requests.append(request)
+      requests.append((request, node.url.deletingLastPathComponent()))
     }
 
     return requests
@@ -290,7 +290,7 @@ extension Logic.SourceTree {
     if HTTPResponseStatus(statusCode: request.expectedResponse.statusCode).mayHaveResponseBody == false {
       // If the status code does not support a body, there should be no file associated with the request.
       // Otherwise we consider the request corrupt.
-      guard request.expectedResponse.contentType.isAny(of: [.custom, .none]), request.expectedResponse.fileName == nil else {
+      guard request.expectedResponse.contentType == .none, request.expectedResponse.fileName == nil else {
         return nil
       }
     }
