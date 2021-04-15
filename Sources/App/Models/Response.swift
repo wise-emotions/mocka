@@ -45,7 +45,7 @@ struct Response: Hashable {
   }
 }
 
-// MARK : - Custom Coding
+// MARK: - Codable
 
 // To simplify how the data is edited inside the `request.json` file,
 // we customize how we encode and extract the data.
