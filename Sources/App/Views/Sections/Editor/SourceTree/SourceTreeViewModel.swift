@@ -52,21 +52,37 @@ final class SourceTreeViewModel: ObservableObject {
   /// - Parameter node: The node we want to generate the `EditorDetailViewModel` for.
   /// - Returns: An instance of `EditorDetailViewModel`.
   func detailViewModel(for node: FileSystemNode?) -> EditorDetailViewModel {
-    if let selectedNode = selectedNode, selectedNode.isFolder {
-      return EditorDetailViewModel(
-        requestParentFolder: selectedNode,
-        mode: .create,
-        onSave: { [weak self] in
+    if let selectedNode = selectedNode {
+      switch selectedNode.kind {
+      case .folder:
+        return EditorDetailViewModel(
+          requestParentFolder: selectedNode,
+          mode: .create,
+          onSave: { [weak self] in
+            try? self?.refreshContent()
+          },
+          onCancel: { [weak self] in
+            self?.selectedNode = nil
+            self?.isShowingCreateRequestDetailView = false
+          }
+        )
+        
+      case .requestFile:
+        let flatDirectories = directoryContent.flatten()
+        // The parent of the node, but that is the folder with the regex `METHOD - name of API`.
+        let requestFolderNode = flatDirectories.first { $0.children?.contains(selectedNode) ?? false }!
+        // The parent namespace folder.
+        let parent = flatDirectories.first { $0.children?.contains(requestFolderNode) ?? false }!
+        
+        return EditorDetailViewModel(requestFile: node, requestFolder: requestFolderNode, requestParentFolder: parent, mode: .edit, onSave: { [weak self] in
           try? self?.refreshContent()
-        },
-        onCancel: { [weak self] in
-          self?.isShowingCreateRequestDetailView = false
-        }
-      )
+        })
+      }
     }
-    
+        
     guard let node = node else {
       return EditorDetailViewModel(mode: .create, onCancel: { [weak self] in
+        self?.selectedNode = nil
         self?.isShowingCreateRequestDetailView = false
       })
     }
@@ -124,7 +140,7 @@ final class SourceTreeViewModel: ObservableObject {
       break
       
     case .edit:
-      break
+      isShowingCreateRequestDetailView = true
     }
   }
 }

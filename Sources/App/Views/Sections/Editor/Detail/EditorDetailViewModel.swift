@@ -169,7 +169,6 @@ final class EditorDetailViewModel: ObservableObject {
   
   /// The user cancelled editing.
   var userCancelled: Interaction?
-  
 
   // MARK - Init
 
