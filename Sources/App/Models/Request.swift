@@ -7,7 +7,7 @@ import MockaServer
 
 /// An object containing information related to a server request.
 /// This object is saved to and retrieved from the file system.
-struct Request: Hashable {
+struct Request: Equatable, Hashable {
   /// The path of the `API`. This should not consider any query parameters.
   let path: Path
 
