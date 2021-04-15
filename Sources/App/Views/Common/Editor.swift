@@ -46,12 +46,6 @@ struct Editor: View {
         .background(Color.doppio)
         .cornerRadius(8)
         .border(viewModel.borderColor)
-        .onChange(
-          of: viewModel.text,
-          perform: { _ in
-            viewModel.prettyPrintJSON()
-          }
-        )
       }
     }
     .onDrop(
