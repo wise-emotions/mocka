@@ -20,6 +20,27 @@ struct HTTPHeader: Hashable {
   }
 }
 
+// MARK : - Custom Coding
+
+// To simplify how the data is edited inside the `request.json` file,
+// we customize how we encode and extract the data.
+//
+// Without the custom encoder we would have:
+// ```
+// headers: [
+//   {
+//     "key": "someKey",
+//     "value: "someValue
+//   }
+// ]
+// ```
+//
+// With the custom encoder we will have:
+// ```
+// headers: [
+//   "key": "value"
+// ]
+// ```
 extension HTTPHeader: Codable {
   init(from decoder: Decoder) throws {
     let container = try decoder.singleValueContainer()
