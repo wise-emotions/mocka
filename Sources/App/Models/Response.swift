@@ -55,16 +55,17 @@ struct Response: Hashable {
 // headers: [
 //   {
 //     "key": "someKey",
-//     "value: "someValue
+//     "value": "someValue"
 //   }
 // ]
 // ```
 //
 // With the custom encoder we will have:
 // ```
-// headers: {
-//   "key": "value"
-// }
+// headers: [
+//   { "key": "value" },
+//   { "ke2": "valu2" }
+// ]
 // ```
 extension Response: Codable {
   enum CodingKeys: String, CodingKey {
@@ -81,8 +82,11 @@ extension Response: Codable {
     try container.encode(contentType, forKey: .contentType)
     try container.encode(fileName, forKey: .fileName)
 
-    var headersDictionary: [String: String] = [:]
-    headers.forEach { headersDictionary[$0.key] = $0.value }
+    let headersDictionary = headers
+      .filter {
+        $0.key.isNotEmpty && $0.value.isNotEmpty
+      }
+
     try container.encode(headersDictionary, forKey: .headers)
   }
 
@@ -93,9 +97,6 @@ extension Response: Codable {
     contentType = try container.decode(ResponseBody.ContentType.self, forKey: .contentType)
     fileName = try container.decodeIfPresent(String.self, forKey: .fileName)
 
-    let decodedHeaders = try container.decode([String: String].self, forKey: .headers)
-    headers = decodedHeaders.reduce(into: [HTTPHeader]()) {
-      $0.append(HTTPHeader(key: $1.key, value: $1.value))
-    }
+    headers = try container.decode([HTTPHeader].self, forKey: .headers)
   }
 }
