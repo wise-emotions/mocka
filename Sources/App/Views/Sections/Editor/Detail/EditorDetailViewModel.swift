@@ -89,7 +89,7 @@ final class EditorDetailViewModel: ObservableObject {
         return
       }
 
-      displayedResponseHeaders.append(KeyValueItem(key: "Content-Type", value: contentType.rawValue))
+      displayedResponseHeaders.insert(KeyValueItem(key: "Content-Type", value: contentType.rawValue), at: 0)
     }
   }
 
