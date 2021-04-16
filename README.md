@@ -30,8 +30,6 @@ Mocka — A Mock Server for Developers by Developers, made with Swift ❤️.
 ☕️ Getting Mocka
 ===============
 
-Download the latest release now from the [GitHub Releases Page](https://github.com/wise-emotions/mocka/releases).
-
 To build it yourself or to contribute, look at the [Development](https://github.com/wise-emotions/mocka#-development) section for more information.
 
 🚀 Features

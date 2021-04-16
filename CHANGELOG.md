@@ -14,7 +14,7 @@ All notable changes to this project will be documented in this file.<br>
 ---
 
 ## [0.1.0](https://github.com/wise-emotions/mocka/releases/tag/0.1.0) - Welcome To Mocka
-### 16 April 2021
+### 30 April 2021
 ### Added
 - Added Welcome sheet with workspace URL, server address, and port
 - Added Server section with a list and a detail of all the network exchanges
