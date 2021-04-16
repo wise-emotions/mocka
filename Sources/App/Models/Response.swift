@@ -82,7 +82,8 @@ extension Response: Codable {
     try container.encode(contentType, forKey: .contentType)
     try container.encode(fileName, forKey: .fileName)
 
-    let headersDictionary = headers
+    let headersDictionary =
+      headers
       .filter {
         $0.key.isNotEmpty && $0.value.isNotEmpty
       }
