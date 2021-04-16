@@ -245,7 +245,7 @@ final class EditorDetailViewModel: ObservableObject {
     currentRequestParentFolder = unwrappedRequestParentFolder
     selectedHTTPMethod = request.method
     selectedContentType = request.expectedResponse.contentType
-    displayedResponseHeaders = request.expectedResponse.headers.map { KeyValueItem(key: $0.key, value: $0.value)}
+    displayedResponseHeaders = request.expectedResponse.headers.map { KeyValueItem(key: $0.key, value: $0.value) }
     displayedStatusCode = String(request.expectedResponse.statusCode)
 
     if let responseFileName = request.expectedResponse.fileName {

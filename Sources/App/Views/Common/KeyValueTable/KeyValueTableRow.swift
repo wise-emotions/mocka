@@ -10,7 +10,7 @@ struct KeyValueTableRow: View {
   // MARK: - Stored Properties
 
   /// The item to show inside the row.
-   var item: KeyValueItem
+  var item: KeyValueItem
 
   /// The row mode.
   /// Useful to disable user interaction on `read` mode.

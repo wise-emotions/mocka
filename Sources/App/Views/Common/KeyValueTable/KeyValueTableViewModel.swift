@@ -52,8 +52,7 @@ class KeyValueTableViewModel: ObservableObject {
 
   /// Add a new row to the `KeyValueTable`.
   func addNewRow() {
-    if
-      let lastKeyValueItem = keyValueItems.last,
+    if let lastKeyValueItem = keyValueItems.last,
       lastKeyValueItem.key.isNotEmpty,
       lastKeyValueItem.value.isNotEmpty
     {
