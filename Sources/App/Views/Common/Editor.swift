@@ -45,7 +45,6 @@ struct Editor: View {
         .frame(minHeight: 40)
         .background(Color.doppio)
         .cornerRadius(8)
-        .border(viewModel.borderColor)
       }
     }
     .onDrop(

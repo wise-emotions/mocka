@@ -35,31 +35,8 @@ class EditorViewModel: ObservableObject {
   /// The table mode. In `write` mode an add button will be added.
   @Published var mode: Mode
 
-  // MARK: - Computed Properties
-
-  /// Whether or not the input is a valid json.
-  var isValidJSON: Bool {
-    text.wrappedValue.prettyPrintedJSON != nil
-  }
-
-  /// The color of the border of the text editor.
-  var borderColor: Color {
-    guard isDraggingOver.isFalse else {
-      return Color.irish
-    }
-
-    guard text.wrappedValue.isNotEmpty else {
-      return .clear
-    }
-
-    return isValidJSON ? .clear : Color.redEye
-  }
-
-  /// Whether or not the error label is visible.
-  var isErrorLabelVisible: Bool {
-    isValidJSON.isFalse
-  }
-
+  // MARK: - Init
+  
   init(text: Binding<String> = .constant(""), mode: Mode = .read) {
     self.text = text
     self.mode = mode
