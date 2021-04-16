@@ -57,8 +57,6 @@ final class EditorDetailViewModel: ObservableObject {
     }
   }
 
-  // MARK: Content displayed on the UI
-
   /// The custom name of the request.
   @Published var displayedRequestName: String = ""
 
@@ -69,7 +67,7 @@ final class EditorDetailViewModel: ObservableObject {
   @Published var displayedStatusCode: String = ""
 
   /// The desired headers of the response.
-  @Published var displayedResponseHeaders: [HTTPHeader] = []
+  @Published var displayedResponseHeaders: [KeyValueItem] = []
 
   /// The text body of the response, if any.
   @Published var displayedResponseBody: String = ""
@@ -91,7 +89,7 @@ final class EditorDetailViewModel: ObservableObject {
         return
       }
 
-      displayedResponseHeaders.append(HTTPHeader(key: "Content-Type", value: contentType.rawValue))
+      displayedResponseHeaders.insert(KeyValueItem(key: "Content-Type", value: contentType.rawValue), at: 0)
     }
   }
 
@@ -114,10 +112,10 @@ final class EditorDetailViewModel: ObservableObject {
   @Published var isContentTypeTextFieldEnabled: Bool
 
   /// If `true` the `TextField` for `ResponseHeaders` will be enabled. Otherwise, disabled.
-  @Published var isResponseHeadersTextFieldEnabled: Bool
+  @Published var isResponseHeadersKeyValueTableEnabled: Bool
 
   /// If `true` the `TextField` for `ResponseBody` will be enabled. Otherwise, disabled.
-  @Published var isResponseBodyTextFieldEnabled: Bool
+  @Published var isResponseBodyEditorEnabled: Bool
 
   /// If true, the `UI` should display the empty state `UI`.
   @Published var shouldShowEmptyState: Bool
@@ -162,6 +160,15 @@ final class EditorDetailViewModel: ObservableObject {
     return true
   }
 
+  /// Whether or not to display the `body` section in the editor detail.
+  var isEditorDetailResponseBodyVisible: Bool {
+    guard let contentType = selectedContentType else {
+      return false
+    }
+
+    return contentType != .none
+  }
+
   // MARK: - Interaction
 
   /// The user finished editing.
@@ -200,8 +207,8 @@ final class EditorDetailViewModel: ObservableObject {
       isHTTPMethodTextFieldEnabled = true
       isStatusCodeTextFieldEnabled = true
       isContentTypeTextFieldEnabled = true
-      isResponseHeadersTextFieldEnabled = true
-      isResponseBodyTextFieldEnabled = true
+      isResponseHeadersKeyValueTableEnabled = true
+      isResponseBodyEditorEnabled = true
     } else {
       isRequestNameTextFieldEnabled = false
       isRequestPathTextFieldEnabled = false
@@ -209,8 +216,8 @@ final class EditorDetailViewModel: ObservableObject {
       isHTTPMethodTextFieldEnabled = false
       isStatusCodeTextFieldEnabled = false
       isContentTypeTextFieldEnabled = false
-      isResponseHeadersTextFieldEnabled = false
-      isResponseBodyTextFieldEnabled = false
+      isResponseHeadersKeyValueTableEnabled = false
+      isResponseBodyEditorEnabled = false
     }
 
     guard
@@ -238,7 +245,7 @@ final class EditorDetailViewModel: ObservableObject {
     currentRequestParentFolder = unwrappedRequestParentFolder
     selectedHTTPMethod = request.method
     selectedContentType = request.expectedResponse.contentType
-    displayedResponseHeaders = request.expectedResponse.headers
+    displayedResponseHeaders = request.expectedResponse.headers.map { $0.keyValueItem }
     displayedStatusCode = String(request.expectedResponse.statusCode)
 
     if let responseFileName = request.expectedResponse.fileName {
@@ -301,6 +308,11 @@ final class EditorDetailViewModel: ObservableObject {
     displayedRequestPath = request.path.joined(separator: "/")
     selectedHTTPMethod = request.method
     selectedContentType = request.expectedResponse.contentType
+    displayedResponseHeaders = request.expectedResponse.headers.map { $0.keyValueItem }
+
+    // End editing mode.
+    currentMode = .read
+    userCancelled?()
   }
 
   /// The user tapped the save button.
@@ -312,7 +324,7 @@ final class EditorDetailViewModel: ObservableObject {
       expectedResponse: Response(
         statusCode: Int(displayedStatusCode)!,
         contentType: selectedContentType!,
-        headers: displayedResponseHeaders
+        headers: displayedResponseHeaders.map { $0.header }
       )
     )
 
@@ -328,7 +340,13 @@ final class EditorDetailViewModel: ObservableObject {
       try? Logic.SourceTree.addDirectory(at: selectedRequestParentFolder!.url, named: newRequestFolderName)
 
       // Add response, if any.
-      #warning("Add implementation")
+      if displayedResponseBody.isNotEmpty, let expectedFileExtension = selectedContentType?.expectedFileExtension {
+        try? Logic.SourceTree.addResponse(
+          displayedResponseBody,
+          ofType: expectedFileExtension,
+          to: selectedRequestParentFolder!.url.appendingPathComponent(newRequestFolderName)
+        )
+      }
 
       // Add request.
       try? Logic.SourceTree.addRequest(request, to: selectedRequestParentFolder!.url.appendingPathComponent(newRequestFolderName))
@@ -358,7 +376,7 @@ final class EditorDetailViewModel: ObservableObject {
     {
       try? Logic.SourceTree.addResponse(
         displayedResponseBody,
-        type: expectedFileExtension,
+        ofType: expectedFileExtension,
         to: selectedRequestParentFolder!.url.appendingPathComponent(newRequestFolderName)
       )
     }
@@ -390,8 +408,8 @@ final class EditorDetailViewModel: ObservableObject {
     isHTTPMethodTextFieldEnabled = false
     isStatusCodeTextFieldEnabled = false
     isContentTypeTextFieldEnabled = false
-    isResponseHeadersTextFieldEnabled = false
-    isResponseBodyTextFieldEnabled = false
+    isResponseHeadersKeyValueTableEnabled = false
+    isResponseBodyEditorEnabled = false
   }
 
   /// Sets all control variables to `true` (enabled).
@@ -402,7 +420,7 @@ final class EditorDetailViewModel: ObservableObject {
     isHTTPMethodTextFieldEnabled = true
     isStatusCodeTextFieldEnabled = true
     isContentTypeTextFieldEnabled = true
-    isResponseHeadersTextFieldEnabled = true
-    isResponseBodyTextFieldEnabled = true
+    isResponseHeadersKeyValueTableEnabled = true
+    isResponseBodyEditorEnabled = true
   }
 }

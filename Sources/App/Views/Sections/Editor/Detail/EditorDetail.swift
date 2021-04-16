@@ -10,7 +10,7 @@ struct EditorDetail: View {
   // MARK: - Stored Properties
 
   /// The associated ViewModel.
-  @StateObject var viewModel: EditorDetailViewModel
+  @ObservedObject var viewModel: EditorDetailViewModel
 
   // MARK: - Body
 
@@ -64,6 +64,27 @@ struct EditorDetail: View {
           .padding(.horizontal, 26)
           .padding(.vertical, 5)
           .disabled(viewModel.isContentTypeTextFieldEnabled.isFalse)
+
+          Text("Response Headers")
+            .font(.system(size: 13, weight: .semibold, design: .default))
+            .foregroundColor(Color.latte)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.horizontal, 16)
+            .padding(.top, 25)
+
+          KeyValueTable(
+            viewModel: KeyValueTableViewModel(
+              keyValueItems: $viewModel.displayedResponseHeaders,
+              mode: viewModel.currentMode == .read ? .read : .write
+            )
+          )
+          .padding(.bottom, 16)
+
+          Editor(viewModel: EditorViewModel(text: $viewModel.displayedResponseBody, mode: viewModel.currentMode == .read ? .read : .write))
+            .disabled(viewModel.isResponseHeadersKeyValueTableEnabled.isFalse || viewModel.isResponseBodyEditorEnabled.isFalse)
+            .isVisible(viewModel.isEditorDetailResponseBodyVisible)
+            .padding(.horizontal, 16)
+
         }
         .padding(.top, 24)
       }
@@ -85,7 +106,6 @@ struct EditorDetail: View {
         Button("Cancel") {
           viewModel.cancelRequestCreation()
         }
-        .frame(height: 25)
         .isHidden(viewModel.shouldShowEmptyState || viewModel.currentMode == .read)
 
         Button(
@@ -98,7 +118,7 @@ struct EditorDetail: View {
           },
           label: {
             Text(viewModel.currentMode == .read ? "Edit" : "Save")
-              .frame(width: 80, height: 21)
+              .frame(width: 80, height: 27)
           }
         )
         .buttonStyle(AccentButtonStyle(isEnabled: viewModel.isSaveButtonEnabled))

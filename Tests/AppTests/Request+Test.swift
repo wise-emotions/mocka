@@ -70,9 +70,11 @@ class RequestTests: XCTestCase {
         "expectedResponse" : {
           "statusCode" : 200,
           "fileName" : "response.json",
-          "headers" : {
-            "Content-Type" : "application\\/json"
-          },
+          "headers" : [
+            {
+              "Content-Type" : "application\\/json"
+            }
+          ],
           "contentType" : "application\\/json"
         }
       }
@@ -104,9 +106,11 @@ class RequestTests: XCTestCase {
         "expectedResponse" : {
           "statusCode" : 200,
           "fileName" : "response.json",
-          "headers" : {
-            "Content-Type": "application\\/json"
-          },
+          "headers" : [
+            {
+              "Content-Type": "application\\/json"
+            }
+          ],
           "contentType" : "application\\/json"
         }
       }
