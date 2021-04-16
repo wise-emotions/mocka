@@ -35,7 +35,7 @@ class KeyValueTableViewModel: ObservableObject {
     self.mode = mode
 
     if mode == .write {
-      self.keyValueItems.append(KeyValueItem(key: "", value: ""))
+      addNewRow()
     }
   }
 
@@ -44,7 +44,22 @@ class KeyValueTableViewModel: ObservableObject {
     self.mode = mode
 
     if mode == .write {
-      self.keyValueItems.append(KeyValueItem(key: "", value: ""))
+      addNewRow()
+    }
+  }
+
+  // MARK: - Function
+
+  /// Add a new row to the `KeyValueTable`.
+  func addNewRow() {
+    if
+      let lastKeyValueItem = keyValueItems.last,
+      lastKeyValueItem.key.isNotEmpty,
+      lastKeyValueItem.value.isNotEmpty
+    {
+      keyValueItems.append(KeyValueItem(key: "", value: ""))
+    } else if keyValueItems.count == 0 {
+      keyValueItems.append(KeyValueItem(key: "", value: ""))
     }
   }
 }

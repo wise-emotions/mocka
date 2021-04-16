@@ -69,8 +69,8 @@ struct EditorDetail: View {
             .font(.system(size: 13, weight: .semibold, design: .default))
             .foregroundColor(Color.latte)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.horizontal, 26)
-            .padding(.vertical, 5)
+            .padding(.horizontal, 16)
+            .padding(.top, 25)
 
           KeyValueTable(
             viewModel: KeyValueTableViewModel(

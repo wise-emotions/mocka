@@ -45,7 +45,7 @@ struct KeyValueTableRow: View {
       .textFieldStyle(PlainTextFieldStyle())
       .foregroundColor(Color.latte)
     }
-    .background(index.isMultiple(of: 2) ? Color.lungo : Color.doppio)
+    .background(index.isMultiple(of: 2) ? Color.lungo : Color.americano)
     .cornerRadius(5)
   }
 }
