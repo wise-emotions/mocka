@@ -79,8 +79,9 @@ For example you can type: `./setup.sh close clean open` to close the current Xco
 
 1. You cannot add an API in the root workspace path
 2. You cannot add a folder from the Editor list
-3. The `RoundedBorderDropdown` used while editing an API in the Editor section, always start as grayed out (disabled like), even in editing mode (SwiftUI bug)
-4. Every time an API is added, or the refresh button is pressed, the list in the Editor section will be closed. The same thing happen when close and reopen the Editor section by pressing on any other section
+3. You cannot edit or add headers while editing or creating an API
+4. The `RoundedBorderDropdown` used while editing an API in the Editor section, always start as grayed out (disabled like), even in editing mode (SwiftUI bug)
+5. Every time an API is added, or the refresh button is pressed, the list in the Editor section will be closed. The same thing happen when close and reopen the Editor section by pressing on any other section
 
 If you find other issues, please [open a bug report](https://github.com/wise-emotions/mocka/issues).
 
