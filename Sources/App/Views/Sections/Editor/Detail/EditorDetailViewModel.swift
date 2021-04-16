@@ -245,7 +245,7 @@ final class EditorDetailViewModel: ObservableObject {
     currentRequestParentFolder = unwrappedRequestParentFolder
     selectedHTTPMethod = request.method
     selectedContentType = request.expectedResponse.contentType
-    displayedResponseHeaders = request.expectedResponse.headers.map { KeyValueItem(key: $0.key, value: $0.value) }
+    displayedResponseHeaders = request.expectedResponse.headers.map { $0.keyValueItem }
     displayedStatusCode = String(request.expectedResponse.statusCode)
 
     if let responseFileName = request.expectedResponse.fileName {
@@ -308,10 +308,11 @@ final class EditorDetailViewModel: ObservableObject {
     displayedRequestPath = request.path.joined(separator: "/")
     selectedHTTPMethod = request.method
     selectedContentType = request.expectedResponse.contentType
+    displayedResponseHeaders = request.expectedResponse.headers.map { $0.keyValueItem }
 
     // End editing mode.
     currentMode = .read
-    userDoneEditing?()
+    userCancelled?()
   }
 
   /// The user tapped the save button.
@@ -323,7 +324,7 @@ final class EditorDetailViewModel: ObservableObject {
       expectedResponse: Response(
         statusCode: Int(displayedStatusCode)!,
         contentType: selectedContentType!,
-        headers: displayedResponseHeaders.map { HTTPHeader(key: $0.key, value: $0.value) }
+        headers: displayedResponseHeaders.map { $0.header }
       )
     )
 

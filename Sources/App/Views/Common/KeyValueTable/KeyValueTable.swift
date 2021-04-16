@@ -26,20 +26,6 @@ struct KeyValueTable: View {
         )
       }
       .drawingGroup(on: viewModel.mode == .read)
-
-      if viewModel.mode == .write {
-        HStack {
-          Spacer()
-
-          SymbolButton(
-            symbolName: .plusCircle,
-            action: {
-              viewModel.addNewRow()
-            }
-          )
-        }
-        .frame(minWidth: 20, maxWidth: .infinity)
-      }
     }
     .padding()
     .background(Color.doppio)

@@ -18,6 +18,11 @@ struct HTTPHeader: Hashable {
   var tuple: (String, String) {
     (key, value)
   }
+
+  /// Returns the `HTTPHeader` as a `KeyValueItem`.
+  var keyValueItem: KeyValueItem {
+    KeyValueItem(key: key, value: value)
+  }
 }
 
 // MARK: - Codable
