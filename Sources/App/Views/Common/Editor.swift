@@ -18,7 +18,7 @@ struct Editor: View {
 
   var body: some View {
     ZStack {
-      VStack {
+      VStack(spacing: 20) {
         HStack {
           Text("Response Body")
             .frame(maxWidth: .infinity, alignment: .leading)
@@ -43,7 +43,8 @@ struct Editor: View {
         )
         .font(.body)
         .frame(minHeight: 40)
-        .background(Color.doppio)
+        .padding(4)
+        .background(Color.lungo)
         .cornerRadius(8)
       }
     }

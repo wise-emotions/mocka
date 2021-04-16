@@ -81,11 +81,10 @@ struct EditorDetail: View {
           .padding(.bottom, 16)
 
           Editor(viewModel: EditorViewModel(text: $viewModel.displayedResponseBody, mode: viewModel.currentMode == .read ? .read : .write))
-            .padding(20)
-            .background(Color.lungo)
-            .padding(20)
             .disabled(viewModel.isResponseHeadersKeyValueTableEnabled.isFalse || viewModel.isResponseBodyEditorEnabled.isFalse)
             .isVisible(viewModel.isEditorDetailResponseBodyVisible)
+            .padding(.horizontal, 16)
+
         }
         .padding(.top, 24)
       }
