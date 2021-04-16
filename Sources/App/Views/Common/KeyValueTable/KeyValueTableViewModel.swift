@@ -23,24 +23,15 @@ class KeyValueTableViewModel: ObservableObject {
   // MARK: - Stored Properties
 
   /// The array of all the table items.
-  @Published var keyValueItems: [KeyValueItem]
+  @Published var keyValueItems: Binding<[KeyValueItem]>
 
   /// The table mode. In `write` mode an add button will be added.
   @Published var mode: Mode
 
   // MARK: - Init
 
-  init(keyValueItems: [KeyValueItem], mode: Mode) {
-    self.keyValueItems = keyValueItems
-    self.mode = mode
-
-    if mode == .write {
-      addNewRow()
-    }
-  }
-
   init(keyValueItems: Binding<[KeyValueItem]>, mode: Mode) {
-    self.keyValueItems = keyValueItems.wrappedValue
+    self.keyValueItems = keyValueItems
     self.mode = mode
 
     if mode == .write {
@@ -52,13 +43,13 @@ class KeyValueTableViewModel: ObservableObject {
 
   /// Add a new row to the `KeyValueTable`.
   func addNewRow() {
-    if let lastKeyValueItem = keyValueItems.last,
+    if let lastKeyValueItem = keyValueItems.wrappedValue.last,
       lastKeyValueItem.key.isNotEmpty,
       lastKeyValueItem.value.isNotEmpty
     {
-      keyValueItems.append(KeyValueItem(key: "", value: ""))
-    } else if keyValueItems.count == 0 {
-      keyValueItems.append(KeyValueItem(key: "", value: ""))
+      keyValueItems.wrappedValue.append(KeyValueItem(key: "", value: ""))
+    } else if keyValueItems.wrappedValue.count == 0 {
+      keyValueItems.wrappedValue.append(KeyValueItem(key: "", value: ""))
     }
   }
 }

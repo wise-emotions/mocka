@@ -10,7 +10,7 @@ struct KeyValueTableRow: View {
   // MARK: - Stored Properties
 
   /// The item to show inside the row.
-  var item: KeyValueItem
+  @Binding var item: KeyValueItem
 
   /// The row mode.
   /// Useful to disable user interaction on `read` mode.
@@ -33,10 +33,10 @@ struct KeyValueTableRow: View {
             .contextMenuCopy(item.value)
 
         case .write:
-          TextField(item.key, text: .constant(item.key))
+          TextField(item.key, text: $item.key)
             .contextMenuCopy(item.key)
 
-          TextField(item.value, text: .constant(item.value))
+          TextField(item.value, text: $item.value)
             .contextMenuCopy(item.value)
         }
       }
@@ -54,12 +54,12 @@ struct KeyValueTableRow: View {
 
 struct KeyValueTableRowPreviews: PreviewProvider {
   static var previews: some View {
-    KeyValueTableRow(item: KeyValueItem(key: "Key", value: "Value"), mode: .read, index: 0)
+    KeyValueTableRow(item: .constant(KeyValueItem(key: "Key", value: "Value")), mode: .read, index: 0)
 
-    KeyValueTableRow(item: KeyValueItem(key: "", value: ""), mode: .read, index: 1)
+    KeyValueTableRow(item: .constant(KeyValueItem(key: "", value: "")), mode: .read, index: 1)
 
-    KeyValueTableRow(item: KeyValueItem(key: "Key", value: "Value"), mode: .write, index: 0)
+    KeyValueTableRow(item: .constant(KeyValueItem(key: "Key", value: "Value")), mode: .write, index: 0)
 
-    KeyValueTableRow(item: KeyValueItem(key: "", value: ""), mode: .write, index: 1)
+    KeyValueTableRow(item: .constant(KeyValueItem(key: "", value: "")), mode: .write, index: 1)
   }
 }

@@ -18,9 +18,9 @@ struct KeyValueTable: View {
     VStack {
       KeyValueTableHeader()
 
-      ForEach(Array(viewModel.keyValueItems.enumerated()), id: \.offset) { index, item in
+      ForEach(Array(viewModel.keyValueItems.wrappedValue.enumerated()), id: \.offset) { index, _ in
         KeyValueTableRow(
-          item: item,
+          item: viewModel.keyValueItems[index],
           mode: viewModel.mode,
           index: index
         )
@@ -61,28 +61,16 @@ struct KeyValueTablePreviews: PreviewProvider {
   static var previews: some View {
     KeyValueTable(
       viewModel: KeyValueTableViewModel(
-        keyValueItems: rows,
+        keyValueItems: .constant(rows),
         mode: .write
       )
     )
 
     KeyValueTable(
       viewModel: KeyValueTableViewModel(
-        keyValueItems: rows,
+        keyValueItems: .constant(rows),
         mode: .read
       )
     )
-  }
-}
-
-// MARK: - Library
-
-struct KeyValueTableLibraryContent: LibraryContentProvider {
-  let keyValueItems: [KeyValueItem] = []
-  let mode: KeyValueTableViewModel.Mode = .read
-
-  @LibraryContentBuilder
-  var views: [LibraryItem] {
-    LibraryItem(KeyValueTable(viewModel: KeyValueTableViewModel(keyValueItems: keyValueItems, mode: mode)))
   }
 }

@@ -50,7 +50,7 @@ struct ServerListItem: View {
       }
       .padding(EdgeInsets(top: 20, leading: 0, bottom: 8, trailing: 8))
     }
-    .background(Color.lungo)
+    .background(Color.doppio)
     .cornerRadius(5)
   }
 }
