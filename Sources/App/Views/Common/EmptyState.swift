@@ -26,8 +26,10 @@ struct EmptyState: View {
         .frame(maxWidth: 45, maxHeight: 45)
         .padding()
         .font(.body)
+        .foregroundColor(.latte)
       Text(text)
         .font(.body)
+        .foregroundColor(.latte)
 
       Spacer()
     }

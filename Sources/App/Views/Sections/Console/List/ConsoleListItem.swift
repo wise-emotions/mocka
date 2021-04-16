@@ -37,6 +37,7 @@ struct ConsoleListItem: View {
       Text(viewModel.logEvent.message)
         .font(.system(size: 16, weight: .regular, design: .default))
         .frame(maxWidth: .infinity, alignment: .leading)
+        .foregroundColor(Color.latte)
         .padding(.leading, 32)
     }
     .padding(.vertical, 4)

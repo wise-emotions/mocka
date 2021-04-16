@@ -15,6 +15,7 @@ struct AppSettings: View {
         .tabItem {
           Label("Server", systemImage: SFSymbol.document.rawValue)
         }
+        .foregroundColor(.latte)
     }
   }
 }

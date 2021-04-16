@@ -24,6 +24,7 @@ struct EditorDetail: View {
             .padding(.horizontal, 26)
             .padding(.vertical, 5)
             .disabled(viewModel.isRequestNameTextFieldEnabled.isFalse)
+            .foregroundColor(.latte)
 
           RoundedBorderDropdown(
             title: "Parent Folder",
@@ -31,6 +32,7 @@ struct EditorDetail: View {
             itemTitleKeyPath: \.name,
             selection: $viewModel.selectedRequestParentFolder
           )
+          .foregroundColor(.latte)
           .padding(.horizontal, 26)
           .padding(.vertical, 5)
           .disabled(viewModel.isRequestParentFolderTextFieldEnabled.isFalse)
@@ -39,6 +41,7 @@ struct EditorDetail: View {
             .padding(.horizontal, 26)
             .padding(.vertical, 5)
             .disabled(viewModel.isRequestPathTextFieldEnabled.isFalse)
+            .foregroundColor(.latte)
 
           RoundedBorderDropdown(
             title: "HTTP Method",
@@ -49,11 +52,13 @@ struct EditorDetail: View {
           .padding(.horizontal, 26)
           .padding(.vertical, 5)
           .disabled(viewModel.isHTTPMethodTextFieldEnabled.isFalse)
+          .foregroundColor(.latte)
 
           RoundedTextField(title: "Response status code", text: $viewModel.displayedStatusCode)
             .padding(.horizontal, 26)
             .padding(.vertical, 5)
             .disabled(viewModel.isStatusCodeTextFieldEnabled.isFalse)
+            .foregroundColor(.latte)
 
           RoundedBorderDropdown(
             title: "Response Content-Type",
@@ -64,10 +69,11 @@ struct EditorDetail: View {
           .padding(.horizontal, 26)
           .padding(.vertical, 5)
           .disabled(viewModel.isContentTypeTextFieldEnabled.isFalse)
+          .foregroundColor(.latte)
 
           Text("Response Headers")
             .font(.system(size: 13, weight: .semibold, design: .default))
-            .foregroundColor(Color.latte)
+            .foregroundColor(.latte)
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.horizontal, 16)
             .padding(.top, 25)
