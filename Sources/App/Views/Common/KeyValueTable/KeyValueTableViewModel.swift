@@ -38,4 +38,13 @@ class KeyValueTableViewModel: ObservableObject {
       self.keyValueItems.append(KeyValueItem(key: "", value: ""))
     }
   }
+
+  init(keyValueItems: Binding<[KeyValueItem]>, mode: Mode) {
+    self.keyValueItems = keyValueItems.wrappedValue
+    self.mode = mode
+
+    if mode == .write {
+      self.keyValueItems.append(KeyValueItem(key: "", value: ""))
+    }
+  }
 }

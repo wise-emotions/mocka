@@ -74,7 +74,7 @@ struct EditorDetail: View {
 
           KeyValueTable(
             viewModel: KeyValueTableViewModel(
-              keyValueItems: viewModel.displayedResponseHeaders,
+              keyValueItems: $viewModel.displayedResponseHeaders,
               mode: viewModel.currentMode == .read ? .read : .write
             )
           )

@@ -69,7 +69,6 @@ final class EditorDetailViewModel: ObservableObject {
   /// The desired headers of the response.
   @Published var displayedResponseHeaders: [KeyValueItem] = []
 
-
   /// The text body of the response, if any.
   @Published var displayedResponseBody: String = ""
 

@@ -10,11 +10,11 @@ struct KeyValueTableRow: View {
   // MARK: - Stored Properties
 
   /// The item to show inside the row.
-  @State var item: KeyValueItem
+   var item: KeyValueItem
 
   /// The row mode.
   /// Useful to disable user interaction on `read` mode.
-  @State var mode: KeyValueTableViewModel.Mode
+  var mode: KeyValueTableViewModel.Mode
 
   /// The index of the item.
   var index: Int
@@ -33,10 +33,10 @@ struct KeyValueTableRow: View {
             .contextMenuCopy(item.value)
 
         case .write:
-          TextField(item.key, text: $item.key)
+          TextField(item.key, text: .constant(item.key))
             .contextMenuCopy(item.key)
 
-          TextField(item.value, text: $item.value)
+          TextField(item.value, text: .constant(item.value))
             .contextMenuCopy(item.value)
         }
       }
