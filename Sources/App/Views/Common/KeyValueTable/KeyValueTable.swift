@@ -20,7 +20,10 @@ struct KeyValueTable: View {
 
       ForEach(Array(viewModel.keyValueItems.wrappedValue.enumerated()), id: \.offset) { index, _ in
         KeyValueTableRow(
-          item: viewModel.keyValueItems[index],
+          item: Binding(
+            get: { viewModel.keyValueItems.wrappedValue[index] },
+            set: { viewModel.keyValueItems.wrappedValue[index] = $0 }
+          ),
           mode: viewModel.mode,
           index: index
         )
