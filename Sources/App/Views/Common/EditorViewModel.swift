@@ -36,7 +36,7 @@ class EditorViewModel: ObservableObject {
   @Published var mode: Mode
 
   // MARK: - Init
-  
+
   init(text: Binding<String> = .constant(""), mode: Mode = .read) {
     self.text = text
     self.mode = mode
