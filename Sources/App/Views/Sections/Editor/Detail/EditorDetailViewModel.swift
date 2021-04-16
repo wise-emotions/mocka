@@ -67,7 +67,8 @@ final class EditorDetailViewModel: ObservableObject {
   @Published var displayedStatusCode: String = ""
 
   /// The desired headers of the response.
-  @Published var displayedResponseHeaders: [HTTPHeader] = []
+  @Published var displayedResponseHeaders: [KeyValueItem] = []
+
 
   /// The text body of the response, if any.
   @Published var displayedResponseBody: String = ""
@@ -89,7 +90,7 @@ final class EditorDetailViewModel: ObservableObject {
         return
       }
 
-      displayedResponseHeaders.append(HTTPHeader(key: "Content-Type", value: contentType.rawValue))
+      displayedResponseHeaders.append(KeyValueItem(key: "Content-Type", value: contentType.rawValue))
     }
   }
 
@@ -158,6 +159,15 @@ final class EditorDetailViewModel: ObservableObject {
     }
 
     return true
+  }
+
+  /// Whether or not to display the `body` section in the editor detail.
+  var isEditorDetailResponseBodyVisible: Bool {
+    guard let contentType = selectedContentType else {
+      return false
+    }
+
+    return contentType != .none
   }
 
   // MARK: - Interaction
@@ -236,7 +246,7 @@ final class EditorDetailViewModel: ObservableObject {
     currentRequestParentFolder = unwrappedRequestParentFolder
     selectedHTTPMethod = request.method
     selectedContentType = request.expectedResponse.contentType
-    displayedResponseHeaders = request.expectedResponse.headers
+    displayedResponseHeaders = request.expectedResponse.headers.map { KeyValueItem(key: $0.key, value: $0.value)}
     displayedStatusCode = String(request.expectedResponse.statusCode)
 
     if let responseFileName = request.expectedResponse.fileName {
@@ -314,7 +324,7 @@ final class EditorDetailViewModel: ObservableObject {
       expectedResponse: Response(
         statusCode: Int(displayedStatusCode)!,
         contentType: selectedContentType!,
-        headers: displayedResponseHeaders
+        headers: displayedResponseHeaders.map { HTTPHeader(key: $0.key, value: $0.value) }
       )
     )
 

@@ -65,14 +65,27 @@ struct EditorDetail: View {
           .padding(.vertical, 5)
           .disabled(viewModel.isContentTypeTextFieldEnabled.isFalse)
 
-          EditorDetailHeadersBody(
-            viewModel: EditorDetailHeadersBodyViewModel(
-              headers: viewModel.displayedResponseHeaders,
-              body: $viewModel.displayedResponseBody,
-              mode: viewModel.currentMode.isAny(of: [.create, .edit]) ? .write : .read
+          Text("Response Headers")
+            .font(.system(size: 13, weight: .semibold, design: .default))
+            .foregroundColor(Color.latte)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.horizontal, 26)
+            .padding(.vertical, 5)
+
+          KeyValueTable(
+            viewModel: KeyValueTableViewModel(
+              keyValueItems: viewModel.displayedResponseHeaders,
+              mode: viewModel.currentMode == .read ? .read : .write
             )
           )
-          .disabled(viewModel.isResponseHeadersKeyValueTableEnabled.isFalse || viewModel.isResponseBodyEditorEnabled.isFalse)
+          .padding(.bottom, 16)
+
+          Editor(viewModel: EditorViewModel(text: $viewModel.displayedResponseBody, mode: viewModel.currentMode == .read ? .read : .write))
+            .padding(20)
+            .background(Color.lungo)
+            .padding(20)
+            .disabled(viewModel.isResponseHeadersKeyValueTableEnabled.isFalse || viewModel.isResponseBodyEditorEnabled.isFalse)
+            .isVisible(viewModel.isEditorDetailResponseBodyVisible)
         }
         .padding(.top, 24)
       }

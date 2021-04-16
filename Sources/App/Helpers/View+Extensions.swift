@@ -33,6 +33,20 @@ extension View {
     }
   }
 
+  /// Hide or show the view based on a boolean value.
+  ///
+  /// Example for visibility:
+  ///
+  ///     Text("Label")
+  ///         .isVisible(true)
+  ///
+  /// - Parameters:
+  ///   - visible: Set to `true` to show the view. Set to `false` to hide the view.
+  /// - Returns: Returns the `View` with the applied modifier.
+  @ViewBuilder func isVisible(_ visible: Bool) -> some View {
+    isHidden(visible.inverted())
+  }
+
   /// Adds a condition that controls whether users can interact with this view.
   ///
   /// The higher views in a view hierarchy can override the value you set on this view.
