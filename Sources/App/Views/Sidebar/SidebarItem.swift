@@ -24,8 +24,6 @@ struct SidebarItem: View {
   
   /// The `foregroundColor` for the button.
   private var buttonForegroundColor: Color {
-    let isDarkModeEnabled = Environment(\.colorScheme).wrappedValue == .dark
-    
     if isDarkModeEnabled {
       return isSelected ? Color.latte : Color.macchiato
     } else {

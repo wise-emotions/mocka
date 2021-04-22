@@ -9,13 +9,6 @@ struct AccentButtonStyle: ButtonStyle {
   /// Whether or not the button is enabled.
   let isEnabled: Bool
 
-  func makeBody(configuration: Self.Configuration) -> some View {
-    configuration.label
-      .foregroundColor(configuration.isPressed ? Color.accentColor : Color.latte)
-      .background(backgroundColor(isPressed: configuration.isPressed))
-      .cornerRadius(6.0)
-  }
-
   /// Returns an instance of `AccentButtonStyle`
   /// - Parameter isEnabled: Whether or not the button is enabled.
   init(isEnabled: Bool = true) {
@@ -31,5 +24,15 @@ struct AccentButtonStyle: ButtonStyle {
     }
 
     return isPressed ? Color.latte : Color.accentColor
+  }
+  
+  func makeBody(configuration: Self.Configuration) -> some View {
+    let isDarkModeEnabled = Environment(\.colorScheme).wrappedValue == .dark
+    let normalStateColor = isDarkModeEnabled ? Color.latte : Color.doppio
+
+    return configuration.label
+      .foregroundColor(configuration.isPressed ? Color.accentColor : normalStateColor)
+      .background(backgroundColor(isPressed: configuration.isPressed))
+      .cornerRadius(6.0)
   }
 }
