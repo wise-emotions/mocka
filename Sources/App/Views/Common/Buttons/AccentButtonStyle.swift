@@ -2,16 +2,21 @@
 //  Mocka
 //
 
+import AppKit
 import SwiftUI
 
 /// This button adheres to `ButtonStyle` protocol set the button color to the `accentColor` selected by the user.
 struct AccentButtonStyle: ButtonStyle {
+  /// The color scheme of the app.
+  let colorScheme: ColorScheme
+
   /// Whether or not the button is enabled.
   let isEnabled: Bool
 
   /// Returns an instance of `AccentButtonStyle`
   /// - Parameter isEnabled: Whether or not the button is enabled.
-  init(isEnabled: Bool = true) {
+  init(colorScheme: ColorScheme, isEnabled: Bool = true) {
+    self.colorScheme = colorScheme
     self.isEnabled = isEnabled
   }
 
@@ -27,7 +32,7 @@ struct AccentButtonStyle: ButtonStyle {
   }
   
   func makeBody(configuration: Self.Configuration) -> some View {
-    let isDarkModeEnabled = Environment(\.colorScheme).wrappedValue == .dark
+    let isDarkModeEnabled = colorScheme == .dark
     let normalStateColor = isDarkModeEnabled ? Color.latte : Color.doppio
 
     return configuration.label

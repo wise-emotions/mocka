@@ -8,6 +8,9 @@ import SwiftUI
 struct EditorDetail: View {
 
   // MARK: - Stored Properties
+  
+  /// The current color scheme of the app.
+  @Environment(\.colorScheme) var colorScheme: ColorScheme
 
   /// The associated ViewModel.
   @ObservedObject var viewModel: EditorDetailViewModel
@@ -121,7 +124,7 @@ struct EditorDetail: View {
               .frame(width: 80, height: 27)
           }
         )
-        .buttonStyle(AccentButtonStyle(isEnabled: viewModel.isSaveButtonEnabled))
+        .buttonStyle(AccentButtonStyle(colorScheme: colorScheme, isEnabled: viewModel.isSaveButtonEnabled))
         .isHidden(viewModel.shouldShowEmptyState)
         .enabled(viewModel.isPrimaryButtonEnabled)
       }

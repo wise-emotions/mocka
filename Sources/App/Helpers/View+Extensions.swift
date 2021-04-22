@@ -5,11 +5,6 @@
 import SwiftUI
 
 extension View {
-  /// Whether or not the dark mode is enabled.
-  var isDarkModeEnabled: Bool {
-    Environment(\.colorScheme).wrappedValue == .dark
-  }
-
   /// Hide or show the view based on a boolean value.
   ///
   /// Example for visibility:
