@@ -21,10 +21,22 @@ struct SidebarItem: View {
   private var isSelected: Bool {
     selectedSection == section
   }
+  
+  /// The `foregroundColor` for the button.
+  private var buttonForegroundColor: Color {
+    let isDarkModeEnabled = Environment(\.colorScheme).wrappedValue == .dark
+    
+    if isDarkModeEnabled {
+      return isSelected ? Color.latte : Color.macchiato
+    } else {
+      return isSelected ? Color.doppio : Color.macchiato
+    }
+  }
 
   // MARK: - Body
 
   var body: some View {
+    
     Button(
       action: {
         selectedSection = section
@@ -37,7 +49,7 @@ struct SidebarItem: View {
           Text(section.title)
             .font(.system(size: 12))
         }
-        .foregroundColor(isSelected ? Color.latte : Color.macchiato)
+        .foregroundColor(buttonForegroundColor)
         .frame(
           minWidth: 0,
           maxWidth: .infinity,
