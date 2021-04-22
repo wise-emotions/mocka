@@ -65,26 +65,31 @@ struct EditorDetail: View {
           .padding(.vertical, 5)
           .disabled(viewModel.isContentTypeTextFieldEnabled.isFalse)
 
-          Text("Response Headers")
-            .font(.system(size: 13, weight: .semibold, design: .default))
-            .foregroundColor(Color.latte)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.horizontal, 16)
-            .padding(.top, 25)
+          VStack(spacing: 0) {
+            Text("Response Headers")
+              .font(.system(size: 13, weight: .semibold, design: .default))
+              .foregroundColor(Color.latte)
+              .frame(maxWidth: .infinity, alignment: .leading)
+              .padding(10)
 
-          KeyValueTable(
-            viewModel: KeyValueTableViewModel(
-              keyValueItems: $viewModel.displayedResponseHeaders,
-              mode: viewModel.currentMode == .read ? .read : .write
+            KeyValueTable(
+              viewModel: KeyValueTableViewModel(
+                keyValueItems: $viewModel.displayedResponseHeaders,
+                mode: viewModel.currentMode == .read ? .read : .write
+              )
             )
-          )
-          .padding(.bottom, 16)
+            .padding(.horizontal, 10)
+            .padding(.bottom, 20)
 
-          Editor(viewModel: EditorViewModel(text: $viewModel.displayedResponseBody, mode: viewModel.currentMode == .read ? .read : .write))
-            .disabled(viewModel.isResponseHeadersKeyValueTableEnabled.isFalse || viewModel.isResponseBodyEditorEnabled.isFalse)
-            .isVisible(viewModel.isEditorDetailResponseBodyVisible)
-            .padding(.horizontal, 16)
-
+            if viewModel.isEditorDetailResponseBodyVisible {
+              Editor(viewModel: EditorViewModel(text: $viewModel.displayedResponseBody, mode: viewModel.currentMode == .read ? .read : .write))
+                .disabled(viewModel.isResponseHeadersKeyValueTableEnabled.isFalse || viewModel.isResponseBodyEditorEnabled.isFalse)
+                .padding(.horizontal, 10)
+            }
+          }
+          .background(Color.lungo)
+          .cornerRadius(5)
+          .padding(24)
         }
         .padding(.top, 24)
       }
