@@ -21,7 +21,7 @@ struct SidebarItem: View {
   private var isSelected: Bool {
     selectedSection == section
   }
-  
+
   /// The `foregroundColor` for the button.
   private var buttonForegroundColor: Color {
     if isDarkModeEnabled {
@@ -34,7 +34,7 @@ struct SidebarItem: View {
   // MARK: - Body
 
   var body: some View {
-    
+
     Button(
       action: {
         selectedSection = section
