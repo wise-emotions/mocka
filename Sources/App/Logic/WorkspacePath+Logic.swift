@@ -36,9 +36,39 @@ extension Logic.WorkspacePath {
       throw MockaError.workspacePathNotFolder
     }
   }
+
+  /// Checks if a folder exists in the given path.
+  /// Creates the folder if it does not exist.
+  /// - Parameter path: The path in wich we want the folder.
+  static func checkPathAndCreateFolderIfNeeded(_ path: String) throws {
+    do {
+      try Self.isFolder(URL(fileURLWithPath: path))
+    } catch MockaError.workspacePathDoesNotExist {
+      // Try to create the folder if it does not exist.
+      do {
+        try Self.createFolder(path)
+      } catch {
+        throw error
+      }
+
+    } catch {
+      throw error
+    }
+  }
 }
 
 private extension Logic.WorkspacePath {
+  /// Create a folder in the given path.
+  /// - Parameter path: The path in wich we want the folder.
+  /// - Throws: `MockaError.failedToCreateDirectory(path:)`.
+  static func createFolder(_ path: String) throws {
+    do {
+      try FileManager.default.createDirectory(atPath: path, withIntermediateDirectories: true, attributes: nil)
+    } catch {
+      throw MockaError.failedToCreateDirectory(path: path)
+    }
+  }
+
   /// Checks if a resource exists at a given `URL`'s path.
   /// - Parameter url: The `URL` of the resource.
   /// - Returns: Returns `true` if the resource is a folder, otherwise `false`.
