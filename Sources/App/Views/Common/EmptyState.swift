@@ -28,6 +28,7 @@ struct EmptyState: View {
         .font(.body)
       Text(text)
         .font(.body)
+        .foregroundColor(.ristretto)
 
       Spacer()
     }

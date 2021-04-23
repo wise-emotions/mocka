@@ -26,11 +26,13 @@ struct ServerSettings: View {
     VStack {
       Text("Welcome to Mocka")
         .font(.largeTitle)
+        .foregroundColor(.latte)
         .isHidden(viewModel.isShownFromSettings, remove: true)
 
       Text("Before starting you need to select a workspace path.\nYou can also set an optional server's address and port.")
         .frame(height: 32)
         .font(.body)
+        .foregroundColor(.latte)
         .padding(.vertical)
         .isHidden(viewModel.isShownFromSettings, remove: true)
 
@@ -38,6 +40,7 @@ struct ServerSettings: View {
         HStack(alignment: .top) {
           Text("Workspace folder")
             .font(.headline)
+            .foregroundColor(.latte)
             .frame(width: 120, height: 30, alignment: .trailing)
 
           VStack {
@@ -69,6 +72,7 @@ struct ServerSettings: View {
 
         HStack {
           Text("Server address")
+            .foregroundColor(.latte)
             .font(.headline)
             .frame(width: 120, alignment: .trailing)
 
@@ -79,6 +83,7 @@ struct ServerSettings: View {
         HStack {
           Text("Server port")
             .font(.headline)
+            .foregroundColor(.latte)
             .frame(width: 120, alignment: .trailing)
 
           RoundedTextField(title: "Server port", text: $viewModel.port)
