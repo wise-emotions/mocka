@@ -61,6 +61,7 @@ struct ServerSettings: View {
           Button("Select folder") {
             viewModel.fileImporterIsPresented.toggle()
           }
+          .foregroundColor(.latte)
           .frame(height: 30)
           .fileImporter(
             isPresented: $viewModel.fileImporterIsPresented,
