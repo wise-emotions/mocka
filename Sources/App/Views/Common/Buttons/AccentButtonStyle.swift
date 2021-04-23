@@ -30,7 +30,7 @@ struct AccentButtonStyle: ButtonStyle {
 
     return isPressed ? Color.latte : Color.accentColor
   }
-  
+
   func makeBody(configuration: Self.Configuration) -> some View {
     let isDarkModeEnabled = colorScheme == .dark
     let normalStateColor = isDarkModeEnabled ? Color.latte : Color.doppio
