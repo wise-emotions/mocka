@@ -14,6 +14,7 @@ struct AccentButtonStyle: ButtonStyle {
   let isEnabled: Bool
 
   /// Returns an instance of `AccentButtonStyle`
+  /// - Parameter colorScheme: The color scheme of the app.
   /// - Parameter isEnabled: Whether or not the button is enabled.
   init(colorScheme: ColorScheme, isEnabled: Bool = true) {
     self.colorScheme = colorScheme
