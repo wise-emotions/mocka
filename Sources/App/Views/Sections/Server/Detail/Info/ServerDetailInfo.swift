@@ -13,12 +13,12 @@ struct ServerDetailInfo: View {
 
   /// The current color scheme of the app.
   @Environment(\.colorScheme) var colorScheme: ColorScheme
-  
+
   /// The associated ViewModel.
   let viewModel: ServerDetailInfoViewModel
-  
+
   // MARK: - Computed Properties
-  
+
   /// The `Color` for the `Text` elements in the `TabView`.
   private var textColor: Color {
     colorScheme == .dark ? .latte : .doppio
