@@ -26,6 +26,7 @@ struct EmptyState: View {
         .frame(maxWidth: 45, maxHeight: 45)
         .padding()
         .font(.body)
+        .foregroundColor(.ristretto)
       Text(text)
         .font(.body)
         .foregroundColor(.ristretto)
