@@ -81,7 +81,7 @@ struct ServerSettings: View {
           RoundedTextField(title: "Server port", text: $viewModel.port)
             .frame(width: 300)
         }
-        
+
         HStack {
           Toggle(isOn: $viewModel.isGitRepositoryCreationEnabled) {
             Text("Create Git Repository")
@@ -91,7 +91,7 @@ struct ServerSettings: View {
           .padding(.leading, 128)
         }
       }
-            
+
       VStack(alignment: .trailing) {
         Button(
           action: {

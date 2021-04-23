@@ -57,19 +57,19 @@ final class ServerSettingsViewModel: ObservableObject {
 
   /// Whether the `fileImporter` is presented.
   @Published var fileImporterIsPresented: Bool = false
-  
+
   /// Whether or not the git repo creation checkbox is enabled.
   @Published var isGitRepositoryCreationEnabled: Bool = false
 
   /// The value of the workspace path.
   /// When this value is updated, the value in the user defaults is updated as well.
   @AppStorage(UserDefaultKey.workspaceURL) private var workspaceURL: URL?
-  
+
   /// Whether or not the workspace git repository already exists.
   var isGitRepositoryAlreadyCreated: Bool {
     FileManager.default.fileExists(atPath: workspacePath.appending("/.git"))
   }
-    
+
   // MARK: - Init
 
   /// Creates the `ServerSettingsViewModel`.
@@ -128,7 +128,7 @@ final class ServerSettingsViewModel: ObservableObject {
       if isGitRepositoryCreationEnabled {
         try createGitRepository(from: workspaceURL)
       }
-      
+
       if isShownFromSettings {
         // Currently we can't close a window from SwiftUI.
         NSApplication.shared.keyWindow?.close()
@@ -145,7 +145,7 @@ final class ServerSettingsViewModel: ObservableObject {
       self.workspacePathError = workspacePathError
     }
   }
-  
+
   /// Creates a local git repository in the workspace `URL`.
   /// - parameter workspaceURL: The workspace `URL`.
   private func createGitRepository(from workspaceURL: URL) throws {
@@ -153,7 +153,7 @@ final class ServerSettingsViewModel: ObservableObject {
     let command = "git init /\(workspaceURL.pathComponents.dropFirst().joined(separator: "/"))"
     task.launchPath = "bin/bash"
     task.arguments = ["-c", command]
-    
+
     try task.run()
     task.waitUntilExit()
   }
