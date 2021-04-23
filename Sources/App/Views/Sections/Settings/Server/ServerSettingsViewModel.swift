@@ -124,7 +124,7 @@ final class ServerSettingsViewModel: ObservableObject {
       try Logic.Settings.updateServerConfigurationFile(
         ServerConnectionConfiguration(hostname: hostname, port: Int(port) ?? 8080)
       )
-      
+
       if isGitRepositoryCreationEnabled {
         try createGitRepository(from: workspaceURL)
       }
