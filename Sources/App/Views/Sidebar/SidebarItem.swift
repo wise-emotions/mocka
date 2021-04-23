@@ -8,7 +8,7 @@ import SwiftUI
 struct SidebarItem: View {
 
   // MARK: - Stored Properties
-  
+
   /// The color scheme currently selected by the user.
   @Environment(\.colorScheme) var colorScheme: ColorScheme
 
