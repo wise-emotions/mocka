@@ -10,7 +10,7 @@ import UniformTypeIdentifiers
 struct ServerSettings: View {
 
   // MARK: - Stored Properties
-  
+
   /// The current color scheme of the app.
   @Environment(\.colorScheme) var colorScheme: ColorScheme
 
