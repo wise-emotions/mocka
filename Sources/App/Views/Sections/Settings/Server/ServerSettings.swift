@@ -95,7 +95,7 @@ struct ServerSettings: View {
       VStack(alignment: .trailing) {
         Button(
           action: {
-            viewModel.confirmSettings(with: presentationMode, shouldCreateGitRepository: viewModel.isGitRepositoryCreationEnabled)
+            viewModel.confirmSettings(with: presentationMode)
           },
           label: {
             Text("OK")

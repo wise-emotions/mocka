@@ -113,10 +113,8 @@ final class ServerSettingsViewModel: ObservableObject {
   /// Confirms the selected startup settings
   /// by creating the configuration file in the right path.
   /// In case of error the `workspaceURL` returns to `nil`.
-  /// - Parameters:
-  ///  - presentationMode: The `View` `PresentationMode`.
-  ///  - shouldCreateGitRepository: Whether or not the Git repo should be created.
-  func confirmSettings(with presentationMode: Binding<PresentationMode>, shouldCreateGitRepository: Bool) {
+  /// - Parameter presentationMode: The `View` `PresentationMode`.
+  func confirmSettings(with presentationMode: Binding<PresentationMode>) {
     let workspaceURL = URL(fileURLWithPath: workspacePath)
 
     do {
@@ -127,7 +125,7 @@ final class ServerSettingsViewModel: ObservableObject {
         ServerConnectionConfiguration(hostname: hostname, port: Int(port) ?? 8080)
       )
       
-      if shouldCreateGitRepository {
+      if isGitRepositoryCreationEnabled {
         try createGitRepository(from: workspaceURL)
       }
       
