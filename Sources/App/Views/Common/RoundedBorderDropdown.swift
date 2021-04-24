@@ -10,16 +10,23 @@ import SwiftUI
 struct RoundedBorderDropdown<Item: Hashable>: NSViewRepresentable {
   /// The coordinator object of the view.
   final class Coordinator {
+
+    // MARK: - Stored Properties
+
     /// The selected item.
     private var selection: Binding<Item?>
 
     /// The list of item displayed in the menu.
     private let items: [Item]
 
+    // MARK: - Init
+
     init(_ selection: Binding<Item?>, items: [Item]) {
       self.selection = selection
       self.items = items
     }
+
+    // MARK: - Functions
 
     @objc
     func changedSelection(_ sender: NSPopUpButton) {
@@ -56,13 +63,16 @@ struct RoundedBorderDropdown<Item: Hashable>: NSViewRepresentable {
     let button = NSRoundedBorderDropdown(frame: .zero, pullsDown: false)
     button.isEnabled = isEnabled
     button.addItems(withTitles: items.map { $0[keyPath: itemTitleKeyPath] })
+
     // Remove selection for initial state, if no selection is already made.
     let selectionIndex = selection.flatMap { items.firstIndex(of: $0) }
     button.selectItem(at: selectionIndex ?? -1)
+
     button.setTitle(selection?[keyPath: itemTitleKeyPath] ?? title)
+
     button.target = context.coordinator
     button.action = #selector(context.coordinator.changedSelection)
-    // Layout
+
     button.translatesAutoresizingMaskIntoConstraints = false
     button.heightAnchor.constraint(equalToConstant: 36).isActive = true
     return button
@@ -103,6 +113,12 @@ final class NSRoundedBorderDropdown: NSPopUpButton {
     }
   }
 
+  override var isFlipped: Bool {
+    true
+  }
+
+  // MARK: - Init
+
   override init(frame buttonFrame: NSRect, pullsDown flag: Bool) {
     super.init(frame: buttonFrame, pullsDown: flag)
 
@@ -113,6 +129,8 @@ final class NSRoundedBorderDropdown: NSPopUpButton {
   required init?(coder: NSCoder) {
     return nil
   }
+
+  // MARK: - Functions
 
   override func draw(_ dirtyRect: NSRect) {
     let lineWidth: CGFloat = 1
