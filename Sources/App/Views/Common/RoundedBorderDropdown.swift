@@ -65,7 +65,7 @@ struct RoundedBorderDropdown<Item: Hashable>: NSViewRepresentable {
     button.addItems(withTitles: items.map { $0[keyPath: itemTitleKeyPath] })
 
     // Remove selection for initial state, if no selection is already made.
-    let selectionIndex = selection.flatMap { items.firstIndex(of: $0) }
+    let selectionIndex = items.firstIndex { $0[keyPath: itemTitleKeyPath] == selection?[keyPath: itemTitleKeyPath] }
     button.selectItem(at: selectionIndex ?? -1)
 
     button.setTitle(selection?[keyPath: itemTitleKeyPath] ?? title)
