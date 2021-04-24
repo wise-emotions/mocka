@@ -99,7 +99,7 @@ final class ServerSettingsViewModel: ObservableObject {
     do {
       self.workspaceURL = workspaceURL
 
-      try Logic.WorkspacePath.checkPathAndCreateFolderIfNeeded(workspacePath)
+      try Logic.WorkspacePath.checkURLAndCreateFolderIfNeeded(at: workspaceURL)
       try Logic.Settings.updateServerConfigurationFile(
         ServerConnectionConfiguration(hostname: hostname, port: Int(port) ?? 8080)
       )

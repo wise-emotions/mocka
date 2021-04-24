@@ -21,6 +21,9 @@ enum MockaError: Error {
   /// An error occurred when trying to encode a file.
   case failedToEncode
 
+  /// An error occurred trying to unwrap an optional URL.
+  case failedToUnwrapURL
+
   /// Could not create directory at request path.
   /// The path is passed included with the error.
   case failedToCreateDirectory(path: String)
