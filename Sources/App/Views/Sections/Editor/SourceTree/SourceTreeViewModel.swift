@@ -68,6 +68,9 @@ final class SourceTreeViewModel: ObservableObject {
     guard let node = node else {
       return EditorDetailViewModel(
         mode: .create,
+        onSave: { [weak self] in
+          try? self?.refreshContent()
+        },
         onCancel: { [weak self] in
           self?.isShowingCreateRequestDetailView = false
         }
