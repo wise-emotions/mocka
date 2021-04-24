@@ -19,6 +19,9 @@ final class ServerSettingsViewModel: ObservableObject {
   /// it will use the observed `workspaceURL` property.
   @Published var workspacePath: String = UserDefaults.standard.url(forKey: UserDefaultKey.workspaceURL)?.path ?? "" {
     didSet {
+      // When the user modifies the `workspacePath` we must remove any `workspacePathError` if present.
+      // This is needed in order to remove the red `RoundedRectangle` around the `RoundedTextField` of the "Workspace folder" entry.
+      // In this way the red `RoundedRectangle` will be hidden while the user is editing the `workspacePath` in the entry.
       workspacePathError = nil
     }
   }
