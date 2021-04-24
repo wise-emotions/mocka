@@ -91,6 +91,12 @@ final class NSRoundedBorderDropdown: NSPopUpButton {
 
   // MARK: - Computed Properties
 
+  override var alignmentRectInsets: NSEdgeInsets {
+    // `NSPopUpButton` has alignment insets by default, which can cause issues when drawing and laying out the view.
+    // Set to .zero since we don't need them.
+    NSEdgeInsets()
+  }
+
   override var isEnabled: Bool {
     didSet {
       style()
@@ -112,7 +118,7 @@ final class NSRoundedBorderDropdown: NSPopUpButton {
     let lineWidth: CGFloat = 1
 
     let path = NSBezierPath(
-      roundedRect: dirtyRect.insetBy(dx: lineWidth, dy: lineWidth),
+      roundedRect: dirtyRect.insetBy(dx: lineWidth / 2, dy: lineWidth / 2),
       xRadius: 6,
       yRadius: 6
     )
