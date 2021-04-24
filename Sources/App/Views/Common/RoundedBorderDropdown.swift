@@ -136,7 +136,7 @@ final class NSRoundedBorderDropdown: NSPopUpButton {
   }
 
   private func style() {
-    Self.styleTitleLabel(titleLabel, isEnabled: isEnabled)
+    Self.styleTitleLabel(titleLabel, isEnabled: isEnabled, hasSelection: selectedItem != nil)
     Self.styleDisclosureImage(disclosureImage, isEnabled: isEnabled)
   }
 
@@ -160,9 +160,9 @@ final class NSRoundedBorderDropdown: NSPopUpButton {
 // MARK: - Styling Functions
 
 private extension NSRoundedBorderDropdown {
-  static func styleTitleLabel(_ label: NSTextField, isEnabled: Bool) {
+  static func styleTitleLabel(_ label: NSTextField, isEnabled: Bool, hasSelection: Bool) {
     label.font = .systemFont(ofSize: 12)
-    label.textColor = isEnabled ? NSColor(.latte) : NSColor(.americano)
+    label.textColor = isEnabled && hasSelection ? NSColor(.latte) : NSColor(.americano)
   }
 
   static func styleDisclosureImage(_ imageView: NSImageView, isEnabled: Bool) {
