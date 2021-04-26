@@ -25,6 +25,7 @@ If applicable, add screenshots to help explain your problem.
 
 **Configuration**
 OS and Version: [e.g. macOS 11.2]
+App Version: [e.g. 0.1.0]
 
 **Additional Context**
 Add any other context about the problem here.
