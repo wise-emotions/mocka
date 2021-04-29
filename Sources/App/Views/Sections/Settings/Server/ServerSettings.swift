@@ -11,9 +11,6 @@ struct ServerSettings: View {
 
   // MARK: - Stored Properties
 
-  /// The current color scheme of the app.
-  @Environment(\.colorScheme) var colorScheme: ColorScheme
-
   /// A binding to the current presentation mode of the view associated with this environment.
   @Environment(\.presentationMode) var presentationMode
 
@@ -111,7 +108,7 @@ struct ServerSettings: View {
               .frame(width: 100, height: 21)
           }
         )
-        .buttonStyle(AccentButtonStyle(colorScheme: colorScheme))
+        .buttonStyle(AccentButtonStyle())
         .padding(.horizontal)
         .padding(.top)
       }

@@ -7,17 +7,12 @@ import SwiftUI
 
 /// This button adheres to `ButtonStyle` protocol set the button color to the `accentColor` selected by the user.
 struct AccentButtonStyle: ButtonStyle {
-  /// The color scheme of the app.
-  let colorScheme: ColorScheme
-
   /// Whether or not the button is enabled.
   let isEnabled: Bool
 
   /// Returns an instance of `AccentButtonStyle`
-  /// - Parameter colorScheme: The color scheme of the app.
   /// - Parameter isEnabled: Whether or not the button is enabled.
-  init(colorScheme: ColorScheme, isEnabled: Bool = true) {
-    self.colorScheme = colorScheme
+  init(isEnabled: Bool = true) {
     self.isEnabled = isEnabled
   }
 
@@ -33,11 +28,8 @@ struct AccentButtonStyle: ButtonStyle {
   }
 
   func makeBody(configuration: Self.Configuration) -> some View {
-    let isDarkModeEnabled = colorScheme == .dark
-    let normalStateColor = isDarkModeEnabled ? Color.latte : Color.doppio
-
     return configuration.label
-      .foregroundColor(configuration.isPressed ? Color.accentColor : normalStateColor)
+      .foregroundColor(configuration.isPressed ? Color.accentColor : .milk)
       .background(backgroundColor(isPressed: configuration.isPressed))
       .cornerRadius(6.0)
   }

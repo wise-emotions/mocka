@@ -28,6 +28,9 @@ extension Color {
 
   /// Color #FFFFFF with alpha at 50%.
   static let macchiato = Color("Macchiato")
+  
+  /// Color #FFFFFF both on light and dark mode.
+  static let milk = Color("Milk")
 
   /// Color #FF0000.
   static let redEye: Color = Color("RedEye")

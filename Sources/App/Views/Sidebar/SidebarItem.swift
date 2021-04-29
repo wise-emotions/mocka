@@ -9,9 +9,6 @@ struct SidebarItem: View {
 
   // MARK: - Stored Properties
 
-  /// The color scheme currently selected by the user.
-  @Environment(\.colorScheme) var colorScheme: ColorScheme
-
   /// The selected section.
   @Binding var selectedSection: SidebarSection
 
@@ -23,15 +20,6 @@ struct SidebarItem: View {
   /// Whether the button should be displayed as selected.
   private var isSelected: Bool {
     selectedSection == section
-  }
-
-  /// The `foregroundColor` for the button.
-  private var buttonForegroundColor: Color {
-    if colorScheme == .dark {
-      return isSelected ? Color.latte : Color.macchiato
-    } else {
-      return isSelected ? Color.doppio : Color.macchiato
-    }
   }
 
   // MARK: - Body
@@ -50,7 +38,7 @@ struct SidebarItem: View {
           Text(section.title)
             .font(.system(size: 12))
         }
-        .foregroundColor(buttonForegroundColor)
+        .foregroundColor(isSelected ? Color.milk : Color.macchiato)
         .frame(
           minWidth: 0,
           maxWidth: .infinity,
