@@ -28,8 +28,7 @@ struct Mocka: App {
         .sheet(
           isPresented: $appEnvironment.shouldShowStartupSettings
         ) {
-          StartupSettings()
-            .environmentObject(appEnvironment)
+          ServerSettings(viewModel: ServerSettingsViewModel(isShownFromSettings: false))
         }
     }
     .windowStyle(HiddenTitleBarWindowStyle())
@@ -37,6 +36,10 @@ struct Mocka: App {
     .commands {
       SidebarCommands()
       KeyboardShortcutCommands(appEnvironment: appEnvironment)
+    }
+
+    Settings {
+      AppSettings()
     }
   }
 }

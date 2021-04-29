@@ -8,18 +8,22 @@ import UniformTypeIdentifiers
 /// The editor view.
 /// Used to edit an API body.
 struct Editor: View {
+
+  // MARK: - Stored Properties
+
   /// The associated ViewModel.
-  @StateObject var viewModel = EditorViewModel()
+  @ObservedObject var viewModel: EditorViewModel
+
+  // MARK: - Body
 
   var body: some View {
     ZStack {
-      VStack {
+      VStack(spacing: 20) {
         HStack {
           Text("Response Body")
             .frame(maxWidth: .infinity, alignment: .leading)
             .font(.headline)
             .foregroundColor(Color.latte)
-            .padding(.leading)
 
           Spacer()
 
@@ -32,19 +36,16 @@ struct Editor: View {
             allowsMultipleSelection: false,
             onCompletion: viewModel.importFile(from:)
           )
-          .padding(.trailing)
         }
 
-        TextEditor(text: $viewModel.text)
-          .font(.body)
-          .border(viewModel.borderColor)
-          .onChange(
-            of: viewModel.text,
-            perform: { _ in
-              viewModel.prettyPrintJSON()
-            }
-          )
-          .padding(.horizontal)
+        TextEditor(
+          text: viewModel.mode == .write ? viewModel.text : .constant(viewModel.text.wrappedValue)
+        )
+        .font(.body)
+        .frame(minHeight: 40)
+        .padding(4)
+        .background(Color.lungo)
+        .cornerRadius(8)
       }
     }
     .onDrop(
@@ -54,6 +55,8 @@ struct Editor: View {
     )
   }
 }
+
+// MARK: - Previews
 
 struct EditorPreviews: PreviewProvider {
   static var previews: some View {

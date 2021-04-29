@@ -24,11 +24,20 @@ enum SFSymbol: String {
   /// Plus circle icon.
   case plusCircle = "plus.circle"
 
+  /// Refresh icon.
+  case refresh = "arrow.triangle.2.circlepath"
+
+  /// Scroll icon.
+  case scroll
+
   /// Sidebar squares left icon.
   case sidebarSquaresLeft = "sidebar.squares.left"
 
   /// Stop circle icon.
   case stopCircle = "stop.circle"
+
+  /// Table cells icon.
+  case tableCells = "tablecells"
 
   /// Trash icon.
   case trash

@@ -7,8 +7,13 @@ import SwiftUI
 /// The HTTP status code ellipse view.
 /// it automatically set the color based on the HTTP status.
 struct HTTPStatusCodeEllipse: View {
+
+  // MARK: - Stored Properties
+
   /// The `HTTPStatus` of the response`
   let httpStatus: UInt
+
+  // MARK: - Computed Properties
 
   /// The color of the ellipse, based on the HTTPStatus.
   var httpStatusColor: Color {
@@ -27,6 +32,8 @@ struct HTTPStatusCodeEllipse: View {
     }
   }
 
+  // MARK: - Body
+
   var body: some View {
     Ellipse()
       .fill(httpStatusColor)
@@ -34,11 +41,15 @@ struct HTTPStatusCodeEllipse: View {
   }
 }
 
+// MARK: - Previews
+
 struct HTTPStatusCodeEllipsePreviews: PreviewProvider {
   static var previews: some View {
     HTTPStatusCodeEllipse(httpStatus: 200)
   }
 }
+
+// MARK: - Library
 
 struct HTTPStatusCodeEllipseLibraryContent: LibraryContentProvider {
   let statusCode: UInt = 200

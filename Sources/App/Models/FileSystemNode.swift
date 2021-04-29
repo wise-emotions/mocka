@@ -4,7 +4,7 @@
 
 import Foundation
 
-/// An object representing a node (i.e: directory or file) in the filesystem.
+/// An object representing a node (directory or file) in the filesystem.
 struct FileSystemNode: Identifiable, Hashable {
 
   // MARK: - Stored Properties
@@ -21,19 +21,39 @@ struct FileSystemNode: Identifiable, Hashable {
   /// The `URL` to the node.
   let url: URL
 
-  /// The children nodes of the directory. `nil` if the node represents a file.
-  let children: [FileSystemNode]?
-
   // MARK: - Computed Properties
+
+  /// The children nodes of the directory. `nil` if the node represents a file.
+  var children: [FileSystemNode]? {
+    switch kind {
+    case let .folder(children, _):
+      return children
+
+    case .requestFile:
+      return nil
+    }
+  }
 
   /// Whether the node represents a directory in the filesystem.
   var isFolder: Bool {
-    kind == .folder
+    switch kind {
+    case .folder:
+      return true
+
+    case .requestFile:
+      return false
+    }
   }
 
-  /// Whether the node represents a file in the filesystem.
-  var isFile: Bool {
-    kind == .file
+  /// The list of available actions that can be performed on the node.
+  var availableActions: [Action] {
+    switch kind {
+    case let .folder(_, isRequestFolder):
+      return isRequestFolder ? [] : [.create]
+
+    case .requestFile:
+      return []
+    }
   }
 
   // MARK: - Init
@@ -43,24 +63,56 @@ struct FileSystemNode: Identifiable, Hashable {
   ///   - name: The name of the file or folder.
   ///   - url: The `URL` to the node.
   ///   - kind: The kind of the node. Folder or `file`.
-  ///   - children: The children nodes of the directory. `nil` if the node represents a file.
-  init(name: String, url: URL, kind: FileSystemNode.Kind, children: [FileSystemNode]? = nil) {
+  init(name: String, url: URL, kind: FileSystemNode.Kind) {
     self.name = name
     self.url = url
     self.kind = kind
-    self.children = children
+  }
+
+  // MARK: - Functions
+
+  /// Returns a set containing the node alongside all its children.
+  func flatten() -> Set<FileSystemNode> {
+    var nodes: Set<FileSystemNode> = [self]
+
+    guard let children = children else {
+      return nodes
+    }
+
+    nodes = children.reduce(into: nodes) {
+      $0.formUnion($1.flatten())
+    }
+
+    return nodes
   }
 }
 
 // MARK: - Data Structure
 
 extension FileSystemNode {
-  /// The possibile kinds of `FileSystemNode`.
-  enum Kind {
-    /// The node is a folder.
-    case folder
+  /// All actions that could be performed on `FileSystemNode`.
+  enum Action {
+    /// A child node can be created under the node.
+    case create
+  }
 
-    /// The node is a file.
-    case file
+  /// The possibile kinds of `FileSystemNode`.
+  enum Kind: Hashable {
+    /// The node is a folder.
+    /// `children` are the nodes inside of the folder.
+    /// `isRequestFolder` is `true` when the folder contains a request.
+    case folder(children: [FileSystemNode], isRequestFolder: Bool)
+
+    /// The node is a request file.
+    case requestFile(_ request: Request)
+  }
+}
+
+extension Array where Element == FileSystemNode {
+  /// Returns a set containing all the node alongside their children.
+  func flatten() -> Set<Element> {
+    self.reduce(into: Set<FileSystemNode>()) {
+      $0.formUnion($1.flatten())
+    }
   }
 }

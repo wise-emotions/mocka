@@ -12,6 +12,11 @@ final class RestartServerButtonViewModel: ObservableObject {
   /// Restart the current running server instance.
   /// - Parameter appEnvironment: The `AppEnvironment` instance.
   func restartRunningServer(on appEnvironment: AppEnvironment) {
-    try? appEnvironment.server.restart(with: appEnvironment.serverConfiguration)
+    guard let serverConfiguration = appEnvironment.serverConfiguration else {
+      appEnvironment.shouldShowStartupSettings = true
+      return
+    }
+
+    try? appEnvironment.server.restart(with: serverConfiguration)
   }
 }

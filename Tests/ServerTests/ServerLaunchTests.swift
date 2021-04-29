@@ -36,6 +36,7 @@ class ServerLaunchTests: XCTestCase {
 
     do {
       try server.start(with: ServerTestsHelpers.ServerConfiguration())
+      XCTFail("Was expecting the test to fail, but succeeded instead")
     } catch {
       guard case .instanceAlreadyRunning = error as? ServerError else {
         XCTFail("Was expecting `ServerError.instanceAlreadyRunning` but got \(error) instead")

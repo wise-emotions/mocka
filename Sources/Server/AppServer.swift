@@ -121,7 +121,7 @@ public class AppServer {
 
   /// Clears the buffered log events from the `networkExchangesSubject`.
   public func clearBufferedNetworkExchanges() {
-    consoleLogsSubject.clearBuffer()
+    networkExchangesSubject.clearBuffer()
   }
 
   /// Registers a route for every request.
@@ -136,7 +136,7 @@ public class AppServer {
       application?
         .on($0.method.vaporMethod, $0.vaporParameter) { [unowned self] request -> EventLoopFuture<ClientResponse> in
           // This property is force-unwrapped because it can never fail,
-          // since the raw value passed is an identical copy of SWIFTNIO's `HTTPMethod`.
+          // since the raw value passed is an identical copy of SwiftNIO's `HTTPMethod`.
           let httpMethod = HTTPMethod(rawValue: request.method.rawValue)!
           let receivedRequestTimeStamp = Date().timeIntervalSince1970
 
@@ -174,7 +174,7 @@ public class AppServer {
           }
 
           return request.fileio
-            .collectFile(at: responseBody.fileLocation.path)
+            .collectFile(at: responseBody.pathToFile)
             .flatMap { buffer -> EventLoopFuture<ClientResponse> in
               clientResponse = ClientResponse(status: requestedResponse.status, headers: requestedResponse.headers, body: buffer)
               networkExchangesSubject.send(networkExchange)
@@ -182,7 +182,7 @@ public class AppServer {
             }
             .flatMapError { error in
               // So far, only logical error is the file not being found.
-              let failReason = "File not found at \(responseBody.fileLocation.path)"
+              let failReason = "File not found at \(responseBody.pathToFile)"
               clientResponse = ClientResponse(status: .badRequest, headers: [:], body: ByteBuffer(string: failReason))
               networkExchangesSubject.send(networkExchange)
               return request.eventLoop.makeFailedFuture(Abort(.badRequest, reason: failReason))
