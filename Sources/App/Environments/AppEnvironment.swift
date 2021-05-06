@@ -10,6 +10,9 @@ import SwiftUI
 final class AppEnvironment: ObservableObject {
   /// Whether the server is currently running.
   @Published var isServerRunning: Bool = false
+  
+  /// Whether the server is currently in record mode.
+  @Published var isServerRecording: Bool = false
 
   /// The selected app section, selected by using the app's Sidebar.
   @Published var selectedSection: SidebarSection = .server
