@@ -97,7 +97,7 @@ extension FileSystemNode {
 
     /// A child request node can be created under the node.
     case createRequest
-    
+
     /// A child folder node can be created under the node.
     case createFolder
   }

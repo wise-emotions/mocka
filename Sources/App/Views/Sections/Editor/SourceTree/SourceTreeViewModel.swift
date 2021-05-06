@@ -116,7 +116,7 @@ final class SourceTreeViewModel: ObservableObject {
     switch action {
     case .createRequest:
       return "􀁌  Add Request"
-      
+
     case .createFolder:
       return "􀈙  Add Folder"
 
@@ -131,25 +131,25 @@ final class SourceTreeViewModel: ObservableObject {
   ///   - node: The `FileSystemNode` on which the action is performed to.
   func performAction(_ action: FileSystemNode.Action, on node: FileSystemNode? = nil) throws {
     selectedNode = node
-    
+
     switch action {
     case .createRequest:
       isShowingCreateRequestDetailView = true
-      
+
     case .createFolder:
       guard let parentFolder = node?.url ?? UserDefaults.standard.url(forKey: UserDefaultKey.workspaceURL) else {
         throw MockaError.missingWorkspacePathValue
       }
-      
-      for index in 0 ... Int.max {
+
+      for index in 0...Int.max {
         let directoryName = "untitled folder" + (index == 0 ? "" : " \(index)")
-        
+
         if let createdNode = try? Logic.SourceTree.addDirectory(at: parentFolder, named: directoryName) {
           renamingNode = createdNode
           break
         }
       }
-      
+
       try refreshContent()
 
     case .editRequest:
