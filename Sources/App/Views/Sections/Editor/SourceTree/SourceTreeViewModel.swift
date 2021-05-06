@@ -28,12 +28,15 @@ final class SourceTreeViewModel: ObservableObject {
   /// The selected `FileSystemNode`.
   var selectedNode: FileSystemNode? = nil
 
+  /// The node that is currently being renamed.
+  var renamingNode: FileSystemNode? = nil
+
   // MARK: - Computed Properties
 
   /// The directories contents filtered based on the the filtered text, if any.
   var filteredNodes: [FileSystemNode] {
     #warning("Needs implementation")
-    return directoryContent
+    return directoryContent.sorted(by: { $0.name < $1.name })
   }
 
   // MARK: - Init
@@ -108,21 +111,56 @@ final class SourceTreeViewModel: ObservableObject {
   /// - Returns: The name of the action.
   func actionName(action: FileSystemNode.Action) -> String {
     switch action {
-    case .create:
-      return "􀁌  Add"
+    case .createRequest:
+      return "􀁌  Add Request"
+      
+    case .createFolder:
+      return "􀈙  Add Folder"
+
+    case .editRequest:
+      return "􀈋  Edit Request"
     }
   }
 
   /// Performs the action associated with the context menu item.
   /// - Parameters:
-  ///   - action: The `FileSystemNode.Action`.
-  ///   - node: The `FileSystemNode`.
-  func performAction(_ action: FileSystemNode.Action, on node: FileSystemNode? = nil) {
+  ///   - action: The `FileSystemNode.Action` to perform.
+  ///   - node: The `FileSystemNode` on which the action is performed to.
+  func performAction(_ action: FileSystemNode.Action, on node: FileSystemNode? = nil) throws {
     selectedNode = node
-
+    
     switch action {
-    case .create:
+    case .createRequest:
+      isShowingCreateRequestDetailView = true
+      
+    case .createFolder:
+      guard let parentFolder = node?.url ?? UserDefaults.standard.url(forKey: UserDefaultKey.workspaceURL) else {
+        throw MockaError.missingWorkspacePathValue
+      }
+      
+      for index in 0 ... Int.max {
+        let directoryName = "untitled folder" + (index == 0 ? "" : " \(index)")
+        
+        if let createdNode = try? Logic.SourceTree.addDirectory(at: parentFolder, named: directoryName) {
+          renamingNode = createdNode
+          break
+        }
+      }
+      
+      try refreshContent()
+
+    case .editRequest:
       isShowingCreateRequestDetailView = true
     }
+  }
+
+  /// Renames the node.
+  /// - Parameters:
+  ///   - node: The `FileSystemNode` to rename.
+  ///   - name: The updated name.
+  func renameNode(_ node: FileSystemNode, to name: String) throws {
+    try Logic.SourceTree.renameDirectory(node: node, to: name)
+    renamingNode = nil
+    try refreshContent()
   }
 }

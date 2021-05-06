@@ -92,15 +92,37 @@ extension Logic.SourceTree {
   }
 
   /// Adds a directory while creating intermediate directories.
-  /// - Throws: `MockaError.failedToCreateDirectory`
+  /// - Throws: `MockaError.failedToCreateDirectory` if the directory cannot be created.
   /// - Parameters:
   ///   - url: The `URL` of the hosting directory.
   ///   - named: The name of the new directory.
-  static func addDirectory(at url: URL, named: String) throws {
+  /// - Returns: The updated `FileSystemNode`-
+  @discardableResult
+  static func addDirectory(at url: URL, named: String) throws -> FileSystemNode {
     do {
       try FileManager.default.createDirectory(atPath: url.appendingPathComponent(named).path, withIntermediateDirectories: false, attributes: nil)
+      return FileSystemNode(name: named, url: url.appendingPathComponent(named), kind: .folder(children: [], isRequestFolder: false))
     } catch {
       throw MockaError.failedToCreateDirectory(path: url.appendingPathComponent(named).path)
+    }
+  }
+
+  /// Renames a directory.
+  /// - Parameters:
+  ///   - node: The `FileSystemNode` to rename.
+  ///   - name: The updated name.
+  /// - Throws: `MockaError.failedToRenameDirectory` if the directory cannot be renamed.
+  /// - Returns: The updated `FileSystemNode`-
+  @discardableResult
+  static func renameDirectory(node: FileSystemNode, to name: String) throws -> FileSystemNode {
+    let currentURL = node.url
+    let renamedURL = currentURL.deletingLastPathComponent().appendingPathComponent(name)
+    
+    do {
+      try FileManager.default.moveItem(atPath: currentURL.path, toPath: renamedURL.path)
+      return FileSystemNode(name: name, url: renamedURL, kind: node.kind)
+    } catch {
+      throw MockaError.failedToRenameDirectory(path: currentURL.path, name: name)
     }
   }
 

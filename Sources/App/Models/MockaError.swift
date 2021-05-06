@@ -32,4 +32,8 @@ enum MockaError: Error {
   /// Failed to write a string at a path.
   /// The content and the path are included with the error.
   case failedToWriteToFile(content: String, path: String)
+
+  /// Failed to rename a directory.
+  /// The path and the name are included with the error.
+  case failedToRenameDirectory(path: String, name: String)
 }
