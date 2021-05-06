@@ -65,6 +65,12 @@ struct EditorDetail: View {
           .padding(.vertical, 5)
           .disabled(viewModel.isContentTypeTextFieldEnabled.isFalse)
 
+          Text("If a Response Content-Type is selected, you need to provide a body. Otherwise, select \"none\".")
+            .padding(.horizontal, 26)
+            .padding(.top, -5)
+            .foregroundColor(.americano)
+            .frame(maxWidth: .infinity, alignment: .leading)
+
           Text("Response Headers")
             .font(.system(size: 13, weight: .semibold, design: .default))
             .foregroundColor(Color.latte)
