@@ -13,8 +13,8 @@ final class SourceTreeViewModel: ObservableObject {
   /// The text that filters the requests.
   @Published var filterText: String = ""
 
-  /// The contents of the directory.
-  @Published var directoryContent: [FileSystemNode] = []
+  /// The sourceTree of the workspace.
+  @Published var sourceTree: FileSystemNode
 
   /// When true the `EditorDetail` in `.create` mode will be shown.
   ///
@@ -33,7 +33,16 @@ final class SourceTreeViewModel: ObservableObject {
   /// The directories contents filtered based on the the filtered text, if any.
   var filteredNodes: [FileSystemNode] {
     #warning("Needs implementation")
-    return directoryContent
+    return sourceTree.children ?? []
+  }
+
+  /// Checks if the workspace contains any valid nodes.
+  var isSourceTreeEmpty: Bool {
+    guard let children = sourceTree.children else {
+      return true
+    }
+
+    return children.isEmpty
   }
 
   // MARK: - Init
@@ -42,8 +51,8 @@ final class SourceTreeViewModel: ObservableObject {
   ///
   /// This instantiation will fail if the workspace path value has not been set yet.
   /// - Throws: `MockaError.missingWorkspacePathValue` if `path` is `nil`.
-  init() throws {
-    try refreshContent()
+  init(editorEnvironment: EditorEnvironment) {
+    sourceTree = editorEnvironment.sourceTree
   }
 
   // MARK: - Functions
@@ -54,6 +63,7 @@ final class SourceTreeViewModel: ObservableObject {
   func detailViewModel(for node: FileSystemNode?) -> EditorDetailViewModel {
     if let selectedNode = selectedNode, selectedNode.isFolder {
       return EditorDetailViewModel(
+        sourceTree: sourceTree,
         requestParentFolder: selectedNode,
         mode: .create,
         onSave: { [weak self] in
@@ -67,6 +77,7 @@ final class SourceTreeViewModel: ObservableObject {
 
     guard let node = node else {
       return EditorDetailViewModel(
+        sourceTree: sourceTree,
         mode: .create,
         onSave: { [weak self] in
           try? self?.refreshContent()
@@ -79,16 +90,17 @@ final class SourceTreeViewModel: ObservableObject {
 
     switch node.kind {
     case .folder:
-      return EditorDetailViewModel()
+      return EditorDetailViewModel(sourceTree: sourceTree)
 
     case .requestFile:
-      let flatDirectories = directoryContent.flatten()
+      let flatDirectories = sourceTree.flatten()
       // The parent of the node, but that is the folder with the regex `METHOD - name of API`.
       let requestFolderNode = flatDirectories.first { $0.children?.contains(node) ?? false }!
       // The parent namespace folder.
       let parent = flatDirectories.first { $0.children?.contains(requestFolderNode) ?? false }!
 
       return EditorDetailViewModel(
+        sourceTree: sourceTree,
         requestFile: node, requestFolder: requestFolderNode, requestParentFolder: parent,
         onSave: { [weak self] in
           try? self?.refreshContent()
@@ -99,11 +111,7 @@ final class SourceTreeViewModel: ObservableObject {
 
   /// Updates the `directoryContent` by iterating over the contents of the workspace directory.
   func refreshContent() throws {
-    guard let workspaceDirectory = workspaceURL else {
-      throw MockaError.missingWorkspacePathValue
-    }
-
-    directoryContent = Logic.SourceTree.contents(of: workspaceDirectory)
+    sourceTree = Logic.SourceTree.sourceTree()
   }
 
   /// Returns the name of the action.

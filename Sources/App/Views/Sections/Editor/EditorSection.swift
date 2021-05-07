@@ -14,15 +14,18 @@ struct EditorSection: View {
   /// The app environment object.
   @EnvironmentObject var appEnvironment: AppEnvironment
 
+  /// The editor environment object.
+  @EnvironmentObject var editorEnvironment: EditorEnvironment
+
   // MARK: - Body
 
   var body: some View {
     NavigationView {
       Sidebar(selectedSection: $appEnvironment.selectedSection)
 
-      SourceTree(viewModel: try! SourceTreeViewModel())
+      SourceTree(viewModel: SourceTreeViewModel(editorEnvironment: editorEnvironment))
 
-      EditorDetail(viewModel: EditorDetailViewModel())
+      EditorDetail(viewModel: EditorDetailViewModel(sourceTree: editorEnvironment.sourceTree))
     }
     .background(Color.doppio)
   }

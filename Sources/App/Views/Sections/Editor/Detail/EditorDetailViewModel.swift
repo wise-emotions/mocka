@@ -38,7 +38,7 @@ final class EditorDetailViewModel: ObservableObject {
   let currentResponseBody: String?
 
   /// The list of all the namespace folders available.
-  let namespaceFolders: [FileSystemNode] = Logic.SourceTree.namespaceFolders()
+  let namespaceFolders: [FileSystemNode]
 
   /// The list of all the supported HTTP Methods.
   let allHTTPMethods: [HTTPMethod] = HTTPMethod.allCases
@@ -189,6 +189,7 @@ final class EditorDetailViewModel: ObservableObject {
   ///   - onSave: A closure to invoke when the user taps the `Save` button.
   ///   - onCancel: A closure to invoke when the user taps the `Cancel` button.
   init(
+    sourceTree: FileSystemNode,
     requestFile: FileSystemNode? = nil,
     requestFolder: FileSystemNode? = nil,
     requestParentFolder: FileSystemNode? = nil,
@@ -196,6 +197,7 @@ final class EditorDetailViewModel: ObservableObject {
     onSave: Interaction? = nil,
     onCancel: Interaction? = nil
   ) {
+    self.namespaceFolders = Logic.SourceTree.namespaceFolders(in: sourceTree)
     userDoneEditing = onSave
     userCancelled = onCancel
     currentMode = mode

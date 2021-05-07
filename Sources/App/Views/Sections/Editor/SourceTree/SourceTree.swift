@@ -18,7 +18,7 @@ struct SourceTree: View {
     VStack {
       Divider()
 
-      if viewModel.directoryContent.isEmpty {
+      if viewModel.isSourceTreeEmpty {
         EmptyState(symbol: .scroll, text: "Tap the 􀁌 to add an API request")
           .background(
             NavigationLink(
@@ -35,7 +35,7 @@ struct SourceTree: View {
             ) {}
           )
       } else {
-        List(viewModel.filteredNodes, children: \.children) { node in
+        List(viewModel.sourceTree.children ?? [], children: \.children) { node in
           NavigationLink(destination: EditorDetail(viewModel: viewModel.detailViewModel(for: node))) {
             SourceTreeNode(name: node.name, isFolder: node.isFolder)
           }
@@ -98,6 +98,6 @@ struct SourceTree: View {
 
 struct SourceTreePreviews: PreviewProvider {
   static var previews: some View {
-    SourceTree(viewModel: try! SourceTreeViewModel())
+    SourceTree(viewModel: try! SourceTreeViewModel(editorEnvironment: EditorEnvironment()))
   }
 }

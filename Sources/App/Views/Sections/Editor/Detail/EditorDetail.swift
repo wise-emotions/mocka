@@ -26,7 +26,7 @@ struct EditorDetail: View {
             .disabled(viewModel.isRequestNameTextFieldEnabled.isFalse)
 
           RoundedBorderDropdown(
-            title: "Parent Folder",
+            title: "Select Folder",
             items: viewModel.namespaceFolders,
             itemTitleKeyPath: \.name,
             selection: $viewModel.selectedRequestParentFolder
