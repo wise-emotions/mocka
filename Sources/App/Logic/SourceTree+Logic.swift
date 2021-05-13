@@ -96,7 +96,7 @@ extension Logic.SourceTree {
   /// - Parameters:
   ///   - url: The `URL` of the hosting directory.
   ///   - named: The name of the new directory.
-  /// - Returns: The updated `FileSystemNode`-
+  /// - Returns: The created `FileSystemNode`.
   @discardableResult
   static func addDirectory(at url: URL, named: String) throws -> FileSystemNode {
     do {
@@ -112,7 +112,7 @@ extension Logic.SourceTree {
   ///   - node: The `FileSystemNode` to rename.
   ///   - name: The updated name.
   /// - Throws: `MockaError.failedToRenameDirectory` if the directory cannot be renamed.
-  /// - Returns: The updated `FileSystemNode`-
+  /// - Returns: The updated `FileSystemNode`.
   @discardableResult
   static func renameDirectory(node: FileSystemNode, to name: String) throws -> FileSystemNode {
     let currentURL = node.url
