@@ -1,0 +1,5 @@
+//
+//  Mocka
+//
+
+import Foundation

@@ -24,6 +24,12 @@ public class AppServer {
   /// - Note: This property is marked `internal` to allow only the `Server` to send events.
   private let networkExchangesSubject = BufferedSubject<NetworkExchange, Never>()
 
+  /// The `PassthroughSubject` of `NetworkExchange`s for the record mode.
+  /// This subject is used to send and subscribe to `NetworkExchange`s.
+  /// Anytime a request/response exchange happens, a detailed version of the actors is generated and injected in this object.
+  /// - Note: This property is marked `internal` to allow only the `Server` to send events.
+  private let recordModeNetworkExchangesSubject = PassthroughSubject<NetworkExchange, Never>()
+
   /// The `Set` containing the list of subscriptions.
   private var subscriptions = Set<AnyCancellable>()
 
@@ -37,6 +43,11 @@ public class AppServer {
   /// The `Publisher` of `NetworkExchange`s.
   public var networkExchangesPublisher: AnyPublisher<NetworkExchange, Never> {
     networkExchangesSubject.eraseToAnyPublisher()
+  }
+  
+  /// The `Publisher` of `NetworkExchange`s for the record mode.
+  public var recordModeNetworkExchangesPublisher: AnyPublisher<NetworkExchange, Never> {
+    recordModeNetworkExchangesSubject.eraseToAnyPublisher()
   }
 
   /// The host associated with the running instance's configuration.
@@ -85,7 +96,13 @@ public class AppServer {
     application?.logger = Logger(label: "Server Logger", factory: { _ in ConsoleLogHander(subject: consoleLogsSubject) })
     application?.http.server.configuration.port = configuration.port
     application?.http.server.configuration.hostname = configuration.hostname
-    application?.middleware.use(AppMiddleware(baseURL: URL(string: "ws-test.telepass.com")!))
+    application?.middleware.use(
+      AppMiddleware(
+        baseURL: URL(string: "ws-test.telepass.com")!,
+        recordModeNetworkExchangesSubject: recordModeNetworkExchangesSubject,
+        configuration: configuration
+      )
+    )
     
     do {
       try application?.server.start()

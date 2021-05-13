@@ -14,7 +14,7 @@ struct Mocka: App {
 
   var body: some Scene {
     WindowGroup {
-      AppSection()
+      AppSection(viewModel: AppSectionViewModel(recordModeNetworkExchangesPublisher: appEnvironment.server.recordModeNetworkExchangesPublisher))
         .frame(
           // Due to a bug of the `NavigationView` we cannot use the exactly minimum size.
           // We add `5` points to be sure to not close the sidebar while resizing the view.
