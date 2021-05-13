@@ -20,6 +20,9 @@ packages:
   Vapor:
     url: https://github.com/vapor/vapor
     from: 4.0.0
+  Sourceful:
+    url: https://github.com/twostraws/Sourceful
+    branch: main
 targets:
   MockaApp:
     type: application
@@ -33,6 +36,7 @@ targets:
       - path: Sources/App
     dependencies:
       - target: MockaServer
+      - package: Sourceful
     scheme:
       testTargets:
         - MockaAppTests
