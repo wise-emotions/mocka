@@ -83,7 +83,7 @@ extension Logic.SourceTree {
             result.append($0)
           }
       }
-    ?? [parent]
+      ?? [parent]
   }
 
   /// Adds a directory while creating intermediate directories.
