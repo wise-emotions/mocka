@@ -117,7 +117,7 @@ extension Logic.SourceTree {
   static func renameDirectory(node: FileSystemNode, to name: String) throws -> FileSystemNode {
     let currentURL = node.url
     let renamedURL = currentURL.deletingLastPathComponent().appendingPathComponent(name)
-    
+
     do {
       try FileManager.default.moveItem(atPath: currentURL.path, toPath: renamedURL.path)
       return FileSystemNode(name: name, url: renamedURL, kind: node.kind)

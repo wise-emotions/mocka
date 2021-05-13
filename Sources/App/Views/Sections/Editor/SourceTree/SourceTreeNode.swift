@@ -19,7 +19,7 @@ struct SourceTreeNode: View {
 
   /// Whether the node represents a folder or not.
   let isFolder: Bool
-  
+
   /// Whether the node is being renamed or not.
   let isRenaming: Bool
 
@@ -27,7 +27,7 @@ struct SourceTreeNode: View {
 
   /// The user renamed the node.
   var onRenamed: ((String) -> Void)?
-  
+
   // MARK: - Body
 
   var body: some View {
@@ -37,11 +37,14 @@ struct SourceTreeNode: View {
         .frame(width: 24)
 
       if isRenaming {
-        TextField("Folder name", text: $name, onCommit: {
-          if name.isNotEmpty {
-            onRenamed?(name)
+        TextField(
+          "Folder name", text: $name,
+          onCommit: {
+            if name.isNotEmpty {
+              onRenamed?(name)
+            }
           }
-        })
+        )
         .introspectTextField { textField in
           if isRenaming && shouldBecomeFirstResponder {
             textField.becomeFirstResponder()
@@ -53,7 +56,7 @@ struct SourceTreeNode: View {
       }
     }
   }
-  
+
   // MARK: - Init
 
   /// Creates an instance of `SourceTreeNode`.
