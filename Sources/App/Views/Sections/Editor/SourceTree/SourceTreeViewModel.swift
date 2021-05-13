@@ -141,6 +141,8 @@ final class SourceTreeViewModel: ObservableObject {
         throw MockaError.missingWorkspacePathValue
       }
 
+      // Create a folder using the "untitled folder" name.
+      // If the folder already exists, adds an incrementing postfix until the folder is successfully created.
       for index in 0...Int.max {
         let directoryName = "untitled folder" + (index == 0 ? "" : " \(index)")
 
