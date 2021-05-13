@@ -2,6 +2,7 @@
 //  Mocka
 //
 
+import Sourceful
 import SwiftUI
 import UniformTypeIdentifiers
 
@@ -38,14 +39,20 @@ struct Editor: View {
           )
         }
 
-        TextEditor(
-          text: viewModel.mode == .write ? viewModel.text : .constant(viewModel.text.wrappedValue)
+        SourceCodeTextEditor(
+          text: viewModel.mode == .write ? viewModel.text : .constant(viewModel.text.wrappedValue),
+          customization: SourceCodeTextEditor.Customization(
+            didChangeText: { _ in },
+            insertionPointColor: { Sourceful.Color.white },
+            lexerForSource: { _ in JSONLexer() },
+            textViewDidBeginEditing: { _ in },
+            theme: { MockaSourceCodeTheme() }
+          )
         )
         .font(.body)
-        .frame(minHeight: 40)
-        .padding(4)
+        .frame(minHeight: 120, maxHeight: .infinity)
         .background(Color.lungo)
-        .cornerRadius(8)
+        .clipShape(RoundedRectangle(cornerRadius: 8))
       }
     }
     .onDrop(
