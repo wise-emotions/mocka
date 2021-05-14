@@ -25,7 +25,6 @@ struct SidebarItem: View {
   // MARK: - Body
 
   var body: some View {
-
     Button(
       action: {
         selectedSection = section
