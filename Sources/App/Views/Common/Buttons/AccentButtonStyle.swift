@@ -28,7 +28,7 @@ struct AccentButtonStyle: ButtonStyle {
   }
 
   func makeBody(configuration: Self.Configuration) -> some View {
-    return configuration.label
+    configuration.label
       .foregroundColor(configuration.isPressed ? Color.accentColor : .milk)
       .background(backgroundColor(isPressed: configuration.isPressed))
       .cornerRadius(6.0)
