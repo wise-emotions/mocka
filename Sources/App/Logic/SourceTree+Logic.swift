@@ -28,12 +28,9 @@ extension Logic {
       return "(\(allSupportedMethods)) - .*"
     }
 
-    /// The  root file system node.
+    /// The root file system node.
     static var rootFileSystemNode: FileSystemNode {
-      let workspaceURL = UserDefaults.standard.url(forKey: UserDefaultKey.workspaceURL)!
-      let allSubNodes = contents(of: workspaceURL)
-
-      return FileSystemNode(name: "Workspace Root", url: workspaceURL, kind: .folder(children: allSubNodes, isRequestFolder: false))
+      sourceTree()
     }
   }
 }

@@ -14,7 +14,9 @@ final class SourceTreeViewModel: ObservableObject {
   @Published var filterText: String = ""
 
   /// The sourceTree of the workspace.
-  @Published var sourceTree: FileSystemNode
+  var sourceTree: FileSystemNode {
+    editorEnvironment.sourceTree
+  }
 
   /// When true the `EditorDetail` in `.create` mode will be shown.
   ///
@@ -27,6 +29,9 @@ final class SourceTreeViewModel: ObservableObject {
 
   /// The selected `FileSystemNode`.
   var selectedNode: FileSystemNode? = nil
+
+  /// The environment of the editor.
+  private var editorEnvironment: EditorEnvironment
 
   // MARK: - Computed Properties
 
@@ -52,7 +57,7 @@ final class SourceTreeViewModel: ObservableObject {
   /// This instantiation will fail if the workspace path value has not been set yet.
   /// - Throws: `MockaError.missingWorkspacePathValue` if `path` is `nil`.
   init(editorEnvironment: EditorEnvironment) {
-    sourceTree = editorEnvironment.sourceTree
+    self.editorEnvironment = editorEnvironment
   }
 
   // MARK: - Functions
@@ -111,7 +116,7 @@ final class SourceTreeViewModel: ObservableObject {
 
   /// Updates the `directoryContent` by iterating over the contents of the workspace directory.
   func refreshContent() throws {
-    sourceTree = Logic.SourceTree.sourceTree()
+    editorEnvironment.sourceTree = Logic.SourceTree.sourceTree()
   }
 
   /// Returns the name of the action.
