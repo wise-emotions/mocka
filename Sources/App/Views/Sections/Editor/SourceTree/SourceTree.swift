@@ -35,7 +35,7 @@ struct SourceTree: View {
             ) {}
           )
       } else {
-        List(viewModel.sourceTree.children ?? [], children: \.children) { node in
+        List(viewModel.filteredNodes, children: \.children) { node in
           NavigationLink(destination: EditorDetail(viewModel: viewModel.detailViewModel(for: node))) {
             SourceTreeNode(name: node.name, isFolder: node.isFolder)
           }
