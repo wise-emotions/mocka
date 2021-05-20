@@ -21,78 +21,50 @@ final class AppSectionViewModel: ObservableObject {
   init(recordModeNetworkExchangesPublisher: AnyPublisher<NetworkExchange, Never>) {
     recordModeNetworkExchangesPublisher
       .receive(on: RunLoop.main)
-      .sink { [weak self] _ in
-        
+      .sink { [weak self] networkExchange in
+        self?.createAndSaveRequest(from: networkExchange)
       }
       .store(in: &subscriptions)
   }
   
   /// The user tapped the save button.
   func createAndSaveRequest(from networkExchange: NetworkExchange) {
-    // The new created request.
+    // The newly created request.
     let request = Request(
       path: networkExchange.request.uri.path.components(separatedBy: "/"),
       method: HTTPMethod(rawValue: networkExchange.request.httpMethod.rawValue)!,
       expectedResponse: Response(
         statusCode: Int(networkExchange.response.status.code),
-        contentType: networkExchange.response.headers.contentType!,
+        contentType: networkExchange.response.headers.contentType ?? .applicationJSON,
         headers: networkExchange.response.headers.map { HTTPHeader(key: $0.name, value: $0.value) }
       )
     )
+    
+    let desktopDirectory = FileManager.default.urls(for: .desktopDirectory, in: .userDomainMask)[0]
 
-    let newRequestFolderName = Self.requestFolderName(request, requestName: networkExchange.request.uri.path)
+    try! Logic.SourceTree.addDirectory(at: desktopDirectory, named: Self.requestFolderName(request))
 
-    guard
-      currentRequest != nil,
-      let currentRequestFolder = currentRequestFolder,
-      let currentRequestParentFolder = currentRequestParentFolder
-    else {
-      // We are in create mode.
-      // Create new request folder.
-      try? Logic.SourceTree.addDirectory(at: selectedRequestParentFolder!.url, named: newRequestFolderName)
-
-      // Add response, if any.
-      if displayedResponseBody.isNotEmpty, let expectedFileExtension = selectedContentType?.expectedFileExtension {
-        try? Logic.SourceTree.addResponse(
-          displayedResponseBody,
-          ofType: expectedFileExtension,
-          to: selectedRequestParentFolder!.url.appendingPathComponent(newRequestFolderName)
-        )
-      }
-
-      // Add request.
-      try? Logic.SourceTree.addRequest(request, to: selectedRequestParentFolder!.url.appendingPathComponent(newRequestFolderName))
-
-      return
-    }
-
-      try? Logic.SourceTree.addDirectory(at: selectedRequestParentFolder!.url, named: newRequestFolderName)
-      // Delete old request folder.
-      try? Logic.SourceTree.deleteDirectory(at: currentRequestFolder.url.path)
-
-    // Add response, if needed.
-    if displayedResponseBody.isNotEmpty,
-      let expectedFileExtension = selectedContentType?.expectedFileExtension,
-      let statusCode = Int(displayedStatusCode),
-      HTTPResponseStatus(statusCode: statusCode).mayHaveResponseBody
+    // Add response, if any.
+    if
+      let responseBodyData = networkExchange.response.body,
+      let responseBody = String(data: responseBodyData, encoding: .utf8),
+      let expectedFileExtension = request.expectedResponse.contentType.expectedFileExtension
     {
-      try? Logic.SourceTree.addResponse(
-        displayedResponseBody,
+      try! Logic.SourceTree.addResponse(
+        responseBody,
         ofType: expectedFileExtension,
-        to: selectedRequestParentFolder!.url.appendingPathComponent(newRequestFolderName)
+        to: desktopDirectory.appendingPathComponent(Self.requestFolderName(request))
       )
     }
 
     // Add request.
-    try? Logic.SourceTree.addRequest(request, to: selectedRequestParentFolder!.url.appendingPathComponent(newRequestFolderName))
+    try! Logic.SourceTree.addRequest(request, to: desktopDirectory.appendingPathComponent(Self.requestFolderName(request)))
   }
   
   /// Generates the name of the request folder.
-  /// - Parameters:
-  ///   - request: The request we want to save.
-  ///   - requestName: The custom name of the request.
+  /// - Parameter request: The request we want to save.
   /// - Returns: The name of the request folder.
-  static func requestFolderName(_ request: Request, requestName: String) -> String {
-    "\(request.method.rawValue) - \(requestName)"
+  static func requestFolderName(_ request: Request) -> String {
+    "\(request.method.rawValue) - \(request.path)"
   }
 }
