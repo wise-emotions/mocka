@@ -18,6 +18,12 @@ extension NSTextView {
     // The 1st nextResponder is NSClipView.
     // The 2nd nextResponder is NSScrollView.
     // The 3rd nextResponder is NSResponder SwiftUIPlatformViewHost.
-    nextResponder?.nextResponder?.nextResponder?.scrollWheel(with: event)
+
+    if let documentView = enclosingScrollView?.documentView, documentView.visibleRect.maxY >= documentView.frame.maxY {
+      nextResponder?.nextResponder?.nextResponder?.scrollWheel(with: event)
+      return
+    }
+
+    super.scrollWheel(with: event)
   }
 }

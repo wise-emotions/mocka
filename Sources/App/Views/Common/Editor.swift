@@ -19,7 +19,7 @@ struct Editor: View {
 
   var body: some View {
     ZStack {
-      VStack(spacing: 20) {
+      VStack(spacing: 16) {
         HStack {
           Text("Response Body")
             .frame(maxWidth: .infinity, alignment: .leading)
@@ -50,7 +50,7 @@ struct Editor: View {
           )
         )
         .font(.body)
-        .frame(minHeight: 120, maxHeight: .infinity)
+        .frame(height: 320)
         .background(Color.lungo)
         .clipShape(RoundedRectangle(cornerRadius: 8))
       }
