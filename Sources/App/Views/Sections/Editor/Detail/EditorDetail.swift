@@ -15,84 +15,24 @@ struct EditorDetail: View {
   // MARK: - Body
 
   var body: some View {
-    VStack {
+    Group {
       if viewModel.shouldShowEmptyState {
         EmptyState(symbol: .document, text: "Select a request to display its details")
       } else {
         ScrollView {
-          RoundedTextField(title: "API custom name", text: $viewModel.displayedRequestName)
-            .padding(.horizontal, 26)
-            .padding(.vertical, 5)
-            .disabled(viewModel.isRequestNameTextFieldEnabled.isFalse)
+          VStack(spacing: 24) {
+            fieldsSection
 
-          RoundedBorderDropdown(
-            title: "Parent Folder",
-            items: viewModel.namespaceFolders,
-            itemTitleKeyPath: \.name,
-            selection: $viewModel.selectedRequestParentFolder
-          )
-          .padding(.horizontal, 26)
-          .padding(.vertical, 5)
-          .disabled(viewModel.isRequestParentFolderTextFieldEnabled.isFalse)
+            headersSection
 
-          RoundedTextField(title: "Path", text: $viewModel.displayedRequestPath)
-            .padding(.horizontal, 26)
-            .padding(.vertical, 5)
-            .disabled(viewModel.isRequestPathTextFieldEnabled.isFalse)
-
-          RoundedBorderDropdown(
-            title: "HTTP Method",
-            items: viewModel.allHTTPMethods,
-            itemTitleKeyPath: \.rawValue,
-            selection: $viewModel.selectedHTTPMethod
-          )
-          .padding(.horizontal, 26)
-          .padding(.vertical, 5)
-          .disabled(viewModel.isHTTPMethodTextFieldEnabled.isFalse)
-
-          RoundedTextField(title: "Response status code", text: $viewModel.displayedStatusCode)
-            .padding(.horizontal, 26)
-            .padding(.vertical, 5)
-            .disabled(viewModel.isStatusCodeTextFieldEnabled.isFalse)
-
-          RoundedBorderDropdown(
-            title: "Response Content-Type",
-            items: viewModel.allContentTypes,
-            itemTitleKeyPath: \.rawValue,
-            selection: $viewModel.selectedContentType
-          )
-          .padding(.horizontal, 26)
-          .padding(.vertical, 5)
-          .disabled(viewModel.isContentTypeTextFieldEnabled.isFalse)
-
-          Text("If a Response Content-Type is selected, you need to provide a body. Otherwise, select \"none\".")
-            .padding(.horizontal, 26)
-            .padding(.top, -5)
-            .foregroundColor(.americano)
-            .frame(maxWidth: .infinity, alignment: .leading)
-
-          Text("Response Headers")
-            .font(.system(size: 13, weight: .semibold, design: .default))
-            .foregroundColor(Color.latte)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.horizontal, 16)
-            .padding(.top, 25)
-
-          KeyValueTable(
-            viewModel: KeyValueTableViewModel(
-              keyValueItems: $viewModel.displayedResponseHeaders,
-              mode: viewModel.currentMode == .read ? .read : .write
-            )
-          )
-          .padding(.bottom, 16)
-
-          Editor(viewModel: EditorViewModel(text: $viewModel.displayedResponseBody, mode: viewModel.currentMode == .read ? .read : .write))
-            .disabled(viewModel.isResponseHeadersKeyValueTableEnabled.isFalse || viewModel.isResponseBodyEditorEnabled.isFalse)
-            .isVisible(viewModel.isEditorDetailResponseBodyVisible)
-            .padding(.horizontal, 16)
-
+            Editor(viewModel: EditorViewModel(text: $viewModel.displayedResponseBody, mode: viewModel.currentMode == .read ? .read : .write))
+              .disabled(viewModel.isResponseHeadersKeyValueTableEnabled.isFalse || viewModel.isResponseBodyEditorEnabled.isFalse)
+              .isVisible(viewModel.isEditorDetailResponseBodyVisible)
+          }
+          .padding(.horizontal, 16)
+          .padding(.vertical, 16)
         }
-        .padding(.top, 24)
+        .padding(.top, 1)
       }
     }
     .frame(minWidth: Size.minimumListWidth)
@@ -131,6 +71,63 @@ struct EditorDetail: View {
         .isHidden(viewModel.shouldShowEmptyState)
         .enabled(viewModel.isPrimaryButtonEnabled)
       }
+    }
+  }
+
+  private var fieldsSection: some View {
+    VStack(spacing: 12) {
+      RoundedTextField(title: "API custom name", text: $viewModel.displayedRequestName)
+        .disabled(viewModel.isRequestNameTextFieldEnabled.isFalse)
+
+      RoundedBorderDropdown(
+        title: "Parent Folder",
+        items: viewModel.namespaceFolders,
+        itemTitleKeyPath: \.name,
+        selection: $viewModel.selectedRequestParentFolder
+      )
+      .disabled(viewModel.isRequestParentFolderTextFieldEnabled.isFalse)
+
+      RoundedTextField(title: "Path", text: $viewModel.displayedRequestPath)
+        .disabled(viewModel.isRequestPathTextFieldEnabled.isFalse)
+
+      RoundedBorderDropdown(
+        title: "HTTP Method",
+        items: viewModel.allHTTPMethods,
+        itemTitleKeyPath: \.rawValue,
+        selection: $viewModel.selectedHTTPMethod
+      )
+      .disabled(viewModel.isHTTPMethodTextFieldEnabled.isFalse)
+
+      RoundedTextField(title: "Response status code", text: $viewModel.displayedStatusCode)
+        .disabled(viewModel.isStatusCodeTextFieldEnabled.isFalse)
+
+      RoundedBorderDropdown(
+        title: "Response Content-Type",
+        items: viewModel.allContentTypes,
+        itemTitleKeyPath: \.rawValue,
+        selection: $viewModel.selectedContentType
+      )
+      .disabled(viewModel.isContentTypeTextFieldEnabled.isFalse)
+
+      Text("If a Response Content-Type is selected, you need to provide a body. Otherwise, select \"none\".")
+        .foregroundColor(.americano)
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
+  }
+
+  private var headersSection: some View {
+    VStack(spacing: 16) {
+      Text("Response Headers")
+        .font(.system(size: 13, weight: .semibold, design: .default))
+        .foregroundColor(Color.latte)
+        .frame(maxWidth: .infinity, alignment: .leading)
+
+      KeyValueTable(
+        viewModel: KeyValueTableViewModel(
+          keyValueItems: $viewModel.displayedResponseHeaders,
+          mode: viewModel.currentMode == .read ? .read : .write
+        )
+      )
     }
   }
 }
