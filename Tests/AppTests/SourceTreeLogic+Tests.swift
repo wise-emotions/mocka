@@ -154,7 +154,7 @@ class SourceTreeLogicTests: XCTestCase {
     let namespaceFolder = Logic.SourceTree.namespaceFolders(in: Logic.SourceTree.rootFileSystemNode)
 
     XCTAssertEqual(namespaceFolder.count, 5)
-    XCTAssertEqual(namespaceFolder.map { $0.name }.sorted(by: <), ["App", "Generic", "V2", "Void", "Workspace gRoot"])
+    XCTAssertEqual(namespaceFolder.map { $0.name }.sorted(by: <), ["App", "Generic", "V2", "Void", "Workspace Root"])
   }
 }
 
