@@ -10,7 +10,9 @@ struct FileSystemNode: Identifiable, Hashable {
   // MARK: - Stored Properties
 
   /// The identifier of the object.
-  let id = UUID()
+  var id: Int {
+    hashValue
+  }
 
   /// The name of the file or folder.
   let name: String
@@ -27,7 +29,7 @@ struct FileSystemNode: Identifiable, Hashable {
   var children: [FileSystemNode]? {
     switch kind {
     case let .folder(children, _):
-      return children
+      return children.sorted(by: { $0.name < $1.name })
 
     case .requestFile:
       return nil
@@ -84,6 +86,12 @@ struct FileSystemNode: Identifiable, Hashable {
     }
 
     return nodes
+  }
+
+  // MARK: - Hashable
+
+  func hash(into hasher: inout Hasher) {
+    hasher.combine(url)
   }
 }
 

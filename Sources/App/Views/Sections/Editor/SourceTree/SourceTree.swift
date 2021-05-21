@@ -35,31 +35,64 @@ struct SourceTree: View {
             ) {}
           )
       } else {
-        List(viewModel.filteredNodes, children: \.children) { node in
-          NavigationLink(destination: EditorDetail(viewModel: viewModel.detailViewModel(for: node))) {
-            SourceTreeNode(
-              name: node.name,
-              isFolder: node.isFolder,
-              isRenaming: node == viewModel.renamingNode,
-              onRenamed: { updatedName in
-                try? viewModel.renameNode(node, to: updatedName)
-              }
-            )
-          }
-          .contextMenu(
-            ContextMenu(
-              menuItems: {
-                ForEach(node.availableActions, id: \.self) { action in
-                  Button(
-                    viewModel.actionName(action: action),
-                    action: {
-                      try? viewModel.performAction(action, on: node)
+        List {
+          ForEach(viewModel.filteredNodes, id: \.id) { node in
+            DisclosureGroup(
+              isExpanded: Binding<Bool>(
+                get: {
+                  viewModel.listState[node.id, default: false]
+                },
+                set: {
+                  viewModel.listState[node.id] = $0
+                }
+              ),
+              content: {
+                ForEach(node.children ?? []) { node in
+                  NavigationLink(destination: EditorDetail(viewModel: viewModel.detailViewModel(for: node))) {
+                    SourceTreeNode(
+                      name: node.name,
+                      isFolder: node.isFolder,
+                      isRenaming: node == viewModel.renamingNode,
+                      onRenamed: { updatedName in
+                        try? viewModel.renameNode(node, to: updatedName)
+                      }
+                    )
+                  }
+                }
+              },
+              label: {
+                NavigationLink(destination: EditorDetail(viewModel: viewModel.detailViewModel(for: node))) {
+                  SourceTreeNode(
+                    name: node.name,
+                    isFolder: node.isFolder,
+                    isRenaming: node == viewModel.renamingNode,
+                    onRenamed: { updatedName in
+                      try? viewModel.renameNode(node, to: updatedName)
                     }
                   )
                 }
+                .onTapGesture {
+                  withAnimation {
+                    self.listState[node.id, default: false].toggle()
+                  }
+                }
+                .contextMenu(
+                  ContextMenu(
+                    menuItems: {
+                      ForEach(node.availableActions, id: \.self) { action in
+                        Button(
+                          viewModel.actionName(action: action),
+                          action: {
+                            try? viewModel.performAction(action, on: node)
+                          }
+                        )
+                      }
+                    }
+                  )
+                )
               }
             )
-          )
+          }
         }
         .listStyle(SidebarListStyle())
         .padding(.top, -8)
