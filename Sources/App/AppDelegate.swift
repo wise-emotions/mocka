@@ -6,9 +6,6 @@ import AppKit
 
 final class AppDelegate: NSObject, NSApplicationDelegate {
   func applicationDidFinishLaunching(_ notification: Notification) {
-    // Force dark mode.
-    NSApp.appearance = NSAppearance(named: .darkAqua)
-
     // Disable the Tab Bar feature.
     disableTabBar()
   }

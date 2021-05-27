@@ -23,11 +23,13 @@ struct ServerSettings: View {
     VStack {
       Text("Welcome to Mocka")
         .font(.largeTitle)
+        .foregroundColor(.latte)
         .isHidden(viewModel.isShownFromSettings, remove: true)
 
       Text("Before starting you need to select a workspace path.\nYou can also set an optional server's address and port.")
         .frame(height: 32)
         .font(.body)
+        .foregroundColor(.latte)
         .padding(.vertical)
         .isHidden(viewModel.isShownFromSettings, remove: true)
 
@@ -35,26 +37,20 @@ struct ServerSettings: View {
         HStack(alignment: .top) {
           Text("Workspace folder")
             .font(.headline)
+            .foregroundColor(.latte)
             .frame(width: 120, height: 30, alignment: .trailing)
 
-          VStack {
-            RoundedTextField(title: "Workspace folder", text: $viewModel.workspacePath)
-              .frame(width: 300)
-              .overlay(
-                RoundedRectangle(cornerRadius: 6)
-                  .stroke(Color.redEye, lineWidth: viewModel.workspacePathError == nil ? 0 : 1)
-              )
-
-            Text("Please note that the selected folder must exist and it will not be automatically created.")
-              .font(.subheadline)
-              .frame(width: 300, height: 30)
-              .padding(.top, -6)
-              .foregroundColor(.macchiato)
-          }
+          RoundedTextField(title: "Workspace folder", text: $viewModel.workspacePath)
+            .frame(width: 300)
+            .overlay(
+              RoundedRectangle(cornerRadius: 6)
+                .stroke(Color.redEye, lineWidth: viewModel.workspacePathError == nil ? 0 : 1)
+            )
 
           Button("Select folder") {
             viewModel.fileImporterIsPresented.toggle()
           }
+          .foregroundColor(.latte)
           .frame(height: 30)
           .fileImporter(
             isPresented: $viewModel.fileImporterIsPresented,
@@ -66,6 +62,7 @@ struct ServerSettings: View {
 
         HStack {
           Text("Server address")
+            .foregroundColor(.latte)
             .font(.headline)
             .frame(width: 120, alignment: .trailing)
 
@@ -76,6 +73,7 @@ struct ServerSettings: View {
         HStack {
           Text("Server port")
             .font(.headline)
+            .foregroundColor(.latte)
             .frame(width: 120, alignment: .trailing)
 
           RoundedTextField(title: "Server port", text: $viewModel.port)

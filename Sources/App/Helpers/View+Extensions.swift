@@ -112,6 +112,7 @@ extension View {
         }
       ) {
         Text(text)
+          .foregroundColor(Color.latte)
       }
     }
   }
