@@ -22,13 +22,18 @@ final class AppSectionViewModel: ObservableObject {
     recordModeNetworkExchangesPublisher
       .receive(on: RunLoop.main)
       .sink { [weak self] networkExchange in
-        self?.createAndSaveRequest(from: networkExchange)
+        #warning("Add proper values")
+        self?.createAndSaveRequest(
+          from: networkExchange,
+          to: FileManager.default.urls(for: .desktopDirectory, in: .userDomainMask)[0],
+          shouldOverwriteResponse: true
+        )
       }
       .store(in: &subscriptions)
   }
   
   /// The user tapped the save button.
-  func createAndSaveRequest(from networkExchange: NetworkExchange) {
+  func createAndSaveRequest(from networkExchange: NetworkExchange, to directory: URL, shouldOverwriteResponse: Bool) {
     // The newly created request.
     let request = Request(
       path: networkExchange.request.uri.path.components(separatedBy: "/"),
@@ -40,9 +45,13 @@ final class AppSectionViewModel: ObservableObject {
       )
     )
     
-    let desktopDirectory = FileManager.default.urls(for: .desktopDirectory, in: .userDomainMask)[0]
-
-    try! Logic.SourceTree.addDirectory(at: desktopDirectory, named: Self.requestFolderName(request))
+    if Logic.SourceTree.contents(of: directory).isNotEmpty, shouldOverwriteResponse {
+      try? Logic.SourceTree.deleteDirectory(at: directory.absoluteString)
+    } else {
+      return
+    }
+    
+    try? Logic.SourceTree.addDirectory(at: directory, named: Self.requestFolderName(request))
 
     // Add response, if any.
     if
@@ -50,15 +59,15 @@ final class AppSectionViewModel: ObservableObject {
       let responseBody = String(data: responseBodyData, encoding: .utf8),
       let expectedFileExtension = request.expectedResponse.contentType.expectedFileExtension
     {
-      try! Logic.SourceTree.addResponse(
+      try? Logic.SourceTree.addResponse(
         responseBody,
         ofType: expectedFileExtension,
-        to: desktopDirectory.appendingPathComponent(Self.requestFolderName(request))
+        to: directory.appendingPathComponent(Self.requestFolderName(request))
       )
     }
 
     // Add request.
-    try! Logic.SourceTree.addRequest(request, to: desktopDirectory.appendingPathComponent(Self.requestFolderName(request)))
+    try? Logic.SourceTree.addRequest(request, to: directory.appendingPathComponent(Self.requestFolderName(request)))
   }
   
   /// Generates the name of the request folder.
