@@ -40,20 +40,12 @@ struct ServerSettings: View {
             .foregroundColor(.latte)
             .frame(width: 120, height: 30, alignment: .trailing)
 
-          VStack {
-            RoundedTextField(title: "Workspace folder", text: $viewModel.workspacePath)
-              .frame(width: 300)
-              .overlay(
-                RoundedRectangle(cornerRadius: 6)
-                  .stroke(Color.redEye, lineWidth: viewModel.workspacePathError == nil ? 0 : 1)
-              )
-
-            Text("Please note that the selected folder must exist and it will not be automatically created.")
-              .font(.subheadline)
-              .frame(width: 300, height: 30)
-              .padding(.top, -6)
-              .foregroundColor(.macchiato)
-          }
+          RoundedTextField(title: "Workspace folder", text: $viewModel.workspacePath)
+            .frame(width: 300)
+            .overlay(
+              RoundedRectangle(cornerRadius: 6)
+                .stroke(Color.redEye, lineWidth: viewModel.workspacePathError == nil ? 0 : 1)
+            )
 
           Button("Select folder") {
             viewModel.fileImporterIsPresented.toggle()
