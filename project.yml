@@ -33,6 +33,7 @@ targets:
       - path: Sources/App
     dependencies:
       - target: MockaServer
+      - target: MockaLaunchHelper
     scheme:
       testTargets:
         - MockaAppTests
@@ -42,6 +43,33 @@ targets:
       revealArchiveInOrganizer: false
     info:
       path: Sources/App/Resources/Info.plist
+      properties:
+        CFBundleDevelopmentRegion: "$(DEVELOPMENT_LANGUAGE)"
+        CFBundleExecutable: $(EXECUTABLE_NAME)
+        CFBundleIdentifier: $(PRODUCT_BUNDLE_IDENTIFIER)
+        CFBundleInfoDictionaryVersion: "6.0"
+        CFBundleName: $(PRODUCT_NAME)
+        CFBundlePackageType: $(PRODUCT_BUNDLE_PACKAGE_TYPE)
+        CFBundleShortVersionString: "1.0.0"
+        CFBundleVersion: "1"
+        LSMinimumSystemVersion: "$(MACOSX_DEPLOYMENT_TARGET)"
+    buildPhase:
+      copyFiles:
+        destination: wrapper
+        subpath: Contents/Library/LoginItems
+  
+      
+  MockaLaunchHelper:
+    type: application
+    platform: macOS
+    attributes: 
+      ProvisioningStyle: Automatic
+    settings:
+      SKIP_INSTALL: YES
+    sources:
+      - LaunchHelper
+    info:
+      path: LaunchHelper/Info.plist
       properties:
         CFBundleDevelopmentRegion: "$(DEVELOPMENT_LANGUAGE)"
         CFBundleExecutable: $(EXECUTABLE_NAME)
