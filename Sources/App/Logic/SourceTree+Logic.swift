@@ -38,6 +38,7 @@ extension Logic {
 // MARK: - Functions
 
 extension Logic.SourceTree {
+  Computes the source tree starting with the workspace root containing all sub-nodes.
   /// - Returns: The source tree starting with the workspace root containing all sub-nodes.
   static func sourceTree() -> FileSystemNode {
     let workspaceURL = UserDefaults.standard.url(forKey: UserDefaultKey.workspaceURL)!
