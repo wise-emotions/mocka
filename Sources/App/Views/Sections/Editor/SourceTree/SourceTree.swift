@@ -98,6 +98,6 @@ struct SourceTree: View {
 
 struct SourceTreePreviews: PreviewProvider {
   static var previews: some View {
-    SourceTree(viewModel: SourceTreeViewModel(editorEnvironment: EditorEnvironment()))
+    SourceTree(viewModel: SourceTreeViewModel(editorSectionEnvironment: EditorSectionEnvironment()))
   }
 }

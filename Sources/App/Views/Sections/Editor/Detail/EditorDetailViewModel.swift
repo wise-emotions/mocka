@@ -197,7 +197,7 @@ final class EditorDetailViewModel: ObservableObject {
     onSave: Interaction? = nil,
     onCancel: Interaction? = nil
   ) {
-    self.namespaceFolders = Logic.SourceTree.namespaceFolders(in: sourceTree)
+    namespaceFolders = Logic.SourceTree.namespaceFolders(in: sourceTree)
     userDoneEditing = onSave
     userCancelled = onCancel
     currentMode = mode

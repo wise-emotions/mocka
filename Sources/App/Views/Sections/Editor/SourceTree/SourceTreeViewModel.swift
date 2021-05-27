@@ -15,7 +15,7 @@ final class SourceTreeViewModel: ObservableObject {
 
   /// The sourceTree of the workspace.
   var sourceTree: FileSystemNode {
-    editorEnvironment.sourceTree
+    editorSectionEnvironment.sourceTree
   }
 
   /// When true the `EditorDetail` in `.create` mode will be shown.
@@ -31,7 +31,7 @@ final class SourceTreeViewModel: ObservableObject {
   var selectedNode: FileSystemNode? = nil
 
   /// The environment of the editor.
-  private var editorEnvironment: EditorEnvironment
+  private var editorSectionEnvironment: EditorSectionEnvironment
 
   // MARK: - Computed Properties
 
@@ -56,8 +56,8 @@ final class SourceTreeViewModel: ObservableObject {
   ///
   /// This instantiation will fail if the workspace path value has not been set yet.
   /// - Throws: `MockaError.missingWorkspacePathValue` if `path` is `nil`.
-  init(editorEnvironment: EditorEnvironment) {
-    self.editorEnvironment = editorEnvironment
+  init(editorSectionEnvironment: EditorSectionEnvironment) {
+    self.editorSectionEnvironment = editorSectionEnvironment
   }
 
   // MARK: - Functions
