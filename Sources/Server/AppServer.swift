@@ -13,16 +13,13 @@ public class AppServer {
   /// The `Vapor` `Application` instance.
   internal private(set) var application: Application?
 
+  #warning("Document")
+  private let mockaMiddleware = MockaMiddleware()
+
   /// The `BufferedSubject` of `LogEvent`s.
   /// This subject is used to send and subscribe to `LogEvent`s.
   /// - Note: This property is marked `internal` to allow only the `Server` to send events.
   private let consoleLogsSubject = BufferedSubject<LogEvent, Never>()
-
-  /// The `BufferedSubject` of `NetworkExchange`s.
-  /// This subject is used to send and subscribe to `NetworkExchange`s.
-  /// Anytime a request/response exchange happens, a detailed version of the actors is generated and injected in this object.
-  /// - Note: This property is marked `internal` to allow only the `Server` to send events.
-  private let networkExchangesSubject = BufferedSubject<NetworkExchange, Never>()
 
   /// The `Set` containing the list of subscriptions.
   private var subscriptions = Set<AnyCancellable>()
@@ -36,7 +33,7 @@ public class AppServer {
 
   /// The `Publisher` of `NetworkExchange`s.
   public var networkExchangesPublisher: AnyPublisher<NetworkExchange, Never> {
-    networkExchangesSubject.eraseToAnyPublisher()
+    mockaMiddleware.networkExchangesSubject.eraseToAnyPublisher()
   }
 
   /// The host associated with the running instance's configuration.
@@ -88,6 +85,7 @@ public class AppServer {
     application?.logger = Logger(label: "Server Logger", factory: { _ in ConsoleLogHander(subject: consoleLogsSubject) })
     application?.http.server.configuration.port = configuration.port
     application?.http.server.configuration.hostname = configuration.hostname
+    application?.middleware.use(mockaMiddleware)
 
     do {
       registerRoutes(for: configuration.requests)
@@ -121,7 +119,7 @@ public class AppServer {
 
   /// Clears the buffered log events from the `networkExchangesSubject`.
   public func clearBufferedNetworkExchanges() {
-    networkExchangesSubject.clearBuffer()
+    mockaMiddleware.networkExchangesSubject.clearBuffer()
   }
 
   /// Registers a route for every request.
@@ -135,6 +133,8 @@ public class AppServer {
 
       application?
         .on($0.method.vaporMethod, $0.vaporParameter) { [unowned self] request -> EventLoopFuture<ClientResponse> in
+          #warning("Clean here after MockaMiddleware is finished. This logic should be moved there.")
+
           // This property is force-unwrapped because it can never fail,
           // since the raw value passed is an identical copy of SwiftNIO's `HTTPMethod`.
           let httpMethod = HTTPMethod(rawValue: request.method.rawValue)!
@@ -162,14 +162,14 @@ public class AppServer {
 
           guard let responseBody = requestedResponse.body else {
             clientResponse = ClientResponse(status: requestedResponse.status, headers: requestedResponse.headers, body: nil)
-            networkExchangesSubject.send(networkExchange)
+//            networkExchangesSubject.send(networkExchange)
             return request.eventLoop.makeSucceededFuture(clientResponse)
           }
 
           guard responseBody.isValidFileFormat() else {
             let failReason = "Invalid file format. Was expecting a .\(responseBody.contentType.expectedFileExtension!) file"
             clientResponse = ClientResponse(status: .badRequest, headers: [:], body: ByteBuffer(string: failReason))
-            networkExchangesSubject.send(networkExchange)
+//            networkExchangesSubject.send(networkExchange)
             return request.eventLoop.makeFailedFuture(Abort(.badRequest, reason: failReason))
           }
 
@@ -177,14 +177,14 @@ public class AppServer {
             .collectFile(at: responseBody.pathToFile)
             .flatMap { buffer -> EventLoopFuture<ClientResponse> in
               clientResponse = ClientResponse(status: requestedResponse.status, headers: requestedResponse.headers, body: buffer)
-              networkExchangesSubject.send(networkExchange)
+//              networkExchangesSubject.send(networkExchange)
               return request.eventLoop.makeSucceededFuture(clientResponse)
             }
             .flatMapError { error in
               // So far, only logical error is the file not being found.
               let failReason = "File not found at \(responseBody.pathToFile)"
               clientResponse = ClientResponse(status: .badRequest, headers: [:], body: ByteBuffer(string: failReason))
-              networkExchangesSubject.send(networkExchange)
+//              networkExchangesSubject.send(networkExchange)
               return request.eventLoop.makeFailedFuture(Abort(.badRequest, reason: failReason))
             }
         }
