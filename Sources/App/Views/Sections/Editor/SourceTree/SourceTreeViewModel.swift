@@ -116,7 +116,7 @@ final class SourceTreeViewModel: ObservableObject {
 
   /// Updates the `sourceTree` by iterating over the contents of the workspace directory.
   func refreshContent() throws {
-    editorEnvironment.sourceTree = Logic.SourceTree.sourceTree()
+    editorSectionEnvironment.sourceTree = Logic.SourceTree.sourceTree()
   }
 
   /// Returns the name of the action.
