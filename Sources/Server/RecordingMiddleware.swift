@@ -8,28 +8,23 @@ import Vapor
 /// This class will act as a MITM to intercept network calls to localhost,
 /// creating real requests whose response will be sent back to the caller.
 final class RecordingMiddleware: Middleware {
-  /// The base `URL` that will be used instead of localhost when performing the real network calls.
-  let baseURL: URL
-  
+  /// The configuration of the middleware.
+  let configuration: MiddlewareConfigurationProvider
+
   /// The `PassthroughSubject` used to send the request and response pair back to the app.
   let recordModeNetworkExchangesSubject: PassthroughSubject<NetworkExchange, Never>
-  
-  /// The configuration of the server.
-  let configuration: ServerConnectionConfigurationProvider
-  
+    
   /// Initializes the `RecordingMiddleware.
   /// - Parameters:
-  ///   - baseURL: The base `URL` to perform the real network calls.
+  ///   - configuration: The configuration of the middleware.
   ///   - recordModeNetworkExchangesSubject: The `PassthroughSubject` used to send the request and response pair back to the app.
-  ///   - configuration: The configuration of the server.
-  init(baseURL: URL, recordModeNetworkExchangesSubject: PassthroughSubject<NetworkExchange, Never>, configuration: ServerConnectionConfigurationProvider) {
-    self.baseURL = baseURL
-    self.recordModeNetworkExchangesSubject = recordModeNetworkExchangesSubject
+  init(configuration: MiddlewareConfigurationProvider,recordModeNetworkExchangesSubject: PassthroughSubject<NetworkExchange, Never>) {
     self.configuration = configuration
+    self.recordModeNetworkExchangesSubject = recordModeNetworkExchangesSubject
   }
   
   func respond(to request: Vapor.Request, chainingTo next: Responder) -> EventLoopFuture<Response> {
-    let requestURL = Vapor.URI(string: "https://ws-test.telepass.com\(request.url.path)")
+    let requestURL = Vapor.URI(string: configuration.baseURL.absoluteString + request.url.path)
     let headers = request.headers.removing(name: "Host")
     let clientRequest = ClientRequest(method: request.method, url: requestURL, headers: headers, body: request.body.data)
     

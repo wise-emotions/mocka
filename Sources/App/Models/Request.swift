@@ -34,6 +34,18 @@ struct Request: Equatable, Hashable {
     self.method = method
     self.expectedResponse = expectedResponse
   }
+  
+  /// Creates a `Request` object starting from a `NetworkExchange` object.
+  /// - Parameter networkExchange: The `NetworkExchange` object received from the server.
+  init(from networkExchange: NetworkExchange) {
+    path = networkExchange.request.uri.path.components(separatedBy: "/")
+    method = HTTPMethod(rawValue: networkExchange.request.httpMethod.rawValue)!
+    expectedResponse = Response(
+      statusCode: Int(networkExchange.response.status.code),
+      contentType: networkExchange.response.headers.contentType ?? .applicationJSON,
+      headers: networkExchange.response.headers.map { HTTPHeader(key: $0.name, value: $0.value) }
+    )
+  }
 
   /// Converts a `MockaApp.Request` into a `MockaServer.Request`.
   /// - Parameters:

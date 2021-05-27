@@ -80,7 +80,10 @@ public class AppServer {
 
   // MARK: - Methods
   
-  public func startRecording(with configuration: ServerConnectionConfigurationProvider) throws {
+  /// Starts a new `Application` instance using the passed configuration and uses it to record network calls.
+  /// - Parameter configuration: An object conforming to `MiddlewareConfigurationProvider`.
+  /// - Throws: `ServerError.instanceAlreadyRunning` or a wrapped `Vapor` error.
+  public func startRecording(with configuration: MiddlewareConfigurationProvider) throws {
     guard application == nil else {
       throw ServerError.instanceAlreadyRunning
     }
@@ -99,9 +102,8 @@ public class AppServer {
     application?.http.client.configuration.decompression = .enabled(limit: .none)
     application?.middleware.use(
       RecordingMiddleware(
-        baseURL: URL(string: "ws-test.telepass.com")!,
-        recordModeNetworkExchangesSubject: recordModeNetworkExchangesSubject,
-        configuration: configuration
+        configuration: configuration,
+        recordModeNetworkExchangesSubject: recordModeNetworkExchangesSubject
       )
     )
     
@@ -112,35 +114,35 @@ public class AppServer {
       throw ServerError.vapor(error: error)
     }
   }
-//
-//  /// Starts a new `Application` instance using the passed configuration.
-//  /// - Parameter configuration: An object conforming to `ServerConfigurationProvider`.
-//  /// - Throws: `ServerError.instanceAlreadyRunning` or a wrapped `Vapor` error.
-//  public func start(with configuration: ServerConfigurationProvider) throws {
-//    guard application == nil else {
-//      throw ServerError.instanceAlreadyRunning
-//    }
-//
-//    do {
-//      let environment = try Environment.detect()
-//      application = Application(environment)
-//    } catch {
-//      throw ServerError.vapor(error: error)
-//    }
-//
-//    // Logger must be set at the beginning or it will result in missing the server start event.
-//    application?.logger = Logger(label: "Server Logger", factory: { _ in ConsoleLogHander(subject: consoleLogsSubject) })
-//    application?.http.server.configuration.port = configuration.port
-//    application?.http.server.configuration.hostname = configuration.hostname
-//
-//    do {
-//      registerRoutes(for: configuration.requests)
-//      try application?.server.start()
-//    } catch {
-//      // The most common error would be when we try to run the server on a PORT that is already used.
-//      throw ServerError.vapor(error: error)
-//    }
-//  }
+
+  /// Starts a new `Application` instance using the passed configuration.
+  /// - Parameter configuration: An object conforming to `ServerConfigurationProvider`.
+  /// - Throws: `ServerError.instanceAlreadyRunning` or a wrapped `Vapor` error.
+  public func start(with configuration: ServerConfigurationProvider) throws {
+    guard application == nil else {
+      throw ServerError.instanceAlreadyRunning
+    }
+
+    do {
+      let environment = try Environment.detect()
+      application = Application(environment)
+    } catch {
+      throw ServerError.vapor(error: error)
+    }
+
+    // Logger must be set at the beginning or it will result in missing the server start event.
+    application?.logger = Logger(label: "Server Logger", factory: { _ in ConsoleLogHander(subject: consoleLogsSubject) })
+    application?.http.server.configuration.port = configuration.port
+    application?.http.server.configuration.hostname = configuration.hostname
+
+    do {
+      registerRoutes(for: configuration.requests)
+      try application?.server.start()
+    } catch {
+      // The most common error would be when we try to run the server on a PORT that is already used.
+      throw ServerError.vapor(error: error)
+    }
+  }
 
   /// Shuts down the currently running instance of `Application`, if any.
   public func stop() throws {
@@ -155,7 +157,7 @@ public class AppServer {
   /// - Throws: `ServerError.instanceAlreadyRunning` or a wrapped `Vapor` error.
   public func restart(with configuration: ServerConfigurationProvider) throws {
     try stop()
-    try startRecording(with: configuration)
+    try start(with: configuration)
   }
 
   /// Clears the buffered log events from the `consoleLogsSubject`.

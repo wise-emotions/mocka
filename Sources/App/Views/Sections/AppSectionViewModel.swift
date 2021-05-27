@@ -32,18 +32,14 @@ final class AppSectionViewModel: ObservableObject {
       .store(in: &subscriptions)
   }
   
-  /// The user tapped the save button.
+  /// Creates a request from the received `NetworkExchange` and saves it to the provided folder.
+  /// If the response is already present, it is overwritten or not based on the `shouldOverwriteResponse` parameter.
+  /// - Parameters:
+  ///   - networkExchange: The received `NetworkExchange` object, that contains the request/response pair.
+  ///   - directory: The directory where to save the request and response.
+  ///   - shouldOverwriteResponse: Whether or not the request and response should be overwritten if already present.
   func createAndSaveRequest(from networkExchange: NetworkExchange, to directory: URL, shouldOverwriteResponse: Bool) {
-    // The newly created request.
-    let request = Request(
-      path: networkExchange.request.uri.path.components(separatedBy: "/"),
-      method: HTTPMethod(rawValue: networkExchange.request.httpMethod.rawValue)!,
-      expectedResponse: Response(
-        statusCode: Int(networkExchange.response.status.code),
-        contentType: networkExchange.response.headers.contentType ?? .applicationJSON,
-        headers: networkExchange.response.headers.map { HTTPHeader(key: $0.name, value: $0.value) }
-      )
-    )
+    let request = Request(from: networkExchange)
     
     if Logic.SourceTree.contents(of: directory).isNotEmpty, shouldOverwriteResponse {
       try? Logic.SourceTree.deleteDirectory(at: directory.absoluteString)
@@ -73,7 +69,7 @@ final class AppSectionViewModel: ObservableObject {
   /// Generates the name of the request folder.
   /// - Parameter request: The request we want to save.
   /// - Returns: The name of the request folder.
-  static func requestFolderName(_ request: Request) -> String {
+  static private func requestFolderName(_ request: Request) -> String {
     "\(request.method.rawValue) - \(request.path)"
   }
 }
