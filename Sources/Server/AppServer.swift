@@ -96,8 +96,9 @@ public class AppServer {
     application?.logger = Logger(label: "Server Logger", factory: { _ in ConsoleLogHander(subject: consoleLogsSubject) })
     application?.http.server.configuration.port = configuration.port
     application?.http.server.configuration.hostname = configuration.hostname
+    application?.http.client.configuration.decompression = .enabled(limit: .none)
     application?.middleware.use(
-      AppMiddleware(
+      RecordingMiddleware(
         baseURL: URL(string: "ws-test.telepass.com")!,
         recordModeNetworkExchangesSubject: recordModeNetworkExchangesSubject,
         configuration: configuration
