@@ -102,7 +102,7 @@ struct SourceTree: View {
       ContextMenu(
         menuItems: {
           Button(
-            "􀈙  Add Folder",
+            "Add Folder",
             action: {
               try? viewModel.performAction(.createFolder)
             }
