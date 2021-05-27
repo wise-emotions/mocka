@@ -29,11 +29,11 @@ struct EditorDetail: View {
             title: "Parent Folder",
             items: viewModel.namespaceFolders,
             itemTitleKeyPath: \.name,
-            selection: $viewModel.selectedRequestParentFolder
+            selection: $viewModel.selectedRequestParentFolder,
+            isEnabled: viewModel.isRequestParentFolderTextFieldEnabled
           )
           .padding(.horizontal, 26)
           .padding(.vertical, 5)
-          .disabled(viewModel.isRequestParentFolderTextFieldEnabled.isFalse)
 
           RoundedTextField(title: "Path", text: $viewModel.displayedRequestPath)
             .padding(.horizontal, 26)
@@ -44,11 +44,11 @@ struct EditorDetail: View {
             title: "HTTP Method",
             items: viewModel.allHTTPMethods,
             itemTitleKeyPath: \.rawValue,
-            selection: $viewModel.selectedHTTPMethod
+            selection: $viewModel.selectedHTTPMethod,
+            isEnabled: viewModel.isHTTPMethodTextFieldEnabled
           )
           .padding(.horizontal, 26)
           .padding(.vertical, 5)
-          .disabled(viewModel.isHTTPMethodTextFieldEnabled.isFalse)
 
           RoundedTextField(title: "Response status code", text: $viewModel.displayedStatusCode)
             .padding(.horizontal, 26)
@@ -59,11 +59,11 @@ struct EditorDetail: View {
             title: "Response Content-Type",
             items: viewModel.allContentTypes,
             itemTitleKeyPath: \.rawValue,
-            selection: $viewModel.selectedContentType
+            selection: $viewModel.selectedContentType,
+            isEnabled: viewModel.isContentTypeTextFieldEnabled
           )
           .padding(.horizontal, 26)
           .padding(.vertical, 5)
-          .disabled(viewModel.isContentTypeTextFieldEnabled.isFalse)
 
           Text("If a Response Content-Type is selected, you need to provide a body. Otherwise, select \"none\".")
             .padding(.horizontal, 26)
