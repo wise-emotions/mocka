@@ -37,7 +37,7 @@ struct SidebarItem: View {
           Text(section.title)
             .font(.system(size: 12))
         }
-        .foregroundColor(isSelected ? Color.latte : Color.macchiato)
+        .foregroundColor(isSelected ? Color.milk : Color.macchiato)
         .frame(
           minWidth: 0,
           maxWidth: .infinity,

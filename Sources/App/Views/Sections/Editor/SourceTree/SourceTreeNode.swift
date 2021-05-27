@@ -24,6 +24,7 @@ struct SourceTreeNode: View {
         .frame(width: 24)
 
       Text(name)
+        .foregroundColor(.latte)
     }
   }
 }

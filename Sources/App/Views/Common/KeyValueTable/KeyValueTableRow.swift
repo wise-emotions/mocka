@@ -43,7 +43,7 @@ struct KeyValueTableRow: View {
       .frame(maxWidth: .infinity, maxHeight: 30, alignment: .leading)
       .padding(EdgeInsets(top: 6, leading: 10, bottom: 6, trailing: 10))
       .textFieldStyle(PlainTextFieldStyle())
-      .foregroundColor(Color.latte)
+      .foregroundColor(.latte)
     }
     .background(index.isMultiple(of: 2) ? Color.lungo : Color.americano)
     .cornerRadius(5)

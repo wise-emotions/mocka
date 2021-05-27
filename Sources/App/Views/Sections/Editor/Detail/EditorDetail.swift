@@ -73,7 +73,7 @@ struct EditorDetail: View {
 
           Text("Response Headers")
             .font(.system(size: 13, weight: .semibold, design: .default))
-            .foregroundColor(Color.latte)
+            .foregroundColor(.latte)
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.horizontal, 16)
             .padding(.top, 25)
