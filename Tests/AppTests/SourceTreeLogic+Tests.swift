@@ -231,8 +231,8 @@ extension SourceTreeLogicTests {
 
   /// Adds a `request.json` of type `.ok` with a `response.json`.
   /// - Parameters:
-  /// Test - url: The `URL` where to create the request file.
-  /// Test - addResponse: If `false`, `response.json` won't be created. This will lead to voiding the validity of the request.
+  /// - url: The `URL` where to create the request file.
+  /// - addResponse: If `false`, `response.json` won't be created. This will lead to voiding the validity of the request.
   static func addRequestWithJSONResponse(to url: URL, addResponse: Bool = true) {
     // Add the request.
     let request = MockaApp.Request(
