@@ -3,7 +3,7 @@ set -e
 
 PROJECT_NAME="Mocka"
 CLEAN_SCHEME="MockaApp"
-SWIFT_FORMAT_VERSION="swift-5.4-branch"
+SWIFT_FORMAT_VERSION="swift-5.3-branch"
 
 # Install Homebrew dependency manager.
 if ! [[ -x "$(command -v brew)" ]]; then
