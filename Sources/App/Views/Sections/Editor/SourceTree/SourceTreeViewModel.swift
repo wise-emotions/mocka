@@ -115,13 +115,13 @@ final class SourceTreeViewModel: ObservableObject {
   func actionName(action: FileSystemNode.Action) -> String {
     switch action {
     case .createRequest:
-      return "􀁌  Add Request"
+      return "Add Request"
 
     case .createFolder:
-      return "􀈙  Add Folder"
+      return "Add Folder"
 
     case .editRequest:
-      return "􀈋  Edit Request"
+      return "Edit Request"
     }
   }
 
