@@ -21,6 +21,9 @@ packages:
   Vapor:
     url: https://github.com/vapor/vapor
     from: 4.0.0
+  Introspect:
+    url: https://github.com/siteline/SwiftUI-Introspect
+    from: 0.1.3
 targets:
   MockaApp:
     type: application
@@ -36,6 +39,7 @@ targets:
       - path: Sources/App
     dependencies:
       - target: MockaServer
+      - package: Introspect
     scheme:
       testTargets:
         - MockaAppTests
