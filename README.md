@@ -77,11 +77,8 @@ For example you can type: `./setup.sh close clean open` to close the current Xco
 🐛 Known Issues
 ===============
 
-1. You cannot add an API in the root workspace path [#71](https://github.com/wise-emotions/mocka/issues/71)
-2. You cannot add a folder from the Editor list [#70](https://github.com/wise-emotions/mocka/issues/70)
-3. You cannot create an API with an empty body [#72](https://github.com/wise-emotions/mocka/issues/72)
-4. Every time an API is added, or the refresh button is pressed, the list in the Editor section will be closed. The same thing happens when close and reopen the Editor section by pressing on any other section [#73](https://github.com/wise-emotions/mocka/issues/73)
-5. The `RoundedBorderDropdown` used while editing an API in the Editor section, always starts as grayed out (disabled like), even in editing mode (SwiftUI bug?) [#74](https://github.com/wise-emotions/mocka/issues/74)
+1. `testIsWorkspaceURLValidReturnsFalseForMissingServerConfiguration` in `Tests/AppTests/SettingsLogic+Test.swift` Unit Test sometimes fails 
+2. The CI fails due to the lack of macOS 11 on GitHub Actions
 
 If you find other issues, please [open a bug report](https://github.com/wise-emotions/mocka/issues).
 
