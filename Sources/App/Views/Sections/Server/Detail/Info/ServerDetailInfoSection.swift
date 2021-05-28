@@ -23,24 +23,24 @@ struct ServerDetailInfoSection: View {
             .padding()
             .frame(minWidth: 100, maxWidth: .infinity, alignment: .leading)
             .font(.system(size: 13, weight: .regular, design: .default))
-            .foregroundColor(Color.latte)
+            .foregroundColor(.latte)
             .contextMenuCopy(viewModel.urlString)
         }
 
         if viewModel.isQuerySectionVisible {
           ServerDetailInfoSubSection(title: "Query") {
-            KeyValueTable(viewModel: KeyValueTableViewModel(keyValueItems: viewModel.queryParameters, mode: .read))
+            KeyValueTable(viewModel: KeyValueTableViewModel(keyValueItems: .constant(viewModel.queryParameters), mode: .read))
           }
         }
 
         if viewModel.isHeadersSectionVisible {
-          ServerDetailInfoSubSection(title: "Headers") {
-            KeyValueTable(viewModel: KeyValueTableViewModel(keyValueItems: viewModel.headers, mode: .read))
+          ServerDetailInfoSubSection(title: "Response Headers") {
+            KeyValueTable(viewModel: KeyValueTableViewModel(keyValueItems: .constant(viewModel.headers), mode: .read))
           }
         }
 
         if viewModel.isBodySectionVisible {
-          ServerDetailInfoSubSection(title: "Body") {
+          ServerDetailInfoSubSection(title: "Response Body") {
             TextEditor(text: .constant(viewModel.body))
               .padding()
               .font(.system(size: 13, weight: .regular, design: .default))

@@ -33,6 +33,37 @@ extension View {
     }
   }
 
+  /// Hide or show the view based on a boolean value.
+  ///
+  /// Example for visibility:
+  ///
+  ///     Text("Label")
+  ///         .isVisible(true)
+  ///
+  /// - Parameters:
+  ///   - visible: Set to `true` to show the view. Set to `false` to hide the view.
+  ///   - remove: Boolean value indicating whether or not to remove the view.
+  /// - Returns: Returns the `View` with the applied modifier.
+  @ViewBuilder func isVisible(_ visible: Bool, remove: Bool = false) -> some View {
+    isHidden(visible.inverted(), remove: remove)
+  }
+
+  /// Adds a condition that controls whether users can interact with this view.
+  ///
+  /// The higher views in a view hierarchy can override the value you set on this view.
+  /// In the following example, the button isn’t interactive because the outer enabled(_:) modifier overrides the inner one:
+  /// ```swift
+  /// HStack {
+  ///   Button(Text("Press")) {}
+  ///     .enabled(true)
+  /// }
+  /// .enabled(false)
+  /// ```
+  /// - Parameter enabled: A Boolean value that determines whether users can interact with this view.
+  @ViewBuilder func enabled(_ enabled: Bool) -> some View {
+    disabled(enabled.inverted())
+  }
+
   /// Conditionally composites this view’s contents into an offscreen image before final display.
   ///
   /// Example for drawing:
@@ -82,6 +113,7 @@ extension View {
         }
       ) {
         Text(text)
+          .foregroundColor(Color.latte)
       }
     }
   }

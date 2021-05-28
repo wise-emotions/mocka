@@ -27,33 +27,24 @@ extension Logic {
 
       return "(\(allSupportedMethods)) - .*"
     }
+
+    /// The root file system node.
+    static var rootFileSystemNode: FileSystemNode {
+      sourceTree()
+    }
   }
 }
 
 // MARK: - Functions
 
 extension Logic.SourceTree {
-  /// Enumerates the contents of a directory.
-  /// - Parameter url: The `URL` of the directory to scan.
-  /// - Returns: An array of `FileSystemNode` containing all sub-nodes of the directory.
-  static func contents(of url: URL) -> [FileSystemNode] {
-    guard
-      let directoryEnumerator = FileManager.default.enumerator(
-        at: url,
-        includingPropertiesForKeys: Array(resourceKeys),
-        options: [.skipsHiddenFiles, .skipsSubdirectoryDescendants]
-      )
-    else {
-      return []
-    }
+  /// Computes the source tree starting with the workspace root containing all sub-nodes.
+  /// - Returns: The source tree starting with the workspace root containing all sub-nodes.
+  static func sourceTree() -> FileSystemNode {
+    let workspaceURL = UserDefaults.standard.url(forKey: UserDefaultKey.workspaceURL)!
+    let allSubNodes = contents(of: workspaceURL)
 
-    return directoryEnumerator.reduce(into: [FileSystemNode]()) {
-      guard let url = $1 as? URL, let node = node(at: url) else {
-        return
-      }
-
-      $0.append(node)
-    }
+    return FileSystemNode(name: "Workspace Root", url: workspaceURL, kind: .folder(children: allSubNodes, isRequestFolder: false))
   }
 
   /// Fetches all the requests under the root workspace `URL`.
@@ -68,7 +59,7 @@ extension Logic.SourceTree {
       .reduce(into: Set<MockaServer.Request>()) { result, node in
         allRequests(in: node)
           .map {
-            $0.mockaRequest(withResponseAt: node.url)
+            $0.request.mockaRequest(withResponseAt: $0.request.hasResponseBody ? $0.location : nil)
           }
           .forEach {
             result.insert($0)
@@ -77,18 +68,20 @@ extension Logic.SourceTree {
   }
 
   /// The list of all folders used as a namespace in all of the workspace.
-  static func namespaceFolders() -> [FileSystemNode] {
-    guard let rootPath = UserDefaults.standard.url(forKey: UserDefaultKey.workspaceURL) else {
-      return []
-    }
-
-    return contents(of: rootPath)
-      .reduce(into: [FileSystemNode]()) { result, node in
-        namespaceFolders(in: node)
+  static func namespaceFolders(in parent: FileSystemNode) -> [FileSystemNode] {
+    parent
+      .children?
+      .reduce(into: namespaceFolders(node: parent)) { result, node in
+        namespaceFolders(node: node)
           .forEach {
+            guard result.contains($0).isFalse else {
+              return
+            }
+
             result.append($0)
           }
       }
+      ?? [parent]
   }
 
   /// Adds a directory while creating intermediate directories.
@@ -112,21 +105,6 @@ extension Logic.SourceTree {
       try FileManager.default.removeItem(atPath: path)
     } catch {
       throw MockaError.failedToDeleteDirectory(path: path)
-    }
-  }
-
-  /// Writes a string to a `response.\(type)` file at a `URL`.
-  /// - Parameters:
-  ///   - string: The string to write to the file.
-  ///   - type: The extension of the file.
-  ///   - url: The `URL` where to save the response.
-  /// - Throws: `MockaError.failedToWriteToFile`
-  static func addResponse(_ string: String, type: String, to url: URL) throws {
-    let responseFilePath = url.appendingPathComponent("response.\(type)", isDirectory: false).path
-    do {
-      try string.write(toFile: responseFilePath, atomically: true, encoding: String.Encoding.utf8)
-    } catch {
-      throw MockaError.failedToWriteToFile(content: string, path: responseFilePath)
     }
   }
 
@@ -155,6 +133,20 @@ extension Logic.SourceTree {
     }
   }
 
+  /// Writes the response to a file with the proper extension to a url.
+  /// - Parameters:
+  ///   - response: The string of the response.
+  ///   - extension: The extension with which to save the response file.
+  ///   - url: the `URL` where to save the file.
+  /// - Throws: `MockaError.failedToWriteToFile`.
+  static func addResponse(_ response: String, ofType extension: String, to url: URL) throws {
+    do {
+      try response.write(to: url.appendingPathComponent("response.\(`extension`)"), atomically: false, encoding: .utf8)
+    } catch {
+      throw MockaError.failedToWriteToFile(content: response, path: url.appendingPathComponent("response.\(`extension`)").path)
+    }
+  }
+
   /// Extracts the content of a file at a given `URL`.
   /// Should the extraction encounter any problem, `nil` is returned.
   /// - Parameter url: The `URL` of the file.
@@ -167,10 +159,33 @@ extension Logic.SourceTree {
     return String(data: data, encoding: .utf8)
   }
 
+  /// Enumerates the contents of a directory.
+  /// - Parameter url: The `URL` of the directory to scan.
+  /// - Returns: An array of `FileSystemNode` containing all sub-nodes of the directory.
+  private static func contents(of url: URL) -> [FileSystemNode] {
+    guard
+      let directoryEnumerator = FileManager.default.enumerator(
+        at: url,
+        includingPropertiesForKeys: Array(resourceKeys),
+        options: [.skipsHiddenFiles, .skipsSubdirectoryDescendants]
+      )
+    else {
+      return []
+    }
+
+    return directoryEnumerator.reduce(into: [FileSystemNode]()) {
+      guard let url = $1 as? URL, let node = node(at: url) else {
+        return
+      }
+
+      $0.append(node)
+    }
+  }
+
   /// The list of all folders used as a namespace inside a specific node.
   /// - Parameter node: The node to look up its content.
   /// - Returns: An array of all found nodes.
-  private static func namespaceFolders(in node: FileSystemNode) -> [FileSystemNode] {
+  private static func namespaceFolders(node: FileSystemNode) -> [FileSystemNode] {
     var folders: [FileSystemNode] = []
 
     switch node.kind {
@@ -195,8 +210,8 @@ extension Logic.SourceTree {
   /// Recursively looks up all the `Request`s in a `FileSystemNode` and its children.
   /// - Parameter node: The root `FileSystemNode`.
   /// - Returns: An array containing all the found requests.
-  private static func allRequests(in node: FileSystemNode) -> [Request] {
-    var requests: [Request] = []
+  private static func allRequests(in node: FileSystemNode) -> [(request: Request, location: URL)] {
+    var requests: [(request: Request, location: URL)] = []
 
     switch node.kind {
     case let .folder(children, _):
@@ -205,7 +220,7 @@ extension Logic.SourceTree {
       }
 
     case let .requestFile(request):
-      requests.append(request)
+      requests.append((request, node.url.deletingLastPathComponent()))
     }
 
     return requests
@@ -290,7 +305,7 @@ extension Logic.SourceTree {
     if HTTPResponseStatus(statusCode: request.expectedResponse.statusCode).mayHaveResponseBody == false {
       // If the status code does not support a body, there should be no file associated with the request.
       // Otherwise we consider the request corrupt.
-      guard request.expectedResponse.contentType.isAny(of: [.custom, .none]), request.expectedResponse.fileName == nil else {
+      guard request.expectedResponse.contentType == .none, request.expectedResponse.fileName == nil else {
         return nil
       }
     }

@@ -34,8 +34,6 @@ struct FileSystemNode: Identifiable, Hashable {
     }
   }
 
-  // MARK: - Computed Properties
-
   /// Whether the node represents a directory in the filesystem.
   var isFolder: Bool {
     switch kind {
@@ -44,6 +42,17 @@ struct FileSystemNode: Identifiable, Hashable {
 
     case .requestFile:
       return false
+    }
+  }
+
+  /// The list of available actions that can be performed on the node.
+  var availableActions: [Action] {
+    switch kind {
+    case let .folder(_, isRequestFolder):
+      return isRequestFolder ? [] : [.create]
+
+    case .requestFile:
+      return []
     }
   }
 
@@ -81,6 +90,12 @@ struct FileSystemNode: Identifiable, Hashable {
 // MARK: - Data Structure
 
 extension FileSystemNode {
+  /// All actions that could be performed on `FileSystemNode`.
+  enum Action {
+    /// A child node can be created under the node.
+    case create
+  }
+
   /// The possibile kinds of `FileSystemNode`.
   enum Kind: Hashable {
     /// The node is a folder.

@@ -18,10 +18,22 @@ struct SourceTree: View {
     VStack {
       Divider()
 
-      if viewModel.directoryContent.isEmpty {
+      if viewModel.isSourceTreeEmpty {
         EmptyState(symbol: .scroll, text: "Tap the 􀁌 to add an API request")
+          .background(
+            NavigationLink(
+              destination: EditorDetail(viewModel: viewModel.detailViewModel(for: nil)),
+              isActive: $viewModel.isShowingCreateRequestDetailView
+            ) {}
+          )
       } else if viewModel.filteredNodes.isEmpty {
         EmptyState(symbol: .document, text: "Could not find any API requests with this name")
+          .background(
+            NavigationLink(
+              destination: EditorDetail(viewModel: viewModel.detailViewModel(for: nil)),
+              isActive: $viewModel.isShowingCreateRequestDetailView
+            ) {}
+          )
       } else {
         List(viewModel.filteredNodes, children: \.children) { node in
           NavigationLink(destination: EditorDetail(viewModel: viewModel.detailViewModel(for: node))) {
@@ -30,14 +42,26 @@ struct SourceTree: View {
           .contextMenu(
             ContextMenu(
               menuItems: {
-                Button("Delete", action: {})
-                Button("Edit", action: {})
+                ForEach(node.availableActions, id: \.self) { action in
+                  Button(
+                    viewModel.actionName(action: action),
+                    action: {
+                      viewModel.performAction(action, on: node)
+                    }
+                  )
+                }
               }
             )
           )
         }
         .listStyle(SidebarListStyle())
         .padding(.top, -8)
+        .background(
+          NavigationLink(
+            destination: EditorDetail(viewModel: viewModel.detailViewModel(for: nil)),
+            isActive: $viewModel.isShowingCreateRequestDetailView
+          ) {}
+        )
       }
     }
     .frame(minWidth: Size.minimumListWidth)
@@ -60,7 +84,8 @@ struct SourceTree: View {
           SymbolButton(
             symbolName: .plusCircle,
             action: {
-              try? viewModel.refreshContent()
+              viewModel.selectedNode = nil
+              viewModel.isShowingCreateRequestDetailView = true
             }
           )
         }
@@ -73,6 +98,6 @@ struct SourceTree: View {
 
 struct SourceTreePreviews: PreviewProvider {
   static var previews: some View {
-    SourceTree(viewModel: try! SourceTreeViewModel())
+    SourceTree(viewModel: SourceTreeViewModel(editorSectionEnvironment: EditorSectionEnvironment()))
   }
 }

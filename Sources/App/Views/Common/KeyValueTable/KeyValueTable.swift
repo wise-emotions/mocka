@@ -18,31 +18,21 @@ struct KeyValueTable: View {
     VStack {
       KeyValueTableHeader()
 
-      ForEach(Array(viewModel.keyValueItems.enumerated()), id: \.offset) { index, item in
+      ForEach(Array(viewModel.keyValueItems.wrappedValue.enumerated()), id: \.offset) { index, _ in
         KeyValueTableRow(
-          item: item,
+          item: Binding(
+            get: { viewModel.keyValueItems.wrappedValue[index] },
+            set: { viewModel.keyValueItems.wrappedValue[index] = $0 }
+          ),
           mode: viewModel.mode,
           index: index
         )
       }
       .drawingGroup(on: viewModel.mode == .read)
-
-      if viewModel.mode == .write {
-        HStack {
-          Spacer()
-
-          SymbolButton(
-            symbolName: .plusCircle,
-            action: {
-              viewModel.keyValueItems.append(KeyValueItem(key: "", value: ""))
-            }
-          )
-        }
-        .frame(minWidth: 20, maxWidth: .infinity)
-      }
     }
     .padding()
     .background(Color.doppio)
+    .cornerRadius(6)
   }
 }
 
@@ -60,28 +50,16 @@ struct KeyValueTablePreviews: PreviewProvider {
   static var previews: some View {
     KeyValueTable(
       viewModel: KeyValueTableViewModel(
-        keyValueItems: rows,
+        keyValueItems: .constant(rows),
         mode: .write
       )
     )
 
     KeyValueTable(
       viewModel: KeyValueTableViewModel(
-        keyValueItems: rows,
+        keyValueItems: .constant(rows),
         mode: .read
       )
     )
-  }
-}
-
-// MARK: - Library
-
-struct KeyValueTableLibraryContent: LibraryContentProvider {
-  let keyValueItems: [KeyValueItem] = []
-  let mode: KeyValueTableViewModel.Mode = .read
-
-  @LibraryContentBuilder
-  var views: [LibraryItem] {
-    LibraryItem(KeyValueTable(viewModel: KeyValueTableViewModel(keyValueItems: keyValueItems, mode: mode)))
   }
 }

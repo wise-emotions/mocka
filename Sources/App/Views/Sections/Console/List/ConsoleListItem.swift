@@ -25,19 +25,20 @@ struct ConsoleListItem: View {
       Text(viewModel.logEvent.level.name)
         .font(.system(size: 12, weight: .bold, design: .default))
         .frame(width: 60, alignment: .leading)
-        .foregroundColor(Color.latte)
+        .foregroundColor(.latte)
         .padding(.leading, 24)
 
       Text(viewModel.logEvent.date.timeIntervalSince1970.timestampPrint)
         .font(.system(size: 16, weight: .regular, design: .default))
         .frame(width: 210)
         .padding(.leading, 40)
-        .foregroundColor(Color.macchiato)
+        .foregroundColor(.macchiato)
 
       Text(viewModel.logEvent.message)
         .font(.system(size: 16, weight: .regular, design: .default))
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.leading, 32)
+        .foregroundColor(.latte)
     }
     .padding(.vertical, 4)
     .frame(minHeight: 26)

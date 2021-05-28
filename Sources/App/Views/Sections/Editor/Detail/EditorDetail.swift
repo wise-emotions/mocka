@@ -10,7 +10,7 @@ struct EditorDetail: View {
   // MARK: - Stored Properties
 
   /// The associated ViewModel.
-  @StateObject var viewModel: EditorDetailViewModel
+  @ObservedObject var viewModel: EditorDetailViewModel
 
   // MARK: - Body
 
@@ -23,12 +23,14 @@ struct EditorDetail: View {
           RoundedTextField(title: "API custom name", text: $viewModel.displayedRequestName)
             .padding(.horizontal, 26)
             .padding(.vertical, 5)
+            .disabled(viewModel.isRequestNameTextFieldEnabled.isFalse)
 
           RoundedBorderDropdown(
-            title: "Parent Folder",
+            title: "Select Folder",
             items: viewModel.namespaceFolders,
             itemTitleKeyPath: \.name,
-            selection: $viewModel.selectedRequestParentFolder
+            selection: $viewModel.selectedRequestParentFolder,
+            isEnabled: viewModel.isRequestParentFolderTextFieldEnabled
           )
           .padding(.horizontal, 26)
           .padding(.vertical, 5)
@@ -36,12 +38,14 @@ struct EditorDetail: View {
           RoundedTextField(title: "Path", text: $viewModel.displayedRequestPath)
             .padding(.horizontal, 26)
             .padding(.vertical, 5)
+            .disabled(viewModel.isRequestPathTextFieldEnabled.isFalse)
 
           RoundedBorderDropdown(
             title: "HTTP Method",
             items: viewModel.allHTTPMethods,
             itemTitleKeyPath: \.rawValue,
-            selection: $viewModel.selectedHTTPMethod
+            selection: $viewModel.selectedHTTPMethod,
+            isEnabled: viewModel.isHTTPMethodTextFieldEnabled
           )
           .padding(.horizontal, 26)
           .padding(.vertical, 5)
@@ -49,15 +53,48 @@ struct EditorDetail: View {
           RoundedTextField(title: "Response status code", text: $viewModel.displayedStatusCode)
             .padding(.horizontal, 26)
             .padding(.vertical, 5)
+            .disabled(viewModel.isStatusCodeTextFieldEnabled.isFalse)
 
           RoundedBorderDropdown(
             title: "Response Content-Type",
             items: viewModel.allContentTypes,
             itemTitleKeyPath: \.rawValue,
-            selection: $viewModel.selectedContentType
+            selection: $viewModel.selectedContentType,
+            isEnabled: viewModel.isContentTypeTextFieldEnabled
           )
           .padding(.horizontal, 26)
           .padding(.vertical, 5)
+
+          Text("If a Response Content-Type is selected, you need to provide a body. Otherwise, select \"none\".")
+            .padding(.horizontal, 26)
+            .padding(.top, -5)
+            .foregroundColor(.americano)
+            .frame(maxWidth: .infinity, alignment: .leading)
+
+          VStack(spacing: 0) {
+            Text("Response Headers")
+              .font(.system(size: 13, weight: .semibold, design: .default))
+              .foregroundColor(Color.latte)
+              .frame(maxWidth: .infinity, alignment: .leading)
+              .padding(10)
+
+            KeyValueTable(
+              viewModel: KeyValueTableViewModel(
+                keyValueItems: $viewModel.displayedResponseHeaders,
+                mode: viewModel.currentMode == .read ? .read : .write
+              )
+            )
+            .padding(.horizontal, 10)
+            .padding(.bottom, 20)
+
+            Editor(viewModel: EditorViewModel(text: $viewModel.displayedResponseBody, mode: viewModel.currentMode == .read ? .read : .write))
+              .disabled(viewModel.isResponseHeadersKeyValueTableEnabled.isFalse || viewModel.isResponseBodyEditorEnabled.isFalse)
+              .padding(.horizontal, 10)
+              .isVisible(viewModel.isEditorDetailResponseBodyVisible, remove: true)
+          }
+          .background(Color.lungo)
+          .cornerRadius(5)
+          .padding(24)
         }
         .padding(.top, 24)
       }
@@ -79,19 +116,24 @@ struct EditorDetail: View {
         Button("Cancel") {
           viewModel.cancelRequestCreation()
         }
-        .frame(height: 25)
-        .isHidden(viewModel.shouldShowEmptyState)
+        .isHidden(viewModel.shouldShowEmptyState || viewModel.currentMode == .read)
 
         Button(
           action: {
-            viewModel.createAndSaveRequest()
+            if viewModel.currentMode.isAny(of: [.edit, .create]) {
+              viewModel.createAndSaveRequest()
+            } else if viewModel.currentMode == .read {
+              viewModel.enableEditMode()
+            }
           },
           label: {
-            Text("Save")
-              .frame(width: 80, height: 21)
+            Text(viewModel.currentMode == .read ? "Edit" : "Save")
+              .frame(width: 80, height: 27)
           }
         )
-        .buttonStyle(AccentButtonStyle())
+        .buttonStyle(AccentButtonStyle(isEnabled: viewModel.isSaveButtonEnabled))
+        .isHidden(viewModel.shouldShowEmptyState)
+        .enabled(viewModel.isPrimaryButtonEnabled)
       }
     }
   }

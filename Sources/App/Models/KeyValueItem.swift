@@ -14,4 +14,9 @@ struct KeyValueItem: Identifiable, Hashable {
 
   /// The value of the KeyValue parameter.
   var value: String
+
+  /// Returns the `KeyValueItem` as an `HTTPHeader`
+  var header: HTTPHeader {
+    HTTPHeader(key: key, value: value)
+  }
 }
