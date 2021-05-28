@@ -86,20 +86,17 @@ class SourceTreeLogicTests: XCTestCase {
       }
 
     measure {
-      _ = Logic.SourceTree.contents(of: Self.temporaryWorkspaceURL)
+      _ = Logic.SourceTree.sourceTree()
     }
   }
 
   /// Test only valid folders are considered.
   func testOnlyContentOfValidStructuresIsConsidered() {
-    let contents = Logic.SourceTree.contents(of: Self.temporaryWorkspaceURL)
-
-    // One folder in the workspace.
-    XCTAssertEqual(contents.count, 1)
+    let contents = Logic.SourceTree.sourceTree()
 
     // The folder has only 4 valid folders out of the existing 6.
     // GET - get all users, V2, Void and Generic.
-    XCTAssertEqual(contents[0].children?.count, 4)
+    XCTAssertEqual(contents.children?[0].children?.count, 4)
   }
 
   /// Test fetching requests without setting workspace url fails.
@@ -155,19 +152,12 @@ class SourceTreeLogicTests: XCTestCase {
     XCTAssertEqual(requests[1].requestedResponse.headers.contentType, nil)
   }
 
-  /// Test `namespaceFolders` returns an empty array if the workspace url has not been set.
-  func testNamespaceFoldersWithoutWorkspaceURLSetReturnEmptyArray() {
-    UserDefaults.standard.set(nil, forKey: UserDefaultKey.workspaceURL)
-
-    XCTAssertEqual(Logic.SourceTree.namespaceFolders(), [])
-  }
-
-  /// Test `namespaceFolders` returns an array containing all the folders that serve as a namespace.
+  // Test `namespaceFolders` returns an array containing all the folders that serve as a namespace.
   func testNamespaceFoldersReturnArrayWithCorrectFolders() {
-    let namespaceFolder = Logic.SourceTree.namespaceFolders()
+    let namespaceFolder = Logic.SourceTree.namespaceFolders(in: Logic.SourceTree.rootFileSystemNode)
 
-    XCTAssertEqual(namespaceFolder.count, 4)
-    XCTAssertEqual(namespaceFolder.map { $0.name }.sorted(by: <), ["App", "Generic", "V2", "Void"])
+    XCTAssertEqual(namespaceFolder.count, 5)
+    XCTAssertEqual(namespaceFolder.map { $0.name }.sorted(by: <), ["App", "Generic", "V2", "Void", "Workspace Root"])
   }
 
   /// Test `addDirectory` returns the created `FileSystemNode`.

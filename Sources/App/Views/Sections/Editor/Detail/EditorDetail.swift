@@ -26,14 +26,14 @@ struct EditorDetail: View {
             .disabled(viewModel.isRequestNameTextFieldEnabled.isFalse)
 
           RoundedBorderDropdown(
-            title: "Parent Folder",
+            title: "Select Folder",
             items: viewModel.namespaceFolders,
             itemTitleKeyPath: \.name,
-            selection: $viewModel.selectedRequestParentFolder
+            selection: $viewModel.selectedRequestParentFolder,
+            isEnabled: viewModel.isRequestParentFolderTextFieldEnabled
           )
           .padding(.horizontal, 26)
           .padding(.vertical, 5)
-          .disabled(viewModel.isRequestParentFolderTextFieldEnabled.isFalse)
 
           RoundedTextField(title: "Path", text: $viewModel.displayedRequestPath)
             .padding(.horizontal, 26)
@@ -44,11 +44,11 @@ struct EditorDetail: View {
             title: "HTTP Method",
             items: viewModel.allHTTPMethods,
             itemTitleKeyPath: \.rawValue,
-            selection: $viewModel.selectedHTTPMethod
+            selection: $viewModel.selectedHTTPMethod,
+            isEnabled: viewModel.isHTTPMethodTextFieldEnabled
           )
           .padding(.horizontal, 26)
           .padding(.vertical, 5)
-          .disabled(viewModel.isHTTPMethodTextFieldEnabled.isFalse)
 
           RoundedTextField(title: "Response status code", text: $viewModel.displayedStatusCode)
             .padding(.horizontal, 26)
@@ -59,11 +59,11 @@ struct EditorDetail: View {
             title: "Response Content-Type",
             items: viewModel.allContentTypes,
             itemTitleKeyPath: \.rawValue,
-            selection: $viewModel.selectedContentType
+            selection: $viewModel.selectedContentType,
+            isEnabled: viewModel.isContentTypeTextFieldEnabled
           )
           .padding(.horizontal, 26)
           .padding(.vertical, 5)
-          .disabled(viewModel.isContentTypeTextFieldEnabled.isFalse)
 
           Text("If a Response Content-Type is selected, you need to provide a body. Otherwise, select \"none\".")
             .padding(.horizontal, 26)
@@ -71,26 +71,30 @@ struct EditorDetail: View {
             .foregroundColor(.americano)
             .frame(maxWidth: .infinity, alignment: .leading)
 
-          Text("Response Headers")
-            .font(.system(size: 13, weight: .semibold, design: .default))
-            .foregroundColor(.latte)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.horizontal, 16)
-            .padding(.top, 25)
+          VStack(spacing: 0) {
+            Text("Response Headers")
+              .font(.system(size: 13, weight: .semibold, design: .default))
+              .foregroundColor(Color.latte)
+              .frame(maxWidth: .infinity, alignment: .leading)
+              .padding(10)
 
-          KeyValueTable(
-            viewModel: KeyValueTableViewModel(
-              keyValueItems: $viewModel.displayedResponseHeaders,
-              mode: viewModel.currentMode == .read ? .read : .write
+            KeyValueTable(
+              viewModel: KeyValueTableViewModel(
+                keyValueItems: $viewModel.displayedResponseHeaders,
+                mode: viewModel.currentMode == .read ? .read : .write
+              )
             )
-          )
-          .padding(.bottom, 16)
+            .padding(.horizontal, 10)
+            .padding(.bottom, 20)
 
-          Editor(viewModel: EditorViewModel(text: $viewModel.displayedResponseBody, mode: viewModel.currentMode == .read ? .read : .write))
-            .disabled(viewModel.isResponseHeadersKeyValueTableEnabled.isFalse || viewModel.isResponseBodyEditorEnabled.isFalse)
-            .isVisible(viewModel.isEditorDetailResponseBodyVisible)
-            .padding(.horizontal, 16)
-
+            Editor(viewModel: EditorViewModel(text: $viewModel.displayedResponseBody, mode: viewModel.currentMode == .read ? .read : .write))
+              .disabled(viewModel.isResponseHeadersKeyValueTableEnabled.isFalse || viewModel.isResponseBodyEditorEnabled.isFalse)
+              .padding(.horizontal, 10)
+              .isVisible(viewModel.isEditorDetailResponseBodyVisible, remove: true)
+          }
+          .background(Color.lungo)
+          .cornerRadius(5)
+          .padding(24)
         }
         .padding(.top, 24)
       }

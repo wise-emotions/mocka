@@ -18,7 +18,7 @@ struct SourceTree: View {
     VStack {
       Divider()
 
-      if viewModel.directoryContent.isEmpty {
+      if viewModel.isSourceTreeEmpty {
         EmptyState(symbol: .scroll, text: "Tap the 􀁌 to add an API request")
           .background(
             NavigationLink(
@@ -117,6 +117,6 @@ struct SourceTree: View {
 
 struct SourceTreePreviews: PreviewProvider {
   static var previews: some View {
-    SourceTree(viewModel: try! SourceTreeViewModel())
+    SourceTree(viewModel: SourceTreeViewModel(editorSectionEnvironment: EditorSectionEnvironment()))
   }
 }
