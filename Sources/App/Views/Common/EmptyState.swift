@@ -19,7 +19,7 @@ struct EmptyState: View {
 
   var body: some View {
     VStack {
-      Spacer()
+      Color.clear
 
       Image(systemName: symbol.rawValue)
         .resizable()
@@ -27,12 +27,14 @@ struct EmptyState: View {
         .padding()
         .font(.body)
         .foregroundColor(.ristretto)
+
       Text(text)
         .font(.body)
         .foregroundColor(.ristretto)
 
-      Spacer()
+      Color.clear
     }
+    .contentShape(Rectangle())
   }
 }
 
