@@ -11,7 +11,7 @@ options:
   bundleIdPrefix: com.wisemotions
   developmentLanguage: en
   indentWidth: 2
-  xcodeVersion: 12.4
+  xcodeVersion: 12.5
   deploymentTarget:
     macOS: "11.0"
   generateEmptyDirectories: true
