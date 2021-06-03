@@ -104,7 +104,7 @@ class SourceTreeLogicTests: XCTestCase {
     UserDefaults.standard.set(nil, forKey: UserDefaultKey.workspaceURL)
 
     do {
-      let _ = try Logic.SourceTree.requests()
+      _ = try Logic.SourceTree.requests()
       XCTFail("Was expecting the test to fail, but succeeded instead")
     } catch {
       guard case .workspacePathDoesNotExist = error as? MockaError else {

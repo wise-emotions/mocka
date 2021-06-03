@@ -339,7 +339,7 @@ final class EditorDetailViewModel: ObservableObject {
     else {
       // We are in create mode.
       // Create new request folder.
-      try? Logic.SourceTree.addDirectory(at: selectedRequestParentFolder!.url, named: newRequestFolderName)
+      _ = try? Logic.SourceTree.addDirectory(at: selectedRequestParentFolder!.url, named: newRequestFolderName)
 
       // Add response, if any.
       if displayedResponseBody.isNotEmpty, let expectedFileExtension = selectedContentType?.expectedFileExtension {
@@ -365,7 +365,7 @@ final class EditorDetailViewModel: ObservableObject {
 
     if hasNewPath {
       // Create new request folder.
-      try? Logic.SourceTree.addDirectory(at: selectedRequestParentFolder!.url, named: newRequestFolderName)
+      _ = try? Logic.SourceTree.addDirectory(at: selectedRequestParentFolder!.url, named: newRequestFolderName)
       // Delete old request folder.
       try? Logic.SourceTree.deleteDirectory(at: currentRequestFolder.url.path)
     }
