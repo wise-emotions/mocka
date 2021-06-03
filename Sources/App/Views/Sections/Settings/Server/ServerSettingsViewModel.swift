@@ -19,7 +19,10 @@ final class ServerSettingsViewModel: ObservableObject {
   /// it will use the observed `workspaceURL` property.
   @Published var workspacePath: String = UserDefaults.standard.url(forKey: UserDefaultKey.workspaceURL)?.path ?? "" {
     didSet {
-      checkURL(workspacePath)
+      // When the user modifies the `workspacePath` we must remove any `workspacePathError` if present.
+      // This is needed in order to remove the red `RoundedRectangle` around the `RoundedTextField` of the "Workspace folder" entry.
+      // In this way the red `RoundedRectangle` will be hidden while the user is editing the `workspacePath` in the entry.
+      workspacePathError = nil
     }
   }
 
@@ -80,22 +83,6 @@ final class ServerSettingsViewModel: ObservableObject {
 
   // MARK: - Functions
 
-  /// Check the validity of the given path.
-  /// - Parameter path: If valid, returns the path.
-  func checkURL(_ path: String) {
-    do {
-      try Logic.WorkspacePath.isFolder(URL(fileURLWithPath: path))
-
-      workspacePathError = nil
-    } catch {
-      guard let workspacePathError = error as? MockaError else {
-        return
-      }
-
-      self.workspacePathError = workspacePathError
-    }
-  }
-
   /// The `fileImporter` completion function.
   /// This function is called once the user selected a folder.
   /// It sets the path in case of success, and the error in case of error.
@@ -120,7 +107,7 @@ final class ServerSettingsViewModel: ObservableObject {
     do {
       self.workspaceURL = workspaceURL
 
-      try Logic.WorkspacePath.isFolder(workspaceURL)
+      try Logic.WorkspacePath.checkURLAndCreateFolderIfNeeded(at: workspaceURL)
       try Logic.Settings.updateServerConfigurationFile(
         ServerConnectionConfiguration(hostname: hostname, port: Int(port) ?? 8080)
       )

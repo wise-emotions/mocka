@@ -27,6 +27,7 @@ struct AppSection: View {
 
     case .editor:
       EditorSection()
+        .environmentObject(EditorSectionEnvironment())
 
     case .console:
       ConsoleSection()

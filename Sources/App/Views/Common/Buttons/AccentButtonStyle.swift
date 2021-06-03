@@ -2,19 +2,13 @@
 //  Mocka
 //
 
+import AppKit
 import SwiftUI
 
 /// This button adheres to `ButtonStyle` protocol set the button color to the `accentColor` selected by the user.
 struct AccentButtonStyle: ButtonStyle {
   /// Whether or not the button is enabled.
   let isEnabled: Bool
-
-  func makeBody(configuration: Self.Configuration) -> some View {
-    configuration.label
-      .foregroundColor(configuration.isPressed ? Color.accentColor : Color.latte)
-      .background(backgroundColor(isPressed: configuration.isPressed))
-      .cornerRadius(6.0)
-  }
 
   /// Returns an instance of `AccentButtonStyle`
   /// - Parameter isEnabled: Whether or not the button is enabled.
@@ -31,5 +25,12 @@ struct AccentButtonStyle: ButtonStyle {
     }
 
     return isPressed ? Color.latte : Color.accentColor
+  }
+
+  func makeBody(configuration: Self.Configuration) -> some View {
+    configuration.label
+      .foregroundColor(configuration.isPressed ? Color.accentColor : .milk)
+      .background(backgroundColor(isPressed: configuration.isPressed))
+      .cornerRadius(6.0)
   }
 }
