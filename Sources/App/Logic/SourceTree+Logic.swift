@@ -184,7 +184,7 @@ extension Logic.SourceTree {
   /// Enumerates the contents of a directory.
   /// - Parameter url: The `URL` of the directory to scan.
   /// - Returns: An array of `FileSystemNode` containing all sub-nodes of the directory.
-  private static func contents(of url: URL) -> [FileSystemNode] {
+  static func contents(of url: URL) -> [FileSystemNode] {
     guard
       let directoryEnumerator = FileManager.default.enumerator(
         at: url,

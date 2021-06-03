@@ -13,6 +13,12 @@ final class AppEnvironment: ObservableObject {
   
   /// Whether the server is currently in record mode.
   @Published var isServerRecording: Bool = false
+  
+  /// The base `URL` to be used by the middleware when performing network calls in record mode.
+  @Published var middlewareBaseURL: URL? = nil
+  
+  /// The path where the recorded responses and requests will be saved in record mode.
+  @Published var selectedRecordingPath: URL? = nil
 
   /// The selected app section, selected by using the app's Sidebar.
   @Published var selectedSection: SidebarSection = .server
