@@ -22,7 +22,7 @@ struct ServerDetailHeader: View {
 
         Text(viewModel.urlString)
           .font(.system(size: 13))
-          .foregroundColor(Color.latte)
+          .foregroundColor(.latte)
           .fixedSize(horizontal: false, vertical: true)
           .contextMenuCopy(viewModel.urlString)
       }
@@ -32,13 +32,13 @@ struct ServerDetailHeader: View {
 
         Text(String("\(viewModel.httpStatus) \(viewModel.httpStatusMeaning)"))
           .font(.system(size: 13))
-          .foregroundColor(Color.macchiato)
+          .foregroundColor(.macchiato)
 
         Spacer()
 
         Text(viewModel.timestamp)
           .font(.system(size: 13))
-          .foregroundColor(Color.macchiato)
+          .foregroundColor(.macchiato)
           .padding(.trailing, 6)
       }
     }
