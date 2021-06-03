@@ -14,7 +14,7 @@ public class AppServer {
   internal private(set) var application: Application?
 
   #warning("Document")
-  private let mockaMiddleware = MockaMiddleware()
+  private lazy var mockaMiddleware = MockaMiddleware(host: host, port: port, scheme: URI.Scheme.http)
 
   /// The `BufferedSubject` of `LogEvent`s.
   /// This subject is used to send and subscribe to `LogEvent`s.

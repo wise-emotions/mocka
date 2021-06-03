@@ -7,11 +7,26 @@ import Vapor
 
 #warning("Document")
 internal final class MockaMiddleware: Middleware {
+  /// The host associated with the running instance's configuration.
+  let host: String?
+
   /// The `BufferedSubject` of `NetworkExchange`s.
   /// This subject is used to send and subscribe to `NetworkExchange`s.
   /// Anytime a request/response exchange happens, a detailed version of the actors is generated and injected in this object.
   /// - Note: This property is marked `internal` to allow only the `Server` to send events.
   let networkExchangesSubject = BufferedSubject<NetworkExchange, Never>()
+  
+  /// The port associated with the running instance's configuration.
+  let port: Int?
+  
+  /// The scheme associated with the running instance's configuration.
+  let scheme: URI.Scheme
+  
+  init(host: String?, port: Int?, scheme: URI.Scheme) {
+    self.host = host
+    self.port = port
+    self.scheme = scheme
+  }
 
   func respond(to request: Vapor.Request, chainingTo next: Responder) -> EventLoopFuture<Response> {
     next.respond(to: request)
@@ -20,17 +35,19 @@ internal final class MockaMiddleware: Middleware {
           return
         }
 
-        let networkExchange: NetworkExchange
-
         switch result {
         case let .success(response):
-          networkExchange = self.networkExchange(from: request, and: response)
+          let networkExchange = self.networkExchange(from: request, and: response)
+          self.networkExchangesSubject.send(networkExchange)
 
         case let .failure(error):
-          networkExchange = self.networkExchange(from: request, error: error)
+          guard let networkExchange = self.errorNetworkExchange(from: request, error: error) else {
+            #warning("Handle the case when `error` is not an `AbortError`?")
+            return
+          }
+
+          self.networkExchangesSubject.send(networkExchange)
         }
-        
-        self.networkExchangesSubject.send(networkExchange)
       }
   }
   
@@ -54,26 +71,32 @@ private extension MockaMiddleware {
     return bufferCopy.readData(length: bufferCopy.readableBytes)
   }
   
-  #warning("Document")
+  /// Parses a `DetailedRequest` from the given `Request` instance.
+  /// - Parameter request: The request to be parsed.
+  /// - Returns: A new `DetailedRequest` instance.
   func detailedRequest(from request: Vapor.Request) -> DetailedRequest {
     // This property is force-unwrapped because it can never fail,
     // since the raw value passed is an identical copy of SwiftNIO's `HTTPMethod`.
     let httpMethod = HTTPMethod(rawValue: request.method.rawValue)!
 
-    #warning("The host returned from request doesn't include the value '127.0.0.1' from the configuration short")
-
     return DetailedRequest(
       httpMethod: httpMethod,
-      uri: URI(scheme: URI.Scheme.http, host: request.url.host, port: request.url.port, path: request.url.path),
+      uri: uri(from: request),
       headers: request.headers,
       body: body(from: request.body.data),
       timestamp: Date().timeIntervalSince1970
     )
   }
   
-  #warning("Document")
-  func networkExchange(from request: Vapor.Request, error: Error) -> NetworkExchange {
-    let networkError = error as! AbortError
+  /// Parses a `NetworkExchange` from a failed `request`, trying to parse the given `error` into a networ error.
+  /// - Parameters:
+  ///   - request: The request sent to the server.
+  ///   - error: The error that will be parsed into a network error.
+  /// - Returns: A new `NetworkExchange` if the parsing succeds.
+  func errorNetworkExchange(from request: Vapor.Request, error: Error) -> NetworkExchange? {
+    guard let networkError = error as? AbortError else {
+      return nil
+    }
     
     return NetworkExchange(
       request: detailedRequest(from: request),
@@ -100,12 +123,19 @@ private extension MockaMiddleware {
     return NetworkExchange(
       request: detailedRequest(from: request),
       response: DetailedResponse(
-        uri: URI(scheme: URI.Scheme.http, host: host, port: port, path: path),
+        uri: uri(from: request),
         headers: response.headers,
         status: response.status,
         body: response.body.data,
         timestamp: Date().timeIntervalSince1970
       )
     )
+  }
+  
+  /// Returns an `URI` instance enriched with the `request` information.
+  /// - Parameter request: The request from which extract information.
+  /// - Returns: A new `URI` instance.
+  func uri(from request: Vapor.Request) -> URI {
+    URI(scheme: scheme, host: host, port: port, path: request.url.path, query: request.url.query)
   }
 }
