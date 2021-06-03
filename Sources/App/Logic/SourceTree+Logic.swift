@@ -27,33 +27,24 @@ extension Logic {
 
       return "(\(allSupportedMethods)) - .*"
     }
+
+    /// The root file system node.
+    static var rootFileSystemNode: FileSystemNode {
+      sourceTree()
+    }
   }
 }
 
 // MARK: - Functions
 
 extension Logic.SourceTree {
-  /// Enumerates the contents of a directory.
-  /// - Parameter url: The `URL` of the directory to scan.
-  /// - Returns: An array of `FileSystemNode` containing all sub-nodes of the directory.
-  static func contents(of url: URL) -> [FileSystemNode] {
-    guard
-      let directoryEnumerator = FileManager.default.enumerator(
-        at: url,
-        includingPropertiesForKeys: Array(resourceKeys),
-        options: [.skipsHiddenFiles, .skipsSubdirectoryDescendants]
-      )
-    else {
-      return []
-    }
+  /// Computes the source tree starting with the workspace root containing all sub-nodes.
+  /// - Returns: The source tree starting with the workspace root containing all sub-nodes.
+  static func sourceTree() -> FileSystemNode {
+    let workspaceURL = UserDefaults.standard.url(forKey: UserDefaultKey.workspaceURL)!
+    let allSubNodes = contents(of: workspaceURL)
 
-    return directoryEnumerator.reduce(into: [FileSystemNode]()) {
-      guard let url = $1 as? URL, let node = node(at: url) else {
-        return
-      }
-
-      $0.append(node)
-    }
+    return FileSystemNode(name: "Workspace Root", url: workspaceURL, kind: .folder(children: allSubNodes, isRequestFolder: false))
   }
 
   /// Fetches all the requests under the root workspace `URL`.
@@ -77,18 +68,20 @@ extension Logic.SourceTree {
   }
 
   /// The list of all folders used as a namespace in all of the workspace.
-  static func namespaceFolders() -> [FileSystemNode] {
-    guard let rootPath = UserDefaults.standard.url(forKey: UserDefaultKey.workspaceURL) else {
-      return []
-    }
-
-    return contents(of: rootPath)
-      .reduce(into: [FileSystemNode]()) { result, node in
-        namespaceFolders(in: node)
+  static func namespaceFolders(in parent: FileSystemNode) -> [FileSystemNode] {
+    parent
+      .children?
+      .reduce(into: namespaceFolders(node: parent)) { result, node in
+        namespaceFolders(node: node)
           .forEach {
+            guard result.contains($0).isFalse else {
+              return
+            }
+
             result.append($0)
           }
       }
+      ?? [parent]
   }
 
   /// Adds a directory while creating intermediate directories.
@@ -188,10 +181,33 @@ extension Logic.SourceTree {
     return String(data: data, encoding: .utf8)
   }
 
+  /// Enumerates the contents of a directory.
+  /// - Parameter url: The `URL` of the directory to scan.
+  /// - Returns: An array of `FileSystemNode` containing all sub-nodes of the directory.
+  private static func contents(of url: URL) -> [FileSystemNode] {
+    guard
+      let directoryEnumerator = FileManager.default.enumerator(
+        at: url,
+        includingPropertiesForKeys: Array(resourceKeys),
+        options: [.skipsHiddenFiles, .skipsSubdirectoryDescendants]
+      )
+    else {
+      return []
+    }
+
+    return directoryEnumerator.reduce(into: [FileSystemNode]()) {
+      guard let url = $1 as? URL, let node = node(at: url) else {
+        return
+      }
+
+      $0.append(node)
+    }
+  }
+
   /// The list of all folders used as a namespace inside a specific node.
   /// - Parameter node: The node to look up its content.
   /// - Returns: An array of all found nodes.
-  private static func namespaceFolders(in node: FileSystemNode) -> [FileSystemNode] {
+  private static func namespaceFolders(node: FileSystemNode) -> [FileSystemNode] {
     var folders: [FileSystemNode] = []
 
     switch node.kind {

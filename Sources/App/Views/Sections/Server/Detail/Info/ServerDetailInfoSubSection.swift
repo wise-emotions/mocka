@@ -22,7 +22,7 @@ struct ServerDetailInfoSubSection<ContentView: View>: View {
     VStack(alignment: .leading, spacing: 8) {
       Text(title)
         .font(.system(size: 13, weight: .semibold, design: .default))
-        .foregroundColor(Color.latte)
+        .foregroundColor(.latte)
 
       content()
         .background(Color.doppio)

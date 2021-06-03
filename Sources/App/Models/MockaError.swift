@@ -5,7 +5,7 @@
 import Foundation
 
 /// A list of errors that can be thrown inside of `Mocka` app.
-enum MockaError: Error {
+enum MockaError: Error, Equatable {
   /// The workspace path value is missing when it's expected to be populated.
   case missingWorkspacePathValue
 
@@ -20,6 +20,9 @@ enum MockaError: Error {
 
   /// An error occurred when trying to encode a file.
   case failedToEncode
+
+  /// An error occurred trying to unwrap an optional URL.
+  case failedToUnwrapURL
 
   /// Could not create directory at request path.
   /// The path is passed included with the error.

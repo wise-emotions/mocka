@@ -45,6 +45,7 @@ struct SourceTreeNode: View {
             }
           }
         )
+        .foregroundColor(.latte)
         .introspectTextField { textField in
           if isRenaming && shouldBecomeFirstResponder {
             textField.becomeFirstResponder()
@@ -53,6 +54,7 @@ struct SourceTreeNode: View {
         }
       } else {
         Text(name)
+          .foregroundColor(.latte)
       }
     }
   }
