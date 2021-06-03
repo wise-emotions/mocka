@@ -51,14 +51,14 @@ You can also go to the [GitHub Project](https://github.com/wise-emotions/mocka/p
 
 | **Mocka** | **macOS** |
 |-----------|-----------|
-| 0.1.0     | 11.2      |
+| 0.1.0     | 11.0      |
 
 ⚙️ Build Requirements
 ====================
 
 | **Mocka** | **Swift** | **Xcode** |
 |-----------|-----------|-----------|
-| 0.1.0     | 5.3       | 12.4      |
+| 0.1.0     | 5.3       | 12.5      |
 
 🧑‍💻👩‍💻 Development
 ================
@@ -77,7 +77,7 @@ For example you can type: `./setup.sh close clean open` to close the current Xco
 🐛 Known Issues
 ===============
 
-1. `testIsWorkspaceURLValidReturnsFalseForMissingServerConfiguration` in `Tests/AppTests/SettingsLogic+Test.swift` Unit Test sometimes fails 
+1. `testIsWorkspaceURLValidReturnsFalseForMissingServerConfiguration` in `Tests/AppTests/SettingsLogic+Test.swift` Unit Test sometimes fails
 2. The CI fails due to the lack of macOS 11 on GitHub Actions
 
 If you find other issues, please [open a bug report](https://github.com/wise-emotions/mocka/issues).
