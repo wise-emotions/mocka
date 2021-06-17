@@ -31,6 +31,11 @@ targets:
       PRODUCT_MODULE_NAME: "MockaApp"
     sources:
       - path: Sources/App
+      - path: .build/Products/Debug/MockaLaunchHelper.app
+        buildPhase:
+          copyFiles:
+            destination: wrapper
+            subpath: Contents/Library/LoginItems
     dependencies:
       - target: MockaServer
       - target: MockaLaunchHelper
@@ -53,12 +58,7 @@ targets:
         CFBundleShortVersionString: "1.0.0"
         CFBundleVersion: "1"
         LSMinimumSystemVersion: "$(MACOSX_DEPLOYMENT_TARGET)"
-    buildPhase:
-      copyFiles:
-        destination: wrapper
-        subpath: Contents/Library/LoginItems
-  
-      
+   
   MockaLaunchHelper:
     type: application
     platform: macOS
@@ -80,6 +80,7 @@ targets:
         CFBundleShortVersionString: "1.0.0"
         CFBundleVersion: "1"
         LSMinimumSystemVersion: "$(MACOSX_DEPLOYMENT_TARGET)"
+        LSBackgroundOnly: 1
 
   MockaAppTests:
     type: bundle.unit-test

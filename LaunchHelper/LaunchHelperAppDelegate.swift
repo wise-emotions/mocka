@@ -15,10 +15,15 @@ final class LaunchHelperAppDelegate: NSObject, NSApplicationDelegate {
       return
     }
 
-    let pathComponents = (Bundle.main.bundlePath as NSString).pathComponents
-    let mainPath = NSString.path(withComponents: Array(pathComponents[0 ... pathComponents.count - 5]))
+    var path = Bundle.main.bundlePath as NSString
 
-    guard let appURL = URL(string: mainPath) else {
+    for _ in 1...4 {
+      path = path.deletingLastPathComponent as NSString
+    }
+    path.appendingPathComponent("MacOS")
+    path.appendingPathComponent("Mocka")
+
+    guard let appURL = URL(string: path as String) else {
       return
     }
 
