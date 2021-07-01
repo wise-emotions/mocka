@@ -5,6 +5,7 @@
 import Combine
 import Foundation
 import MockaServer
+import UserNotifications
 
 /// The ViewModel of the `ServerToolbar`.
 final class ServerListViewModel: ObservableObject {
@@ -14,7 +15,7 @@ final class ServerListViewModel: ObservableObject {
   /// The text that filters the requests.
   @Published var filterText: String = ""
 
-  /// The array of `NetworkExchange`s.
+  /// The array of `NetworkExchange`s to be shown in the view.
   @Published var networkExchanges: [NetworkExchange] = []
 
   /// The `Set` containing the list of subscriptions.
@@ -39,11 +40,18 @@ final class ServerListViewModel: ObservableObject {
 
   /// Creates a new instance with a `Publisher` of `NetworkExchange`s.
   /// - Parameter networkExchangesPublisher: The publisher of `NetworkExchange`s.
-  init(networkExchangesPublisher: AnyPublisher<NetworkExchange, Never>) {
-    networkExchangesPublisher
+  init(networkExchangesPublisher: AnyPublisher<NetworkExchange, Never>?) {
+    networkExchangesPublisher?
       .receive(on: RunLoop.main)
-      .sink { [weak self] in
-        self?.networkExchanges.append($0)
+      .sink { [weak self] networkExchange in
+        let statusCode = networkExchange.response.status.code
+        let isFailedResponse = statusCode >= 300 && statusCode <= 600
+        
+        if isFailedResponse {
+          self?.showNotificationIfAuthorized(for: networkExchange.response)
+        }
+        
+        self?.networkExchanges.append(networkExchange)
       }
       .store(in: &subscriptions)
   }
@@ -53,5 +61,69 @@ final class ServerListViewModel: ObservableObject {
   /// Clears the array of network exchanges.
   func clearNetworkExchanges() {
     networkExchanges.removeAll()
+  }
+}
+
+// MARK: - Private Helpers
+
+private extension ServerListViewModel {
+  /// Builds a `UNNotificationRequest` for the given failed response.
+  /// - Parameter failedResponse: The response whose request just failed.
+  /// - Returns: A new `UNNotificationRequest` instance.
+  func notificationRequest(for failedResponse: DetailedResponse) -> UNNotificationRequest {
+    let content = UNMutableNotificationContent()
+    content.body = "The request failed with \(failedResponse.status.code) status code."
+    content.title = "Ma che è sta merda man?!"
+    content.subtitle = "Endpoint: \(failedResponse.uri)"
+    content.sound = .default
+    
+    return UNNotificationRequest(identifier: "FAILED_REQUEST", content: content, trigger: nil)
+  }
+
+  /// Requests notifications permissions if the user never answered to it.
+  /// - Parameter completion: The closure excecuted when the user answers the request.
+  func requestNotificationsAuthorizationIfNecessary(_ completion: @escaping AuthorizationRequestCompletion) {
+    UNUserNotificationCenter.current().getNotificationSettings { settings in
+      switch settings.authorizationStatus {
+      case .notDetermined:
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound], completionHandler: completion)
+        
+      case .authorized, .provisional:
+        completion(true, nil)
+        
+      case .denied:
+        #warning("Map to app error")
+        completion(false, NSError())
+
+      @unknown default:
+        #warning("Map to app error")
+        completion(false, NSError())
+        return
+      }
+    }
+  }
+  
+  /// Shows a local notification for the given `response`.
+  /// This will check and evenutally ask for notifications authorization if the user never answered to it.
+  /// - Parameter failedResponse: The response just received by the server.
+  func showNotificationIfAuthorized(for failedResponse: DetailedResponse) {
+    requestNotificationsAuthorizationIfNecessary { [weak self] isPermissionGiven, error in
+      guard let self = self else {
+        return
+      }
+
+      guard error == nil else {
+        print("Can't send notifications")
+        return
+      }
+      
+      guard isPermissionGiven else {
+        return
+      }
+      
+      let request = self.notificationRequest(for: failedResponse)
+
+      UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
+    }
   }
 }
