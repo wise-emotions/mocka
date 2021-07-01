@@ -92,12 +92,10 @@ private extension ServerListViewModel {
         completion(true, nil)
         
       case .denied:
-        #warning("Map to app error?")
-        completion(false, NSError())
+        completion(false, NSError(domain: "AppPermissions", code: 0, userInfo: [NSLocalizedDescriptionKey: "User denied notifications permissions"]))
 
       @unknown default:
-        #warning("Map to app error?")
-        completion(false, NSError())
+        completion(false, NSError(domain: "AppPermissions", code: 0, userInfo: [NSLocalizedDescriptionKey: "Unknown authorizationStatus value"]))
         return
       }
     }
