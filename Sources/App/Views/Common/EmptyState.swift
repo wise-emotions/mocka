@@ -19,18 +19,22 @@ struct EmptyState: View {
 
   var body: some View {
     VStack {
-      Spacer()
+      Color.clear
 
       Image(systemName: symbol.rawValue)
         .resizable()
         .frame(maxWidth: 45, maxHeight: 45)
         .padding()
         .font(.body)
+        .foregroundColor(.ristretto)
+
       Text(text)
         .font(.body)
+        .foregroundColor(.ristretto)
 
-      Spacer()
+      Color.clear
     }
+    .contentShape(Rectangle())
   }
 }
 

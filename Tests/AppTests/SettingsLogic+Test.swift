@@ -10,10 +10,10 @@ class SettingsLogicTests: XCTestCase {
 
   // MARK: Variables
 
-  // The `URL` of a temporary folder we will use for this test.
+  /// The `URL` of a temporary folder we will use for this test.
   var temporaryWorkspaceURL: URL!
 
-  // The full path where the configuration file should be present.
+  /// The full path where the configuration file should be present.
   private var configurationFilePath: String {
     temporaryWorkspaceURL.appendingPathComponent(Logic.Settings.serverConfigurationFileName).path
   }
@@ -32,20 +32,20 @@ class SettingsLogicTests: XCTestCase {
 
   // MARK: Tests
 
-  // Test `isWorkspaceURLValid` returns true.
+  /// Test `isWorkspaceURLValid` returns true.
   func testIsWorkspaceURLValidReturnsTrue() {
     UserDefaults.standard.set(temporaryWorkspaceURL, forKey: UserDefaultKey.workspaceURL)
     try? Logic.Settings.updateServerConfigurationFile(ServerConnectionConfiguration())
     XCTAssertTrue(Logic.Settings.isWorkspaceURLValid)
   }
 
-  // Test `isWorkspaceURLValid` returns false because it cannot find the `workspaceURL` in `UserDefaults`.
+  /// Test `isWorkspaceURLValid` returns false because it cannot find the `workspaceURL` in `UserDefaults`.
   func testIsWorkspaceURLValidReturnsFalseForMissingWorkSpaceURL() {
     XCTAssertFalse(Logic.Settings.isWorkspaceURLValid)
     XCTAssertNil(UserDefaults.standard.url(forKey: UserDefaultKey.workspaceURL))
   }
 
-  // Test `isWorkspaceURLValid` returns false because it cannot find the serverConfiguration file in `workspaceURL`.
+  /// Test `isWorkspaceURLValid` returns false because it cannot find the serverConfiguration file in `workspaceURL`.
   func testIsWorkspaceURLValidReturnsFalseForMissingServerConfiguration() {
     XCTAssertFalse(Logic.Settings.isWorkspaceURLValid)
     XCTAssertFalse(
@@ -55,7 +55,7 @@ class SettingsLogicTests: XCTestCase {
     )
   }
 
-  // Test that the creation of the server configuration file occurs at the root path.
+  /// Test that the creation of the server configuration file occurs at the root path.
   func testSettingsFileCreationAtWorkspaceRoot() {
     XCTAssertFalse(FileManager.default.fileExists(atPath: Logic.Settings.serverConfigurationFileName))
     UserDefaults.standard.set(temporaryWorkspaceURL, forKey: UserDefaultKey.workspaceURL)
@@ -63,7 +63,7 @@ class SettingsLogicTests: XCTestCase {
     XCTAssertTrue(FileManager.default.fileExists(atPath: configurationFilePath))
   }
 
-  // Tests that the configuration file is created and updated with the correct values.
+  /// Test that the configuration file is created and updated with the correct values.
   func testUpdateServerConfigurationFileOverridesValues() {
     UserDefaults.standard.set(temporaryWorkspaceURL, forKey: UserDefaultKey.workspaceURL)
     try? Logic.Settings.updateServerConfigurationFile(ServerConnectionConfiguration())
@@ -89,7 +89,7 @@ class SettingsLogicTests: XCTestCase {
     XCTAssertEqual(newConfiguration.port, 3000)
   }
 
-  // Test that the creation of the server configuration file throws `MockaError.workspacePathDoesNotExist` if workspace URL is not set.
+  /// Test that the creation of the server configuration file throws `MockaError.workspacePathDoesNotExist` if workspace URL is not set.
   func testSettingsFileCreationFailsWithoutWorkspaceRoot() {
     UserDefaults.standard.set(nil, forKey: UserDefaultKey.workspaceURL)
     do {

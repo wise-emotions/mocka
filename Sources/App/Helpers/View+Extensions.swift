@@ -42,9 +42,10 @@ extension View {
   ///
   /// - Parameters:
   ///   - visible: Set to `true` to show the view. Set to `false` to hide the view.
+  ///   - remove: Boolean value indicating whether or not to remove the view.
   /// - Returns: Returns the `View` with the applied modifier.
-  @ViewBuilder func isVisible(_ visible: Bool) -> some View {
-    isHidden(visible.inverted())
+  @ViewBuilder func isVisible(_ visible: Bool, remove: Bool = false) -> some View {
+    isHidden(visible.inverted(), remove: remove)
   }
 
   /// Adds a condition that controls whether users can interact with this view.
@@ -112,6 +113,7 @@ extension View {
         }
       ) {
         Text(text)
+          .foregroundColor(Color.latte)
       }
     }
   }

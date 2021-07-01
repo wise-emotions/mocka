@@ -23,7 +23,7 @@ struct ServerDetailInfoSection: View {
             .padding()
             .frame(minWidth: 100, maxWidth: .infinity, alignment: .leading)
             .font(.system(size: 13, weight: .regular, design: .default))
-            .foregroundColor(Color.latte)
+            .foregroundColor(.latte)
             .contextMenuCopy(viewModel.urlString)
         }
 

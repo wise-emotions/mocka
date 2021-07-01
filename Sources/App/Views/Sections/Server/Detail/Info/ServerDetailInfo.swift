@@ -21,11 +21,13 @@ struct ServerDetailInfo: View {
       ServerDetailInfoSection(viewModel: viewModel.modelForRequestTab)
         .tabItem {
           Text(viewModel.titleForRequestTab)
+            .foregroundColor(.milk)
         }
 
       ServerDetailInfoSection(viewModel: viewModel.modelForResponseTab)
         .tabItem {
           Text(viewModel.titleForResponseTab)
+            .foregroundColor(.milk)
         }
     }
     .padding()

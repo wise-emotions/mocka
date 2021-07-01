@@ -18,7 +18,7 @@ struct Editor: View {
 
   var body: some View {
     ZStack {
-      VStack(spacing: 20) {
+      VStack(spacing: 10) {
         HStack {
           Text("Response Body")
             .frame(maxWidth: .infinity, alignment: .leading)
@@ -44,8 +44,10 @@ struct Editor: View {
         .font(.body)
         .frame(minHeight: 40)
         .padding(4)
-        .background(Color.lungo)
+        .background(Color.doppio)
         .cornerRadius(8)
+        .padding(.bottom, 10)
+        .fixedSize(horizontal: false, vertical: true)
       }
     }
     .onDrop(

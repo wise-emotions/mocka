@@ -38,7 +38,7 @@ final class EditorDetailViewModel: ObservableObject {
   let currentResponseBody: String?
 
   /// The list of all the namespace folders available.
-  let namespaceFolders: [FileSystemNode] = Logic.SourceTree.namespaceFolders()
+  let namespaceFolders: [FileSystemNode]
 
   /// The list of all the supported HTTP Methods.
   let allHTTPMethods: [HTTPMethod] = HTTPMethod.allCases
@@ -189,6 +189,7 @@ final class EditorDetailViewModel: ObservableObject {
   ///   - onSave: A closure to invoke when the user taps the `Save` button.
   ///   - onCancel: A closure to invoke when the user taps the `Cancel` button.
   init(
+    sourceTree: FileSystemNode,
     requestFile: FileSystemNode? = nil,
     requestFolder: FileSystemNode? = nil,
     requestParentFolder: FileSystemNode? = nil,
@@ -196,6 +197,7 @@ final class EditorDetailViewModel: ObservableObject {
     onSave: Interaction? = nil,
     onCancel: Interaction? = nil
   ) {
+    namespaceFolders = Logic.SourceTree.namespaceFolders(in: sourceTree)
     userDoneEditing = onSave
     userCancelled = onCancel
     currentMode = mode
@@ -337,7 +339,7 @@ final class EditorDetailViewModel: ObservableObject {
     else {
       // We are in create mode.
       // Create new request folder.
-      try? Logic.SourceTree.addDirectory(at: selectedRequestParentFolder!.url, named: newRequestFolderName)
+      _ = try? Logic.SourceTree.addDirectory(at: selectedRequestParentFolder!.url, named: newRequestFolderName)
 
       // Add response, if any.
       if displayedResponseBody.isNotEmpty, let expectedFileExtension = selectedContentType?.expectedFileExtension {
@@ -363,7 +365,7 @@ final class EditorDetailViewModel: ObservableObject {
 
     if hasNewPath {
       // Create new request folder.
-      try? Logic.SourceTree.addDirectory(at: selectedRequestParentFolder!.url, named: newRequestFolderName)
+      _ = try? Logic.SourceTree.addDirectory(at: selectedRequestParentFolder!.url, named: newRequestFolderName)
       // Delete old request folder.
       try? Logic.SourceTree.deleteDirectory(at: currentRequestFolder.url.path)
     }

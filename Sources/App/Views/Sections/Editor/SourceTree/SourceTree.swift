@@ -18,7 +18,7 @@ struct SourceTree: View {
     VStack {
       Divider()
 
-      if viewModel.directoryContent.isEmpty {
+      if viewModel.isSourceTreeEmpty {
         EmptyState(symbol: .scroll, text: "Tap the 􀁌 to add an API request")
           .background(
             NavigationLink(
@@ -37,7 +37,14 @@ struct SourceTree: View {
       } else {
         List(viewModel.filteredNodes, children: \.children) { node in
           NavigationLink(destination: EditorDetail(viewModel: viewModel.detailViewModel(for: node))) {
-            SourceTreeNode(name: node.name, isFolder: node.isFolder)
+            SourceTreeNode(
+              name: node.name,
+              isFolder: node.isFolder,
+              isRenaming: node == viewModel.renamingNode,
+              onRenamed: { updatedName in
+                try? viewModel.renameNode(node, to: updatedName)
+              }
+            )
           }
           .contextMenu(
             ContextMenu(
@@ -46,7 +53,7 @@ struct SourceTree: View {
                   Button(
                     viewModel.actionName(action: action),
                     action: {
-                      viewModel.performAction(action, on: node)
+                      try? viewModel.performAction(action, on: node)
                     }
                   )
                 }
@@ -91,6 +98,18 @@ struct SourceTree: View {
         }
       }
     }
+    .contextMenu(
+      ContextMenu(
+        menuItems: {
+          Button(
+            "Add Folder",
+            action: {
+              try? viewModel.performAction(.createFolder)
+            }
+          )
+        }
+      )
+    )
   }
 }
 
@@ -98,6 +117,6 @@ struct SourceTree: View {
 
 struct SourceTreePreviews: PreviewProvider {
   static var previews: some View {
-    SourceTree(viewModel: try! SourceTreeViewModel())
+    SourceTree(viewModel: SourceTreeViewModel(editorSectionEnvironment: EditorSectionEnvironment()))
   }
 }

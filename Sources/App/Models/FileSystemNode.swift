@@ -49,10 +49,10 @@ struct FileSystemNode: Identifiable, Hashable {
   var availableActions: [Action] {
     switch kind {
     case let .folder(_, isRequestFolder):
-      return isRequestFolder ? [] : [.create]
+      return isRequestFolder ? [.editRequest] : [.createRequest, .createFolder]
 
     case .requestFile:
-      return []
+      return [.editRequest]
     }
   }
 
@@ -92,8 +92,14 @@ struct FileSystemNode: Identifiable, Hashable {
 extension FileSystemNode {
   /// All actions that could be performed on `FileSystemNode`.
   enum Action {
-    /// A child node can be created under the node.
-    case create
+    /// The request can be edited.
+    case editRequest
+
+    /// A child request node can be created under the node.
+    case createRequest
+
+    /// A child folder node can be created under the node.
+    case createFolder
   }
 
   /// The possibile kinds of `FileSystemNode`.
@@ -114,5 +120,11 @@ extension Array where Element == FileSystemNode {
     self.reduce(into: Set<FileSystemNode>()) {
       $0.formUnion($1.flatten())
     }
+  }
+}
+
+extension FileSystemNode: Equatable {
+  static func == (lhs: FileSystemNode, rhs: FileSystemNode) -> Bool {
+    lhs.name == rhs.name && lhs.url == rhs.url && lhs.kind == rhs.kind
   }
 }
