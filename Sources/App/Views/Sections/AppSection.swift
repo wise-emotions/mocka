@@ -44,7 +44,7 @@ struct AppSectionPreview: PreviewProvider {
   )
 
   static var previews: some View {
-    AppSection(viewModel: AppSectionViewModel(recordModeNetworkExchangesPublisher: networkExchanges.publisher.eraseToAnyPublisher()))
+    AppSection(viewModel: AppSectionViewModel(recordModeNetworkExchangesPublisher: networkExchanges.publisher.eraseToAnyPublisher(), appEnvironment: AppEnvironment()))
       .previewLayout(.fixed(width: 1024, height: 600))
       .environmentObject(AppEnvironment())
   }

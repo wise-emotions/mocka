@@ -13,19 +13,33 @@ final class AppSectionViewModel: ObservableObject {
 
   /// The `Set` containing the list of subscriptions.
   var subscriptions = Set<AnyCancellable>()
+  
+  var appEnvironment: AppEnvironment
+  
+  /// The path for the request and response to save in the record mode.
+  var recordingPath: URL? {
+    appEnvironment.selectedRecordingPath
+  }
 
   // MARK: - Init
 
   /// Creates a new instance with a `Publisher` of `NetworkExchange`s for the record mode.
   /// - Parameter recordModeNetworkExchangesPublisher: The publisher of `NetworkExchange`s for the record mode.
-  init(recordModeNetworkExchangesPublisher: AnyPublisher<NetworkExchange, Never>) {
+  init(recordModeNetworkExchangesPublisher: AnyPublisher<NetworkExchange, Never>, appEnvironment: AppEnvironment) {
+    self.appEnvironment = appEnvironment
+    
     recordModeNetworkExchangesPublisher
       .receive(on: RunLoop.main)
       .sink { [weak self] networkExchange in
+        guard let recordingPath = self?.recordingPath else {
+          print("ops")
+          return
+        }
+        
         #warning("Add proper values")
         self?.createAndSaveRequest(
           from: networkExchange,
-          to: FileManager.default.urls(for: .desktopDirectory, in: .userDomainMask)[0],
+          to: recordingPath,
           shouldOverwriteResponse: true
         )
       }

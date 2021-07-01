@@ -18,7 +18,7 @@ final class RecordingMiddleware: Middleware {
   /// - Parameters:
   ///   - configuration: The configuration of the middleware.
   ///   - recordModeNetworkExchangesSubject: The `PassthroughSubject` used to send the request and response pair back to the app.
-  init(configuration: MiddlewareConfigurationProvider,recordModeNetworkExchangesSubject: PassthroughSubject<NetworkExchange, Never>) {
+  init(configuration: MiddlewareConfigurationProvider, recordModeNetworkExchangesSubject: PassthroughSubject<NetworkExchange, Never>) {
     self.configuration = configuration
     self.recordModeNetworkExchangesSubject = recordModeNetworkExchangesSubject
   }

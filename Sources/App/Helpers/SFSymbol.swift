@@ -23,6 +23,12 @@ enum SFSymbol: String {
 
   /// Plus circle icon.
   case plusCircle = "plus.circle"
+  
+  /// Start recording icon.
+  case startRecording = "record.circle"
+  
+  /// Stop recording icon.
+  case stopRecording = "record.circle.fill"
 
   /// Refresh icon.
   case refresh = "arrow.triangle.2.circlepath"

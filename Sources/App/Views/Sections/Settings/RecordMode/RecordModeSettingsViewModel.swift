@@ -44,4 +44,28 @@ final class RecordModeSettingsViewModel: ObservableObject {
     self.recordingPath = recordingFolder
     recordingPathError = nil
   }
+  
+  /// Confirms the selected startup settings
+  /// by creating the configuration file in the right path.
+  /// In case of error the `workspaceURL` returns to `nil`.
+  /// - Parameter presentationMode: The `View` `PresentationMode`.
+  func confirmSettings(with appEnvironment: AppEnvironment) {
+    let recordingURL = URL(fileURLWithPath: recordingPath)
+    let middlewareURL = URL(string: middlewareBaseURL)
+    
+    do {
+      try Logic.WorkspacePath.checkURLAndCreateFolderIfNeeded(at: recordingURL)
+      
+      appEnvironment.middlewareBaseURL = middlewareURL
+      appEnvironment.selectedRecordingPath = recordingURL
+      
+      NSApplication.shared.keyWindow?.close()
+    } catch {
+      guard let recordingPathError = error as? MockaError else {
+        return
+      }
+
+      self.recordingPathError = recordingPathError
+    }
+  }
 }

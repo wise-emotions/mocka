@@ -22,7 +22,7 @@ struct RecordModeSettings: View {
   var body: some View {
     VStack {
       Text("Before starting the record mode, you need to choose a path where the requests and responses will be saved.\nYou also need to input the base URL that will be used to perform the network calls.")
-        .frame(height: 32)
+        .frame(height: 50)
         .font(.body)
         .padding(.vertical)
 
@@ -30,7 +30,7 @@ struct RecordModeSettings: View {
         HStack(alignment: .top) {
           Text("Recording folder path")
             .font(.headline)
-            .frame(width: 120, height: 30, alignment: .trailing)
+            .frame(width: 120, alignment: .trailing)
 
           VStack {
             RoundedTextField(title: "Recording folder path", text: $viewModel.recordingPath)
@@ -72,7 +72,7 @@ struct RecordModeSettings: View {
       VStack(alignment: .trailing) {
         Button(
           action: {
-//            viewModel.confirmSettings(with: presentationMode)
+            viewModel.confirmSettings(with: appEnvironment)
           },
           label: {
             Text("OK")

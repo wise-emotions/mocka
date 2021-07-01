@@ -33,4 +33,13 @@ final class AppEnvironment: ObservableObject {
   var serverConfiguration: ServerConfiguration? {
     Logic.Settings.serverConfiguration
   }
+  
+  /// The global record mode middleware configuration.
+  var middlewareConfiguration: MiddlewareConfiguration? {
+    guard let baseURL = middlewareBaseURL, let hostname = serverConfiguration?.hostname, let port = serverConfiguration?.port else {
+      return nil
+    }
+    
+    return MiddlewareConfiguration(baseURL: baseURL, hostname: hostname, port: port)
+  }
 }
