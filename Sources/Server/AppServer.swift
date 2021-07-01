@@ -13,8 +13,8 @@ public class AppServer {
   /// The `Vapor` `Application` instance.
   internal private(set) var application: Application?
 
-  #warning("Document")
-  private lazy var mockaMiddleware = MockaMiddleware(host: host, port: port, scheme: URI.Scheme.http)
+  /// The custom middleware for the server.
+  private var mockaMiddleware: MockaMiddleware?
 
   /// The `BufferedSubject` of `LogEvent`s.
   /// This subject is used to send and subscribe to `LogEvent`s.
@@ -32,8 +32,8 @@ public class AppServer {
   }
 
   /// The `Publisher` of `NetworkExchange`s.
-  public var networkExchangesPublisher: AnyPublisher<NetworkExchange, Never> {
-    mockaMiddleware.networkExchangesSubject.eraseToAnyPublisher()
+  public var networkExchangesPublisher: AnyPublisher<NetworkExchange, Never>? {
+    mockaMiddleware?.networkExchangesSubject.eraseToAnyPublisher()
   }
 
   /// The host associated with the running instance's configuration.
@@ -77,6 +77,7 @@ public class AppServer {
     do {
       let environment = try Environment.detect()
       application = Application(environment)
+      mockaMiddleware = MockaMiddleware(host: host, port: port, scheme: URI.Scheme.http)
     } catch {
       throw ServerError.vapor(error: error)
     }
@@ -85,7 +86,9 @@ public class AppServer {
     application?.logger = Logger(label: "Server Logger", factory: { _ in ConsoleLogHander(subject: consoleLogsSubject) })
     application?.http.server.configuration.port = configuration.port
     application?.http.server.configuration.hostname = configuration.hostname
-    application?.middleware.use(mockaMiddleware)
+    mockaMiddleware.map {
+      application?.middleware.use($0)
+    }
 
     do {
       registerRoutes(for: configuration.requests)
@@ -119,7 +122,7 @@ public class AppServer {
 
   /// Clears the buffered log events from the `networkExchangesSubject`.
   public func clearBufferedNetworkExchanges() {
-    mockaMiddleware.networkExchangesSubject.clearBuffer()
+    mockaMiddleware?.networkExchangesSubject.clearBuffer()
   }
 
   /// Registers a route for every request.

@@ -116,11 +116,7 @@ private extension MockaMiddleware {
   ///   - response: The response sent to the client.
   /// - Returns: A `NetworkExchange` instance built from the input request and response.
   func networkExchange(from request: Vapor.Request, and response: Vapor.Response) -> NetworkExchange {
-    let host = request.url.host
-    let port = request.url.port
-    let path = request.url.path
-    
-    return NetworkExchange(
+    NetworkExchange(
       request: detailedRequest(from: request),
       response: DetailedResponse(
         uri: uri(from: request),
