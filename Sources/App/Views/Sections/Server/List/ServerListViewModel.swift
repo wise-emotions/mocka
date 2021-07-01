@@ -72,9 +72,9 @@ private extension ServerListViewModel {
   /// - Returns: A new `UNNotificationRequest` instance.
   func notificationRequest(for failedResponse: DetailedResponse) -> UNNotificationRequest {
     let content = UNMutableNotificationContent()
-    content.body = "The request failed with \(failedResponse.status.code) status code."
-    content.title = "Ma che è sta merda man?!"
-    content.subtitle = "Endpoint: \(failedResponse.uri)"
+    content.body = "Received response with \(failedResponse.status.code) status code."
+    content.title = "Request failed!"
+    content.subtitle = "Endpoint: \(failedResponse.uri.path)"
     content.sound = .default
     
     return UNNotificationRequest(identifier: "FAILED_REQUEST", content: content, trigger: nil)
@@ -92,11 +92,11 @@ private extension ServerListViewModel {
         completion(true, nil)
         
       case .denied:
-        #warning("Map to app error")
+        #warning("Map to app error?")
         completion(false, NSError())
 
       @unknown default:
-        #warning("Map to app error")
+        #warning("Map to app error?")
         completion(false, NSError())
         return
       }
@@ -112,12 +112,7 @@ private extension ServerListViewModel {
         return
       }
 
-      guard error == nil else {
-        print("Can't send notifications")
-        return
-      }
-      
-      guard isPermissionGiven else {
+      guard error == nil, isPermissionGiven else {
         return
       }
       
