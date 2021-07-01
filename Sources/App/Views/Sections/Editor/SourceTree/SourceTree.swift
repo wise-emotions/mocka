@@ -58,6 +58,23 @@ struct SourceTree: View {
                       }
                     )
                   }
+                  .onTapGesture {
+                    self.viewModel.listState[node.id, default: false].toggle()
+                  }
+                  .contextMenu(
+                    ContextMenu(
+                      menuItems: {
+                        ForEach(node.availableActions, id: \.self) { action in
+                          Button(
+                            viewModel.actionName(action: action),
+                            action: {
+                              try? viewModel.performAction(action, on: node)
+                            }
+                          )
+                        }
+                      }
+                    )
+                  )
                 }
               },
               label: {
@@ -72,9 +89,7 @@ struct SourceTree: View {
                   )
                 }
                 .onTapGesture {
-                  withAnimation {
-                    self.listState[node.id, default: false].toggle()
-                  }
+                  self.viewModel.listState[node.id, default: false].toggle()
                 }
                 .contextMenu(
                   ContextMenu(
