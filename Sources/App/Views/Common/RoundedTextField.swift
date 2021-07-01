@@ -37,6 +37,7 @@ struct RoundedTextField: View {
     HStack(alignment: .firstTextBaseline, spacing: 8) {
       TextField(title, text: $text)
         .textFieldStyle(PlainTextFieldStyle())
+        .foregroundColor(.latte)
     }
     .font(.system(size: 12))
     .padding(.leading, 6)
