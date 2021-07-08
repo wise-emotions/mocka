@@ -8,13 +8,7 @@ struct KeyboardShortcutCommands: Commands {
   @ObservedObject var appEnvironment: AppEnvironment
 
   var body: some Commands {
-    CommandGroup(replacing: .newItem) {
-      Button("New API") {
-        appEnvironment.selectedSection = .editor
-
-      }
-      .keyboardShortcut("n")
-      
+    CommandGroup(replacing: .newItem) {      
       Button("Run") {
         appEnvironment.selectedSection = .server
         
@@ -37,6 +31,16 @@ struct KeyboardShortcutCommands: Commands {
         appEnvironment.isServerRunning = false
       }
       .keyboardShortcut(".")
+      
+      Button("Restart") {
+        guard let serverConfiguration = appEnvironment.serverConfiguration else {
+          appEnvironment.shouldShowStartupSettings = true
+          return
+        }
+
+        try? appEnvironment.server.restart(with: serverConfiguration)
+      }
+      .keyboardShortcut("R")
     }
     
     CommandGroup(after: .windowArrangement) {
