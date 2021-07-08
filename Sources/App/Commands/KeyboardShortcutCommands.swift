@@ -5,6 +5,7 @@
 import SwiftUI
 
 struct KeyboardShortcutCommands: Commands {
+  /// The app environment.
   @ObservedObject var appEnvironment: AppEnvironment
 
   var body: some Commands {
