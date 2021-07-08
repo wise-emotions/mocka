@@ -30,12 +30,16 @@ final class RecordingMiddleware: Middleware {
     
     return request.client.send(clientRequest)
       .flatMap { [weak self] clientResponse -> EventLoopFuture<Response> in
+        var response = clientResponse
+      
         guard let self = self else {
-          return clientResponse.encodeResponse(for: request)
+          return response.encodeResponse(for: request)
         }
-
-        self.recordModeNetworkExchangesSubject.send(self.networkExchange(from: request, and: clientResponse))
-        return clientResponse.encodeResponse(for: request)
+        
+        response.headers = clientResponse.headers.removing(name: "Content-Encoding")
+        
+        self.recordModeNetworkExchangesSubject.send(self.networkExchange(from: request, and: response))
+        return response.encodeResponse(for: request)
       }
       .flatMapError { error in
         return request.eventLoop.makeFailedFuture(error)

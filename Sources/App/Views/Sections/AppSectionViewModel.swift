@@ -54,14 +54,18 @@ final class AppSectionViewModel: ObservableObject {
   ///   - shouldOverwriteResponse: Whether or not the request and response should be overwritten if already present.
   func createAndSaveRequest(from networkExchange: NetworkExchange, to directory: URL, shouldOverwriteResponse: Bool) {
     let request = Request(from: networkExchange)
+    let requestDirectoryName = Self.requestDirectoryName(request)
+    let requestDirectory = directory.appendingPathComponent(requestDirectoryName)
     
-    if Logic.SourceTree.contents(of: directory).isNotEmpty, shouldOverwriteResponse {
-      try? Logic.SourceTree.deleteDirectory(at: directory.absoluteString)
-    } else {
-      return
+    if Logic.SourceTree.contents(of: requestDirectory).isNotEmpty {
+      if shouldOverwriteResponse {
+        try? Logic.SourceTree.deleteDirectory(at: requestDirectoryName)
+      } else {
+        return
+      }
     }
     
-    try? Logic.SourceTree.addDirectory(at: directory, named: Self.requestFolderName(request))
+    try? Logic.SourceTree.addDirectory(at: directory, named: requestDirectoryName)
 
     // Add response, if any.
     if
@@ -72,18 +76,18 @@ final class AppSectionViewModel: ObservableObject {
       try? Logic.SourceTree.addResponse(
         responseBody,
         ofType: expectedFileExtension,
-        to: directory.appendingPathComponent(Self.requestFolderName(request))
+        to: directory.appendingPathComponent(requestDirectoryName)
       )
     }
 
     // Add request.
-    try? Logic.SourceTree.addRequest(request, to: directory.appendingPathComponent(Self.requestFolderName(request)))
+    try? Logic.SourceTree.addRequest(request, to: requestDirectory)
   }
   
   /// Generates the name of the request folder.
   /// - Parameter request: The request we want to save.
   /// - Returns: The name of the request folder.
-  static private func requestFolderName(_ request: Request) -> String {
+  static private func requestDirectoryName(_ request: Request) -> String {
     "\(request.method.rawValue) - \(request.path)"
   }
 }
