@@ -14,7 +14,7 @@ public class AppServer {
   internal private(set) var application: Application?
 
   /// The custom middleware for the server.
-  private var mockaMiddleware: MockaMiddleware?
+  private var mockaMiddleware: NetworkExchangeMiddleware?
 
   /// The `BufferedSubject` of `LogEvent`s.
   /// This subject is used to send and subscribe to `LogEvent`s.
@@ -77,7 +77,7 @@ public class AppServer {
     do {
       let environment = try Environment.detect()
       application = Application(environment)
-      mockaMiddleware = MockaMiddleware(host: host, port: port, scheme: URI.Scheme.http)
+      mockaMiddleware = NetworkExchangeMiddleware(host: host, port: port, scheme: URI.Scheme.http)
     } catch {
       throw ServerError.vapor(error: error)
     }
@@ -136,8 +136,6 @@ public class AppServer {
 
       application?
         .on($0.method.vaporMethod, $0.vaporParameter) { [unowned self] request -> EventLoopFuture<ClientResponse> in
-          #warning("Clean here after MockaMiddleware is finished. This logic should be moved there.")
-
           // This property is force-unwrapped because it can never fail,
           // since the raw value passed is an identical copy of SwiftNIO's `HTTPMethod`.
           let httpMethod = HTTPMethod(rawValue: request.method.rawValue)!
@@ -165,14 +163,12 @@ public class AppServer {
 
           guard let responseBody = requestedResponse.body else {
             clientResponse = ClientResponse(status: requestedResponse.status, headers: requestedResponse.headers, body: nil)
-//            networkExchangesSubject.send(networkExchange)
             return request.eventLoop.makeSucceededFuture(clientResponse)
           }
 
           guard responseBody.isValidFileFormat() else {
             let failReason = "Invalid file format. Was expecting a .\(responseBody.contentType.expectedFileExtension!) file"
             clientResponse = ClientResponse(status: .badRequest, headers: [:], body: ByteBuffer(string: failReason))
-//            networkExchangesSubject.send(networkExchange)
             return request.eventLoop.makeFailedFuture(Abort(.badRequest, reason: failReason))
           }
 
@@ -180,14 +176,12 @@ public class AppServer {
             .collectFile(at: responseBody.pathToFile)
             .flatMap { buffer -> EventLoopFuture<ClientResponse> in
               clientResponse = ClientResponse(status: requestedResponse.status, headers: requestedResponse.headers, body: buffer)
-//              networkExchangesSubject.send(networkExchange)
               return request.eventLoop.makeSucceededFuture(clientResponse)
             }
             .flatMapError { error in
               // So far, only logical error is the file not being found.
               let failReason = "File not found at \(responseBody.pathToFile)"
               clientResponse = ClientResponse(status: .badRequest, headers: [:], body: ByteBuffer(string: failReason))
-//              networkExchangesSubject.send(networkExchange)
               return request.eventLoop.makeFailedFuture(Abort(.badRequest, reason: failReason))
             }
         }

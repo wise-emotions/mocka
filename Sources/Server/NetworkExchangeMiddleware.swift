@@ -5,8 +5,8 @@
 import Combine
 import Vapor
 
-#warning("Document")
-internal final class MockaMiddleware: Middleware {
+/// The `Middleware` that parses all the `Vapor.Response`s of the server to `NetworkExchange`s.
+internal final class NetworkExchangeMiddleware: Middleware {
   /// The host associated with the running instance's configuration.
   let host: String?
 
@@ -59,7 +59,7 @@ internal final class MockaMiddleware: Middleware {
 
 // MARK: - Private Helpers
 
-private extension MockaMiddleware {
+private extension NetworkExchangeMiddleware {
   /// Transforms readable bytes in the buffer to data.
   /// - Parameter buffer: The `ByteBuffer` to read.
   /// - Returns: `Data` read from the `ByteBuffer`. `nil` if `ByteBuffer` is `nil`.
