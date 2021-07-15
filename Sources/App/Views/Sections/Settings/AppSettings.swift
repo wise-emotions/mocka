@@ -15,6 +15,12 @@ struct AppSettings: View {
         .tabItem {
           Label("Server", systemImage: SFSymbol.document.rawValue)
         }
+      
+      NotificationsSettings()
+        .tabItem {
+          #warning("Update icon")
+          Label("Notifications", systemImage: SFSymbol.document.rawValue)
+        }
     }
   }
 }
