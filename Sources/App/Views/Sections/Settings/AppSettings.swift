@@ -18,11 +18,6 @@ struct AppSettings: View {
         .tabItem {
           Label("Server", systemImage: SFSymbol.document.rawValue)
         }
-      
-      RecordModeSettings(viewModel: RecordModeSettingsViewModel())
-        .tabItem {
-          Label("Record mode", systemImage: SFSymbol.startRecording.rawValue)
-        }
     }
   }
 }

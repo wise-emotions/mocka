@@ -21,11 +21,15 @@ struct StartAndStopRecordModeButton: View {
 
   var body: some View {
     SymbolButton(
-      symbolName: appEnvironment.isServerRecording ? .stopRecording : .startRecording,
+      symbolName: appEnvironment.isServerRecording ? .stopCircle : .startRecording,
+      color: appEnvironment.isServerRunning ? Color.redEye : nil,
       action: {
-        viewModel.startAndStopRecordMode(on: appEnvironment)
+        if appEnvironment.middlewareConfiguration == nil {
+          appEnvironment.isRecordModeSettingsPresented.toggle()
+        } else {
+          viewModel.startAndStopRecordMode(on: appEnvironment)
+        }
       }
     )
-    .disabled(appEnvironment.middlewareConfiguration == nil)
   }
 }

@@ -15,16 +15,12 @@ final class StartAndStopRecordModeButtonViewModel: ObservableObject {
     switch appEnvironment.isServerRecording {
     case true:
       try? appEnvironment.server.stop()
-
+      
+      appEnvironment.isServerRunning.toggle()
+      appEnvironment.isServerRecording.toggle()
+      
     case false:
-      guard let middlewareConfiguration = appEnvironment.middlewareConfiguration else {
-        return
-      }
-
-      try? appEnvironment.server.startRecording(with: middlewareConfiguration)
+      appEnvironment.isRecordModeSettingsPresented.toggle()
     }
-
-    appEnvironment.isServerRunning.toggle()
-    appEnvironment.isServerRecording.toggle()
   }
 }

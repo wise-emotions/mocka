@@ -28,6 +28,9 @@ final class AppEnvironment: ObservableObject {
 
   /// Whether the startup settings should be shown or not.
   @Published var shouldShowStartupSettings = !Logic.Settings.isWorkspaceURLValid
+  
+  /// Whether or not the record mode settings are shown.
+  @Published var isRecordModeSettingsPresented: Bool = false
 
   /// The global server configuration.
   var serverConfiguration: ServerConfiguration? {

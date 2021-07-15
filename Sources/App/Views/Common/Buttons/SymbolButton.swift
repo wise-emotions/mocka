@@ -12,9 +12,12 @@ struct SymbolButton: View {
   /// The name of the SF Symbol.
   var symbolName: SFSymbol
 
+  /// An optional foreground color for the button.
+  var color: Color?
+
   /// The action to execute when the button is tapped.
   var action: () -> Void
-
+  
   // MARK: - Body
 
   var body: some View {
@@ -27,6 +30,7 @@ struct SymbolButton: View {
     )
     .buttonStyle(PlainButtonStyle())
     .frame(width: 20, height: 20, alignment: .center)
+    .foregroundColor(color)
   }
 }
 

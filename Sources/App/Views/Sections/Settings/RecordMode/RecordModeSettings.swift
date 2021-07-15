@@ -72,10 +72,10 @@ struct RecordModeSettings: View {
       VStack(alignment: .trailing) {
         Button(
           action: {
-            viewModel.confirmSettings(with: appEnvironment)
+            viewModel.confirmSettingsAndStartRecording()
           },
           label: {
-            Text("OK")
+            Text("Start recording")
               .frame(width: 100, height: 21)
           }
         )
@@ -92,6 +92,6 @@ struct RecordModeSettings: View {
 
 struct RecordModeSettingsPreview: PreviewProvider {
   static var previews: some View {
-    RecordModeSettings(viewModel: RecordModeSettingsViewModel())
+    RecordModeSettings(viewModel: RecordModeSettingsViewModel(appEnvironment: AppEnvironment()))
   }
 }

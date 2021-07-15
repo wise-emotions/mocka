@@ -30,6 +30,13 @@ struct Mocka: App {
         ) {
           ServerSettings(viewModel: ServerSettingsViewModel(isShownFromSettings: false))
         }
+        .sheet(
+          isPresented: $appEnvironment.isRecordModeSettingsPresented
+        ) {
+          RecordModeSettings(viewModel: RecordModeSettingsViewModel(appEnvironment: appEnvironment))
+            .environmentObject(appEnvironment)
+        }
+
     }
     .windowStyle(HiddenTitleBarWindowStyle())
     .windowToolbarStyle(UnifiedWindowToolbarStyle())

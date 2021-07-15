@@ -68,8 +68,6 @@ struct ServerList: View {
               viewModel.clearNetworkExchanges()
             }
           )
-          
-          StartAndStopRecordModeButton()
         }
       }
     }

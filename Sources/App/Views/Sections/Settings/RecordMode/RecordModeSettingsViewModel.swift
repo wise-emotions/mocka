@@ -10,8 +10,10 @@ final class RecordModeSettingsViewModel: ObservableObject {
 
   // MARK: - Stored Properties
   
+  var appEnvironment: AppEnvironment
+  
   /// The folder where the record mode requests will be saved.
-  @Published var recordingPath: String = "" {
+  @Published var recordingPath: String {
     didSet {
       // When the user modifies the `recordingPath` we must remove any `recordingPathError` if present.
       // This is needed in order to remove the red `RoundedRectangle` around the `RoundedTextField` of the "record mode folder" entry.
@@ -21,13 +23,24 @@ final class RecordModeSettingsViewModel: ObservableObject {
   }
 
   /// The base URL that will be passed to the middleware for the record mode to start.
-  @Published var middlewareBaseURL: String = ""
+  @Published var middlewareBaseURL: String
 
   /// Handle the workspace path error.
   @Published var recordingPathError: MockaError? = nil
 
   /// Whether the `fileImporter` is presented.
   @Published var fileImporterIsPresented: Bool = false
+  
+  // MARK: - Init
+
+  /// Creates a new instance with the app environment.
+  /// - Parameter appEnvironment: The app environment.
+  init(appEnvironment: AppEnvironment) {
+    self.appEnvironment = appEnvironment
+    
+    middlewareBaseURL = appEnvironment.middlewareBaseURL?.absoluteString ?? ""
+    recordingPath = appEnvironment.selectedRecordingPath?.path ?? ""
+  }
   
   // MARK: - Functions
 
@@ -48,8 +61,7 @@ final class RecordModeSettingsViewModel: ObservableObject {
   /// Confirms the selected startup settings
   /// by creating the configuration file in the right path.
   /// In case of error the `workspaceURL` returns to `nil`.
-  /// - Parameter presentationMode: The `View` `PresentationMode`.
-  func confirmSettings(with appEnvironment: AppEnvironment) {
+  func confirmSettingsAndStartRecording() {
     let recordingURL = URL(fileURLWithPath: recordingPath)
     let middlewareURL = URL(string: middlewareBaseURL)
     
@@ -58,8 +70,16 @@ final class RecordModeSettingsViewModel: ObservableObject {
       
       appEnvironment.middlewareBaseURL = middlewareURL
       appEnvironment.selectedRecordingPath = recordingURL
+      appEnvironment.isRecordModeSettingsPresented.toggle()
+
+      guard let middlewareConfiguration = appEnvironment.middlewareConfiguration, appEnvironment.isServerRecording.isFalse else {
+        return
+      }
       
-      NSApplication.shared.keyWindow?.close()
+      try? appEnvironment.server.startRecording(with: middlewareConfiguration)
+      
+      appEnvironment.isServerRunning.toggle()
+      appEnvironment.isServerRecording.toggle()
     } catch {
       guard let recordingPathError = error as? MockaError else {
         return
