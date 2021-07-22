@@ -11,7 +11,7 @@ struct NotificationsSettings: View {
   
   var body: some View {
     VStack {
-      Toggle("Notifiche per request fallite", isOn: $viewModel.areNotificationEnabled)
+      Toggle("Notifiche per request fallite", isOn: $viewModel.areInAppNotificationEnabled)
         .toggleStyle(CheckboxToggleStyle())
     }
   }

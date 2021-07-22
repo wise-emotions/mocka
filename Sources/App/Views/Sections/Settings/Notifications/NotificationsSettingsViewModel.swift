@@ -6,16 +6,10 @@ import SwiftUI
 
 /// The `ViewModel` for the `NotificationsSettingsView`.
 struct NotificationsSettingsViewModel {
-  /// The app environment object.
-  var appEnvironment: AppEnvironment
-
-  /// Whether or not notifications are enabled.
-  var areNotificationEnabled: Bool {
-    get {
-      appEnvironment.areInAppNotificationEnabled
-    }
-    set {
-      appEnvironment.areInAppNotificationEnabled = newValue
+  /// Whether or not the in-app notifications are enabled.
+  var areInAppNotificationEnabled: Bool = Logic.Settings.areInAppNotificationEnabled {
+    didSet {
+      Logic.Settings.areInAppNotificationEnabled = areInAppNotificationEnabled
     }
   }
 }

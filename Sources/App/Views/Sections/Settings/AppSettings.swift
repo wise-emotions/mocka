@@ -18,7 +18,7 @@ struct AppSettings: View {
           Label("Server", systemImage: SFSymbol.document.rawValue)
         }
 
-      NotificationsSettings(viewModel: NotificationsSettingsViewModel(appEnvironment: appEnvironment))
+      NotificationsSettings(viewModel: NotificationsSettingsViewModel(areInAppNotificationEnabled: appEnvironment.areInAppNotificationEnabled))
         .tabItem {
           Label("Notifications", systemImage: SFSymbol.bell.rawValue)
         }
