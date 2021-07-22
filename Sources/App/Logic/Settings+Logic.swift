@@ -10,6 +10,16 @@ extension Logic {
   enum Settings {
     /// The name of the file containing the server's configuration.
     static let serverConfigurationFileName = "serverConfiguration.json"
+    
+    /// Whether or not the in-app notifications are enabled.
+    static var areInAppNotificationEnabled: Bool {
+      get {
+        UserDefaults.standard.bool(forKey: UserDefaultKey.areInAppNotificationEnabled)
+      }
+      set {
+        UserDefaults.standard.setValue(newValue, forKey: UserDefaultKey.areInAppNotificationEnabled)
+      }
+    }
 
     /// Checks if the workspace `URL` saved in the `UserDefaults` is valid.
     /// That is, it is not nil, it exists, and it contains the `serverConfiguration.json` file.

@@ -40,6 +40,7 @@ struct Mocka: App {
 
     Settings {
       AppSettings()
+        .environmentObject(appEnvironment)
     }
   }
 }

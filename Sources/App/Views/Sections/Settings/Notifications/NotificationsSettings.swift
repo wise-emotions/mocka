@@ -6,8 +6,13 @@ import SwiftUI
 
 /// The notifications settings view.
 struct NotificationsSettings: View {
+  /// The `ViewModel` for the view.
+  @State var viewModel: NotificationsSettingsViewModel
+  
   var body: some View {
-    Text("TBD")      
-      .padding(25)
+    VStack {
+      Toggle("Notifiche per request fallite", isOn: $viewModel.areNotificationEnabled)
+        .toggleStyle(CheckboxToggleStyle())
+    }
   }
 }
