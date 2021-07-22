@@ -27,7 +27,7 @@ final class SourceTreeViewModel: ObservableObject {
   /// When this value is updated, the value in the user defaults is updated as well.
   @AppStorage(UserDefaultKey.workspaceURL) private var workspaceURL: URL?
 
-  @Published var listState: [FileSystemNode.ID: Bool] = [:]
+  @Published var listState: [URL: Bool] = [:]
 
   /// The selected `FileSystemNode`.
   var selectedNode: FileSystemNode? = nil
@@ -167,6 +167,11 @@ final class SourceTreeViewModel: ObservableObject {
         }
       }
 
+      if let node = node {
+        // Open node to see the new folder.
+        listState[node.url] = true
+      }
+      
       try refreshContent()
 
     case .editRequest:
