@@ -14,7 +14,7 @@ internal final class NetworkExchangeMiddleware: Middleware {
   /// This subject is used to send and subscribe to `NetworkExchange`s.
   /// Anytime a request/response exchange happens, a detailed version of the actors is generated and injected in this object.
   /// - Note: This property is marked `internal` to allow only the `Server` to send events.
-  let networkExchangesSubject = BufferedSubject<NetworkExchange, Never>()
+  let networkExchangesSubject: BufferedSubject<NetworkExchange, Never>
   
   /// The port associated with the running instance's configuration.
   let port: Int?
@@ -22,10 +22,11 @@ internal final class NetworkExchangeMiddleware: Middleware {
   /// The scheme associated with the running instance's configuration.
   let scheme: URI.Scheme
   
-  init(host: String?, port: Int?, scheme: URI.Scheme) {
+  init(host: String?, port: Int?, scheme: URI.Scheme, subject: BufferedSubject<NetworkExchange, Never>) {
     self.host = host
     self.port = port
     self.scheme = scheme
+    self.networkExchangesSubject = subject
   }
 
   func respond(to request: Vapor.Request, chainingTo next: Responder) -> EventLoopFuture<Response> {

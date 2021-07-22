@@ -13,13 +13,18 @@ public class AppServer {
   /// The `Vapor` `Application` instance.
   internal private(set) var application: Application?
 
-  /// The custom middleware for the server.
-  private var mockaMiddleware: NetworkExchangeMiddleware?
-
   /// The `BufferedSubject` of `LogEvent`s.
   /// This subject is used to send and subscribe to `LogEvent`s.
-  /// - Note: This property is marked `internal` to allow only the `Server` to send events.
+  /// - Note: This property is marked `private` to allow only the `Server` to send events.
   private let consoleLogsSubject = BufferedSubject<LogEvent, Never>()
+  
+  /// The custom middleware for the server that parses all the `Vapor.Response`s of the server to `NetworkExchange`s.
+  private var networkExchangeMiddleware: NetworkExchangeMiddleware?
+
+  /// The `BufferedSubject` of `NetworkExchange`s.
+  /// This subject is used to send and subscribe to `NetworkExchange`s.
+  /// - Note: This property is marked `private` to allow only the `Server` to send events.
+  private var networkExchangesSubject = BufferedSubject<NetworkExchange, Never>()
 
   /// The `Set` containing the list of subscriptions.
   private var subscriptions = Set<AnyCancellable>()
@@ -32,9 +37,10 @@ public class AppServer {
   }
 
   /// The `Publisher` of `NetworkExchange`s.
-  public var networkExchangesPublisher: AnyPublisher<NetworkExchange, Never>? {
-    mockaMiddleware?.networkExchangesSubject.eraseToAnyPublisher()
+  public var networkExchangesPublisher: AnyPublisher<NetworkExchange, Never> {
+    networkExchangesSubject.eraseToAnyPublisher()
   }
+  
 
   /// The host associated with the running instance's configuration.
   internal var host: String? {
@@ -77,7 +83,7 @@ public class AppServer {
     do {
       let environment = try Environment.detect()
       application = Application(environment)
-      mockaMiddleware = NetworkExchangeMiddleware(host: host, port: port, scheme: URI.Scheme.http)
+      networkExchangeMiddleware = NetworkExchangeMiddleware(host: host, port: port, scheme: URI.Scheme.http, subject: networkExchangesSubject)
     } catch {
       throw ServerError.vapor(error: error)
     }
@@ -86,7 +92,7 @@ public class AppServer {
     application?.logger = Logger(label: "Server Logger", factory: { _ in ConsoleLogHander(subject: consoleLogsSubject) })
     application?.http.server.configuration.port = configuration.port
     application?.http.server.configuration.hostname = configuration.hostname
-    mockaMiddleware.map {
+    networkExchangeMiddleware.map {
       application?.middleware.use($0)
     }
 
@@ -122,7 +128,7 @@ public class AppServer {
 
   /// Clears the buffered log events from the `networkExchangesSubject`.
   public func clearBufferedNetworkExchanges() {
-    mockaMiddleware?.networkExchangesSubject.clearBuffer()
+    networkExchangeMiddleware?.networkExchangesSubject.clearBuffer()
   }
 
   /// Registers a route for every request.
