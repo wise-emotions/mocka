@@ -25,7 +25,7 @@ struct EditorDetail: View {
 
             headersSection
 
-            Editor(viewModel: EditorViewModel(text: $viewModel.displayedResponseBody, mode: viewModel.currentMode == .read ? .read : .write))
+            Editor(viewModel: EditorViewModel(text: viewModel.displayedResponseBody, mode: viewModel.currentMode == .read ? .read : .write))
               .disabled(viewModel.isResponseHeadersKeyValueTableEnabled.isFalse || viewModel.isResponseBodyEditorEnabled.isFalse)
               .isVisible(viewModel.isEditorDetailResponseBodyVisible)
           }
@@ -83,9 +83,9 @@ struct EditorDetail: View {
         title: "Parent Folder",
         items: viewModel.namespaceFolders,
         itemTitleKeyPath: \.name,
-        selection: $viewModel.selectedRequestParentFolder
+        selection: $viewModel.selectedRequestParentFolder,
+        isEnabled: viewModel.isRequestParentFolderTextFieldEnabled
       )
-      .disabled(viewModel.isRequestParentFolderTextFieldEnabled.isFalse)
 
       RoundedTextField(title: "Path", text: $viewModel.displayedRequestPath)
         .disabled(viewModel.isRequestPathTextFieldEnabled.isFalse)
@@ -94,9 +94,9 @@ struct EditorDetail: View {
         title: "HTTP Method",
         items: viewModel.allHTTPMethods,
         itemTitleKeyPath: \.rawValue,
-        selection: $viewModel.selectedHTTPMethod
+        selection: $viewModel.selectedHTTPMethod,
+        isEnabled: viewModel.isHTTPMethodTextFieldEnabled
       )
-      .disabled(viewModel.isHTTPMethodTextFieldEnabled.isFalse)
 
       RoundedTextField(title: "Response status code", text: $viewModel.displayedStatusCode)
         .disabled(viewModel.isStatusCodeTextFieldEnabled.isFalse)
@@ -105,9 +105,9 @@ struct EditorDetail: View {
         title: "Response Content-Type",
         items: viewModel.allContentTypes,
         itemTitleKeyPath: \.rawValue,
-        selection: $viewModel.selectedContentType
+        selection: $viewModel.selectedContentType,
+        isEnabled: viewModel.isContentTypeTextFieldEnabled
       )
-      .disabled(viewModel.isContentTypeTextFieldEnabled.isFalse)
 
       Text("If a Response Content-Type is selected, you need to provide a body. Otherwise, select \"none\".")
         .foregroundColor(.americano)

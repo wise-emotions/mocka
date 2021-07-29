@@ -24,7 +24,7 @@ class EditorViewModel: ObservableObject {
   // MARK: - Stored Properties
 
   /// The text of the editor.
-  @Published var text: Binding<String>
+  @Published var text: String
 
   /// Wether the user is dragging a file over the editor.
   @Published var isDraggingOver = false
@@ -37,7 +37,7 @@ class EditorViewModel: ObservableObject {
 
   // MARK: - Init
 
-  init(text: Binding<String> = .constant(""), mode: Mode = .read) {
+  init(text: String = "", mode: Mode = .read) {
     self.text = text
     self.mode = mode
   }
@@ -56,17 +56,17 @@ class EditorViewModel: ObservableObject {
       return
     }
 
-    text.wrappedValue = input
+    text = input
     selectedFileURL.stopAccessingSecurityScopedResource()
   }
 
   /// Pretty print the json.
   func prettyPrintJSON() {
-    guard let prettyPrintedJSON = text.wrappedValue.prettyPrintedJSON else {
+    guard let prettyPrintedJSON = text.prettyPrintedJSON else {
       return
     }
 
-    text.wrappedValue = prettyPrintedJSON
+    text = prettyPrintedJSON
   }
 
   /// This function handles the `onDrop` event.
@@ -86,7 +86,7 @@ class EditorViewModel: ObservableObject {
             return
           }
 
-          self?.text.wrappedValue = json
+          self?.text = json
         }
       }
     )

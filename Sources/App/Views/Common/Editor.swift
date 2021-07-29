@@ -39,15 +39,10 @@ struct Editor: View {
           )
         }
 
-        SourceCodeTextEditor(
-          text: viewModel.mode == .write ? viewModel.text : .constant(viewModel.text.wrappedValue),
-          customization: SourceCodeTextEditor.Customization(
-            didChangeText: { _ in },
-            insertionPointColor: { Sourceful.Color.white },
-            lexerForSource: { _ in JSONLexer() },
-            textViewDidBeginEditing: { _ in },
-            theme: { MockaSourceCodeTheme() }
-          )
+        MockaSourceCodeTextEditor(
+          text: $viewModel.text,
+          theme: MockaSourceCodeTheme(),
+          isEnabled: viewModel.mode == .write
         )
         .font(.body)
         .frame(height: 320)

@@ -25,19 +25,19 @@ final class MockaSourceCodeTheme: SourceCodeTheme {
       return Color.labelColor
 
     case .keyword:
-      return Color.systemPurple
+      return Color(named: "Keyword")!
 
     case .string:
-      return Color.systemRed
+      return Color(named: "String")!
 
     case .comment:
       return Color.secondaryLabelColor
 
     case .identifier:
-      return Color.systemPurple
+      return Color(named: "Keyword")!
 
     case .number:
-      return Color.yellow
+      return Color(named: "Number")!
 
     case .editorPlaceholder:
       return Color.labelColor
