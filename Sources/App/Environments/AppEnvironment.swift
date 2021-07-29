@@ -19,7 +19,11 @@ final class AppEnvironment: ObservableObject {
   var failedRequestsNotificationSubscription: AnyCancellable?
 
   /// Whether the server is currently running.
-  @Published var isServerRunning: Bool = false
+  @Published var isServerRunning: Bool = false {
+    didSet {
+      Logic.Settings.Notifications.updateFailedRequestsNotificationSubscription(in: self)
+    }
+  }
 
   /// The selected app section, selected by using the app's Sidebar.
   @Published var selectedSection: SidebarSection = .server

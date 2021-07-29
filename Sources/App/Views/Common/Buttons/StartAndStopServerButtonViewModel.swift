@@ -14,44 +14,17 @@ final class StartAndStopServerButtonViewModel: ObservableObject {
   func startAndStopRunningServer(on appEnvironment: AppEnvironment) {
     switch appEnvironment.isServerRunning {
     case true:
-      stopServerAndCancelNotificationSubscription(in: appEnvironment)
+      try? appEnvironment.server.stop()
 
     case false:
-      startServerAndSubscribeToNotifications(using: appEnvironment)
-    }
-  }
-}
-
-private extension StartAndStopServerButtonViewModel {
-  /// Stops the server canceling the subscriptions to the failed requests notifications.
-  /// - Parameter appEnvironment: The `AppEnvironment` instance.
-  func stopServerAndCancelNotificationSubscription(in appEnvironment: AppEnvironment) {
-    try? appEnvironment.server.stop()
-    appEnvironment.failedRequestsNotificationSubscription = nil
-    appEnvironment.isServerRunning.toggle()
-  }
-
-  /// Starts the server and subscribe to failed requests notifications.
-  /// - Parameter appEnvironment: The `AppEnvironment` instance.
-  func startServerAndSubscribeToNotifications(using appEnvironment: AppEnvironment) {
-    guard let serverConfiguration = appEnvironment.serverConfiguration else {
-      appEnvironment.shouldShowStartupSettings = true
-      return
-    }
-
-    try? appEnvironment.server.start(with: serverConfiguration)
-
-    // Subscribe to failed request notifications.
-    appEnvironment.failedRequestsNotificationSubscription = appEnvironment.server.networkExchangesPublisher
-      .receive(on: RunLoop.main)
-      .filter {
-        let statusCode = $0.response.status.code
-        return statusCode >= 300 && statusCode <= 600
-      }
-      .sink {
-        Logic.Settings.Notifications.add(notification: .failedResponse(statusCode: $0.response.status.code, path: $0.response.uri.path))
+      guard let serverConfiguration = appEnvironment.serverConfiguration else {
+        appEnvironment.shouldShowStartupSettings = true
+        return
       }
 
+      try? appEnvironment.server.start(with: serverConfiguration)
+    }
+    
     appEnvironment.isServerRunning.toggle()
   }
 }
