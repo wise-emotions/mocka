@@ -24,7 +24,7 @@ final class StartAndStopServerButtonViewModel: ObservableObject {
 
       try? appEnvironment.server.start(with: serverConfiguration)
     }
-    
+
     appEnvironment.isServerRunning.toggle()
   }
 }

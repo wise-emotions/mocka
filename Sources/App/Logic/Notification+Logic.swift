@@ -77,16 +77,16 @@ extension Logic.Settings.Notifications {
         }
       }
   }
-  
+
   /// Updates the `failedRequestsNotificationSubscription` in the given `appEnvironment`.
-  /// 
+  ///
   /// - Parameter appEnvironment: The `AppEnvironment` instance to be updated.
   static func updateFailedRequestsNotificationSubscription(in appEnvironment: AppEnvironment) {
     guard appEnvironment.isServerRunning else {
       appEnvironment.failedRequestsNotificationSubscription = nil
       return
     }
-    
+
     appEnvironment.failedRequestsNotificationSubscription = appEnvironment.server.networkExchangesPublisher
       .receive(on: RunLoop.main)
       .filter {
