@@ -4,7 +4,6 @@
 
 import MockaServer
 import SwiftUI
-import UserNotifications
 
 /// App environment object shared by all the `View`s of the application.
 final class AppEnvironment: ObservableObject {
