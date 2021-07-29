@@ -110,7 +110,7 @@ private extension ServerListViewModel {
         return
       }
 
-      guard error == nil, isPermissionGiven else {
+      guard error == nil, isPermissionGiven, Logic.Settings.areInAppNotificationEnabled else {
         return
       }
       
