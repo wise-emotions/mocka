@@ -43,7 +43,6 @@ internal final class NetworkExchangeMiddleware: Middleware {
 
         case let .failure(error):
           guard let networkExchange = self.errorNetworkExchange(from: request, error: error) else {
-            #warning("Handle the case when `error` is not an `AbortError`?")
             return
           }
 
@@ -89,7 +88,7 @@ private extension NetworkExchangeMiddleware {
     )
   }
   
-  /// Parses a `NetworkExchange` from a failed `request`, trying to parse the given `error` into a networ error.
+  /// Parses a `NetworkExchange` from a failed `request`, trying to parse the given `error` into a network error.
   /// - Parameters:
   ///   - request: The request sent to the server.
   ///   - error: The error that will be parsed into a network error.

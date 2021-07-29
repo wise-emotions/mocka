@@ -2,6 +2,7 @@
 //  Mocka
 //
 
+import SwiftUI
 import UserNotifications
 
 extension Logic.Settings {
@@ -9,16 +10,9 @@ extension Logic.Settings {
   enum Notifications {}
 }
 
-extension Logic.Settings.Notifications {
+extension Logic.Settings.Notifications {  
   /// Whether or not the in-app notifications are enabled.
-  static var areInAppNotificationEnabled: Bool {
-    get {
-      UserDefaults.standard.bool(forKey: UserDefaultKey.areInAppNotificationEnabled)
-    }
-    set {
-      UserDefaults.standard.setValue(newValue, forKey: UserDefaultKey.areInAppNotificationEnabled)
-    }
-  }
+  @AppStorage(UserDefaultKey.areInAppNotificationEnabled) static var areInAppNotificationEnabled: Bool = false
   
   /// The `UNUserNotificationCenter` used for handling notifications.
   private static var notificationCenter: UNUserNotificationCenter {

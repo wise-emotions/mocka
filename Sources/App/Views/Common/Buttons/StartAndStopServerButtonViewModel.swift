@@ -19,8 +19,6 @@ final class StartAndStopServerButtonViewModel: ObservableObject {
     case false:
       startServerAndSubscribeToNotifications(using: appEnvironment)
     }
-
-    appEnvironment.isServerRunning.toggle()
   }
 }
 
@@ -30,6 +28,7 @@ private extension StartAndStopServerButtonViewModel {
   func stopServerAndCancelNotificationSubscription(in appEnvironment: AppEnvironment) {
     try? appEnvironment.server.stop()
     appEnvironment.failedRequestsNotificationSubscription = nil
+    appEnvironment.isServerRunning.toggle()
   }
   
   /// Starts the server and subscribe to failed requests notifications.
@@ -52,5 +51,7 @@ private extension StartAndStopServerButtonViewModel {
       .sink {
         Logic.Settings.Notifications.add(notification: .failedResponse($0.response))
       }
+    
+    appEnvironment.isServerRunning.toggle()
   }
 }
