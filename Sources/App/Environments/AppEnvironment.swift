@@ -2,7 +2,6 @@
 //  Mocka
 //
 
-import Foundation
 import MockaServer
 import SwiftUI
 import UserNotifications
