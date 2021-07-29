@@ -38,7 +38,7 @@ extension AppDelegate {
     // We can use the appEnvironment to disable not available actions,
     // but we have experimented some bugs on the tap of the buttons inside the manu view
     // when the app is in background.
-    let statusItemMenu = StatusItemMenu() { [weak self] in
+    let statusItemMenu = StatusItemMenu { [weak self] in
       self?.statusItem.menu?.cancelTracking()
     }
     .environmentObject(appEnvironment)
