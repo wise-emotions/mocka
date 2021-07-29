@@ -87,7 +87,7 @@ private extension NetworkExchangeMiddleware {
       timestamp: Date().timeIntervalSince1970
     )
   }
-  
+
   /// Parses a `NetworkExchange` from a failed `request`, trying to parse the given `error` into a network error.
   /// - Parameters:
   ///   - request: The request sent to the server.
