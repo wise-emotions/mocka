@@ -94,16 +94,14 @@ private extension NetworkExchangeMiddleware {
   ///   - error: The error that will be parsed into a network error.
   /// - Returns: A new `NetworkExchange` if the parsing succeds.
   func errorNetworkExchange(from request: Vapor.Request, error: Error) -> NetworkExchange? {
-    guard let networkError = error as? AbortError else {
-      return nil
-    }
+    let status = (error as? AbortError)?.status ?? .custom(code: 0, reasonPhrase: error.localizedDescription)
 
     return NetworkExchange(
       request: detailedRequest(from: request),
       response: DetailedResponse(
         uri: request.url,
         headers: request.headers,
-        status: networkError.status,
+        status: status,
         body: nil,
         timestamp: Date().timeIntervalSince1970
       )
