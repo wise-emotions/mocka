@@ -2,8 +2,8 @@
 //  Mocka
 //
 
-import XCTest
 import UserNotifications
+import XCTest
 
 @testable import MockaApp
 @testable import MockaServer
