@@ -18,7 +18,7 @@ extension Logic.Settings.Notifications {
   private static var notificationCenter: UNUserNotificationCenter {
     .current()
   }
-  
+
   /// Builds an `UNNotificationRequest` with the given `notification`'s content and adds it to the notification center.
   ///
   /// - Parameters:
@@ -58,21 +58,23 @@ extension Logic.Settings.Notifications {
   ///
   /// - Parameter completion: The closure excecuted when the user answers the request.
   static func requestNotificationsAuthorizationIfNecessary(_ completion: @escaping AuthorizationRequestCompletion) {
-    UNUserNotificationCenter.current().getNotificationSettings { settings in
-      switch settings.authorizationStatus {
-      case .notDetermined:
-        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound], completionHandler: completion)
-        
-      case .authorized, .provisional:
-        completion(true, nil)
-        
-      case .denied:
-        completion(false, NSError(domain: "App Permissions", code: 0, userInfo: [NSLocalizedDescriptionKey: "User denied notifications permissions"]))
+    UNUserNotificationCenter.current()
+      .getNotificationSettings { settings in
+        switch settings.authorizationStatus {
+        case .notDetermined:
+          UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound], completionHandler: completion)
 
-      @unknown default:
-        completion(false, NSError(domain: "App Permissions", code: 0, userInfo: [NSLocalizedDescriptionKey: "Unknown authorizationStatus value"]))
-        return
+        case .authorized, .provisional:
+          completion(true, nil)
+
+        case .denied:
+          completion(
+            false, NSError(domain: "App Permissions", code: 0, userInfo: [NSLocalizedDescriptionKey: "User denied notifications permissions"]))
+
+        @unknown default:
+          completion(false, NSError(domain: "App Permissions", code: 0, userInfo: [NSLocalizedDescriptionKey: "Unknown authorizationStatus value"]))
+          return
+        }
       }
-    }
   }
 }

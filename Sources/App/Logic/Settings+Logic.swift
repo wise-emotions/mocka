@@ -12,20 +12,20 @@ extension Logic {
 extension Logic.Settings {
   /// The name of the file containing the server's configuration.
   static let serverConfigurationFileName = "serverConfiguration.json"
-  
+
   /// Checks if the workspace `URL` saved in the `UserDefaults` is valid.
   /// That is, it is not nil, it exists, and it contains the `serverConfiguration.json` file.
   static var isWorkspaceURLValid: Bool {
     guard let savedWorkspaceURL = UserDefaults.standard.url(forKey: UserDefaultKey.workspaceURL) else {
       return false
     }
-    
+
     return
       FileManager.default.fileExists(atPath: savedWorkspaceURL.path)
       && uniformType(of: savedWorkspaceURL) == UTType.folder
       && serverConfigurationFileExists(at: savedWorkspaceURL)
   }
-  
+
   /// The server configuration.
   ///
   /// This variable extracts the hostname and port of the server from the `serverConfigurationFileName`.
@@ -42,7 +42,7 @@ extension Logic.Settings {
     else {
       return nil
     }
-    
+
     return ServerConfiguration(hostname: serverConfiguration.hostname, port: serverConfiguration.port, requests: requests)
   }
 }
@@ -56,24 +56,24 @@ extension Logic.Settings {
     guard let unwrappedURL = UserDefaults.standard.url(forKey: UserDefaultKey.workspaceURL) else {
       throw MockaError.workspacePathDoesNotExist
     }
-    
+
     let filePath = unwrappedURL.appendingPathComponent(serverConfigurationFileName, isDirectory: false)
-    
+
     do {
       let encoder = JSONEncoder()
       encoder.outputFormatting = .prettyPrinted
       let data = try encoder.encode(configuration)
-      
+
       guard let string = String(data: data, encoding: .utf8) else {
         throw MockaError.failedToEncode
       }
-      
+
       try string.write(toFile: filePath.path, atomically: true, encoding: String.Encoding.utf8)
     } catch {
       throw MockaError.failedToWriteToFile(content: serverConfigurationFileName, path: filePath.path)
     }
   }
-  
+
   /// Handle the folder selection by using the `fileImporter`.
   /// - Parameter result: The `URL` selected by the `fileImporter`.
   /// - Returns: Returns the selected path as `String`.
@@ -84,7 +84,7 @@ extension Logic.Settings {
     else {
       return nil
     }
-    
+
     selectedFolder.stopAccessingSecurityScopedResource()
     return selectedFolder.path
   }
@@ -98,7 +98,7 @@ private extension Logic.Settings {
     let fullPath = url.appendingPathComponent(serverConfigurationFileName, isDirectory: false)
     return FileManager.default.fileExists(atPath: fullPath.path) && uniformType(of: fullPath) == UTType.json
   }
-  
+
   /// Fetches the `UTType` of the passed `URL`.
   /// - Parameter path: The `URL` of the resource.
   /// - Returns: Returns the `UTType` of the given resource if available, otherwise `nil`.

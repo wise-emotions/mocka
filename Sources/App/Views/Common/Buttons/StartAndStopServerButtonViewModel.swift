@@ -30,7 +30,7 @@ private extension StartAndStopServerButtonViewModel {
     appEnvironment.failedRequestsNotificationSubscription = nil
     appEnvironment.isServerRunning.toggle()
   }
-  
+
   /// Starts the server and subscribe to failed requests notifications.
   /// - Parameter appEnvironment: The `AppEnvironment` instance.
   func startServerAndSubscribeToNotifications(using appEnvironment: AppEnvironment) {
@@ -40,7 +40,7 @@ private extension StartAndStopServerButtonViewModel {
     }
 
     try? appEnvironment.server.start(with: serverConfiguration)
-    
+
     // Subscribe to failed request notifications.
     appEnvironment.failedRequestsNotificationSubscription = appEnvironment.server.networkExchangesPublisher
       .receive(on: RunLoop.main)

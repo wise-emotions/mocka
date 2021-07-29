@@ -15,13 +15,13 @@ internal final class NetworkExchangeMiddleware: Middleware {
   /// Anytime a request/response exchange happens, a detailed version of the actors is generated and injected in this object.
   /// - Note: This property is marked `internal` to allow only the `Server` to send events.
   let networkExchangesSubject: BufferedSubject<NetworkExchange, Never>
-  
+
   /// The port associated with the running instance's configuration.
   let port: Int?
-  
+
   /// The scheme associated with the running instance's configuration.
   let scheme: URI.Scheme
-  
+
   init(host: String?, port: Int?, scheme: URI.Scheme, subject: BufferedSubject<NetworkExchange, Never>) {
     self.host = host
     self.port = port
@@ -50,7 +50,7 @@ internal final class NetworkExchangeMiddleware: Middleware {
         }
       }
   }
-  
+
   /// Clears the buffered log events from the `networkExchangesSubject`.
   func clearBufferedNetworkExchanges() {
     networkExchangesSubject.clearBuffer()
@@ -70,7 +70,7 @@ private extension NetworkExchangeMiddleware {
 
     return bufferCopy.readData(length: bufferCopy.readableBytes)
   }
-  
+
   /// Parses a `DetailedRequest` from the given `Request` instance.
   /// - Parameter request: The request to be parsed.
   /// - Returns: A new `DetailedRequest` instance.
@@ -97,7 +97,7 @@ private extension NetworkExchangeMiddleware {
     guard let networkError = error as? AbortError else {
       return nil
     }
-    
+
     return NetworkExchange(
       request: detailedRequest(from: request),
       response: DetailedResponse(
@@ -109,7 +109,7 @@ private extension NetworkExchangeMiddleware {
       )
     )
   }
-  
+
   /// Parses a `NetworkExchange` from the given request and response.
   /// - Parameters:
   ///   - request: The request sent to the server.
@@ -127,7 +127,7 @@ private extension NetworkExchangeMiddleware {
       )
     )
   }
-  
+
   /// Returns an `URI` instance enriched with the `request` information.
   /// - Parameter request: The request from which extract information.
   /// - Returns: A new `URI` instance.
