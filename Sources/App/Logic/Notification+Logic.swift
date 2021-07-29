@@ -10,10 +10,10 @@ extension Logic.Settings {
   enum Notifications {}
 }
 
-extension Logic.Settings.Notifications {  
+extension Logic.Settings.Notifications {
   /// Whether or not the in-app notifications are enabled.
   @AppStorage(UserDefaultKey.areInAppNotificationEnabled) static var areInAppNotificationEnabled: Bool = false
-  
+
   /// The `UNUserNotificationCenter` used for handling notifications.
   private static var notificationCenter: UNUserNotificationCenter {
     .current()

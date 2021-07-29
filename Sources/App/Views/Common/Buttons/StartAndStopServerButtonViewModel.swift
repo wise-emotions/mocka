@@ -51,7 +51,7 @@ private extension StartAndStopServerButtonViewModel {
       .sink {
         Logic.Settings.Notifications.add(notification: .failedResponse($0.response))
       }
-    
+
     appEnvironment.isServerRunning.toggle()
   }
 }
