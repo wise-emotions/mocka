@@ -139,7 +139,7 @@ public class AppServer {
       let requestedResponse = $0.requestedResponse
 
       application?
-        .on($0.method.vaporMethod, $0.vaporParameter) { [unowned self] request -> EventLoopFuture<ClientResponse> in
+        .on($0.method.vaporMethod, $0.vaporParameter) { request -> EventLoopFuture<ClientResponse> in
           var clientResponse: ClientResponse!
 
           guard let responseBody = requestedResponse.body else {

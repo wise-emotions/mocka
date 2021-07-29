@@ -49,7 +49,7 @@ private extension StartAndStopServerButtonViewModel {
         return statusCode >= 300 && statusCode <= 600
       }
       .sink {
-        Logic.Settings.Notifications.add(notification: .failedResponse($0.response))
+        Logic.Settings.Notifications.add(notification: .failedResponse(statusCode: $0.response.status.code, path: $0.response.uri.path))
       }
 
     appEnvironment.isServerRunning.toggle()
