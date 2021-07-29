@@ -43,13 +43,6 @@ final class ServerListViewModel: ObservableObject {
     networkExchangesPublisher?
       .receive(on: RunLoop.main)
       .sink { [weak self] networkExchange in
-        let statusCode = networkExchange.response.status.code
-        let isFailedResponse = statusCode >= 300 && statusCode <= 600
-        
-        if isFailedResponse {
-          self?.showNotificationIfAuthorized(for: networkExchange.response)
-        }
-        
         self?.networkExchanges.append(networkExchange)
       }
       .store(in: &subscriptions)
@@ -60,16 +53,5 @@ final class ServerListViewModel: ObservableObject {
   /// Clears the array of network exchanges.
   func clearNetworkExchanges() {
     networkExchanges.removeAll()
-  }
-}
-
-// MARK: - Private Helpers
-
-private extension ServerListViewModel {
-  /// Shows a local notification for the given `response`.
-  /// This will check and evenutally ask for notifications authorization if the user never answered to it.
-  /// - Parameter failedResponse: The response just received by the server.
-  func showNotificationIfAuthorized(for failedResponse: DetailedResponse) {
-    Logic.Settings.Notifications.add(notification: .failedResponse(failedResponse))
   }
 }

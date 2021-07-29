@@ -2,6 +2,7 @@
 //  Mocka
 //
 
+import Combine
 import MockaServer
 import SwiftUI
 
@@ -16,6 +17,9 @@ final class AppEnvironment: ObservableObject {
       Logic.Settings.Notifications.areInAppNotificationEnabled = areInAppNotificationEnabled
     }
   }
+  
+  /// The subscription for mapping the failed requests into `InAppNotifications`.
+  var failedRequestsNotificationSubscription: AnyCancellable?
 
   /// Whether the server is currently running.
   @Published var isServerRunning: Bool = false

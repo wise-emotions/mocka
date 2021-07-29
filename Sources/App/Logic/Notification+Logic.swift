@@ -9,7 +9,7 @@ extension Logic.Settings {
   enum Notifications {}
 }
 
-extension Logic.Settings.Notifications {  
+extension Logic.Settings.Notifications {
   /// Whether or not the in-app notifications are enabled.
   static var areInAppNotificationEnabled: Bool {
     get {
@@ -61,6 +61,7 @@ extension Logic.Settings.Notifications {
   }
 
   /// Requests notifications permissions if the user never answered to it.
+  ///
   /// - Parameter completion: The closure excecuted when the user answers the request.
   static func requestNotificationsAuthorizationIfNecessary(_ completion: @escaping AuthorizationRequestCompletion) {
     UNUserNotificationCenter.current().getNotificationSettings { settings in
