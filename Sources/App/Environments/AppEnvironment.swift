@@ -17,7 +17,7 @@ final class AppEnvironment: ObservableObject {
       Logic.Settings.Notifications.areInAppNotificationEnabled = areInAppNotificationEnabled
     }
   }
-  
+
   /// The subscription for mapping the failed requests into `InAppNotifications`.
   var failedRequestsNotificationSubscription: AnyCancellable?
 

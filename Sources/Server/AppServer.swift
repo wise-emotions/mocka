@@ -17,7 +17,7 @@ public class AppServer {
   /// This subject is used to send and subscribe to `LogEvent`s.
   /// - Note: This property is marked `private` to allow only the `Server` to send events.
   private let consoleLogsSubject = BufferedSubject<LogEvent, Never>()
-  
+
   /// The custom middleware for the server that parses all the `Vapor.Response`s of the server to `NetworkExchange`s.
   private var networkExchangeMiddleware: NetworkExchangeMiddleware?
 
@@ -40,7 +40,6 @@ public class AppServer {
   public var networkExchangesPublisher: AnyPublisher<NetworkExchange, Never> {
     networkExchangesSubject.eraseToAnyPublisher()
   }
-  
 
   /// The host associated with the running instance's configuration.
   internal var host: String? {
