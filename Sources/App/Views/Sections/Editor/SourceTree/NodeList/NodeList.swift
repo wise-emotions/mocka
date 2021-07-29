@@ -6,23 +6,23 @@ import SwiftUI
 
 struct NodeList: View {
   var viewModel: NodeListViewModel
-
+  
   var body: some View {
     ForEach(viewModel.nodes, id: \.id) { node in
-      DisclosureGroup(
-        isExpanded: Binding<Bool>(
-          get: {
-            viewModel.listState[node.url, default: false]
-          },
-          set: {
-            viewModel.listState[node.url] = $0
-          }
-        ),
-        content: {
-          if let children = node.children {
+      if node.isFolder {
+        DisclosureGroup(
+          isExpanded: Binding<Bool>(
+            get: {
+              viewModel.listState[node.url, default: false]
+            },
+            set: {
+              viewModel.listState[node.url] = $0
+            }
+          ),
+          content: {
             NodeList(
               viewModel: NodeListViewModel(
-                nodes: children,
+                nodes: node.children ?? [],
                 renamingNode: viewModel.renamingNode,
                 listState: viewModel.listState,
                 detailViewModel: viewModel.detailViewModel,
@@ -31,7 +31,8 @@ struct NodeList: View {
                 performAction: viewModel.performAction
               )
             )
-          } else {
+          },
+          label: {
             NavigationLink(destination: EditorDetail(viewModel: viewModel.detailViewModel(node))) {
               SourceTreeNode(
                 name: node.name,
@@ -41,9 +42,6 @@ struct NodeList: View {
                   try? viewModel.renameNode(node, updatedName)
                 }
               )
-            }
-            .onTapGesture {
-              self.viewModel.listState[node.url, default: false].toggle()
             }
             .contextMenu(
               ContextMenu(
@@ -60,37 +58,33 @@ struct NodeList: View {
               )
             )
           }
-        },
-        label: {
-          NavigationLink(destination: EditorDetail(viewModel: viewModel.detailViewModel(node))) {
-            SourceTreeNode(
-              name: node.name,
-              isFolder: node.isFolder,
-              isRenaming: node == viewModel.renamingNode,
-              onRenamed: { updatedName in
-                try? viewModel.renameNode(node, updatedName)
-              }
-            )
-          }
-          .onTapGesture {
-            self.viewModel.listState[node.url, default: false].toggle()
-          }
-          .contextMenu(
-            ContextMenu(
-              menuItems: {
-                ForEach(node.availableActions, id: \.self) { action in
-                  Button(
-                    viewModel.actionName(action),
-                    action: {
-                      try? viewModel.performAction(action, node)
-                    }
-                  )
-                }
-              }
-            )
+        )
+      } else {
+        NavigationLink(destination: EditorDetail(viewModel: viewModel.detailViewModel(node))) {
+          SourceTreeNode(
+            name: node.name,
+            isFolder: node.isFolder,
+            isRenaming: node == viewModel.renamingNode,
+            onRenamed: { updatedName in
+              try? viewModel.renameNode(node, updatedName)
+            }
           )
         }
-      )
+        .contextMenu(
+          ContextMenu(
+            menuItems: {
+              ForEach(node.availableActions, id: \.self) { action in
+                Button(
+                  viewModel.actionName(action),
+                  action: {
+                    try? viewModel.performAction(action, node)
+                  }
+                )
+              }
+            }
+          )
+        )
+      }
     }
   }
 }
