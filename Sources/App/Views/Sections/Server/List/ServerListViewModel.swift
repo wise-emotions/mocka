@@ -3,8 +3,8 @@
 //
 
 import Combine
+import Foundation
 import MockaServer
-import UserNotifications
 
 /// The ViewModel of the `ServerToolbar`.
 final class ServerListViewModel: ObservableObject {
@@ -66,56 +66,10 @@ final class ServerListViewModel: ObservableObject {
 // MARK: - Private Helpers
 
 private extension ServerListViewModel {
-  /// Builds a `UNNotificationRequest` for the given failed response.
-  /// - Parameter failedResponse: The response whose request just failed.
-  /// - Returns: A new `UNNotificationRequest` instance.
-  func notificationRequest(for failedResponse: DetailedResponse) -> UNNotificationRequest {
-    let content = UNMutableNotificationContent()
-    content.body = "Received response with \(failedResponse.status.code) status code."
-    content.title = "Request failed!"
-    content.subtitle = "Endpoint: \(failedResponse.uri.path)"
-    content.sound = .default
-    
-    return UNNotificationRequest(identifier: "FAILED_REQUEST", content: content, trigger: nil)
-  }
-
-  /// Requests notifications permissions if the user never answered to it.
-  /// - Parameter completion: The closure excecuted when the user answers the request.
-  func requestNotificationsAuthorizationIfNecessary(_ completion: @escaping AuthorizationRequestCompletion) {
-    UNUserNotificationCenter.current().getNotificationSettings { settings in
-      switch settings.authorizationStatus {
-      case .notDetermined:
-        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound], completionHandler: completion)
-        
-      case .authorized, .provisional:
-        completion(true, nil)
-        
-      case .denied:
-        completion(false, NSError(domain: "AppPermissions", code: 0, userInfo: [NSLocalizedDescriptionKey: "User denied notifications permissions"]))
-
-      @unknown default:
-        completion(false, NSError(domain: "AppPermissions", code: 0, userInfo: [NSLocalizedDescriptionKey: "Unknown authorizationStatus value"]))
-        return
-      }
-    }
-  }
-  
   /// Shows a local notification for the given `response`.
   /// This will check and evenutally ask for notifications authorization if the user never answered to it.
   /// - Parameter failedResponse: The response just received by the server.
   func showNotificationIfAuthorized(for failedResponse: DetailedResponse) {
-    requestNotificationsAuthorizationIfNecessary { [weak self] isPermissionGiven, error in
-      guard let self = self else {
-        return
-      }
-
-      guard error == nil, isPermissionGiven, Logic.Settings.areInAppNotificationEnabled else {
-        return
-      }
-      
-      let request = self.notificationRequest(for: failedResponse)
-
-      UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
-    }
+    Logic.Settings.Notifications.add(notification: .failedResponse(failedResponse))
   }
 }

@@ -8,12 +8,12 @@ import SwiftUI
 /// App environment object shared by all the `View`s of the application.
 final class AppEnvironment: ObservableObject {
   /// Whether or not the in-app notifications are enabled.
-  var areInAppNotificationEnabled: Bool = Logic.Settings.areInAppNotificationEnabled {
+  var areInAppNotificationEnabled: Bool = Logic.Settings.Notifications.areInAppNotificationEnabled {
     willSet {
       objectWillChange.send()
     }
     didSet {
-      Logic.Settings.areInAppNotificationEnabled = areInAppNotificationEnabled
+      Logic.Settings.Notifications.areInAppNotificationEnabled = areInAppNotificationEnabled
     }
   }
 

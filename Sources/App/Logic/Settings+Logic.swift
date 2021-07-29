@@ -2,62 +2,52 @@
 //  Mocka
 //
 
-import Foundation
 import UniformTypeIdentifiers
 
 extension Logic {
   /// The logic related to settings of the app.
-  enum Settings {
-    /// The name of the file containing the server's configuration.
-    static let serverConfigurationFileName = "serverConfiguration.json"
+  enum Settings {}
+}
+
+extension Logic.Settings {
+  /// The name of the file containing the server's configuration.
+  static let serverConfigurationFileName = "serverConfiguration.json"
+  
+  /// Checks if the workspace `URL` saved in the `UserDefaults` is valid.
+  /// That is, it is not nil, it exists, and it contains the `serverConfiguration.json` file.
+  static var isWorkspaceURLValid: Bool {
+    guard let savedWorkspaceURL = UserDefaults.standard.url(forKey: UserDefaultKey.workspaceURL) else {
+      return false
+    }
     
-    /// Whether or not the in-app notifications are enabled.
-    static var areInAppNotificationEnabled: Bool {
-      get {
-        UserDefaults.standard.bool(forKey: UserDefaultKey.areInAppNotificationEnabled)
-      }
-      set {
-        UserDefaults.standard.setValue(newValue, forKey: UserDefaultKey.areInAppNotificationEnabled)
-      }
+    return
+      FileManager.default.fileExists(atPath: savedWorkspaceURL.path)
+      && uniformType(of: savedWorkspaceURL) == UTType.folder
+      && serverConfigurationFileExists(at: savedWorkspaceURL)
+  }
+  
+  /// The server configuration.
+  ///
+  /// This variable extracts the hostname and port of the server from the `serverConfigurationFileName`.
+  /// In addition, it tries to fetch all the requests from the workspace path.
+  /// Should either of the two steps fail, it returns nil.
+  static var serverConfiguration: ServerConfiguration? {
+    guard
+      let workspaceURL = UserDefaults.standard.url(forKey: UserDefaultKey.workspaceURL),
+      let settingsFileData = FileManager.default.contents(
+        atPath: workspaceURL.appendingPathComponent(serverConfigurationFileName, isDirectory: false).path
+      ),
+      let serverConfiguration = try? JSONDecoder().decode(ServerConnectionConfiguration.self, from: settingsFileData),
+      let requests = try? Logic.SourceTree.requests()
+    else {
+      return nil
     }
-
-    /// Checks if the workspace `URL` saved in the `UserDefaults` is valid.
-    /// That is, it is not nil, it exists, and it contains the `serverConfiguration.json` file.
-    static var isWorkspaceURLValid: Bool {
-      guard let savedWorkspaceURL = UserDefaults.standard.url(forKey: UserDefaultKey.workspaceURL) else {
-        return false
-      }
-
-      return
-        FileManager.default.fileExists(atPath: savedWorkspaceURL.path)
-        && uniformType(of: savedWorkspaceURL) == UTType.folder
-        && serverConfigurationFileExists(at: savedWorkspaceURL)
-    }
-
-    /// The server configuration.
-    ///
-    /// This variable extracts the hostname and port of the server from the `serverConfigurationFileName`.
-    /// In addition, it tries to fetch all the requests from the workspace path.
-    /// Should either of the two steps fail, it returns nil.
-    static var serverConfiguration: ServerConfiguration? {
-      guard
-        let workspaceURL = UserDefaults.standard.url(forKey: UserDefaultKey.workspaceURL),
-        let settingsFileData = FileManager.default.contents(
-          atPath: workspaceURL.appendingPathComponent(serverConfigurationFileName, isDirectory: false).path
-        ),
-        let serverConfiguration = try? JSONDecoder().decode(ServerConnectionConfiguration.self, from: settingsFileData),
-        let requests = try? Logic.SourceTree.requests()
-      else {
-        return nil
-      }
-
-      return ServerConfiguration(hostname: serverConfiguration.hostname, port: serverConfiguration.port, requests: requests)
-    }
+    
+    return ServerConfiguration(hostname: serverConfiguration.hostname, port: serverConfiguration.port, requests: requests)
   }
 }
 
 extension Logic.Settings {
-
   /// Updates the server configuration file or creates it at the workspace root folder.
   /// - Throws: `MockaError.workspacePathDoesNotExist`,
   ///           `MockaError.failedToEncode`.
@@ -66,24 +56,24 @@ extension Logic.Settings {
     guard let unwrappedURL = UserDefaults.standard.url(forKey: UserDefaultKey.workspaceURL) else {
       throw MockaError.workspacePathDoesNotExist
     }
-
+    
     let filePath = unwrappedURL.appendingPathComponent(serverConfigurationFileName, isDirectory: false)
-
+    
     do {
       let encoder = JSONEncoder()
       encoder.outputFormatting = .prettyPrinted
       let data = try encoder.encode(configuration)
-
+      
       guard let string = String(data: data, encoding: .utf8) else {
         throw MockaError.failedToEncode
       }
-
+      
       try string.write(toFile: filePath.path, atomically: true, encoding: String.Encoding.utf8)
     } catch {
       throw MockaError.failedToWriteToFile(content: serverConfigurationFileName, path: filePath.path)
     }
   }
-
+  
   /// Handle the folder selection by using the `fileImporter`.
   /// - Parameter result: The `URL` selected by the `fileImporter`.
   /// - Returns: Returns the selected path as `String`.
@@ -94,7 +84,7 @@ extension Logic.Settings {
     else {
       return nil
     }
-
+    
     selectedFolder.stopAccessingSecurityScopedResource()
     return selectedFolder.path
   }
@@ -108,7 +98,7 @@ private extension Logic.Settings {
     let fullPath = url.appendingPathComponent(serverConfigurationFileName, isDirectory: false)
     return FileManager.default.fileExists(atPath: fullPath.path) && uniformType(of: fullPath) == UTType.json
   }
-
+  
   /// Fetches the `UTType` of the passed `URL`.
   /// - Parameter path: The `URL` of the resource.
   /// - Returns: Returns the `UTType` of the given resource if available, otherwise `nil`.
