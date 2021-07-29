@@ -137,35 +137,11 @@ public class AppServer {
     self.requests = requests
 
     requests.forEach {
-      let requestedPath = $0.path.joined(separator: "/")
       let requestedResponse = $0.requestedResponse
 
       application?
         .on($0.method.vaporMethod, $0.vaporParameter) { [unowned self] request -> EventLoopFuture<ClientResponse> in
-          // This property is force-unwrapped because it can never fail,
-          // since the raw value passed is an identical copy of SwiftNIO's `HTTPMethod`.
-          let httpMethod = HTTPMethod(rawValue: request.method.rawValue)!
-          let receivedRequestTimeStamp = Date().timeIntervalSince1970
-
           var clientResponse: ClientResponse!
-          var networkExchange: NetworkExchange {
-            NetworkExchange(
-              request: DetailedRequest(
-                httpMethod: httpMethod,
-                uri: URI(scheme: URI.Scheme.http, host: host, port: port, path: request.url.path, query: request.url.query),
-                headers: request.headers,
-                body: body(from: request.body.data),
-                timestamp: receivedRequestTimeStamp
-              ),
-              response: DetailedResponse(
-                uri: URI(scheme: URI.Scheme.http, host: host, port: port, path: requestedPath),
-                headers: clientResponse.headers,
-                status: clientResponse.status,
-                body: body(from: clientResponse.body),
-                timestamp: Date().timeIntervalSince1970
-              )
-            )
-          }
 
           guard let responseBody = requestedResponse.body else {
             clientResponse = ClientResponse(status: requestedResponse.status, headers: requestedResponse.headers, body: nil)
