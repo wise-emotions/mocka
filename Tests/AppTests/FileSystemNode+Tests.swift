@@ -7,7 +7,7 @@ import XCTest
 @testable import MockaApp
 
 class FileSystemNodeTests: XCTestCase {
-  // Test that a node's `flatten` returns an array containing the node and the the children recursively.
+  /// Test that a node's `flatten` returns an array containing the node and the the children recursively.
   func testFileSystemNodeArrayFlattening() {
     let request = FileSystemNode(
       name: "request.json",

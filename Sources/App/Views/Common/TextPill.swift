@@ -21,7 +21,7 @@ struct TextPill: View {
       .frame(height: 20)
       .background(Color.ristretto)
       .cornerRadius(100)
-      .foregroundColor(Color.latte)
+      .foregroundColor(.latte)
   }
 }
 

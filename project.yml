@@ -1,6 +1,7 @@
 name: Mocka
 
 settings:
+  DEVELOPMENT_TEAM: XKET3Q5DFE
   DEBUG_INFORMATION_FORMAT: dwarf-with-dsym
   TARGETED_DEVICE_FAMILY: 3
   # https://forums.swift.org/t/swift-packages-in-multiple-targets-results-in-this-will-result-in-duplication-of-library-code-errors/34892/36
@@ -11,7 +12,7 @@ options:
   bundleIdPrefix: com.wisemotions
   developmentLanguage: en
   indentWidth: 2
-  xcodeVersion: 12.4
+  xcodeVersion: 12.5
   deploymentTarget:
     macOS: "11.0"
   generateEmptyDirectories: true
@@ -23,6 +24,10 @@ packages:
   Sourceful:
     url: https://github.com/twostraws/Sourceful
     branch: main
+
+  Introspect:
+    url: https://github.com/siteline/SwiftUI-Introspect
+    from: 0.1.3
 targets:
   MockaApp:
     type: application
@@ -32,11 +37,14 @@ targets:
     settings:
       PRODUCT_NAME: "Mocka"
       PRODUCT_MODULE_NAME: "MockaApp"
+      CODE_SIGN_ENTITLEMENTS: Sources/App/Resources/MockaApp.entitlements
+      ENABLE_HARDENED_RUNTIME: true
     sources:
       - path: Sources/App
     dependencies:
       - target: MockaServer
       - package: Sourceful
+      - package: Introspect
     scheme:
       testTargets:
         - MockaAppTests
@@ -53,7 +61,7 @@ targets:
         CFBundleInfoDictionaryVersion: "6.0"
         CFBundleName: $(PRODUCT_NAME)
         CFBundlePackageType: $(PRODUCT_BUNDLE_PACKAGE_TYPE)
-        CFBundleShortVersionString: "1.0.0"
+        CFBundleShortVersionString: "0.1.0"
         CFBundleVersion: "1"
         LSMinimumSystemVersion: "$(MACOSX_DEPLOYMENT_TARGET)"
 
@@ -75,7 +83,7 @@ targets:
         CFBundleInfoDictionaryVersion: "6.0"
         CFBundleName: $(PRODUCT_NAME)
         CFBundlePackageType: $(PRODUCT_BUNDLE_PACKAGE_TYPE)
-        CFBundleShortVersionString: "1.0.0"
+        CFBundleShortVersionString: "0.1.0"
         CFBundleVersion: "$(CURRENT_PROJECT_VERSION)"
 
   MockaServer:
@@ -101,7 +109,7 @@ targets:
         CFBundleInfoDictionaryVersion: "6.0"
         CFBundleName: $(PRODUCT_NAME)
         CFBundlePackageType: $(PRODUCT_BUNDLE_PACKAGE_TYPE)
-        CFBundleShortVersionString: "1.0.0"
+        CFBundleShortVersionString: "0.1.0"
         CFBundleVersion: "1"
 
   MockaServerTests:
@@ -122,5 +130,5 @@ targets:
         CFBundleInfoDictionaryVersion: "6.0"
         CFBundleName: $(PRODUCT_NAME)
         CFBundlePackageType: $(PRODUCT_BUNDLE_PACKAGE_TYPE)
-        CFBundleShortVersionString: "1.0.0"
+        CFBundleShortVersionString: "0.1.0"
         CFBundleVersion: "$(CURRENT_PROJECT_VERSION)"
