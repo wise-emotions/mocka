@@ -13,10 +13,6 @@ struct SourceTreeNode: View {
   /// The name of the file or folder.
   @State var name: String
 
-  /// Whether the `TextField` should become the first responder.
-  /// - Note: This is needed since invoking `becomeFirstResponder` more than once will result in resigning the first responder.
-  @State var shouldBecomeFirstResponder: Bool
-
   /// Whether the node represents a folder or not.
   let isFolder: Bool
 
@@ -47,9 +43,8 @@ struct SourceTreeNode: View {
         )
         .foregroundColor(.latte)
         .introspectTextField { textField in
-          if isRenaming && shouldBecomeFirstResponder {
+          if isRenaming, textField.currentEditor() == nil {
             textField.becomeFirstResponder()
-            shouldBecomeFirstResponder = false
           }
         }
       } else {
@@ -69,7 +64,6 @@ struct SourceTreeNode: View {
   ///   - onRenamed: The closure invoked after renaming the node with the new name.
   init(name: String, isFolder: Bool, isRenaming: Bool = false, onRenamed: ((String) -> Void)? = nil) {
     self.name = name
-    self.shouldBecomeFirstResponder = isRenaming
     self.isFolder = isFolder
     self.isRenaming = isRenaming
     self.onRenamed = onRenamed
