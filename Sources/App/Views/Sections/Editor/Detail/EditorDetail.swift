@@ -25,7 +25,7 @@ struct EditorDetail: View {
 
             headersSection
 
-            Editor(viewModel: EditorViewModel(text: viewModel.displayedResponseBody, mode: viewModel.currentMode == .read ? .read : .write))
+            Editor(viewModel: EditorViewModel(text: $viewModel.displayedResponseBody, mode: viewModel.currentMode == .read ? .read : .write))
               .disabled(viewModel.isResponseHeadersKeyValueTableEnabled.isFalse || viewModel.isResponseBodyEditorEnabled.isFalse)
               .isVisible(viewModel.isEditorDetailResponseBodyVisible)
           }

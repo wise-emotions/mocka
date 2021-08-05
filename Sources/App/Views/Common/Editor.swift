@@ -39,7 +39,7 @@ struct Editor: View {
       }
       
       MockaSourceCodeTextEditor(
-        text: $viewModel.text,
+        text: viewModel.text,
         theme: MockaSourceCodeTheme(),
         isEnabled: viewModel.mode == .write
       )
@@ -60,6 +60,6 @@ struct Editor: View {
 
 struct EditorPreviews: PreviewProvider {
   static var previews: some View {
-    Editor(viewModel: EditorViewModel())
+    Editor(viewModel: EditorViewModel(text: .constant("")))
   }
 }
