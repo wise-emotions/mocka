@@ -31,6 +31,9 @@ final class RecordModeSettingsViewModel: ObservableObject {
   /// Whether the `fileImporter` is presented.
   @Published var fileImporterIsPresented: Bool = false
   
+  /// Whether or not the overwrite response checkbox is enabled.
+  @Published var shouldOverwriteResponse: Bool = true
+
   // MARK: - Init
 
   /// Creates a new instance with the app environment.

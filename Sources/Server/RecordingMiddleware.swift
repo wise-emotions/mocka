@@ -36,6 +36,8 @@ final class RecordingMiddleware: Middleware {
           return response.encodeResponse(for: request)
         }
         
+        // We already decoded the response if it is encoded in a format like gzip, so we have to remove the content encoding header,
+        // to prevent a deserialization failure.
         response.headers = clientResponse.headers.removing(name: "Content-Encoding")
         
         self.recordModeNetworkExchangesSubject.send(self.networkExchange(from: request, and: response))

@@ -32,15 +32,13 @@ final class AppSectionViewModel: ObservableObject {
       .receive(on: RunLoop.main)
       .sink { [weak self] networkExchange in
         guard let recordingPath = self?.recordingPath else {
-          print("ops")
           return
         }
         
-        #warning("Add proper values")
         self?.createAndSaveRequest(
           from: networkExchange,
           to: recordingPath,
-          shouldOverwriteResponse: true
+          shouldOverwriteResponse: appEnvironment.shouldOverwriteResponse
         )
       }
       .store(in: &subscriptions)
@@ -65,7 +63,7 @@ final class AppSectionViewModel: ObservableObject {
       }
     }
     
-    try? Logic.SourceTree.addDirectory(at: directory, named: requestDirectoryName)
+    _ = try? Logic.SourceTree.addDirectory(at: directory, named: requestDirectoryName)
 
     // Add response, if any.
     if
@@ -88,6 +86,6 @@ final class AppSectionViewModel: ObservableObject {
   /// - Parameter request: The request we want to save.
   /// - Returns: The name of the request folder.
   static private func requestDirectoryName(_ request: Request) -> String {
-    "\(request.method.rawValue) - \(request.path)"
+    "\(request.method.rawValue) - \(request.path.joined(separator: "/"))"
   }
 }

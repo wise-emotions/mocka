@@ -26,15 +26,16 @@ struct RecordModeSettings: View {
         .font(.body)
         .padding(.vertical)
 
-      VStack(alignment: .leading) {
+      VStack(alignment: .leading, spacing: 16) {
         HStack(alignment: .top) {
           Text("Recording folder path")
-            .font(.headline)
+            .font(.subheadline)
             .frame(width: 120, alignment: .trailing)
+            .padding(.top, 11)
 
           VStack {
             RoundedTextField(title: "Recording folder path", text: $viewModel.recordingPath)
-              .frame(width: 300)
+              .frame(width: 344)
               .overlay(
                 RoundedRectangle(cornerRadius: 6)
                   .stroke(Color.redEye, lineWidth: viewModel.recordingPathError == nil ? 0 : 1)
@@ -42,7 +43,7 @@ struct RecordModeSettings: View {
 
             Text("Please note that the selected folder must exist and it will not be automatically created.")
               .font(.subheadline)
-              .frame(width: 300, height: 30)
+              .frame(width: 344, height: 30)
               .padding(.top, -6)
               .foregroundColor(.macchiato)
           }
@@ -50,7 +51,7 @@ struct RecordModeSettings: View {
           Button("Select folder") {
             viewModel.fileImporterIsPresented.toggle()
           }
-          .frame(height: 30)
+          .frame(height: 36)
           .fileImporter(
             isPresented: $viewModel.fileImporterIsPresented,
             allowedContentTypes: [UTType.folder],
@@ -59,30 +60,53 @@ struct RecordModeSettings: View {
           )
         }
 
-        HStack {
+        HStack(alignment: .top) {
           Text("Recording base URL")
-            .font(.headline)
+            .font(.subheadline)
             .frame(width: 120, alignment: .trailing)
+            .padding(.top, 11)
 
           RoundedTextField(title: "Recording base URL", text: $viewModel.middlewareBaseURL)
-            .frame(width: 300)
+            .frame(width: 344)
+        }
+        
+        HStack {
+          Toggle(isOn: $viewModel.shouldOverwriteResponse) {
+            Text("Overwrite already existing responses")
+          }
+          .padding(.top, 10)
+          .padding(.leading, 128)
         }
       }
-
-      VStack(alignment: .trailing) {
-        Button(
-          action: {
-            viewModel.confirmSettingsAndStartRecording()
-          },
-          label: {
-            Text("Start recording")
-              .frame(width: 100, height: 21)
-          }
-        )
-        .buttonStyle(AccentButtonStyle())
-        .padding(.horizontal)
-        .padding(.top)
+      
+      VStack {
+        HStack {
+          Spacer()
+          
+          Button(
+            action: {
+              appEnvironment.isRecordModeSettingsPresented.toggle()
+            },
+            label: {
+              Text("Cancel")
+                .padding(.horizontal)
+            }
+          )
+          
+          Button(
+            action: {
+              viewModel.confirmSettingsAndStartRecording()
+            },
+            label: {
+              Text("Start recording")
+                .frame(height: 20)
+                .padding(.horizontal)
+            }
+          )
+          .buttonStyle(AccentButtonStyle())
+        }
       }
+      .padding(.top)
     }
     .padding(25)
   }

@@ -17,6 +17,9 @@ final class AppEnvironment: ObservableObject {
   /// The base `URL` to be used by the middleware when performing network calls in record mode.
   @Published var middlewareBaseURL: URL? = nil
   
+  /// Whether or not the response should be overwritten in the record mode.
+  @Published var shouldOverwriteResponse: Bool = true
+  
   /// The path where the recorded responses and requests will be saved in record mode.
   @Published var selectedRecordingPath: URL? = nil
 
