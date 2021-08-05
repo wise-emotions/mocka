@@ -18,37 +18,35 @@ struct Editor: View {
   // MARK: - Body
 
   var body: some View {
-    ZStack {
-      VStack(spacing: 16) {
-        HStack {
-          Text("Response Body")
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .font(.headline)
-            .foregroundColor(Color.latte)
-
-          Spacer()
-
-          Button("Importa") {
-            viewModel.fileImporterIsPresented = true
-          }
-          .fileImporter(
-            isPresented: $viewModel.fileImporterIsPresented,
-            allowedContentTypes: [.html, .css, .csv, .text, .json, .xml],
-            allowsMultipleSelection: false,
-            onCompletion: viewModel.importFile(from:)
-          )
+    VStack(spacing: 16) {
+      HStack {
+        Text("Response Body")
+          .frame(maxWidth: .infinity, alignment: .leading)
+          .font(.headline)
+          .foregroundColor(Color.latte)
+        
+        Spacer()
+        
+        Button("Importa") {
+          viewModel.fileImporterIsPresented = true
         }
-
-        MockaSourceCodeTextEditor(
-          text: $viewModel.text,
-          theme: MockaSourceCodeTheme(),
-          isEnabled: viewModel.mode == .write
+        .fileImporter(
+          isPresented: $viewModel.fileImporterIsPresented,
+          allowedContentTypes: [.html, .css, .csv, .text, .json, .xml],
+          allowsMultipleSelection: false,
+          onCompletion: viewModel.importFile(from:)
         )
-        .font(.body)
-        .frame(height: 320)
-        .background(Color.lungo)
-        .clipShape(RoundedRectangle(cornerRadius: 8))
       }
+      
+      MockaSourceCodeTextEditor(
+        text: $viewModel.text,
+        theme: MockaSourceCodeTheme(),
+        isEnabled: viewModel.mode == .write
+      )
+      .font(.body)
+      .frame(height: 320)
+      .background(Color.lungo)
+      .clipShape(RoundedRectangle(cornerRadius: 8))
     }
     .onDrop(
       of: [UTType.fileURL.identifier],
