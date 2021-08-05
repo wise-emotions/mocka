@@ -24,9 +24,9 @@ struct Editor: View {
           .frame(maxWidth: .infinity, alignment: .leading)
           .font(.headline)
           .foregroundColor(Color.latte)
-        
+
         Spacer()
-        
+
         Button("Importa") {
           viewModel.fileImporterIsPresented = true
         }
@@ -37,7 +37,7 @@ struct Editor: View {
           onCompletion: viewModel.importFile(from:)
         )
       }
-      
+
       MockaSourceCodeTextEditor(
         text: $viewModel.text,
         theme: MockaSourceCodeTheme(),
