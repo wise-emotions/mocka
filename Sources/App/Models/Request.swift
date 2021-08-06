@@ -8,6 +8,9 @@ import MockaServer
 /// An object containing information related to a server request.
 /// This object is saved to and retrieved from the file system.
 struct Request: Equatable, Hashable {
+  /// The name of the request.
+  let name: String
+  
   /// The path of the `API`. This should not consider any query parameters.
   let path: Path
 
@@ -26,10 +29,12 @@ struct Request: Equatable, Hashable {
 
   /// Creates a `Request` object.
   /// - Parameters:
+  ///   - name: The name of the request.
   ///   - path: The path of the `API`. This should not consider any query parameters.
   ///   - method: The method associated with the request.
-  ///   - response: The expected response when this request is invoked.
-  init(path: Path, method: HTTPMethod, expectedResponse: Response) {
+  ///   - expectedResponse: The expected response when this request is invoked.
+  init(name: String, path: Path, method: HTTPMethod, expectedResponse: Response) {
+    self.name = name
     self.path = path
     self.method = method
     self.expectedResponse = expectedResponse
@@ -65,6 +70,7 @@ struct Request: Equatable, Hashable {
 // Without the custom encoder we would have `path` as an array of strings, whereas a `String` is more reasonable.
 extension Request: Codable {
   enum CodingKeys: String, CodingKey {
+    case name
     case path
     case method
     case expectedResponse
@@ -74,6 +80,7 @@ extension Request: Codable {
     let container = try decoder.container(keyedBy: CodingKeys.self)
 
     let stringPath = try container.decode(String.self, forKey: .path)
+    name = try container.decode(String.self, forKey: .name)
     path = stringPath.components(separatedBy: "/")
     method = try container.decode(HTTPMethod.self, forKey: .method)
     expectedResponse = try container.decode(Response.self, forKey: .expectedResponse)
@@ -82,6 +89,7 @@ extension Request: Codable {
   func encode(to encoder: Encoder) throws {
     var container = encoder.container(keyedBy: CodingKeys.self)
 
+    try container.encode(name, forKey: .name)
     let stringPath = path.joined(separator: "/")
     try container.encode(stringPath, forKey: .path)
     try container.encode(method, forKey: .method)

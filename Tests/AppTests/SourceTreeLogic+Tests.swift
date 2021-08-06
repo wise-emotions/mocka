@@ -24,46 +24,18 @@ class SourceTreeLogicTests: XCTestCase {
     temporaryWorkspaceURL = URL(fileURLWithPath: NSTemporaryDirectory().appending("Mocka"))
   }
 
+  override class func tearDown() {
+    UserDefaults.standard.set(nil, forKey: UserDefaultKey.workspaceURL)
+  }
+  
   override func setUp() {
     UserDefaults.standard.set(Self.temporaryWorkspaceURL, forKey: UserDefaultKey.workspaceURL)
-
-    // Create a "/App/GET - get all users" under workspace root folder with a valid request.
-    let getAllUsersURL = Self.temporaryWorkspaceURL.appendingPathComponent("App/GET - get all users")
-    Self.addDirectory(at: getAllUsersURL.path)
-    Self.addRequestWithJSONResponse(to: getAllUsersURL)
-
-    // Create a "/App/POST - get all users" under workspace root folder with a valid request.
-    let createUser = Self.temporaryWorkspaceURL.appendingPathComponent("App/V2/POST - create user")
-    Self.addDirectory(at: createUser.path)
-    Self.addRequestWithNoContent(to: createUser)
-
-    // Create a "/App/GET - get all admins" under workspace root folder with a not valid request.
-    let getAllAdminsURL = Self.temporaryWorkspaceURL.appendingPathComponent("App/GET - get all admins")
-    Self.addDirectory(at: getAllAdminsURL.path)
-    Self.addRequestWithJSONResponse(to: getAllAdminsURL, addResponse: false)
-
-    // Create a "/App/GET - get all superusers" under workspace root folder with a no request.
-    let getAllSuperusersURL = Self.temporaryWorkspaceURL.appendingPathComponent("App/GET - get all superusers")
-    Self.addDirectory(at: getAllSuperusersURL.path)
-
-    // Create a "/App/Void" under workspace root folder with a valid request.
-    let voidURL = Self.temporaryWorkspaceURL.appendingPathComponent("App/Void")
-    Self.addDirectory(at: voidURL.path)
-    Self.addRequestWithJSONResponse(to: voidURL)
-
-    // Create a "/App/Generic" under workspace root folder with no request.
-    let genericURL = Self.temporaryWorkspaceURL.appendingPathComponent("App/Generic")
-    Self.addDirectory(at: genericURL.path)
   }
 
   override func tearDown() {
     try? FileManager.default.removeItem(at: Self.temporaryWorkspaceURL)
   }
-
-  override class func tearDown() {
-    UserDefaults.standard.set(nil, forKey: UserDefaultKey.workspaceURL)
-  }
-
+  
   // MARK: Tests
 
   /// Tests the performance creating a realistic high number of requests nested vertically and horizontally.
@@ -89,105 +61,113 @@ class SourceTreeLogicTests: XCTestCase {
       _ = Logic.SourceTree.sourceTree()
     }
   }
+  
+  func testFoldersCorrectlyCategorized() {
+    // Given
+    
+    // A request folder named `/GET - get all users` under workspace root.
+    let getAllUsersURL = Self.temporaryWorkspaceURL.appendingPathComponent("GET - get all users")
+    Self.addDirectory(at: getAllUsersURL.path)
+    Self.addRequestWithJSONResponse(to: getAllUsersURL)
 
-  /// Test only valid folders are considered.
-  func testOnlyContentOfValidStructuresIsConsidered() {
-    let contents = Logic.SourceTree.sourceTree()
+    // A folder named `/App/GET - get all admins` under workspace root with no valid request, therefore qualifies as a namespace folder.
+    let getAllAdminsURL = Self.temporaryWorkspaceURL.appendingPathComponent("App/GET - get all admins")
+    Self.addDirectory(at: getAllAdminsURL.path)
 
-    // The folder has only 4 valid folders out of the existing 6.
-    // GET - get all users, V2, Void and Generic.
-    XCTAssertEqual(contents.children?[0].children?.count, 4)
+    // A folder `/App/Void` under workspace root folder with a valid request. This will be a namespace folder due to the name.
+    let voidURL = Self.temporaryWorkspaceURL.appendingPathComponent("App/Void")
+    Self.addDirectory(at: voidURL.path)
+    Self.addRequestWithJSONResponse(to: voidURL)
+
+    // A folder `/App/Generic` under workspace root folder with no request.
+    let genericURL = Self.temporaryWorkspaceURL.appendingPathComponent("App/Generic")
+    Self.addDirectory(at: genericURL.path)
+
+    // A request folder `/App/POST - create user` under workspace root.
+    let createUser = Self.temporaryWorkspaceURL.appendingPathComponent("App/POST - create user")
+    Self.addDirectory(at: createUser.path)
+    Self.addRequestWithNoContent(to: createUser)
+    
+    // When
+    
+    let workspace = Logic.SourceTree.sourceTree()
+    let appFolder = workspace.namespaces.first(where: { $0.name == "App" })!
+    
+    // Then
+
+    XCTAssertEqual(workspace.requests.count, 1) // `/GET - get all users`
+    XCTAssertEqual(workspace.namespaces.count, 1) // `/App`
+    
+    XCTAssertEqual(appFolder.namespaces.count, 3)
+    XCTAssertEqual(appFolder.namespaces.map { $0.name }.sorted(by: <).joined(separator: ", "), "GET - get all admins, Generic, Void")
+    XCTAssertEqual(appFolder.requests.count, 1)
   }
+  
+  func testRequestsCorrectlyFetched() {
+    // Given
+    
+    // A request folder named `/GET - get all users` under workspace root.
+    let getAllUsersURL = Self.temporaryWorkspaceURL.appendingPathComponent("GET - get all users")
+    Self.addDirectory(at: getAllUsersURL.path)
+    Self.addRequestWithJSONResponse(to: getAllUsersURL)
 
-  /// Test fetching requests without setting workspace url fails.
-  func testFetchingMockaRequestsFromSourceTreeWithoutSettingWorkspaceFails() {
-    UserDefaults.standard.set(nil, forKey: UserDefaultKey.workspaceURL)
-
-    do {
-      _ = try Logic.SourceTree.requests()
-      XCTFail("Was expecting the test to fail, but succeeded instead")
-    } catch {
-      guard case .workspacePathDoesNotExist = error as? MockaError else {
-        XCTFail("Was expecting a \(MockaError.workspacePathDoesNotExist) but got \(error) instead.")
-        return
-      }
-    }
+    // A request folder `/App/POST - create user` under workspace root.
+    let createUser = Self.temporaryWorkspaceURL.appendingPathComponent("App/POST - create user")
+    Self.addDirectory(at: createUser.path)
+    Self.addRequestWithNoContent(to: createUser)
+    
+    // A request folder `/App/V2/POST - create user` under workspace root.
+    let createUserV2 = Self.temporaryWorkspaceURL.appendingPathComponent("App/V2/POST - create user v2")
+    Self.addDirectory(at: createUserV2.path)
+    Self.addRequestWithJSONResponse(to: createUserV2)
+    
+    // When
+    
+    let requests = try? Logic.SourceTree.requests()
+    
+    // Then
+    
+    XCTAssertEqual(requests?.count, 3)
   }
+  
+  func testNamespaceFoldersProperlyIdentified() {
+    // Given
+    
+    // A request folder named `/GET - get all users` under workspace root.
+    let getAllUsersURL = Self.temporaryWorkspaceURL.appendingPathComponent("GET - get all users")
+    Self.addDirectory(at: getAllUsersURL.path)
+    Self.addRequestWithJSONResponse(to: getAllUsersURL)
 
-  /// Test Mocka requests are fetched correctly from the source tree.
-  func testFetchingMockaRequestsFromSourceTree() {
-    let requests = try! Logic.SourceTree.requests()
-      .sorted {
-        $0.requestedResponse.status.code < $1.requestedResponse.status.code
-      }
+    // A folder named `/App/GET - get all admins` under workspace root with no valid request, therefore qualifies as a namespace folder.
+    let getAllAdminsURL = Self.temporaryWorkspaceURL.appendingPathComponent("App/GET - get all admins")
+    Self.addDirectory(at: getAllAdminsURL.path)
 
-    let expectedRequestOne = MockaApp.Request(
-      path: ["api", "users"],
-      method: .get,
-      expectedResponse: Response(
-        statusCode: 200,
-        contentType: .applicationJSON,
-        headers: [HTTPHeader(key: "Content-Type", value: "application/json")]
-      )
-    )
+    // A folder `/App/Void` under workspace root folder with a valid request. This will be a namespace folder due to the name.
+    let voidURL = Self.temporaryWorkspaceURL.appendingPathComponent("App/Void")
+    Self.addDirectory(at: voidURL.path)
+    Self.addRequestWithJSONResponse(to: voidURL)
 
-    let expectedRequestTwo = MockaApp.Request(
-      path: ["api", "users"],
-      method: .post,
-      expectedResponse: Response(
-        statusCode: 204,
-        contentType: .none,
-        headers: []
-      )
-    )
+    // A folder `/App/Generic` under workspace root folder with no request.
+    let genericURL = Self.temporaryWorkspaceURL.appendingPathComponent("App/Generic")
+    Self.addDirectory(at: genericURL.path)
 
-    XCTAssertEqual(requests[0].path, expectedRequestOne.path)
-    XCTAssertEqual(requests[0].method, expectedRequestOne.method)
-    XCTAssertEqual(Int(requests[0].requestedResponse.status.code), expectedRequestOne.expectedResponse.statusCode)
-    XCTAssertEqual(requests[0].requestedResponse.headers.contentType, expectedRequestOne.expectedResponse.contentType)
-
-    XCTAssertEqual(requests[1].path, expectedRequestTwo.path)
-    XCTAssertEqual(requests[1].method, expectedRequestTwo.method)
-    XCTAssertEqual(Int(requests[1].requestedResponse.status.code), expectedRequestTwo.expectedResponse.statusCode)
-    XCTAssertEqual(requests[1].requestedResponse.headers.contentType, nil)
-  }
-
-  // Test `namespaceFolders` returns an array containing all the folders that serve as a namespace.
-  func testNamespaceFoldersReturnArrayWithCorrectFolders() {
-    let namespaceFolder = Logic.SourceTree.namespaceFolders(in: Logic.SourceTree.rootFileSystemNode)
-
-    XCTAssertEqual(namespaceFolder.count, 5)
-    XCTAssertEqual(namespaceFolder.map { $0.name }.sorted(by: <), ["App", "Generic", "V2", "Void", "Workspace Root"])
-  }
-
-  /// Test `addDirectory` returns the created `FileSystemNode`.
-  func testAddDirectory() {
-    let expectedNodeName = "NewDirectory"
-
-    guard let directory = try? XCTUnwrap(try? Logic.SourceTree.addDirectory(at: Self.temporaryWorkspaceURL, named: expectedNodeName)) else {
-      return
-    }
-
-    XCTAssertEqual(directory.name, expectedNodeName)
-  }
-
-  /// Test `renameDirectory` returns the renamed `FileSystemNode`.
-  func testRenameDirectory() {
-    let initialNodeName = "NewDirectory"
-    let expectedNodeName = "RenamedDirectory"
-
-    guard let directory = try? XCTUnwrap(try? Logic.SourceTree.addDirectory(at: Self.temporaryWorkspaceURL, named: initialNodeName)) else {
-      return
-    }
-
-    guard let renamedDirectory = try? XCTUnwrap(Logic.SourceTree.renameDirectory(node: directory, to: expectedNodeName)) else {
-      return
-    }
-
-    XCTAssertEqual(renamedDirectory.name, expectedNodeName)
-    XCTAssertEqual(renamedDirectory.url.deletingLastPathComponent(), directory.url.deletingLastPathComponent())
+    // A request folder `/App/POST - create user` under workspace root.
+    let createUser = Self.temporaryWorkspaceURL.appendingPathComponent("App/POST - create user")
+    Self.addDirectory(at: createUser.path)
+    Self.addRequestWithNoContent(to: createUser)
+    
+    // When
+    
+    let namespaceFolders = try? Logic.SourceTree.namespaceFolders()
+    
+    // Then
+    
+    XCTAssertEqual(namespaceFolders?.count, 4)
+    XCTAssertEqual(namespaceFolders?.map { $0.name }.sorted(by: <).joined(separator: ", "), "App, GET - get all admins, Generic, Void")
+    
   }
 }
+
 
 // MARK: - Helpers
 
@@ -203,7 +183,7 @@ extension SourceTreeLogicTests {
   static func addRequestWithNoContent(to url: URL) {
     // Add the request.
     let request = MockaApp.Request(
-      path: ["api", "users"],
+      path: ["api", "users", "\(url.lastPathComponent)"],
       method: .post,
       expectedResponse: Response(
         statusCode: 204,
@@ -226,7 +206,7 @@ extension SourceTreeLogicTests {
   static func addRequestWithJSONResponse(to url: URL, addResponse: Bool = true) {
     // Add the request.
     let request = MockaApp.Request(
-      path: ["api", "users"],
+      path: ["api", "users", "\(url.lastPathComponent)"],
       method: .get,
       expectedResponse: Response(
         statusCode: 200,
