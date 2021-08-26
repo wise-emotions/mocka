@@ -53,9 +53,9 @@ do
       else
         echo "swift-format $SWIFT_FORMAT_VERSION already installed." >&2
       fi
-    fi
 
-    cd ..
+      cd ..
+    fi
 
     echo "Formatting code..." >&2
 
