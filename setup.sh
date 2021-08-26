@@ -58,8 +58,8 @@ do
     echo "Formatting code..." >&2
 
     # Run local swift-format.
-    swift run swift-format --configuration ../swiftformat.json -m format -r -i ./../Sources
-    swift run swift-format --configuration ../swiftformat.json -m format -r -i ./../Tests
+    swift run swift-format --configuration swiftformat.json -m format -r -i ./../Sources
+    swift run swift-format --configuration swiftformat.json -m format -r -i ./../Tests
 
     cd ..
   fi
