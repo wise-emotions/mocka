@@ -3,7 +3,7 @@ set -e
 
 PROJECT_NAME="Mocka"
 CLEAN_SCHEME="MockaApp"
-SWIFT_FORMAT_VERSION="swift-5.3-branch"
+SWIFT_FORMAT_VERSION="swift-5.4-branch"
 
 # Install Homebrew dependency manager.
 if ! [[ -x "$(command -v brew)" ]]; then
@@ -55,13 +55,13 @@ do
       fi
     fi
 
+    cd ..
+
     echo "Formatting code..." >&2
 
     # Run local swift-format.
-    swift run swift-format --configuration swiftformat.json -m format -r -i ./../Sources
-    swift run swift-format --configuration swiftformat.json -m format -r -i ./../Tests
-
-    cd ..
+    swift-format/.build/debug/swift-format --configuration ./swiftformat.json -m format -r -i ./Sources
+    swift-format/.build/debug/swift-format --configuration ./swiftformat.json -m format -r -i ./Tests
   fi
 done
 
