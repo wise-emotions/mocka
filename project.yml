@@ -1,7 +1,6 @@
 name: Mocka
 
 settings:
-  DEVELOPMENT_TEAM: XKET3Q5DFE
   DEBUG_INFORMATION_FORMAT: dwarf-with-dsym
   TARGETED_DEVICE_FAMILY: 3
   # https://forums.swift.org/t/swift-packages-in-multiple-targets-results-in-this-will-result-in-duplication-of-library-code-errors/34892/36
