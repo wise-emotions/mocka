@@ -5,6 +5,8 @@ settings:
   TARGETED_DEVICE_FAMILY: 3
   # https://forums.swift.org/t/swift-packages-in-multiple-targets-results-in-this-will-result-in-duplication-of-library-code-errors/34892/36
   DISABLE_DIAMOND_PROBLEM_DIAGNOSTIC: true
+  # https://github.com/wise-emotions/mocka/issues/108
+  SWIFT_OPTIMIZATION_LEVEL: -Onone
 
 options:
   minimumXcodeGenVersion: "2.11.0"

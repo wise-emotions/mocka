@@ -22,7 +22,7 @@ struct SourceTreeNode: View {
   // MARK: - Interaction
 
   /// The user renamed the node.
-  var onRenamed: ((String) -> Void)?
+  let onRenamed: (String) -> Void
 
   // MARK: - Body
 
@@ -37,7 +37,7 @@ struct SourceTreeNode: View {
           "Folder name", text: $name,
           onCommit: {
             if name.isNotEmpty {
-              onRenamed?(name)
+              onRenamed(name)
             }
           }
         )
@@ -62,7 +62,7 @@ struct SourceTreeNode: View {
   ///   - isFolder: Whether the node is a folder or not.
   ///   - isRenaming: Whether the node is being renamed.
   ///   - onRenamed: The closure invoked after renaming the node with the new name.
-  init(name: String, isFolder: Bool, isRenaming: Bool = false, onRenamed: ((String) -> Void)? = nil) {
+  init(name: String, isFolder: Bool, isRenaming: Bool = false, onRenamed: @escaping (String) -> Void) {
     self.name = name
     self.isFolder = isFolder
     self.isRenaming = isRenaming
