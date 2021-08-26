@@ -56,11 +56,12 @@ You can also go to the [GitHub Project](https://github.com/wise-emotions/mocka/p
 ⚙️ Build Requirements
 ====================
 
-| **Mocka** | **Swift** | **Xcode** |
-|-----------|-----------|-----------|
-| 0.1.0     | 5.3       | 12.5      |
+| **Mocka** | **Swift** | **Xcode**   |
+|-----------|-----------|-------------|
+| 0.1.0     | 5.3...5.4 | 12.4...12.5 |
+| `develop` | 5.3...5.4 | 12.4...12.5 |
 
-🧑‍💻👩‍💻 Development
+👩‍💻🧑‍💻 Development
 ================
 
 We currently use `XcodeGen` in order to generate the `.xcodeproj` file.
@@ -78,7 +79,6 @@ For example you can type: `./setup.sh close clean open` to close the current Xco
 ===============
 
 1. `testIsWorkspaceURLValidReturnsFalseForMissingServerConfiguration` in `Tests/AppTests/SettingsLogic+Test.swift` Unit Test sometimes fails
-2. The CI fails due to the lack of macOS 11 on GitHub Actions
 
 If you find other issues, please [open a bug report](https://github.com/wise-emotions/mocka/issues).
 
