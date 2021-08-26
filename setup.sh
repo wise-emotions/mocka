@@ -35,7 +35,7 @@ do
 
       git clone -b $SWIFT_FORMAT_VERSION https://github.com/apple/swift-format.git
       cd swift-format
-      swift build
+      swift build -c release
     else
       echo "Check if swift-format version is $SWIFT_FORMAT_VERSION." >&2
 
@@ -53,9 +53,9 @@ do
       else
         echo "swift-format $SWIFT_FORMAT_VERSION already installed." >&2
       fi
-
-      cd ..
     fi
+    
+    cd ..
 
     echo "Formatting code..." >&2
 
