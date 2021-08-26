@@ -49,7 +49,7 @@ do
         git fetch --all
         git checkout --track origin/$SWIFT_FORMAT_VERSION || git checkout $SWIFT_FORMAT_VERSION
 
-        swift build
+        swift build -c release
       else
         echo "swift-format $SWIFT_FORMAT_VERSION already installed." >&2
       fi
@@ -60,8 +60,8 @@ do
     echo "Formatting code..." >&2
 
     # Run local swift-format.
-    swift-format/.build/debug/swift-format --configuration ./swiftformat.json -m format -r -i ./Sources
-    swift-format/.build/debug/swift-format --configuration ./swiftformat.json -m format -r -i ./Tests
+    swift-format/.build/release/swift-format --configuration ./swiftformat.json -m format -r -i ./Sources
+    swift-format/.build/release/swift-format --configuration ./swiftformat.json -m format -r -i ./Tests
   fi
 done
 
