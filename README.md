@@ -2,18 +2,21 @@
 <img src="Resources/Banner.png" alt="Mocka Banner">
 </p>
 
-[![Build Status](https://github.com/wise-emotions/mocka/actions/workflows/build-mocka-app.yml/badge.svg)](https://github.com/wise-emotions/mocka/actions/workflows/build-mocka-app.yml/)
 [![Version](https://img.shields.io/badge/version-0.1.0-informational)](https://github.com/wise-emotions/mocka/releases)
-[![Language](https://img.shields.io/badge/language-Swift%205.3-orange.svg)](https://swift.org/)
+[![Language](https://img.shields.io/badge/language-Swift%205.4-orange.svg)](https://swift.org/)
 [![Platforms](https://img.shields.io/badge/platforms-macOS-cc9c00.svg)]()
 [![License](https://img.shields.io/badge/license-MIT-lightgrey.svg)](https://github.com/wise-emotions/mocka/blob/main/LICENSE)
+
+[![Build Status](https://github.com/wise-emotions/mocka/actions/workflows/test-mocka-app.yml/badge.svg)](https://github.com/wise-emotions/mocka/actions/workflows/test-mocka-app.yml/)
+[![Build Status](https://github.com/wise-emotions/mocka/actions/workflows/test-mocka-server.yml/badge.svg)](https://github.com/wise-emotions/mocka/actions/workflows/test-mocka-server.yml/)
 
 ---
 
 <p align="center">
+    <a href="#%EF%B8%8F-getting-mocka">Getting Mocka</a> &bull;
     <a href="#-features">Features</a> &bull;
     <a href="#-usage-requirements">Usage Requirements</a> &bull;
-    <a href="#-build-requirements">Build Requirements</a> &bull;
+    <a href="#%EF%B8%8F-build-requirements">Build Requirements</a> &bull;
     <a href="#-development">Development</a> &bull;
     <a href="#-known-issues">Known Issues</a> &bull;
     <a href="#-wanted-features">Wanted Features</a> &bull;
@@ -30,7 +33,9 @@ Mocka — A Mock Server for Developers by Developers, made with Swift ❤️.
 ☕️ Getting Mocka
 ===============
 
-To build it yourself or to contribute, look at the [Development](https://github.com/wise-emotions/mocka#-development) section for more information.
+You can find the latest version [here](https://github.com/wise-emotions/mocka/releases/download/0.1.0/Mocka.app.zip).
+
+Otherwise, to build it yourself or to contribute, look at the [Development](https://github.com/wise-emotions/mocka#-development) section for more information.
 
 🚀 Features
 ===========
@@ -52,15 +57,17 @@ You can also go to the [GitHub Project](https://github.com/wise-emotions/mocka/p
 | **Mocka** | **macOS** |
 |-----------|-----------|
 | 0.1.0     | 11.0      |
+| `develop` | 11.0      |
 
 ⚙️ Build Requirements
 ====================
 
-| **Mocka** | **Swift** | **Xcode** |
-|-----------|-----------|-----------|
-| 0.1.0     | 5.3       | 12.5      |
+| **Mocka** | **Swift** | **Xcode**   |
+|-----------|-----------|-------------|
+| 0.1.0     | 5.3...5.4 | 12.4...12.5 |
+| `develop` | 5.3...5.4 | 12.4...12.5 |
 
-🧑‍💻👩‍💻 Development
+👩‍💻🧑‍💻 Development
 ================
 
 We currently use `XcodeGen` in order to generate the `.xcodeproj` file.
@@ -69,7 +76,7 @@ To install `XcodeGen` you will also need `brew`. If you currently don't have tho
 Currently, the `setup.sh` allows the following parameters:
 - `close` to close the Xcode instance
 - `format` to format all the code by using [`swift-format`](https://github.com/apple/swift-format)
-- `clean` to clean the derived data (at the `.build` folder) and it also run an `xcodebuild clean` command
+- `clean` to clean the derived data (at the `build` folder) and it also run an `xcodebuild clean` command
 - `open` to open the Xcode project
 
 For example you can type: `./setup.sh close clean open` to close the current Xcode instance, clean the project, and open the newly generated one.
@@ -78,9 +85,8 @@ For example you can type: `./setup.sh close clean open` to close the current Xco
 ===============
 
 1. `testIsWorkspaceURLValidReturnsFalseForMissingServerConfiguration` in `Tests/AppTests/SettingsLogic+Test.swift` Unit Test sometimes fails
-2. The CI fails due to the lack of macOS 11 on GitHub Actions
 
-If you find other issues, please [open a bug report](https://github.com/wise-emotions/mocka/issues).
+If you find other issues, please [open a bug report](https://github.com/wise-emotions/mocka/issues/new?assignees=&labels=bug&template=bug_report.md&title=).
 
 If you would like to fix a bug, please follow the [Contributing](https://github.com/wise-emotions/mocka#-contributing) section.
 
