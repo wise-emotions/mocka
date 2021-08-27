@@ -13,7 +13,7 @@
 ---
 
 <p align="center">
-    <a href="#-getting-mock">Getting Mocka</a> &bull;
+    <a href="#-getting-mocka">Getting Mocka</a> &bull;
     <a href="#-features">Features</a> &bull;
     <a href="#-usage-requirements">Usage Requirements</a> &bull;
     <a href="#-build-requirements">Build Requirements</a> &bull;
