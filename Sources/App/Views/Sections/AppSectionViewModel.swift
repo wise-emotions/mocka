@@ -13,9 +13,9 @@ final class AppSectionViewModel: ObservableObject {
 
   /// The `Set` containing the list of subscriptions.
   var subscriptions = Set<AnyCancellable>()
-  
+
   var appEnvironment: AppEnvironment
-  
+
   /// The path for the request and response to save in the record mode.
   var recordingPath: URL? {
     appEnvironment.selectedRecordingPath
@@ -27,23 +27,24 @@ final class AppSectionViewModel: ObservableObject {
   /// - Parameter recordModeNetworkExchangesPublisher: The publisher of `NetworkExchange`s for the record mode.
   init(recordModeNetworkExchangesPublisher: AnyPublisher<NetworkExchange, Never>, appEnvironment: AppEnvironment) {
     self.appEnvironment = appEnvironment
-    
+
     recordModeNetworkExchangesPublisher
       .receive(on: RunLoop.main)
       .sink { [weak self] networkExchange in
         guard let recordingPath = self?.recordingPath else {
           return
         }
-        
-        self?.createAndSaveRequest(
-          from: networkExchange,
-          to: recordingPath,
-          shouldOverwriteResponse: appEnvironment.shouldOverwriteResponse
-        )
+
+        self?
+          .createAndSaveRequest(
+            from: networkExchange,
+            to: recordingPath,
+            shouldOverwriteResponse: appEnvironment.shouldOverwriteResponse
+          )
       }
       .store(in: &subscriptions)
   }
-  
+
   /// Creates a request from the received `NetworkExchange` and saves it to the provided folder.
   /// If the response is already present, it is overwritten or not based on the `shouldOverwriteResponse` parameter.
   /// - Parameters:
@@ -54,7 +55,7 @@ final class AppSectionViewModel: ObservableObject {
     let request = Request(from: networkExchange)
     let requestDirectoryName = Self.requestDirectoryName(request)
     let requestDirectory = directory.appendingPathComponent(requestDirectoryName)
-    
+
     if Logic.SourceTree.contents(of: requestDirectory).isNotEmpty {
       if shouldOverwriteResponse {
         try? Logic.SourceTree.deleteDirectory(at: requestDirectoryName)
@@ -62,12 +63,11 @@ final class AppSectionViewModel: ObservableObject {
         return
       }
     }
-    
+
     _ = try? Logic.SourceTree.addDirectory(at: directory, named: requestDirectoryName)
 
     // Add response, if any.
-    if
-      let responseBodyData = networkExchange.response.body,
+    if let responseBodyData = networkExchange.response.body,
       let responseBody = String(data: responseBodyData, encoding: .utf8),
       let expectedFileExtension = request.expectedResponse.contentType.expectedFileExtension
     {
@@ -81,7 +81,7 @@ final class AppSectionViewModel: ObservableObject {
     // Add request.
     try? Logic.SourceTree.addRequest(request, to: requestDirectory)
   }
-  
+
   /// Generates the name of the request folder.
   /// - Parameter request: The request we want to save.
   /// - Returns: The name of the request folder.

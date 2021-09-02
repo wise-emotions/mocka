@@ -15,10 +15,10 @@ final class StartAndStopRecordModeButtonViewModel: ObservableObject {
     switch appEnvironment.isServerRecording {
     case true:
       try? appEnvironment.server.stop()
-      
+
       appEnvironment.isServerRunning.toggle()
       appEnvironment.isServerRecording.toggle()
-      
+
     case false:
       appEnvironment.isRecordModeSettingsPresented.toggle()
     }

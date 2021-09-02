@@ -13,7 +13,7 @@ final class RecordingMiddleware: Middleware {
 
   /// The `PassthroughSubject` used to send the request and response pair back to the app.
   let recordModeNetworkExchangesSubject: PassthroughSubject<NetworkExchange, Never>
-    
+
   /// Initializes the `RecordingMiddleware.
   /// - Parameters:
   ///   - configuration: The configuration of the middleware.
@@ -22,24 +22,24 @@ final class RecordingMiddleware: Middleware {
     self.configuration = configuration
     self.recordModeNetworkExchangesSubject = recordModeNetworkExchangesSubject
   }
-  
+
   func respond(to request: Vapor.Request, chainingTo next: Responder) -> EventLoopFuture<Response> {
     let requestURL = Vapor.URI(string: configuration.baseURL.absoluteString + request.url.path)
     let headers = request.headers.removing(name: "Host")
     let clientRequest = ClientRequest(method: request.method, url: requestURL, headers: headers, body: request.body.data)
-    
+
     return request.client.send(clientRequest)
       .flatMap { [weak self] clientResponse -> EventLoopFuture<Response> in
         var response = clientResponse
-      
+
         guard let self = self else {
           return response.encodeResponse(for: request)
         }
-        
+
         // We already decoded the response if it is encoded in a format like gzip, so we have to remove the content encoding header,
         // to prevent a deserialization failure.
         response.headers = clientResponse.headers.removing(name: "Content-Encoding")
-        
+
         self.recordModeNetworkExchangesSubject.send(self.networkExchange(from: request, and: response))
         return response.encodeResponse(for: request)
       }
@@ -63,7 +63,6 @@ private extension RecordingMiddleware {
     return bufferCopy.readData(length: bufferCopy.readableBytes)
   }
 
-  
   /// Creates the `NetworkExchange` based on the `Request` and `ClientResponse` pair.
   /// - Parameters:
   ///   - request: The `Vapor.Request` for the network call.
@@ -73,7 +72,8 @@ private extension RecordingMiddleware {
     NetworkExchange(
       request: DetailedRequest(
         httpMethod: HTTPMethod(rawValue: request.method.rawValue)!,
-        uri: URI(scheme: URI.Scheme.http, host: self.configuration.hostname, port: self.configuration.port, path: request.url.path, query: request.url.query),
+        uri: URI(
+          scheme: URI.Scheme.http, host: self.configuration.hostname, port: self.configuration.port, path: request.url.path, query: request.url.query),
         headers: request.headers,
         body: self.body(from: request.body.data),
         timestamp: Date().timeIntervalSince1970

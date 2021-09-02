@@ -21,10 +21,12 @@ struct RecordModeSettings: View {
 
   var body: some View {
     VStack {
-      Text("Before starting the record mode, you need to choose a path where the requests and responses will be saved.\nYou also need to input the base URL that will be used to perform the network calls.")
-        .frame(height: 50)
-        .font(.body)
-        .padding(.vertical)
+      Text(
+        "Before starting the record mode, you need to choose a path where the requests and responses will be saved.\nYou also need to input the base URL that will be used to perform the network calls."
+      )
+      .frame(height: 50)
+      .font(.body)
+      .padding(.vertical)
 
       VStack(alignment: .leading, spacing: 16) {
         HStack(alignment: .top) {
@@ -69,7 +71,7 @@ struct RecordModeSettings: View {
           RoundedTextField(title: "Recording base URL", text: $viewModel.middlewareBaseURL)
             .frame(width: 344)
         }
-        
+
         HStack {
           Toggle(isOn: $viewModel.shouldOverwriteResponse) {
             Text("Overwrite already existing responses")
@@ -78,11 +80,11 @@ struct RecordModeSettings: View {
           .padding(.leading, 128)
         }
       }
-      
+
       VStack {
         HStack {
           Spacer()
-          
+
           Button(
             action: {
               appEnvironment.isRecordModeSettingsPresented.toggle()
@@ -92,7 +94,7 @@ struct RecordModeSettings: View {
                 .padding(.horizontal)
             }
           )
-          
+
           Button(
             action: {
               viewModel.confirmSettingsAndStartRecording()

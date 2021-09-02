@@ -9,7 +9,7 @@ import MockaServer
 struct MiddlewareConfiguration: MiddlewareConfigurationProvider, Codable {
   /// The base `URL` on which the middleware will start requests.
   var baseURL: URL
-  
+
   /// The host part of the `URL`.
   let hostname: String
 
@@ -31,4 +31,3 @@ struct MiddlewareConfiguration: MiddlewareConfigurationProvider, Codable {
     self.port = port
   }
 }
-

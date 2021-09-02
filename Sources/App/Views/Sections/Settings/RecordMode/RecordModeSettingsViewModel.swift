@@ -9,9 +9,9 @@ import UniformTypeIdentifiers
 final class RecordModeSettingsViewModel: ObservableObject {
 
   // MARK: - Stored Properties
-  
+
   var appEnvironment: AppEnvironment
-  
+
   /// The folder where the record mode requests will be saved.
   @Published var recordingPath: String {
     didSet {
@@ -30,7 +30,7 @@ final class RecordModeSettingsViewModel: ObservableObject {
 
   /// Whether the `fileImporter` is presented.
   @Published var fileImporterIsPresented: Bool = false
-  
+
   /// Whether or not the overwrite response checkbox is enabled.
   @Published var shouldOverwriteResponse: Bool = true
 
@@ -40,11 +40,11 @@ final class RecordModeSettingsViewModel: ObservableObject {
   /// - Parameter appEnvironment: The app environment.
   init(appEnvironment: AppEnvironment) {
     self.appEnvironment = appEnvironment
-    
+
     middlewareBaseURL = appEnvironment.middlewareBaseURL?.absoluteString ?? ""
     recordingPath = appEnvironment.selectedRecordingPath?.path ?? ""
   }
-  
+
   // MARK: - Functions
 
   /// The `fileImporter` completion function.
@@ -60,17 +60,17 @@ final class RecordModeSettingsViewModel: ObservableObject {
     self.recordingPath = recordingFolder
     recordingPathError = nil
   }
-  
+
   /// Confirms the selected startup settings
   /// by creating the configuration file in the right path.
   /// In case of error the `workspaceURL` returns to `nil`.
   func confirmSettingsAndStartRecording() {
     let recordingURL = URL(fileURLWithPath: recordingPath)
     let middlewareURL = URL(string: middlewareBaseURL)
-    
+
     do {
       try Logic.WorkspacePath.checkURLAndCreateFolderIfNeeded(at: recordingURL)
-      
+
       appEnvironment.middlewareBaseURL = middlewareURL
       appEnvironment.selectedRecordingPath = recordingURL
       appEnvironment.isRecordModeSettingsPresented.toggle()
@@ -78,9 +78,9 @@ final class RecordModeSettingsViewModel: ObservableObject {
       guard let middlewareConfiguration = appEnvironment.middlewareConfiguration, appEnvironment.isServerRecording.isFalse else {
         return
       }
-      
+
       try? appEnvironment.server.startRecording(with: middlewareConfiguration)
-      
+
       appEnvironment.isServerRunning.toggle()
       appEnvironment.isServerRecording.toggle()
     } catch {

@@ -17,7 +17,7 @@ struct SymbolButton: View {
 
   /// The action to execute when the button is tapped.
   var action: () -> Void
-  
+
   // MARK: - Body
 
   var body: some View {

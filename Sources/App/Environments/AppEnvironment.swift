@@ -10,16 +10,16 @@ import SwiftUI
 final class AppEnvironment: ObservableObject {
   /// Whether the server is currently running.
   @Published var isServerRunning: Bool = false
-  
+
   /// Whether the server is currently in record mode.
   @Published var isServerRecording: Bool = false
-  
+
   /// The base `URL` to be used by the middleware when performing network calls in record mode.
   @Published var middlewareBaseURL: URL? = nil
-  
+
   /// Whether or not the response should be overwritten in the record mode.
   @Published var shouldOverwriteResponse: Bool = true
-  
+
   /// The path where the recorded responses and requests will be saved in record mode.
   @Published var selectedRecordingPath: URL? = nil
 
@@ -31,7 +31,7 @@ final class AppEnvironment: ObservableObject {
 
   /// Whether the startup settings should be shown or not.
   @Published var shouldShowStartupSettings = !Logic.Settings.isWorkspaceURLValid
-  
+
   /// Whether or not the record mode settings are shown.
   @Published var isRecordModeSettingsPresented: Bool = false
 
@@ -39,13 +39,13 @@ final class AppEnvironment: ObservableObject {
   var serverConfiguration: ServerConfiguration? {
     Logic.Settings.serverConfiguration
   }
-  
+
   /// The global record mode middleware configuration.
   var middlewareConfiguration: MiddlewareConfiguration? {
     guard let baseURL = middlewareBaseURL, let hostname = serverConfiguration?.hostname, let port = serverConfiguration?.port else {
       return nil
     }
-    
+
     return MiddlewareConfiguration(baseURL: baseURL, hostname: hostname, port: port)
   }
 }

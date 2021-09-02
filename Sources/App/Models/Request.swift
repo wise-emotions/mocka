@@ -34,7 +34,7 @@ struct Request: Equatable, Hashable {
     self.method = method
     self.expectedResponse = expectedResponse
   }
-  
+
   /// Creates a `Request` object starting from a `NetworkExchange` object.
   /// - Parameter networkExchange: The `NetworkExchange` object received from the server.
   init(from networkExchange: NetworkExchange) {

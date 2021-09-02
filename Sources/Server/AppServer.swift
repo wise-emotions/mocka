@@ -44,7 +44,7 @@ public class AppServer {
   public var networkExchangesPublisher: AnyPublisher<NetworkExchange, Never> {
     networkExchangesSubject.eraseToAnyPublisher()
   }
-  
+
   /// The `Publisher` of `NetworkExchange`s for the record mode.
   public var recordModeNetworkExchangesPublisher: AnyPublisher<NetworkExchange, Never> {
     recordModeNetworkExchangesSubject.eraseToAnyPublisher()
@@ -79,7 +79,7 @@ public class AppServer {
   }
 
   // MARK: - Methods
-  
+
   /// Starts a new `Application` instance using the passed configuration and uses it to record network calls.
   /// - Parameter configuration: An object conforming to `MiddlewareConfigurationProvider`.
   /// - Throws: `ServerError.instanceAlreadyRunning` or a wrapped `Vapor` error.
@@ -100,13 +100,14 @@ public class AppServer {
     application?.http.server.configuration.port = configuration.port
     application?.http.server.configuration.hostname = configuration.hostname
     application?.http.client.configuration.decompression = .enabled(limit: .none)
-    application?.middleware.use(
-      RecordingMiddleware(
-        configuration: configuration,
-        recordModeNetworkExchangesSubject: recordModeNetworkExchangesSubject
+    application?.middleware
+      .use(
+        RecordingMiddleware(
+          configuration: configuration,
+          recordModeNetworkExchangesSubject: recordModeNetworkExchangesSubject
+        )
       )
-    )
-    
+
     do {
       try application?.server.start()
     } catch {
