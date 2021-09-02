@@ -24,7 +24,7 @@ class EditorViewModel: ObservableObject {
   // MARK: - Stored Properties
 
   /// The text of the editor.
-  @Published var text: Binding<String>
+  var text: Binding<String>
 
   /// Wether the user is dragging a file over the editor.
   @Published var isDraggingOver = false
@@ -37,7 +37,7 @@ class EditorViewModel: ObservableObject {
 
   // MARK: - Init
 
-  init(text: Binding<String> = .constant(""), mode: Mode = .read) {
+  init(text: Binding<String>, mode: Mode = .read) {
     self.text = text
     self.mode = mode
   }

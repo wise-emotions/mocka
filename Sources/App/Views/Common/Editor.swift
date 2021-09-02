@@ -2,6 +2,7 @@
 //  Mocka
 //
 
+import Sourceful
 import SwiftUI
 import UniformTypeIdentifiers
 
@@ -17,38 +18,35 @@ struct Editor: View {
   // MARK: - Body
 
   var body: some View {
-    ZStack {
-      VStack(spacing: 10) {
-        HStack {
-          Text("Response Body")
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .font(.headline)
-            .foregroundColor(Color.latte)
+    VStack(spacing: 16) {
+      HStack {
+        Text("Response Body")
+          .frame(maxWidth: .infinity, alignment: .leading)
+          .font(.headline)
+          .foregroundColor(Color.latte)
 
-          Spacer()
+        Spacer()
 
-          Button("Importa") {
-            viewModel.fileImporterIsPresented = true
-          }
-          .fileImporter(
-            isPresented: $viewModel.fileImporterIsPresented,
-            allowedContentTypes: [.html, .css, .csv, .text, .json, .xml],
-            allowsMultipleSelection: false,
-            onCompletion: viewModel.importFile(from:)
-          )
+        Button("Import") {
+          viewModel.fileImporterIsPresented = true
         }
-
-        TextEditor(
-          text: viewModel.mode == .write ? viewModel.text : .constant(viewModel.text.wrappedValue)
+        .fileImporter(
+          isPresented: $viewModel.fileImporterIsPresented,
+          allowedContentTypes: [.html, .css, .csv, .text, .json, .xml],
+          allowsMultipleSelection: false,
+          onCompletion: viewModel.importFile(from:)
         )
-        .font(.body)
-        .frame(minHeight: 40)
-        .padding(4)
-        .background(Color.doppio)
-        .cornerRadius(8)
-        .padding(.bottom, 10)
-        .fixedSize(horizontal: false, vertical: true)
       }
+
+      MockaSourceCodeTextEditor(
+        text: viewModel.text,
+        theme: MockaSourceCodeTheme(),
+        isEnabled: viewModel.mode == .write
+      )
+      .font(.body)
+      .frame(height: 320)
+      .background(Color.lungo)
+      .clipShape(RoundedRectangle(cornerRadius: 8))
     }
     .onDrop(
       of: [UTType.fileURL.identifier],
@@ -62,6 +60,6 @@ struct Editor: View {
 
 struct EditorPreviews: PreviewProvider {
   static var previews: some View {
-    Editor(viewModel: EditorViewModel())
+    Editor(viewModel: EditorViewModel(text: .constant("")))
   }
 }

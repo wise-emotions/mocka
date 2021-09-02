@@ -30,7 +30,7 @@ struct KeyValueTable: View {
       }
       .drawingGroup(on: viewModel.mode == .read)
     }
-    .padding()
+    .padding(.horizontal)
     .background(Color.doppio)
     .cornerRadius(6)
   }

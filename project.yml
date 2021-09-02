@@ -22,6 +22,10 @@ packages:
   Vapor:
     url: https://github.com/vapor/vapor
     from: 4.0.0
+  Sourceful:
+    url: https://github.com/twostraws/Sourceful
+    branch: main
+
   Introspect:
     url: https://github.com/siteline/SwiftUI-Introspect
     from: 0.1.3
@@ -40,6 +44,7 @@ targets:
       - path: Sources/App
     dependencies:
       - target: MockaServer
+      - package: Sourceful
       - package: Introspect
     scheme:
       testTargets:
