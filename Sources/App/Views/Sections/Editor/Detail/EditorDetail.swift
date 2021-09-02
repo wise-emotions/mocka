@@ -16,6 +16,8 @@ struct EditorDetail: View {
 
   var body: some View {
     VStack {
+      Divider()
+
       if viewModel.shouldShowEmptyState {
         EmptyState(symbol: .document, text: "Select a request to display its details")
       } else {

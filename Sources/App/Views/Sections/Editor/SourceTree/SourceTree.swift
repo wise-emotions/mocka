@@ -20,20 +20,8 @@ struct SourceTree: View {
 
       if viewModel.isSourceTreeEmpty {
         EmptyState(symbol: .scroll, text: "Tap the 􀁌 to add an API request")
-          .background(
-            NavigationLink(
-              destination: EditorDetail(viewModel: viewModel.detailViewModel(for: nil)),
-              isActive: $viewModel.isShowingCreateRequestDetailView
-            ) {}
-          )
       } else if viewModel.filteredNodes.isEmpty {
         EmptyState(symbol: .document, text: "Could not find any API requests with this name")
-          .background(
-            NavigationLink(
-              destination: EditorDetail(viewModel: viewModel.detailViewModel(for: nil)),
-              isActive: $viewModel.isShowingCreateRequestDetailView
-            ) {}
-          )
       } else {
         List(viewModel.filteredNodes, children: \.children) { node in
           NavigationLink(destination: EditorDetail(viewModel: viewModel.detailViewModel(for: node))) {
@@ -63,15 +51,17 @@ struct SourceTree: View {
         }
         .listStyle(SidebarListStyle())
         .padding(.top, -8)
-        .background(
-          NavigationLink(
-            destination: EditorDetail(viewModel: viewModel.detailViewModel(for: nil)),
-            isActive: $viewModel.isShowingCreateRequestDetailView
-          ) {}
-        )
       }
     }
     .frame(minWidth: Size.minimumListWidth)
+    .background(
+      // This NavigationLink here is needed to show the detail for the creation of the request when the user tap on the `+` button.
+      NavigationLink(
+        destination: EditorDetail(viewModel: viewModel.detailViewModel(for: nil)),
+        isActive: $viewModel.isShowingCreateRequestDetailView
+      ) {}
+      .hidden()
+    )
     .toolbar {
       ToolbarItem {
         HStack {
