@@ -4,7 +4,9 @@
 
 import Sourceful
 
+/// A lexer for JSON files.
 final class JSONLexer: SourceCodeRegexLexer {
+  /// The list of tokens used for the lexing.
   lazy var generators: [TokenGenerator] = {
     [
       keywordGenerator(["true", "false", "null"], tokenType: .keyword),
@@ -15,7 +17,7 @@ final class JSONLexer: SourceCodeRegexLexer {
     ]
     .compactMap { $0 }
   }()
-
+  
   func generators(source: String) -> [TokenGenerator] {
     return generators
   }

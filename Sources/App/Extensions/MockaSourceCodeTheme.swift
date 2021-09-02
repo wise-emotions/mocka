@@ -4,18 +4,19 @@
 
 import Sourceful
 
+/// An object describing the default Mocka theme for the source editor.
 final class MockaSourceCodeTheme: SourceCodeTheme {
 
-  let gutterStyle = GutterStyle(backgroundColor: Color(.espresso), minimumWidth: 32)
+  let backgroundColor = Color(.lungo)
 
   let font: Font = .monospacedSystemFont(ofSize: 14, weight: .regular)
+  
+  let gutterStyle = GutterStyle(backgroundColor: Color(.espresso), minimumWidth: 32)
 
   let lineNumbersStyle: LineNumbersStyle? = LineNumbersStyle(
     font: .monospacedSystemFont(ofSize: 14, weight: .regular),
     textColor: Color(.macchiato)
   )
-
-  let backgroundColor = Color(.lungo)
 
   // MARK: - Functions
 

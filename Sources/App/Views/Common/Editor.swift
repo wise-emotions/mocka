@@ -27,7 +27,7 @@ struct Editor: View {
 
         Spacer()
 
-        Button("Importa") {
+        Button("Import") {
           viewModel.fileImporterIsPresented = true
         }
         .fileImporter(
