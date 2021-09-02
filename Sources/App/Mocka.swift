@@ -42,7 +42,7 @@ struct Mocka: App {
     .windowToolbarStyle(UnifiedWindowToolbarStyle())
     .commands {
       SidebarCommands()
-      CommandGroup(replacing: .newItem) {}
+      KeyboardShortcutCommands(appEnvironment: appEnvironment)
     }
 
     Settings {
