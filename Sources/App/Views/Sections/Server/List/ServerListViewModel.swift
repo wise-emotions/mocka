@@ -14,7 +14,7 @@ final class ServerListViewModel: ObservableObject {
   /// The text that filters the requests.
   @Published var filterText: String = ""
 
-  /// The array of `NetworkExchange`s.
+  /// The array of `NetworkExchange`s to be shown in the view.
   @Published var networkExchanges: [NetworkExchange] = []
 
   /// The `Set` containing the list of subscriptions.
@@ -39,11 +39,11 @@ final class ServerListViewModel: ObservableObject {
 
   /// Creates a new instance with a `Publisher` of `NetworkExchange`s.
   /// - Parameter networkExchangesPublisher: The publisher of `NetworkExchange`s.
-  init(networkExchangesPublisher: AnyPublisher<NetworkExchange, Never>) {
-    networkExchangesPublisher
+  init(networkExchangesPublisher: AnyPublisher<NetworkExchange, Never>?) {
+    networkExchangesPublisher?
       .receive(on: RunLoop.main)
-      .sink { [weak self] in
-        self?.networkExchanges.append($0)
+      .sink { [weak self] networkExchange in
+        self?.networkExchanges.append(networkExchange)
       }
       .store(in: &subscriptions)
   }

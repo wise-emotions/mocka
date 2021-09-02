@@ -2,52 +2,52 @@
 //  Mocka
 //
 
-import Foundation
 import UniformTypeIdentifiers
 
 extension Logic {
   /// The logic related to settings of the app.
-  enum Settings {
-    /// The name of the file containing the server's configuration.
-    static let serverConfigurationFileName = "serverConfiguration.json"
+  enum Settings {}
+}
 
-    /// Checks if the workspace `URL` saved in the `UserDefaults` is valid.
-    /// That is, it is not nil, it exists, and it contains the `serverConfiguration.json` file.
-    static var isWorkspaceURLValid: Bool {
-      guard let savedWorkspaceURL = UserDefaults.standard.url(forKey: UserDefaultKey.workspaceURL) else {
-        return false
-      }
+extension Logic.Settings {
+  /// The name of the file containing the server's configuration.
+  static let serverConfigurationFileName = "serverConfiguration.json"
 
-      return
-        FileManager.default.fileExists(atPath: savedWorkspaceURL.path)
-        && uniformType(of: savedWorkspaceURL) == UTType.folder
-        && serverConfigurationFileExists(at: savedWorkspaceURL)
+  /// Checks if the workspace `URL` saved in the `UserDefaults` is valid.
+  /// That is, it is not nil, it exists, and it contains the `serverConfiguration.json` file.
+  static var isWorkspaceURLValid: Bool {
+    guard let savedWorkspaceURL = UserDefaults.standard.url(forKey: UserDefaultKey.workspaceURL) else {
+      return false
     }
 
-    /// The server configuration.
-    ///
-    /// This variable extracts the hostname and port of the server from the `serverConfigurationFileName`.
-    /// In addition, it tries to fetch all the requests from the workspace path.
-    /// Should either of the two steps fail, it returns nil.
-    static var serverConfiguration: ServerConfiguration? {
-      guard
-        let workspaceURL = UserDefaults.standard.url(forKey: UserDefaultKey.workspaceURL),
-        let settingsFileData = FileManager.default.contents(
-          atPath: workspaceURL.appendingPathComponent(serverConfigurationFileName, isDirectory: false).path
-        ),
-        let serverConfiguration = try? JSONDecoder().decode(ServerConnectionConfiguration.self, from: settingsFileData),
-        let requests = try? Logic.SourceTree.requests()
-      else {
-        return nil
-      }
+    return
+      FileManager.default.fileExists(atPath: savedWorkspaceURL.path)
+      && uniformType(of: savedWorkspaceURL) == UTType.folder
+      && serverConfigurationFileExists(at: savedWorkspaceURL)
+  }
 
-      return ServerConfiguration(hostname: serverConfiguration.hostname, port: serverConfiguration.port, requests: requests)
+  /// The server configuration.
+  ///
+  /// This variable extracts the hostname and port of the server from the `serverConfigurationFileName`.
+  /// In addition, it tries to fetch all the requests from the workspace path.
+  /// Should either of the two steps fail, it returns nil.
+  static var serverConfiguration: ServerConfiguration? {
+    guard
+      let workspaceURL = UserDefaults.standard.url(forKey: UserDefaultKey.workspaceURL),
+      let settingsFileData = FileManager.default.contents(
+        atPath: workspaceURL.appendingPathComponent(serverConfigurationFileName, isDirectory: false).path
+      ),
+      let serverConfiguration = try? JSONDecoder().decode(ServerConnectionConfiguration.self, from: settingsFileData),
+      let requests = try? Logic.SourceTree.requests()
+    else {
+      return nil
     }
+
+    return ServerConfiguration(hostname: serverConfiguration.hostname, port: serverConfiguration.port, requests: requests)
   }
 }
 
 extension Logic.Settings {
-
   /// Updates the server configuration file or creates it at the workspace root folder.
   /// - Throws: `MockaError.workspacePathDoesNotExist`,
   ///           `MockaError.failedToEncode`.
