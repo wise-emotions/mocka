@@ -14,22 +14,32 @@ struct Mocka: App {
 
   var body: some Scene {
     WindowGroup {
-      AppSection()
-        .frame(
-          // Due to a bug of the `NavigationView` we cannot use the exactly minimum size.
-          // We add `5` points to be sure to not close the sidebar while resizing the view.
-          minWidth: Size.minimumSidebarWidth + Size.minimumListWidth + Size.minimumDetailWidth + 5,
-          maxWidth: .infinity,
-          minHeight: Size.minimumAppHeight,
-          maxHeight: .infinity,
-          alignment: .leading
-        )
-        .environmentObject(appEnvironment)
-        .sheet(
-          isPresented: $appEnvironment.shouldShowStartupSettings
-        ) {
-          ServerSettings(viewModel: ServerSettingsViewModel(isShownFromSettings: false))
-        }
+      AppSection(
+        viewModel: AppSectionViewModel(
+          recordModeNetworkExchangesPublisher: appEnvironment.server.recordModeNetworkExchangesPublisher, appEnvironment: appEnvironment)
+      )
+      .frame(
+        // Due to a bug of the `NavigationView` we cannot use the exactly minimum size.
+        // We add `5` points to be sure to not close the sidebar while resizing the view.
+        minWidth: Size.minimumSidebarWidth + Size.minimumListWidth + Size.minimumDetailWidth + 5,
+        maxWidth: .infinity,
+        minHeight: Size.minimumAppHeight,
+        maxHeight: .infinity,
+        alignment: .leading
+      )
+      .environmentObject(appEnvironment)
+      .sheet(
+        isPresented: $appEnvironment.shouldShowStartupSettings
+      ) {
+        ServerSettings(viewModel: ServerSettingsViewModel(isShownFromSettings: false))
+      }
+      .sheet(
+        isPresented: $appEnvironment.isRecordModeSettingsPresented
+      ) {
+        RecordModeSettings(viewModel: RecordModeSettingsViewModel(appEnvironment: appEnvironment))
+          .environmentObject(appEnvironment)
+      }
+
     }
     .windowStyle(HiddenTitleBarWindowStyle())
     .windowToolbarStyle(UnifiedWindowToolbarStyle())
@@ -40,6 +50,7 @@ struct Mocka: App {
 
     Settings {
       AppSettings()
+        .environmentObject(appEnvironment)
     }
   }
 }

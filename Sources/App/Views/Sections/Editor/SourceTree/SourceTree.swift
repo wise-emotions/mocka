@@ -85,6 +85,8 @@ struct SourceTree: View {
               viewModel.isShowingCreateRequestDetailView = true
             }
           )
+
+          StartAndStopRecordModeButton()
         }
       }
     }

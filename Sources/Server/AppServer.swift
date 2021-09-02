@@ -24,6 +24,12 @@ public class AppServer {
   /// - Note: This property is marked `internal` to allow only the `Server` to send events.
   private let networkExchangesSubject = BufferedSubject<NetworkExchange, Never>()
 
+  /// The `PassthroughSubject` of `NetworkExchange`s for the record mode.
+  /// This subject is used to send and subscribe to `NetworkExchange`s.
+  /// Anytime a request/response exchange happens, a detailed version of the actors is generated and injected in this object.
+  /// - Note: This property is marked `internal` to allow only the `Server` to send events.
+  private let recordModeNetworkExchangesSubject = PassthroughSubject<NetworkExchange, Never>()
+
   /// The `Set` containing the list of subscriptions.
   private var subscriptions = Set<AnyCancellable>()
 
@@ -37,6 +43,11 @@ public class AppServer {
   /// The `Publisher` of `NetworkExchange`s.
   public var networkExchangesPublisher: AnyPublisher<NetworkExchange, Never> {
     networkExchangesSubject.eraseToAnyPublisher()
+  }
+
+  /// The `Publisher` of `NetworkExchange`s for the record mode.
+  public var recordModeNetworkExchangesPublisher: AnyPublisher<NetworkExchange, Never> {
+    recordModeNetworkExchangesSubject.eraseToAnyPublisher()
   }
 
   /// The host associated with the running instance's configuration.
@@ -68,6 +79,42 @@ public class AppServer {
   }
 
   // MARK: - Methods
+
+  /// Starts a new `Application` instance using the passed configuration and uses it to record network calls.
+  /// - Parameter configuration: An object conforming to `MiddlewareConfigurationProvider`.
+  /// - Throws: `ServerError.instanceAlreadyRunning` or a wrapped `Vapor` error.
+  public func startRecording(with configuration: MiddlewareConfigurationProvider) throws {
+    guard application == nil else {
+      throw ServerError.instanceAlreadyRunning
+    }
+
+    do {
+      let environment = try Environment.detect()
+      application = Application(environment)
+    } catch {
+      throw ServerError.vapor(error: error)
+    }
+
+    // Logger must be set at the beginning or it will result in missing the server start event.
+    application?.logger = Logger(label: "Server Logger", factory: { _ in ConsoleLogHander(subject: consoleLogsSubject) })
+    application?.http.server.configuration.port = configuration.port
+    application?.http.server.configuration.hostname = configuration.hostname
+    application?.http.client.configuration.decompression = .enabled(limit: .none)
+    application?.middleware
+      .use(
+        RecordingMiddleware(
+          configuration: configuration,
+          recordModeNetworkExchangesSubject: recordModeNetworkExchangesSubject
+        )
+      )
+
+    do {
+      try application?.server.start()
+    } catch {
+      // The most common error would be when we try to run the server on a PORT that is already used.
+      throw ServerError.vapor(error: error)
+    }
+  }
 
   /// Starts a new `Application` instance using the passed configuration.
   /// - Parameter configuration: An object conforming to `ServerConfigurationProvider`.

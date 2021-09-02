@@ -2,6 +2,7 @@
 //  Mocka
 //
 
+import MockaServer
 import SwiftUI
 
 /// This is the common app section used to show all the other sections.
@@ -10,6 +11,9 @@ import SwiftUI
 struct AppSection: View {
 
   // MARK: - Stored Properties
+
+  /// The associated ViewModel.
+  @ObservedObject var viewModel: AppSectionViewModel
 
   /// The app environment object.
   @EnvironmentObject var appEnvironment: AppEnvironment
@@ -34,9 +38,17 @@ struct AppSection: View {
 // MARK: - Previews
 
 struct AppSectionPreview: PreviewProvider {
+  static let networkExchanges = [NetworkExchange](
+    repeating: NetworkExchange.mock,
+    count: 10
+  )
+
   static var previews: some View {
-    AppSection()
-      .previewLayout(.fixed(width: 1024, height: 600))
-      .environmentObject(AppEnvironment())
+    AppSection(
+      viewModel: AppSectionViewModel(
+        recordModeNetworkExchangesPublisher: networkExchanges.publisher.eraseToAnyPublisher(), appEnvironment: AppEnvironment())
+    )
+    .previewLayout(.fixed(width: 1024, height: 600))
+    .environmentObject(AppEnvironment())
   }
 }
