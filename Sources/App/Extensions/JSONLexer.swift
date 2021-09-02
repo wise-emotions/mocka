@@ -17,7 +17,7 @@ final class JSONLexer: SourceCodeRegexLexer {
     ]
     .compactMap { $0 }
   }()
-  
+
   func generators(source: String) -> [TokenGenerator] {
     return generators
   }

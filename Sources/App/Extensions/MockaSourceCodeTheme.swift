@@ -10,7 +10,7 @@ final class MockaSourceCodeTheme: SourceCodeTheme {
   let backgroundColor = Color(.lungo)
 
   let font: Font = .monospacedSystemFont(ofSize: 14, weight: .regular)
-  
+
   let gutterStyle = GutterStyle(backgroundColor: Color(.espresso), minimumWidth: 32)
 
   let lineNumbersStyle: LineNumbersStyle? = LineNumbersStyle(
