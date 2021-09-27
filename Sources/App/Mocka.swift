@@ -9,9 +9,6 @@ struct Mocka: App {
   /// The `AppDelegate` of the app.
   @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
 
-  /// The app environment.
-  @StateObject private var appEnvironment = AppEnvironment()
-
   var body: some Scene {
     WindowGroup {
       AppSection()
@@ -24,9 +21,9 @@ struct Mocka: App {
           maxHeight: .infinity,
           alignment: .leading
         )
-        .environmentObject(appEnvironment)
+        .environmentObject(appDelegate.appEnvironment)
         .sheet(
-          isPresented: $appEnvironment.shouldShowStartupSettings
+          isPresented: appDelegate.$appEnvironment.shouldShowStartupSettings
         ) {
           ServerSettings(viewModel: ServerSettingsViewModel(isShownFromSettings: false))
         }
